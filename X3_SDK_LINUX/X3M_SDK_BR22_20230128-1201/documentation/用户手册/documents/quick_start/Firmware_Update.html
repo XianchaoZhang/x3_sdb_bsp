@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2.3. 镜像升级方法 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="2.4. 接口使用说明" href="Interface_User_Guide.html" />
+    <link rel="prev" title="2.2. 开发板登录方法" href="Login_Method.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2. 快速入门</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="X3SDB_Setup.html">2.1. X3 SDB开发板说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Login_Method.html">2.2. 开发板登录方法</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.3. 镜像升级方法</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#usb">2.3.1. USB升级</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">2.3.2. 网口升级</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">2.3.3. 串口升级</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">2.3.4. 自定义升级</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Interface_User_Guide.html">2.4. 接口使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Toolset_On_Board.html">2.5. 调试工具说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="X3SDBv3_Setup.html">2.6. X3 SDB v3 开发板接口说明</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">2. </span>快速入门</a> &raquo;</li>
+      <li><span class="section-number">2.3. </span>镜像升级方法</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="Login_Method.html" class="btn btn-neutral float-left" title="2.2. 开发板登录方法" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Interface_User_Guide.html" class="btn btn-neutral float-right" title="2.4. 接口使用说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">2.3. </span>镜像升级方法<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>由于X3芯片方案交付包中的Sample程序跟系统SDK可能存在版本依赖，因此在使用Sample程序前，用户需要使用交付包中配套的开发板镜像对开发板进行升级，推荐直接使用交付包预先编译的开发板镜像。此外用户也可基于源码自行编译，<strong>但需保证编译命令跟X3SDB开发板对应</strong>。对于开发板的镜像升级，地平线提供了PC端一键式工具hbupdate（推荐使用v1.3及以上版本），下表为几种常用的升级方法。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>升级模式</th>
+<th>应用场景</th>
+<th>依赖接口</th>
+<th>升级描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>USB升级</td>
+<td>正常升级</td>
+<td>USB</td>
+<td>适用于开发板方便USB口连接的场景，开发板通过Micro USB线跟PC连接完成升级</td>
+</tr>
+<tr>
+<td>网口升级</td>
+<td>正常升级</td>
+<td>串口、网口</td>
+<td>适用于开发板方便串口、网口连接的场景，开发板通过串口线、网线跟PC连接完成升级</td>
+</tr>
+<tr>
+<td>串口升级</td>
+<td>变砖修复</td>
+<td>串口、网口</td>
+<td>适用于开发板变砖修复场景，开发板通过串口线、网线跟PC连接完成升级</td>
+</tr>
+</tbody>
+</table><p><strong>注意事项：</strong> 如果使用X3 SDB开发板，需注意核心板使用的DDR型号，目前SDB开发板有使用如下DDR</p>
+<ul class="simple">
+<li><p>K4F6E3S4HM-MGCJ 2GB三星LPDDR4</p></li>
+<li><p>K4FBE3D4HM-MGCJ 4GB三星LPDDR4</p></li>
+<li><p>MT53E1G32D2FW-046 WT:A 4GB镁光LPDDR4</p></li>
+</ul>
+<p>发布包X3M_SDK/board_support_package/firmwares中默认编译好的镜像为三星2GB LPDDR4镜像，如果使用的核心板是其他型号DDR，请参考<a class="reference internal" href="../bsp_develop/Bsp_Develop.html"><span class="doc">环境搭建及编译说明</span></a>章节编译对应DDR的系统镜像进行烧录。</p>
+<section id="usb">
+<h2><span class="section-number">2.3.1. </span>USB升级<a class="headerlink" href="#usb" title="永久链接至标题"></a></h2>
+<p>USB升级方法是指开发板可以正常启动进入系统的状态下，用户可以通过<strong>开发板Micro USB口</strong>完成升级的方法。升级过程中，hbupdate工具通过adb下发重启指令让开发板重启并进入fastboot模式，然后升级工具使用fastboot命令完成镜像文件的传输和烧写。</p>
+<p><strong>需要注意，升级前用户需要保证PC正确安装了X3交付包Software_tools目录中的fastboot驱动，驱动安装方法请参考2.2.3章节</strong>。</p>
+<p>开始升级前，升级工具需按图中红色数字顺序进行配置，配置在工具关闭后失效，用户如需保存配置可点击<strong>文件</strong>菜单栏<strong>保存配置</strong>。工具配置步骤如下：<br /><img alt="image-Download-USB" src="../_images/image-Download-USB.png" /></p>
+<ol class="simple">
+<li><p><strong>产品名称</strong>选择<strong>xj3_sdb</strong></p></li>
+<li><p><strong>下载模式</strong>选择<strong>fastboot</strong></p></li>
+<li><p>点击<strong>浏览</strong>选择升级包，不能包含中文路径、空格</p></li>
+<li><p>点击<strong>刷新</strong>探测adb端口，如红框内未显示adb设备，请参考2.2.3.1章节排查</p></li>
+<li><p>点击<strong>开始升级</strong>，等待进度条完成到100%</p></li>
+</ol>
+<p>如工具升级报错，失败信息提示<strong>reboot for entry fastboot failed</strong>，说明工具没有检测到fastboot设备，请参考2.2.3.2章节排查。<br /><img alt="image-Download-USB-failed" src="../_images/image-Download-USB-failed.png" /></p>
+</section>
+<section id="id2">
+<h2><span class="section-number">2.3.2. </span>网口升级<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>网口升级是指开发板可以正常启动进入系统的状态下，用户可通过<strong>开发板串口+网口</strong>完成升级的方法。升级过程中，hbupdate工具通过串口下发重启指令让开发板重启并进入uboot模式，然后升级工具使用tftp、ota等命令完成镜像文件的传输和烧写。</p>
+<p><strong>需要注意，网口升级需要开发板和PC网络能够相互ping通，且PC环境中没有开启防火墙和tftp工具，网络配置方法请参考2.2.2章节</strong>。</p>
+<p>网口升级时，镜像大小不能大于开发板的内存大小。如果镜像超过了内存大小则需要对镜像镜像分段，software_tools/update_tools/separate_disk.sh 脚本可以帮助拆分镜像，并且在升级时勾选 <strong>升级文件分段</strong>。</p>
+<p>开始升级前，升级工具需按图中红色数字顺序进行配置，配置在工具关闭后失效，用户如需保存配置可点击<strong>文件</strong>菜单栏<strong>保存配置</strong>。工具配置步骤如下：<br /><img alt="image-Download-ETH" src="../_images/image-Download-ETH.png" /></p>
+<ol class="simple">
+<li><p><strong>产品名称</strong>选择<strong>xj3_sdb</strong></p></li>
+<li><p><strong>下载模式</strong>选择<strong>uboot</strong></p></li>
+<li><p><strong>下载方式</strong>选择<strong>tftp</strong></p></li>
+<li><p>点击<strong>浏览</strong>选择升级包，不能包含中文路径、空格</p></li>
+<li><p>将开发板网络配置填入<strong>CP IP地址</strong>和<strong>网关地址</strong></p></li>
+<li><p>选择开发板串口在PC上的<strong>COM</strong></p></li>
+<li><p>选择PC机网络IP</p></li>
+<li><p>点击<strong>开始升级</strong>，等待进度条完成到100%</p></li>
+</ol>
+<p>如工具升级报错，失败信息提示<strong>The network of the board is blocked!</strong>，说明工具跟开发板网络通信异常，请检查工具配置第5步是否存在问题。<br /><img alt="image-Download-ETH-failed" src="../_images/image-Download-ETH-failed.png" /></p>
+</section>
+<section id="id3">
+<h2><span class="section-number">2.3.3. </span>串口升级<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p>串口升级是指开发板空片或者变砖时，用户需要通过<strong>开发板串口+网口</strong>完成修复升级的方法。升级过程中，hbupdate工具在开发板上电前，通过串口循环发送握手指令，当开发板上电并检测到该指令后，会强制切换到UART启动模式，然后工具通过串口向开发板下发预置在工具中的bootloader镜像文件(路径data\board_config\xj3-key1\boot_config\boot_file），完成bootloader传输并跳转进Uboot，最后升级工具使用tftp、ota等命令完成镜像文件的传输和烧写。</p>
+<p><strong>需要注意，网口升级需要开发板和PC网络能够相互ping通，且PC环境中没有开启防火墙和tftp工具，网络配置方法请参考2.2.2章节</strong>。</p>
+<p>开始升级前，升级工具需按图中红色数字顺序进行配置，配置在工具关闭后失效，用户如需保存配置可点击<strong>文件</strong>菜单栏<strong>保存配置</strong>。工具配置步骤如下：<br /><img alt="image-Download-UART" src="../_images/image-Download-UART.png" /></p>
+<ol class="simple">
+<li><p><strong>产品名称</strong>选择<strong>xj3_sdb</strong></p></li>
+<li><p><strong>下载模式</strong>选择<strong>uart</strong></p></li>
+<li><p><strong>下载方式</strong>选择<strong>tftp</strong></p></li>
+<li><p><strong>内存类型</strong>选择<strong>lpddr4-samsung-sec</strong></p></li>
+<li><p>点击<strong>浏览</strong>选择升级包，不能包含中文路径、空格</p></li>
+<li><p>将开发板网络配置填入<strong>CP IP地址</strong>和<strong>网关地址</strong></p></li>
+<li><p>选择开发板串口在PC上的<strong>COM</strong></p></li>
+<li><p>选择PC机网络IP</p></li>
+<li><p>点击<strong>开始升级</strong>，并按下图方式给设备上电<br /><img alt="image-20220214145249040" src="../_images/image-20220214145249040.png" /></p></li>
+</ol>
+<p id="update_config"/></section>
+<section id="id4">
+<h2><span class="section-number">2.3.4. </span>自定义升级<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>地平线hbupdate升级工具默认只支持地平线开发板的参数配置(DDR类型、网络等)，但工具提供了定制化配置能力，以满足用户对定制化硬件的版本升级需求。修改方法如下：</p>
+<ol class="simple">
+<li><p>在工具目录中新增board配置文件，文件路径<strong>hbupdate\data\board_config\xj3-key1</strong>，例如xj3_custom.json</p></li>
+<li><p>根据硬件规格，修改新建的xj3_custom.json，主要涉及下图红框内容，<strong>name</strong>字段不要跟开发板重名，否则工具无法做出区分<br /><img alt="image-Download-xj3-custom" src="../_images/image-Download-xj3-custom.png" /></p></li>
+<li><p>修改xj3_custom.json中指定的ddr json配置文件,用于指定工具UART升级中需要使用的bootloader镜像，文件路径<strong>hbupdate\data\board_config\xj3-key1\boot_config</strong>,例如xj3_sdb_lpddr4_samsung_secure_boot.json<br /><img alt="image-Download-xj3-custom-ddr" src="../_images/image-Download-xj3-custom-ddr.png" /></p></li>
+<li><p>完成上述修改后重新打开hbupdate工具，可在产品名称中找到自己定制的产品类型，如下图：<br /><img alt="image-Download-xj3-custom-done" src="../_images/image-Download-xj3-custom-done.png" /></p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Login_Method.html" class="btn btn-neutral float-left" title="2.2. 开发板登录方法" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Interface_User_Guide.html" class="btn btn-neutral float-right" title="2.4. 接口使用说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

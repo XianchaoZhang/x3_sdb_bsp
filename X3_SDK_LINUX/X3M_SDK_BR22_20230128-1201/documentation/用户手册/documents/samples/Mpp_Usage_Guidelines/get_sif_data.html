@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.2.1. get_sif_data 使用说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="3.2.2. get_isp_data 使用说明" href="get_isp_data.html" />
+    <link rel="prev" title="3.2. VIO使用指引" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">3. Demo使用指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Typical_Application_Scenarios/index.html">3.1. 典型应用场景</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">3.2. VIO使用指引</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">3.2.1. get_sif_data 使用说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">3.2.1.1. 程序功能</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">3.2.1.2. 功能使用</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id3">硬件连接</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">程序部署</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id5">运行效果说明</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">3.2.1.3. 程序开发</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id7">源码结构</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id8">编译</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sensor">添加新sensor</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="get_isp_data.html">3.2.2. get_isp_data 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_isp.html">3.2.3. sample_isp 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps.html">3.2.4. sample_vps 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps_zoom.html">3.2.5. sample_vps_zoom 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_osd.html">3.2.6. sample_osd 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html">3.2.7. sample video codec 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vot.html">3.2.8. sample_vot 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_lcd.html">3.2.9. sample_lcd 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_usb_cam_4k60.html">3.2.10. sample_usb_cam_4k60 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html">3.2.11. Sunrise_camera用户使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html">3.2.12. Sunrise_camera开发说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">3. </span>Demo使用指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">3.2. </span>VIO使用指引</a> &raquo;</li>
+      <li><span class="section-number">3.2.1. </span>get_sif_data 使用说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="3.2. VIO使用指引" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="get_isp_data.html" class="btn btn-neutral float-right" title="3.2.2. get_isp_data 使用说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="get-sif-data">
+<h1><span class="section-number">3.2.1. </span>get_sif_data 使用说明<a class="headerlink" href="#get-sif-data" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">3.2.1.1. </span>程序功能<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>下图所示为X3M的视频数据通路框图，其中的专业名词解释请查看 <a class="reference internal" href="../../mpp_develop/1-Overview_zh_CN.html"><span class="doc">多媒体开发概述-术语约定</span></a>。</p>
+<p><img alt="image-20220517184132422" src="../../_images/image-20220517184132422.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">get_sif_data</span></code> 完成 <code class="docutils literal notranslate"><span class="pre">sensor</span></code> 、<code class="docutils literal notranslate"><span class="pre">MIPI</span> <span class="pre">CSI</span></code> 和 <code class="docutils literal notranslate"><span class="pre">SIF</span></code> 模块的初始化，实现从<code class="docutils literal notranslate"><span class="pre">SIF</span></code>模块获取视频帧数据的功能，支持从<code class="docutils literal notranslate"><span class="pre">SIF</span></code>模块获取<code class="docutils literal notranslate"><span class="pre">Raw</span></code>、<code class="docutils literal notranslate"><span class="pre">YUV</span></code>两种格式的图像。</p>
+<p><code class="docutils literal notranslate"><span class="pre">get_sif_data</span></code> 可以有效帮助用户调试<code class="docutils literal notranslate"><span class="pre">sensor</span></code>和<code class="docutils literal notranslate"><span class="pre">X3M</span></code>的点亮调试，在打通<code class="docutils literal notranslate"><span class="pre">sensor</span> <span class="pre">-&gt;</span> <span class="pre">SIF</span></code>的数据通路后，再调试其他模块的功能。</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">3.2.1.2. </span>功能使用<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<section id="id3">
+<h3>硬件连接<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>旭日X3 SDB开发板拥有两个<code class="docutils literal notranslate"><span class="pre">mipi</span> <span class="pre">host</span></code>接口用于连接<code class="docutils literal notranslate"><span class="pre">Sensor</span></code>模组，接口说明请查阅 <a class="reference external" href="../../quick_start/Interface_User_Guide.html#id16">摄像头接口</a> ，请根据当前要调试的<code class="docutils literal notranslate"><span class="pre">Sensor</span></code>模组型号正确连接。</p>
+</section>
+<section id="id4">
+<h3>程序部署<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>把 <code class="docutils literal notranslate"><span class="pre">sample/get_sif_data/get_sif_data</span></code> 上传到开发板上之后，给程序赋予可执行权限<code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">get_sif_data</span></code>，然后执行程序 <code class="docutils literal notranslate"><span class="pre">./get_sif_data</span></code> ，根据提示选择当前连接在开发板上的sensor类别，比如当前连接的是 <code class="docutils literal notranslate"><span class="pre">F37</span> <span class="pre">sensor</span></code>，则选择 1。如果初始化成功，会自动获取第一帧图像（pipe0_plane0_1920x1080_frame_001.raw）保存在程序运行的目录下（退出程序后执行 ls -l pipe0_plane0_1920x1080_frame_* 可以查看），并打印用户可以使用的命令，运行过程如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod +x get_sif_data
+./get_sif_data
+
+Horizon Robotics Sensor Test Tools V1.0
+
+********************** Sensor Lists *************************
+        <span class="m">0</span> -- IMX415
+        <span class="m">1</span> -- F37
+*************************************************************
+
+Please <span class="k">select</span> :1 <span class="c1"># 选择 sensor</span>
+... ... <span class="c1"># 一大段初始化日志</span>
+normal pipe_id <span class="o">(</span><span class="m">0</span><span class="o">)</span>type<span class="o">(</span><span class="m">9</span><span class="o">)</span>frame_id<span class="o">(</span><span class="m">1</span><span class="o">)</span>buf_index<span class="o">(</span><span class="m">0</span><span class="o">)</span>w x h<span class="o">(</span>1920x1080<span class="o">)</span> data_type <span class="m">9</span> img_format <span class="m">0</span>
+stride_size<span class="o">(</span><span class="m">2400</span><span class="o">)</span> w x h1920 x <span class="m">1080</span>  size <span class="m">2592000</span>
+pipe<span class="o">(</span><span class="m">0</span><span class="o">)</span>dump normal raw frame id<span class="o">(</span><span class="m">1</span><span class="o">)</span>,plane<span class="o">(</span><span class="m">1</span><span class="o">)</span>size<span class="o">(</span><span class="m">2592000</span><span class="o">)</span> <span class="c1"># 获取第一帧图像</span>
+filedump<span class="o">(</span>pipe0_plane0_1920x1080_frame_001.raw, size<span class="o">(</span><span class="m">2592000</span><span class="o">)</span> is successed
+<span class="nb">time</span> cost <span class="m">85</span> ms 
+dumpToFile raw cost <span class="nb">time</span> <span class="m">85</span> ms********************** Command Lists *************************
+  q     -- quit
+  g     -- get one frame
+  l     -- get a <span class="nb">set</span> frames
+  h     -- print <span class="nb">help</span> message
+
+Command: 
+</pre></div>
+</div>
+<p><strong>命令解释：</strong></p>
+<ul class="simple">
+<li><p>g： 获取一帧图像，支持输入多个<code class="docutils literal notranslate"><span class="pre">g</span></code>来连续获取图像，例如输入 <code class="docutils literal notranslate"><span class="pre">gggg</span></code></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Command: g
+normal pipe_id <span class="o">(</span><span class="m">0</span><span class="o">)</span>type<span class="o">(</span><span class="m">9</span><span class="o">)</span>frame_id<span class="o">(</span><span class="m">4078</span><span class="o">)</span>buf_index<span class="o">(</span><span class="m">5</span><span class="o">)</span>w x h<span class="o">(</span>1920x1080<span class="o">)</span> data_type <span class="m">9</span> img_format <span class="m">0</span>
+stride_size<span class="o">(</span><span class="m">2400</span><span class="o">)</span> w x h1920 x <span class="m">1080</span>  size <span class="m">2592000</span>
+pipe<span class="o">(</span><span class="m">0</span><span class="o">)</span>dump normal raw frame id<span class="o">(</span><span class="m">4078</span><span class="o">)</span>,plane<span class="o">(</span><span class="m">1</span><span class="o">)</span>size<span class="o">(</span><span class="m">2592000</span><span class="o">)</span>
+filedump<span class="o">(</span>pipe0_plane0_1920x1080_frame_4078.raw, size<span class="o">(</span><span class="m">2592000</span><span class="o">)</span> is successed
+<span class="nb">time</span> cost <span class="m">67</span> ms 
+dumpToFile raw cost <span class="nb">time</span> <span class="m">67</span> ms
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>l： 连续获取12帧图像，相当于输入12个 <code class="docutils literal notranslate"><span class="pre">g</span></code></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Command: l
+normal pipe_id <span class="o">(</span><span class="m">0</span><span class="o">)</span>type<span class="o">(</span><span class="m">9</span><span class="o">)</span>frame_id<span class="o">(</span><span class="m">4588</span><span class="o">)</span>buf_index<span class="o">(</span><span class="m">3</span><span class="o">)</span>w x h<span class="o">(</span>1920x1080<span class="o">)</span> data_type <span class="m">9</span> img_format <span class="m">0</span>
+stride_size<span class="o">(</span><span class="m">2400</span><span class="o">)</span> w x h1920 x <span class="m">1080</span>  size <span class="m">2592000</span>
+pipe<span class="o">(</span><span class="m">0</span><span class="o">)</span>dump normal raw frame id<span class="o">(</span><span class="m">4588</span><span class="o">)</span>,plane<span class="o">(</span><span class="m">1</span><span class="o">)</span>size<span class="o">(</span><span class="m">2592000</span><span class="o">)</span>
+filedump<span class="o">(</span>pipe0_plane0_1920x1080_frame_4588.raw, size<span class="o">(</span><span class="m">2592000</span><span class="o">)</span> is successed
+<span class="nb">time</span> cost <span class="m">56</span> ms 
+... ... <span class="c1"># 连续的获取帧数据的打印</span>
+dumpToFile raw cost <span class="nb">time</span> <span class="m">56</span> msnormal pipe_id <span class="o">(</span><span class="m">0</span><span class="o">)</span>type<span class="o">(</span><span class="m">9</span><span class="o">)</span>frame_id<span class="o">(</span><span class="m">4609</span><span class="o">)</span>buf_index<span class="o">(</span><span class="m">7</span><span class="o">)</span>w x h<span class="o">(</span>1920x1080<span class="o">)</span> data_type <span class="m">9</span> img_format <span class="m">0</span>
+stride_size<span class="o">(</span><span class="m">2400</span><span class="o">)</span> w x h1920 x <span class="m">1080</span>  size <span class="m">2592000</span>
+pipe<span class="o">(</span><span class="m">0</span><span class="o">)</span>dump normal raw frame id<span class="o">(</span><span class="m">4609</span><span class="o">)</span>,plane<span class="o">(</span><span class="m">1</span><span class="o">)</span>size<span class="o">(</span><span class="m">2592000</span><span class="o">)</span>
+filedump<span class="o">(</span>pipe0_plane0_1920x1080_frame_4609.raw, size<span class="o">(</span><span class="m">2592000</span><span class="o">)</span> is successed
+<span class="nb">time</span> cost <span class="m">57</span> ms 
+dumpToFile raw cost <span class="nb">time</span> <span class="m">57</span> ms
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>q: 退出程序</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Command</span><span class="p">:</span> <span class="n">Command</span><span class="p">:</span> <span class="n">q</span>
+<span class="n">quit</span>
+<span class="p">[</span>  <span class="mf">256.825912</span><span class="p">]</span> <span class="p">[</span><span class="n">S0</span><span class="p">][</span><span class="n">V1</span><span class="p">]</span><span class="n">sif_video_streamoff</span>
+<span class="p">[</span>  <span class="mf">256.826439</span><span class="p">]</span> <span class="n">SIF</span> <span class="n">close</span> <span class="n">node</span> <span class="mi">1</span>
+<span class="p">[</span>  <span class="mf">256.853045</span><span class="p">]</span> <span class="p">[</span><span class="n">S0</span><span class="p">][</span><span class="n">V0</span><span class="p">]</span><span class="n">sif_video_streamoff</span> <span class="n">SIF</span> <span class="n">last</span> <span class="n">process</span> <span class="n">stream</span> <span class="n">off</span> 
+<span class="p">[</span>  <span class="mf">256.853922</span><span class="p">]</span> <span class="p">[</span><span class="n">S0</span><span class="p">][</span><span class="n">V0</span><span class="p">]</span><span class="n">sif_video_streamoff</span>
+<span class="p">[</span>  <span class="mf">256.855476</span><span class="p">]</span> <span class="n">hobot_dmcfreq_target</span><span class="p">:</span> <span class="n">dmcfreq</span><span class="o">-&gt;</span><span class="n">rate</span><span class="p">:</span><span class="mi">2666000000</span><span class="p">,</span> <span class="n">target_rate</span><span class="p">:</span><span class="mi">2666000000</span>
+<span class="p">[</span>  <span class="mf">256.856460</span><span class="p">]</span> <span class="n">buf</span><span class="p">:</span><span class="n">performance</span>
+<span class="p">[</span>  <span class="mf">256.856460</span><span class="p">]</span> <span class="p">,</span> <span class="n">powersave_rate</span><span class="p">:</span><span class="mi">2666000000</span><span class="p">,</span> <span class="n">dmcfreq</span><span class="o">-&gt;</span><span class="n">pre_state</span><span class="p">:</span><span class="mi">0</span>
+<span class="p">[</span>  <span class="mf">256.857610</span><span class="p">]</span> <span class="p">[</span><span class="n">S0</span><span class="p">][</span><span class="n">V0</span><span class="p">]</span><span class="n">x3_sif_close</span> <span class="n">SIF</span> <span class="n">last</span> <span class="n">process</span> <span class="n">close</span> 
+<span class="p">[</span>  <span class="mf">256.858301</span><span class="p">]</span> <span class="n">SIF</span> <span class="n">close</span> <span class="n">node</span> <span class="mi">0</span>
+<span class="p">[</span>  <span class="mf">256.858807</span><span class="p">]</span> <span class="p">[</span><span class="n">isp_drv</span><span class="p">]:</span> <span class="n">camera_sys_stream_off</span><span class="p">:</span> <span class="n">camera_sys_stream_off</span> <span class="n">success</span> <span class="n">line</span> <span class="mi">1549</span> <span class="n">dev_name</span> <span class="n">port_0</span>
+<span class="p">[</span>  <span class="mf">256.860006</span><span class="p">]</span> <span class="p">[</span><span class="n">isp_drv</span><span class="p">:</span><span class="n">cam</span><span class="p">]:</span> <span class="n">camera_fop_release</span><span class="p">:</span> <span class="n">line</span> <span class="mi">115</span> <span class="n">port</span> <span class="mi">0</span> <span class="n">user_num</span> <span class="mi">0</span>  <span class="n">camera_cdev</span><span class="o">-&gt;</span><span class="n">start_num</span> <span class="mi">0</span> 
+<span class="p">[</span>  <span class="mf">256.861229</span><span class="p">]</span> <span class="n">vps</span> <span class="n">mipi_host1</span><span class="p">:</span> <span class="n">sensor1_mclk</span> <span class="nb">set</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="mi">0</span> <span class="k">as</span> <span class="mi">24000000</span>
+<span class="p">[</span>  <span class="mf">256.861980</span><span class="p">]</span> <span class="n">vps</span> <span class="n">mipi_host1</span><span class="p">:</span> <span class="n">sensor1_mclk</span> <span class="nb">set</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="mi">0</span> <span class="k">as</span> <span class="mi">24000000</span>
+<span class="p">[</span>  <span class="mf">256.862741</span><span class="p">]</span> <span class="n">vps</span> <span class="n">mipi_host0</span><span class="p">:</span> <span class="n">sensor0_mclk</span> <span class="nb">set</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="mi">0</span> <span class="k">as</span> <span class="mi">24000000</span>
+<span class="p">[</span>  <span class="mf">256.863491</span><span class="p">]</span> <span class="n">vps</span> <span class="n">mipi_host0</span><span class="p">:</span> <span class="n">sensor0_mclk</span> <span class="nb">set</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="mi">0</span> <span class="k">as</span> <span class="mi">24000000</span>
+<span class="p">[</span>  <span class="mf">256.864241</span><span class="p">]</span> <span class="n">vps</span> <span class="n">mipi_host0</span><span class="p">:</span> <span class="n">sensor0_mclk</span> <span class="nb">set</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="mi">0</span> <span class="k">as</span> <span class="mi">24000000</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>运行效果说明<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>执行程序后会获取到如 <code class="docutils literal notranslate"><span class="pre">pipe0_plane0_1920x1080_frame_4609.raw</span></code> 一样命名的<code class="docutils literal notranslate"><span class="pre">raw</span></code>图像，或者如<code class="docutils literal notranslate"><span class="pre">pipe0_1920x1080_frame_1024.yuv</span></code>一样命名的<code class="docutils literal notranslate"><span class="pre">yuv</span></code>图像。</p>
+<p>请参考<a class="reference external" href="../../mpp_develop/3-Video_Input_zh_CN/camera_tuningtool.html#id3">Hobot player静态图片</a>章节浏览图像，两种图像的参数配置说明如下：</p>
+<ul class="simple">
+<li><p>浏览RAW图</p></li>
+</ul>
+<p>按照如下图所示步骤配置选项，其中<code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">config</span></code>里面关注<code class="docutils literal notranslate"><span class="pre">pic_type</span></code>、<code class="docutils literal notranslate"><span class="pre">raw_type</span></code>、 <code class="docutils literal notranslate"><span class="pre">pix_length</span></code> 、<code class="docutils literal notranslate"><span class="pre">width</span></code>和<code class="docutils literal notranslate"><span class="pre">height</span></code>的配置，F37 配置为（PIC_RAW、MIPI_RAW、RAW_BIT_10， 1920，1080），IMX415配置为（PIC_RAW、MIPI_RAW、RAW_BIT_12， 3840，2160）</p>
+<p><img alt="image-20220517211101610" src="../../_images/image-20220517211101610.png" /></p>
+<ul class="simple">
+<li><p>浏览YUV图</p></li>
+</ul>
+<p>按照如下图所示步骤配置选项，其中<code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">config</span></code>里面关注<code class="docutils literal notranslate"><span class="pre">pic_type</span></code>、<code class="docutils literal notranslate"><span class="pre">yuv_type</span></code>、<code class="docutils literal notranslate"><span class="pre">width</span></code>和<code class="docutils literal notranslate"><span class="pre">height</span></code>的配置，F37 配置为（PIC_YUV、YUV_NV12， 1920，1080），IMX415配置为（YUV_NV12， 3840，2160）</p>
+<p><img alt="image-20220517212105959" src="../../_images/image-20220517212105959.png" /></p>
+</section>
+</section>
+<section id="id6">
+<h2><span class="section-number">3.2.1.3. </span>程序开发<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<section id="id7">
+<h3>源码结构<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
+├── main.c                       # 主程序，完成sensor列表的加载，和命令控制
+├── Makefile					 # 编译makefile
+├── module.c
+├── module.h
+├── Readme.md
+├── sensor_handle.c               # sensor 初始化、从sif中获取图像的接口
+├── sensor_handle.h
+├── sensors						  # sensor参数配置，每个新sensor在本目录新增一个文件
+│   ├── sensor_f37.c
+│   └── sensor_imx415.c
+└── sensors.lds
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h3>编译<a class="headerlink" href="#id8" title="永久链接至标题"></a></h3>
+<p>当前代码通过一个Makefile文件配置编译</p>
+<p>依赖的多媒体头文件和库文件分别在BSP SDK的appsdk目录和system/rootfs_yocto/root目录下，编译时需要注意这两个依赖目录位置是否存在</p>
+<p>安装交叉编译工具链后，执行 make 命令直接可以编译生成 get_sif_data 程序：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> sample/get_sif_data
+$ make clean <span class="c1"># 清理源码，保持干净的代码环境</span>
+$ make
+... ... <span class="c1"># 一大段编译打印</span>
+$ ls
+get_sif_data  main.c  main.o  Makefile  module.c  module.h  module.o  Readme.md  sensor_handle.c  sensor_handle.h  sensor_handle.o  sensors  sensors.lds
+$ make install <span class="c1"># 把产出物安装到 out 目录下</span>
+</pre></div>
+</div>
+</section>
+<section id="sensor">
+<h3>添加新sensor<a class="headerlink" href="#sensor" title="永久链接至标题"></a></h3>
+<p>如果有新sensor需要调试，请参考 sensors 目录下的源码文件，对应添加一个新的sensor配置即可。</p>
+<p>以F37为例说明关键代码：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* </span>
+<span class="cm"> * 添加sensor、mipi、sif dev、isp的参数配置</span>
+<span class="cm"> * 各结构体中参数在代码中有已经有比较详细的注释说明</span>
+<span class="cm"> * 其中isp部分参数在本程序中无需关注</span>
+<span class="cm"> */</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">set_sensor_param</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;set_sensor_param</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="cm">/*定义 sensor   初始化的属性信息 */</span><span class="w"></span>
+<span class="w">        </span><span class="n">snsinfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SENSOR_1LANE_F37_30FPS_10BIT_LINEAR_INFO</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="cm">/*定义 mipi 初始化参数信息 */</span><span class="w"></span>
+<span class="w">        </span><span class="n">mipi_attr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MIPI_1LANE_SENSOR_F37_30FPS_10BIT_LINEAR_ATTR</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="cm">/*定义 dev 初始化的属性信息 */</span><span class="w"></span>
+<span class="w">        </span><span class="n">devinfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DEV_ATTR_F37_LINEAR_BASE</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="cm">/*定义 pipe 属性信息 */</span><span class="w"></span>
+<span class="w">        </span><span class="n">pipeinfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PIPE_ATTR_F37_LINEAR_BASE</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">sensor_sif_dev_init</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="cm">/* </span>
+<span class="cm"> * 主程序遍历sensor模块时调用本函数完成sensor名和sensor参数配置接口的注册</span>
+<span class="cm"> */</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">sensor_probe</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="cm">/* 在sensor_lists里面找到一个空位置 */</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">ARRAY_SIZE</span><span class="p">(</span><span class="n">sensor_lists</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">sensor_lists</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sensor_tag</span><span class="p">))</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">ARRAY_SIZE</span><span class="p">(</span><span class="n">sensor_lists</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;sensor lists is full</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">strncpy</span><span class="p">(</span><span class="n">sensor_lists</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sensor_tag</span><span class="p">,</span><span class="w"> </span><span class="n">SENSOR_TAG</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">SENSOR_TAG</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">SENSOR_TAG</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">31</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">sensor_lists</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">set_sensor_param</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="cm">/* 注册sensor的模块入口，主程序在遍历sensor时会用到 */</span><span class="w"></span>
+<span class="n">SENSOR_MODULE_INSTALL</span><span class="p">(</span><span class="n">sensor_probe</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="3.2. VIO使用指引" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="get_isp_data.html" class="btn btn-neutral float-right" title="3.2.2. get_isp_data 使用说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

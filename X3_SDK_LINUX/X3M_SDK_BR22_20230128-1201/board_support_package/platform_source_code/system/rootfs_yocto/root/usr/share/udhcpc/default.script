@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ ! -d "/userdata/udhcpc.d" ];then
+    mkdir -p /userdata/udhcpc.d
+    cp -rf /etc/udhcpc.d/* /userdata/udhcpc.d/
+fi
+exec run-parts -a "$1" /userdata/udhcpc.d

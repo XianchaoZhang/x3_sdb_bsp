@@ -1,0 +1,2237 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>8.9.1. 模型量化错误及解决方法 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="9. 建议反馈" href="../../feedback.html" />
+    <link rel="prev" title="8.9. 量化工具链类" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">8. FAQ</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html">8.1. 环境类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id3">8.2. 系统类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id8">8.3. 视频处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id12">8.4. 编解码类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id14">8.5. 外设类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id15">8.6. 硬件类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id19">8.7. 工具类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usb_faqs/index.html">8.8. 总线类</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">8.9. 量化工具链类</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">8.9.1. 模型量化错误及解决方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hb-mapper-checker-01-check-sh">8.9.1.1. hb_mapper checker (01_check.sh) 错误</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-mapper-makertbin-03-build-sh">8.9.1.2. hb_mapper makertbin (03_build.sh) 错误</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">8.9.1.3. 其他工具使用错误</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hb-model-modifier">hb_model_modifier 工具使用错误</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hb-model-verifier">hb_model_verifier 工具使用错误</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hb-onnxruntime">hb_onnxruntime 错误</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#bin">8.9.2. .bin模型上板错误及解决方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">8.9.3. 模型量化及上板使用技巧</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#qat">8.9.3.1. 量化感知训练QAT</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hemat">hemat量化使用说明</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id4">使用限制</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id5">环境部署</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id6">模型准备</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id7">QAT模型量化</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id8">模型量化</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id9">其他量化配置</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id11">模型结构检查</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id12">量化训练策略</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id13">量化精度验证</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id16">模型编译</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id17">示例代码</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#transformer">8.9.3.2. Transformer使用说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#addtransformer">AddTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#meantransformer">MeanTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#scaletransformer">ScaleTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#normalizetransformer">NormalizeTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#transposetransformer">TransposeTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hwc2chwtransformer">HWC2CHWTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#chw2hwctransformer">CHW2HWCTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#centercroptransformer">CenterCropTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#pilcentercroptransformer">PILCenterCropTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#longsidecroptransformer">LongSideCropTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#padresizetransformer">PadResizeTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#resizetransformer">ResizeTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#pilresizetransformer">PILResizeTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#shortlongresizetransformer">ShortLongResizeTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#padtransformer">PadTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#shortsideresizetransformer">ShortSideResizeTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#paddedcentercroptransformer">PaddedCenterCropTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#bgr2rgbtransformer">BGR2RGBTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rgb2bgrtransformer">RGB2BGRTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rgb2graytransformer">RGB2GRAYTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#bgr2graytransformer">BGR2GRAYTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rgb2gray-128transformer">RGB2GRAY_128Transformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rgb2yuv444transformer">RGB2YUV444Transformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#bgr2yuv444transformer">BGR2YUV444Transformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#bgr2yuv444-128transformer">BGR2YUV444_128Transformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rgb2yuv444-128transformer">RGB2YUV444_128Transformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#bgr2yuvbt601videotransformer">BGR2YUVBT601VIDEOTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rgb2yuvbt601videotransformer">RGB2YUVBT601VIDEOTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#yuvtransformer">YUVTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#reducechanneltransformer">ReduceChannelTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#bgr2nv12transformer">BGR2NV12Transformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rgb2nv12transformer">RGB2NV12Transformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#nv12toyuv444transformer">NV12ToYUV444Transformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#warpaffinetransformer">WarpAffineTransformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#f32tos8transformer">F32ToS8Transformer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#f32tou8transformer">F32ToU8Transformer</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#yolov5x">8.9.3.3. 示例yolov5x模型使用说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#checklist">8.9.3.4. 模型精度调优checklist</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#onnx">1. 验证浮点onnx模型的推理结果</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#yaml">2. 验证yaml配置文件以及前、后处理代码的正确性</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id18">3. 验证模型的图优化阶段未引入精度误差</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id19">4. 验证量化精度是否满足预期</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id20">5. 确保模型编译过程无误且板端推理代码正确</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">8.9.3.5. 模型量化yaml配置文件模板</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#caffeyaml">caffe模型量化yaml文件模板</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#onnxyaml">onnx模型量化yaml文件模板</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#x3bpu">8.9.3.6. x3多核bpu使用说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#binbatch">8.9.3.7. 定点.bin模型上板多batch使用说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id22">8.9.3.8. 应用开发技巧说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id23">多模型控制策略</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id24">模型优先级控制</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#id25">应用调优建议</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">8. </span>FAQ</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">8.9. </span>量化工具链类</a> &raquo;</li>
+      <li><span class="section-number">8.9.1. </span>模型量化错误及解决方法</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="8.9. 量化工具链类" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../../feedback.html" class="btn btn-neutral float-right" title="9. 建议反馈" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">8.9.1. </span>模型量化错误及解决方法<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="hb-mapper-checker-01-check-sh">
+<h2><span class="section-number">8.9.1.1. </span>hb_mapper checker (01_check.sh) 错误<a class="headerlink" href="#hb-mapper-checker-01-check-sh" title="永久链接至标题"></a></h2>
+<ul>
+<li><p><strong>报错信息:</strong> <code class="docutils literal notranslate"><span class="pre">ERROR</span> <span class="pre">The</span> <span class="pre">shape</span> <span class="pre">of</span> <span class="pre">model</span> <span class="pre">input:input</span> <span class="pre">is</span> <span class="pre">[xxx]</span> <span class="pre">which</span> <span class="pre">has</span> <span class="pre">dimensions</span> <span class="pre">of</span> <span class="pre">0.</span> <span class="pre">Please</span> <span class="pre">specify</span> <span class="pre">input-shape</span> <span class="pre">parameter.</span></code></p>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是模型输入为动态shape。针对此错误，您可使用参数 <code class="docutils literal notranslate"><span class="pre">--input-shape</span></code> “input_name input_shape”来指定输入节点的shape信息。</p>
+</li>
+<li><p><strong>报错信息:</strong> <code class="docutils literal notranslate"><span class="pre">ERROR</span> <span class="pre">HorizonRT</span> <span class="pre">not</span> <span class="pre">support</span> <span class="pre">these</span> <span class="pre">cpu</span> <span class="pre">operators:</span> <span class="pre">{op_type}</span> </code></p>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是使用的CPU算子为地平线不支持的CPU算子。 针对此错误，您可以根据我们提供的算子支持列表中的内容对算子进行替换；若不被支持的CPU算子为模型核心算子，请您联系地平线对此进行开发评估。</p>
+</li>
+<li><p><strong>报错信息:</strong> <code class="docutils literal notranslate"><span class="pre">Unsupported</span> <span class="pre">op</span> <span class="pre">{op_type}</span></code></p>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是使用的BPU算子为地平线不支持的BPU算子。针对此错误，若模型整体性能可满足需要，您可以忽略该日志；若模型整体性能不能达到您的预期，您可以根据我们提供的算子支持列表中的内容对算子进行替换。</p>
+</li>
+<li><p><strong>报错信息:</strong> <code class="docutils literal notranslate"><span class="pre">ERROR</span> <span class="pre">nodes:['{op_type}']</span> <span class="pre">are</span> <span class="pre">specified</span> <span class="pre">as</span> <span class="pre">domain:xxx,</span> <span class="pre">which</span> <span class="pre">are</span> <span class="pre">not</span> <span class="pre">supported</span> <span class="pre">by</span> <span class="pre">official</span> <span class="pre">onnx.</span> <span class="pre">Please</span> <span class="pre">check</span> <span class="pre">whether</span> <span class="pre">these</span> <span class="pre">ops</span> <span class="pre">are</span> <span class="pre">official</span> <span class="pre">onnx</span> <span class="pre">ops</span> <span class="pre">or</span> <span class="pre">defined</span> <span class="pre">by</span> <span class="pre">yourself</span></code></p>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是使用的自定义算子为地平线不支持的自定义算子。针对此错误，您可以根据我们提供的算子支持列表中的内容对算子进行替换或参考自定义算子开发完成自定义CPU算子注册。</p>
+</li>
+</ul>
+</section>
+<section id="hb-mapper-makertbin-03-build-sh">
+<h2><span class="section-number">8.9.1.2. </span>hb_mapper makertbin (03_build.sh) 错误<a class="headerlink" href="#hb-mapper-makertbin-03-build-sh" title="永久链接至标题"></a></h2>
+<ul>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Layer</span> <span class="p">{</span><span class="n">op_name</span><span class="p">}</span>  
+    <span class="n">xxx</span> <span class="n">expect</span> <span class="n">data</span> <span class="n">shape</span> <span class="nb">range</span><span class="p">:[[</span><span class="n">xxx</span><span class="p">][</span><span class="n">xxx</span><span class="p">]],</span> <span class="n">but</span> <span class="n">the</span> <span class="n">data</span> <span class="n">shape</span> <span class="ow">is</span> <span class="p">[</span><span class="n">xxx</span><span class="p">]</span>
+<span class="n">Layer</span> <span class="p">{</span><span class="n">op_name</span><span class="p">}</span>
+    <span class="n">Tensor</span> <span class="n">xxx</span> <span class="n">expects</span> <span class="n">be</span> <span class="n">n</span> <span class="n">dimensions</span><span class="p">,</span> <span class="n">but</span> <span class="n">m</span> <span class="n">provided</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是，{op_name}算子超过支持限制被回退到CPU计算。针对此错误，若CPU算子带来的性能损耗您可接受，则无需关注该信息；若性能不能达到您的要求，您可以根据我们提供的算子支持列表中的内容将该op修改至BPU可支持的范围。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>INFO： Layer {op_name} will be executed on CPU
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是，{op_name}算子由于shape（CxHxW）超过8192被回退到CPU计算。针对此错误，若仅少数算子被回退CPU计算且模型整体性能满足要求，则无需关注该信息；若性能不满足要求，建议查看算子支持列表，替换为其他无shape限制的BPU算子。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span> <span class="n">There</span> <span class="ow">is</span> <span class="n">an</span> <span class="n">error</span> <span class="ow">in</span> <span class="k">pass</span><span class="p">:</span> <span class="p">{</span><span class="n">op_name</span><span class="p">}</span><span class="o">.</span> <span class="n">Error</span> <span class="n">message</span><span class="p">:</span><span class="n">xxx</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是，{op_name}算子优化失败。针对此错误，请您将模型以及.log文件收集好后提供给地平线技术人员进行分析处理。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Error</span> <span class="n">There</span> <span class="ow">is</span> <span class="n">an</span> <span class="n">error</span> <span class="ow">in</span> <span class="k">pass</span><span class="p">:</span><span class="n">constant_folding</span><span class="o">.</span> <span class="n">Error</span> <span class="n">message</span><span class="p">:</span> <span class="n">Could</span> <span class="ow">not</span> <span class="n">find</span> <span class="n">an</span> <span class="n">implementation</span> <span class="k">for</span> <span class="n">the</span> <span class="n">node</span> <span class="p">{</span><span class="n">op_name</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是该算子onnxruntime暂未支持。针对此错误，您可以根据我们提供的算子支持列表中的内容对算子进行替换，如不被支持的算子为核心算子，请您联系地平线对此进行开发评估。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">WARNING</span> <span class="nb">input</span> <span class="n">shape</span> <span class="p">[</span><span class="n">xxx</span><span class="p">]</span> <span class="n">has</span> <span class="n">length</span><span class="p">:</span> <span class="n">n</span>  <span class="n">ERROR</span> <span class="nb">list</span> <span class="n">index</span> <span class="n">out</span> <span class="n">of</span> <span class="nb">range</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是目前模型输入暂不支持非四维输入。针对此错误，建议您将模型输入修改至四维（例如HxW -&gt; 1x1xHxW）。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Start</span> <span class="n">to</span> <span class="n">parse</span> <span class="n">the</span> <span class="n">onnx</span> <span class="n">model</span>
+<span class="n">core</span> <span class="n">dump</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是模型解析失败（可能是导出模型时只为一个output/input节点指定了name）。针对此错误，建议您重新导出onnx并确认其有效性（导出onnx模型时不指定output/input name，或者依次为每个output/input节点指定名称）。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Start</span> <span class="n">to</span> <span class="n">calibrate</span><span class="o">/</span><span class="n">quantize</span> <span class="n">the</span> <span class="n">model</span>
+<span class="n">core</span> <span class="n">dump</span>
+
+<span class="n">Start</span> <span class="n">to</span> <span class="nb">compile</span> <span class="n">the</span> <span class="n">model</span> 
+<span class="n">core</span> <span class="n">dump</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是模型量化/编译失败。针对此错误，请您将模型以及.log文件收集好后提供给地平线技术人员进行分析处理。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span> <span class="n">model</span> <span class="n">conversion</span> <span class="n">faild</span><span class="p">:</span> <span class="n">Inferred</span> <span class="n">shape</span> <span class="ow">and</span> <span class="n">existing</span> <span class="n">shape</span> <span class="n">differ</span> <span class="ow">in</span> <span class="n">dimension</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="n">vs</span> <span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是onnx模型的输入shape非法，或者是工具优化pass有误。针对此错误，请您确保onnx模型的有效性，若onnx模型可正常推理，请将模型提供给地平线技术人员进行分析处理。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>WARNING got unexpected input/output/sumin threshold on conv {op_name}! value: xxx
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是数据预处理有误，或该节点weight值太小/太大。针对此错误，1.请您检查数据预处理是否有误；2.我们建议您使用BN算子优化数据分布。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span> <span class="n">hbdk</span><span class="o">-</span><span class="n">cc</span> <span class="nb">compile</span> <span class="n">hbir</span> <span class="n">model</span> <span class="n">failed</span> <span class="k">with</span> <span class="n">returncode</span> <span class="o">-</span><span class="n">n</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是模型编译失败。针对此错误，请您将模型以及.log文件收集好后提供给地平线技术人员进行分析处理。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span> <span class="p">{</span><span class="n">op_type</span><span class="p">}</span>  <span class="n">only</span> <span class="n">support</span> <span class="mi">4</span> <span class="n">dim</span> <span class="nb">input</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是工具链暂不支持该op输入维度为非四维。针对此错误，我们建议您将该op输入维度调整为四维输入。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span> <span class="p">{</span><span class="n">op_type</span><span class="p">}</span> <span class="n">Not</span> <span class="n">support</span> <span class="n">this</span> <span class="n">attribute</span><span class="o">/</span><span class="n">mode</span><span class="o">=</span><span class="n">xxx</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是工具链暂不支持op的该属性。针对此错误，您可以根据我们提供的算子支持列表中的内容进行替换或联系地平线对此进行开发评估。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span> <span class="n">There</span> <span class="ow">is</span> <span class="n">no</span> <span class="n">node</span> <span class="n">can</span> <span class="n">execute</span> <span class="n">on</span> <span class="n">BPU</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">model</span><span class="p">,</span> <span class="n">please</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">the</span> <span class="n">model</span> <span class="n">has</span> <span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">conv</span> <span class="n">node</span> <span class="n">which</span> <span class="ow">is</span> <span class="n">supported</span> <span class="n">by</span> <span class="n">BPU</span><span class="o">.</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是模型中没有可量化的BPU节点。针对此错误，请您确保onnx模型的有效性，且模型中至少使用了一个conv；若前述条件均已满足，请您将模型以及.log文件收集好后提供给地平线技术人员进行分析处理。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span> <span class="p">[</span><span class="n">ONNXRuntimeError</span><span class="p">]</span> <span class="p">:</span> <span class="mi">9</span> <span class="p">:</span> <span class="n">NOT_IMPLEMENTED</span> <span class="p">:</span> <span class="n">could</span> <span class="ow">not</span> <span class="n">find</span> <span class="n">a</span> <span class="n">implementation</span> <span class="k">for</span> <span class="n">the</span> <span class="n">node</span> <span class="n">of</span> <span class="p">{</span><span class="n">op_name</span><span class="p">}:{</span><span class="n">op_type</span><span class="p">}(</span><span class="n">opset</span><span class="p">)</span> 
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是模型opset版本超出工具链支持限制。 针对此错误，请您重新导出模型，确保 <code class="docutils literal notranslate"><span class="pre">opset_version=10或者11</span></code> 。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span> <span class="n">The</span> <span class="n">opset</span> <span class="n">version</span> <span class="n">of</span> <span class="n">the</span> <span class="n">onnx</span> <span class="n">model</span> <span class="ow">is</span> <span class="n">n</span><span class="p">,</span> <span class="n">only</span> <span class="n">model</span> <span class="k">with</span> <span class="n">opset_version</span> <span class="mi">10</span><span class="o">/</span><span class="mi">11</span> <span class="ow">is</span> <span class="n">supported</span> 
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是模型opset版本超出工具链支持限制。针对此错误，请您重新导出模型，确保 <code class="docutils literal notranslate"><span class="pre">opset_version=10</span> <span class="pre">或者</span> <span class="pre">11</span></code> 。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>使用run_on_bpu后转换报错。
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是目前暂不支持将该算子run_on_bpu。<code class="docutils literal notranslate"><span class="pre">run_on_bpu</span></code> 暂仅支持指定模型尾部的 <code class="docutils literal notranslate"><span class="pre">Relu/Softmax/pooling（maxpool、avgpool等）</span></code> 算子以及CPU*+Transpose组合（可通过声明 <code class="docutils literal notranslate"><span class="pre">Transpose</span></code> 节点名称，将 <code class="docutils literal notranslate"><span class="pre">CPU*+Transpose</span></code> 都运行在BPU上，CPU*特指BPU支持的op），若满足前述条件但仍 <code class="docutils literal notranslate"><span class="pre">run_on_bpu</span></code> 失败，请您联系地平线技术人员对此进行分析处理；若不满足前述条件，可联系地平线技术人员对此进行开发评估。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span> <span class="n">tool</span> <span class="n">limits</span> <span class="k">for</span> <span class="nb">max</span> <span class="n">output</span> <span class="n">num</span> <span class="ow">is</span> <span class="mi">32</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是工具链仅支持模型输出节点数量不超过32。针对此错误，建议您将模型输出节点数量控制在32个以内。</p>
+</li>
+</ul>
+</section>
+<section id="id2">
+<h2><span class="section-number">8.9.1.3. </span>其他工具使用错误<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<section id="hb-model-modifier">
+<h3>hb_model_modifier 工具使用错误<a class="headerlink" href="#hb-model-modifier" title="永久链接至标题"></a></h3>
+<ul>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span> <span class="n">Can</span> <span class="ow">not</span> <span class="n">find</span> <span class="n">value</span> <span class="n">info</span> <span class="p">{</span><span class="n">op_name</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 针对此错误，请您完整更新最新版本的工具链SDK开发包。</p>
+</li>
+</ul>
+</section>
+<section id="hb-model-verifier">
+<h3>hb_model_verifier 工具使用错误<a class="headerlink" href="#hb-model-verifier" title="永久链接至标题"></a></h3>
+<ul>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span> <span class="n">Arm</span> <span class="n">result</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">exist</span><span class="p">,</span> <span class="n">program</span> <span class="n">halted</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误后，您可查看终端执行日志相关提示，一般原因为板子连接失败或板端推理失败。针对此错误，若查看到连接失败的相关提示，请您再次确认在当前环境中是否可ping通开发板；若相关提示为板端推理失败，可通过在板端的 /userdata/model_verifier_test路径下执行infer.sh来查看推理失败的具体原因。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span> <span class="n">Quanti</span> <span class="n">onnx</span> <span class="ow">and</span> <span class="n">Arm</span> <span class="n">result</span> <span class="n">Strict</span> <span class="n">check</span> <span class="n">FAILED</span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是模型一致性比对失败。针对此错误，请您将模型提供给地平线技术人员进行分析处理。</p>
+</li>
+</ul>
+</section>
+<section id="hb-onnxruntime">
+<h3>hb_onnxruntime 错误<a class="headerlink" href="#hb-onnxruntime" title="永久链接至标题"></a></h3>
+<ul>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>ERROR [ONNXRuntimeError] : 2：INVALID_ARGUMENT : Unexpected input data type. Actual: (N11onnxruntime17PrimitiveDataTypexxx), expected: (N11onnxruntime17PrimitiveDataTypexxx)
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是输入数据格式与模型不匹配。针对此错误，一般来说浮点onnx模型的输入格式为float32，量化后模型输入格式为int8。可使用可视化工具查看onnx模型input节点的属性。</p>
+</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="bin">
+<h1><span class="section-number">8.9.2. </span>.bin模型上板错误及解决方法<a class="headerlink" href="#bin" title="永久链接至标题"></a></h1>
+<ul>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">common</span><span class="p">.</span><span class="nl">h</span><span class="p">:</span><span class="mi">79</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nl">HR</span><span class="p">:</span><span class="nl">ERROR</span><span class="p">:</span><span class="w"> </span><span class="nl">op_name</span><span class="p">:</span><span class="n">xxx</span><span class="w"> </span><span class="n">invalid</span><span class="w"> </span><span class="n">attr</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="n">xxx</span><span class="w"></span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是libDNN暂不支持该op的某个属性。针对此错误，您可以根据我们提供的算子支持列表中的内容进行替换或联系地平线对此进行开发评估。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span>(hb_dnn_ndarray.cpp:xxx): data type of ndarray do not match specified type. NDArray dtype_: n, given：m
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是libDNN暂不支持该输入类型（后续我们将逐步把算子约束前移至模型转换阶段提醒）。针对此错误，您可以根据我们提供的算子支持列表中的内容进行替换或联系地平线对此进行开发评估。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span>(validate_util.cpp:xxx)：tensor aligned shape size is xxx , but tensor hbSysMem memSize is xxx, tensor hbSysMem memSize should &gt;= tensor aligned shape size!
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 发生此错误的原因可能是输入数据申请内存不足。针对此错误，请使用hbDNNTensorProperties.alignedByteSize来申请内存空间。</p>
+</li>
+<li><p><strong>报错信息:</strong></p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">bpu_model_info</span><span class="p">.</span><span class="nl">cpp</span><span class="p">:</span><span class="n">xxx</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nl">HR</span><span class="p">:</span><span class="nl">ERROR</span><span class="p">:</span><span class="w"> </span><span class="n">hbm</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="n">feature</span><span class="w"> </span><span class="n">names</span><span class="w"> </span><span class="n">must</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">equal</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">graph</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="n">names</span><span class="w"></span>
+</pre></div>
+</div>
+<p><strong>解决方法：</strong> 针对此错误，请您完整更新最新版本的工具链SDK开发包。</p>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h1><span class="section-number">8.9.3. </span>模型量化及上板使用技巧<a class="headerlink" href="#id3" title="永久链接至标题"></a></h1>
+<section id="qat">
+<h2><span class="section-number">8.9.3.1. </span>量化感知训练QAT<a class="headerlink" href="#qat" title="永久链接至标题"></a></h2>
+<p><strong>量化感知训练QAT</strong>，是将训练过的模型量化后又再进行重训练。由于定点数值无法用于反向梯度计算，实际操作过程是在某些op前插入 <code class="docutils literal notranslate"><span class="pre">伪量化节点</span></code>（fake quantization nodes）， 用于在训练时获取流经该op的数据的截断值，便于在部署量化模型时对节点进行量化时使用。我们需要在训练中通过不断优化精度来获取最佳的量化参数。</p>
+<p><img alt="qat_01" src="../../_images/qat_01.png" /></p>
+<p>如上图所示，a为量化的定点模型，数据和模型权重均已变为定点数，通常情况下我们希望  <code class="docutils literal notranslate"><span class="pre">后量化（PTQ）</span></code> 能直接得到a所示的定点模型，并且精度不会损失太多。如果精度损失太多，则需要借助图b所示的 <code class="docutils literal notranslate"><span class="pre">量化感知训练（QAT）</span></code> 减少量化误差。QAT的基本原理是在浮点模型中插入伪量化节点，使得模型在训练中可以感知到量化误差，减少量化损失的精度。如上图b所示，在模型中针对 <code class="docutils literal notranslate"><span class="pre">conv-weight</span></code> 和 <code class="docutils literal notranslate"><span class="pre">activation</span></code> 插入 <code class="docutils literal notranslate"><span class="pre">FakeQuanti</span></code> 节点。由FakeQuanti模拟量化过程，weight会学习到量化的影响，最终损失精度会更小。</p>
+<p>在地平线工具链中，QAT的上下游如下图所示：</p>
+<p><img alt="qat_02" src="../../_images/qat_02.png" /></p>
+<ul class="simple">
+<li><p><strong>Float</strong>: 浮点模型，训练一个正常的浮点模型是QAT的前置步骤，QAT相当于在浮点模型的基础上插入伪量化结点并finetune。</p></li>
+<li><p><strong>Calibration</strong>: 量化校准，伪量化的初始scale有时不太靠谱，在训练之前需要先做校准，避免不合理的scale初始化影响QAT训练。这一步不是必须的，如果QAT模型精度满足要求，那么可以不做calibration，但一般而言calibration有益无害。</p></li>
+<li><p><strong>QAT</strong>：finetune插入了伪量化节点之后的浮点模型。</p></li>
+<li><p><strong>INT</strong>：定点模型，将QAT模型使用地平线转换工具链转换为定点模型，定点模型编译后可以上板。</p></li>
+</ul>
+<section id="hemat">
+<h3>hemat量化使用说明<a class="headerlink" href="#hemat" title="永久链接至标题"></a></h3>
+<section id="id4">
+<h4>使用限制<a class="headerlink" href="#id4" title="永久链接至标题"></a></h4>
+<p>本章节主要针对用户模型在 <code class="docutils literal notranslate"><span class="pre">PTQ量化</span></code> 精度不足前提下，来使用QAT的量化手段对模型精度做进一步提升；但因需对模型进行重新训练并调参，对操作人员技术要求比较高，故 <strong>不建议普通用户使用</strong>。</p>
+</section>
+<section id="id5">
+<h4>环境部署<a class="headerlink" href="#id5" title="永久链接至标题"></a></h4>
+<p>地平线提供两种环境部署方式：<code class="docutils literal notranslate"><span class="pre">docker方式</span></code> 和 <code class="docutils literal notranslate"><span class="pre">虚拟环境安装</span></code> 方式，以下给出两种方式的部署方法，其中version根据实际发布包的版本号进行替换。</p>
+<ul>
+<li><p><strong>Docker方式</strong></p>
+<p>请参考 <a class="reference external" href="../../ai_toolchain_develop/env_install.html#">环境部署</a> 章节内容。</p>
+</li>
+<li><p><strong>虚拟环境方式</strong></p>
+<p>如果您想在原模型训练环境中完成QAT训练，可联系地平线技术支持人员来获取 <code class="docutils literal notranslate"><span class="pre">hemat-{version}-py3-none-any.whl</span></code> 文件，使用以下命令安装（注：环境对应的torch版本为1.9.1）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    pip install hemat-<span class="o">{</span>version<span class="o">}</span>-py3-none-any.whl
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="id6">
+<h4>模型准备<a class="headerlink" href="#id6" title="永久链接至标题"></a></h4>
+<p>QAT训练是一种finetune方法，最好是在浮点结果已经拟合的情况下，再用QAT方法提升量化精度。 即用户的训练分为了两个步骤，先训练浮点模型，将模型精度提升到满意的指标；再通过QAT训练，提升量化精度。</p>
+<p>地平线主推的社区QAT功能是基于fx graph模式开发的，fx graph模式的社区qat不需要编写 <code class="docutils literal notranslate"><span class="pre">fuse_model</span></code> 和 <code class="docutils literal notranslate"><span class="pre">set_qconfig</span></code>，但由于pytorch fx自身的局限性，需要对模型的forward方法进行一些调整以适配 <code class="docutils literal notranslate"><span class="pre">fx</span></code>。注意事项有以下几点：</p>
+<ul>
+<li><p>a. 避免在 <code class="docutils literal notranslate"><span class="pre">forward</span></code> 中编写不运行在training状态的逻辑。避免生成的 <code class="docutils literal notranslate"><span class="pre">graph</span> <span class="pre">module</span></code> 会丢失training无关的逻辑（如模型后处理部分）。</p></li>
+<li><p>b. 由于fx不支持动态控制流，因此避免在forward中使用与动态输入有关的语句（if、for、assert等）。对于并非真正的动态（如：height, width），可以以成员变量的形式预先存储在模型中。如无法避免与动态输入相关的控制流，可以将这部分逻辑写为一个函数，使用wrap方法装饰起来，用法见 <a class="reference external" href="https://pytorch.org/docs/stable/fx.html#torch.fx.wrap">pytorch社区wrap</a> 章节内容。</p>
+<p><img alt="qat_03" src="../../_images/qat_03.png" /></p>
+</li>
+<li><p>c. python的部分内置方法不支持trace，比如：len。可以使用wrap()修饰不需要被trace的方法，详细用法见 <a class="reference external" href="https://pytorch.org/docs/stable/fx.html#non-torch-functions">pytorch社区</a> 章节内容。</p>
+<p><img alt="qat_04" src="../../_images/qat_04.png" /></p>
+</li>
+<li><p>d. 如果有不需要量化的逻辑，可以使用wrap装饰不需要量化的逻辑，这部分逻辑会作为一个整体被trace，中间不会插入伪量化结点。用法见 <a class="reference external" href="https://pytorch.org/docs/stable/fx.html#torch.fx.wrap">pytorch社区wrap</a> 章节内容。</p>
+<p><img alt="qat_05" src="../../_images/qat_05.png" /></p>
+</li>
+<li><p>e. 将需要运行在AI芯片上的、需要量化的部分封装为独立的module成员变量，可仅对该部分做量化感知训练。以下写法是地平线推荐的写法：</p>
+<p><img alt="qat_06" src="../../_images/qat_06.png" /></p>
+</li>
+<li><p>f. 共享conv不共享bn会导致模型在fuse过程混乱导致模型预测完全错误。对于此类问题pytorch在fuse这里的代码中留了todo，后续版本应该会解决这个问题。在当前版本，为了避免这个问题，推荐重点检查参数共享中有无处理完一个分支后影响另一个分支的情况。这类参数共享问题的解决方法建议将QAT模型的conv拆开。</p></li>
+</ul>
+</section>
+<section id="id7">
+<h4>QAT模型量化<a class="headerlink" href="#id7" title="永久链接至标题"></a></h4>
+</section>
+<section id="id8">
+<h4>模型量化<a class="headerlink" href="#id8" title="永久链接至标题"></a></h4>
+<p>地平线主推的社区QAT功能是基于 <code class="docutils literal notranslate"><span class="pre">fx</span> <span class="pre">graph模式</span></code> 开发的。用户只需要对模型结构做出少量调整。通过调用torch的量化接口 <code class="docutils literal notranslate"><span class="pre">prepare_qat_fx</span></code>，使用地平线提供的量化策略配置，即可完成QAT模型的构造。本章节主要对prepare_qat_fx接口以及地平线提供的量化策略配置做介绍。</p>
+<section id="prepare-qat-fx">
+<h5>prepare_qat_fx<a class="headerlink" href="#prepare-qat-fx" title="永久链接至标题"></a></h5>
+<p>该接口为torch提供的模型量化接口，作用为将浮点模型转为一个可以进行量化感知训练的Prepare模型。定义如下：</p>
+<p><img alt="qat_07" src="../../_images/qat_07.png" /></p>
+<p><img alt="qat_08" src="../../_images/qat_08.png" /></p>
+<p>当用户调用prepare_qat_fx时，会进行以下步骤：</p>
+<ul class="simple">
+<li><p>a. 构建静态图：使用 <code class="docutils literal notranslate"><span class="pre">fx工具</span></code> trace整个网络结构（可使用prepare_custum_config_dict指定某一块不被trace），构建出一个静态的网络结构。</p></li>
+<li><p>b. 融合特定网络结构：加载默认的和用户定义的 <code class="docutils literal notranslate"><span class="pre">fuse</span> <span class="pre">pattern</span></code> 配置，对网络结构进行遍历、融合，例如pytorch默认会把conv+bn+relu融合为instrice.ConvBnRelu。</p></li>
+<li><p>c. 转换网络结构：加载默认的和用户定义的 <code class="docutils literal notranslate"><span class="pre">convert</span> <span class="pre">pattern</span></code> 配置，将网络中特定的网络结构转换为指定的网络结构。</p></li>
+<li><p>d. 量化网络结构：加载默认的和用户定义的 <code class="docutils literal notranslate"><span class="pre">quantize</span> <span class="pre">pattern</span></code> ，在需量化的节点位置插入伪量化结点。</p></li>
+</ul>
+</section>
+<section id="qconfig-dict">
+<h5>qconfig_dict<a class="headerlink" href="#qconfig-dict" title="永久链接至标题"></a></h5>
+<p>qconfig_dict作用为声明量化节点的量化方法，例如 <code class="docutils literal notranslate"><span class="pre">非对称</span></code>、<code class="docutils literal notranslate"><span class="pre">per-tensor</span></code> 等方法，地平线支持的量化方式为：Weight: Int8 per channel symetric；Activation: Int8 per tensor symetric。目前地平线支持的量化qconfig为以下3种配置：</p>
+<p><img alt="qat_09" src="../../_images/qat_09.png" /></p>
+<ul class="simple">
+<li><p><strong>如果用户有自定义qconfig的需求，可以参照 <code class="docutils literal notranslate"><span class="pre">pytorch官方文档</span></code> 和地平线提供的 <code class="docutils literal notranslate"><span class="pre">三个qconfig_dict</span></code> 进行 <code class="docutils literal notranslate"><span class="pre">自定义</span></code>，需要注意的是量化方式需要和地平线保持一致！</strong></p></li>
+</ul>
+<p>Calibration的使用不是必须的，但是几乎对于所有模型都有提升，因此建议您可以尝试先使用Calibration对量化参数做初始化，以下提供两个示例分别为使用Calibration和未使用Calibration下如何使用：</p>
+<ul class="simple">
+<li><p><strong>不使用Calibration</strong></p></li>
+</ul>
+<p><img alt="qat_10" src="../../_images/qat_10.png" /></p>
+<ul class="simple">
+<li><p><strong>使用Calibration</strong></p></li>
+</ul>
+<p>Calibration的实现方式很多，这里给用户推荐两种最简单的实现：</p>
+<ul class="simple">
+<li><p>方式1：使用 <code class="docutils literal notranslate"><span class="pre">HorizonQConfig</span></code>，在QAT训练的前 <code class="docutils literal notranslate"><span class="pre">2000-5000</span></code> 个step将学习率设为0，这样模型权重不会更新，但伪量化结点会更新。</p></li>
+</ul>
+<p><img alt="qat_11" src="../../_images/qat_11.png" /></p>
+<ul class="simple">
+<li><p>方式2：使用 <code class="docutils literal notranslate"><span class="pre">HorizonCalibrationQConfig</span></code>，将模型设置为eval()，使用训练数据运行 <code class="docutils literal notranslate"><span class="pre">2000-5000</span></code> 次前向推理。</p></li>
+</ul>
+<p><img alt="qat_12" src="../../_images/qat_12.png" /></p>
+</section>
+<section id="prepare-custom-config-dict">
+<h5>prepare_custom_config_dict<a class="headerlink" href="#prepare-custom-config-dict" title="永久链接至标题"></a></h5>
+<p><code class="docutils literal notranslate"><span class="pre">prepare_custom_config_dict</span></code> 作用为自定义设置prepare的过程，例如：指定不量化某一层、指定不使用FX追踪某一层、指定某些结构（avgpooling+relu）可以打包量化等。</p>
+<p>地平线提供 <code class="docutils literal notranslate"><span class="pre">HorizonPrepareCustomConfigDict</span></code>作为 <code class="docutils literal notranslate"><span class="pre">prepare_custom_config_dict</span></code>，主要定义了关于 <code class="docutils literal notranslate"><span class="pre">add</span></code> 和 <code class="docutils literal notranslate"><span class="pre">pooling</span></code> 等算子的量化方式。若用户有自定义prepare_custom_config_dict的需求，建议用户先查看 <code class="docutils literal notranslate"><span class="pre">pytorch官方文档prepare-fx</span></code> 章节，以下列出与QAT有关的常见配置选项：</p>
+<p><img alt="qat_13" src="../../_images/qat_13.png" /></p>
+<p>若您需要自定义 <code class="docutils literal notranslate"><span class="pre">prepare_custom_config_dict</span></code> 时，请在 <code class="docutils literal notranslate"><span class="pre">HorizonPrepareCustomConfigDict</span></code> 的基础上进行修改，以免 <code class="docutils literal notranslate"><span class="pre">add</span></code> 和 <code class="docutils literal notranslate"><span class="pre">pooling</span></code> 等算子的量化方式不正确。见示例：</p>
+<p><img alt="qat_14" src="../../_images/qat_14.png" /></p>
+</section>
+</section>
+<section id="id9">
+<h4>其他量化配置<a class="headerlink" href="#id9" title="永久链接至标题"></a></h4>
+<p>除了相关配置外，地平线也针对pytorch社区QAT制作了一些方便使用的接口。本章将对这些接口做介绍和使用说明。</p>
+<section id="id10">
+<h5>输入/输出量化配置<a class="headerlink" href="#id10" title="永久链接至标题"></a></h5>
+<p><strong>接口</strong>：disable_input_fake_quant &amp;&amp; disable_output_fake_quant</p>
+<p><strong>作用</strong>：关闭模型输入输出的伪量化操作。</p>
+<p><strong>使用情景</strong>：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">disable_input_fake_quant</span></code>：</p></li>
+</ul>
+<p>如果确认模型的输入是量化过的，可以使用disable_input_fake_quant。对于_modules中存在但 <code class="docutils literal notranslate"><span class="pre">named_modules</span></code> 中没有的情况不能保证disable_input_fake_quant如预期工作，可以通过打印模型确认节点是否被禁用，如果没有被禁用则需要手动使用disable_fake_quant()摘除伪量化节点，详细用法参考 <a class="reference external" href="ai_toolchain_FAQS.html#id11">模型结构检查</a> 章节。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">disable_output_fake_quant</span></code>：</p></li>
+</ul>
+<p>算子以 <code class="docutils literal notranslate"><span class="pre">conv</span></code> 、 <code class="docutils literal notranslate"><span class="pre">matmul</span></code> 结尾可使用 <code class="docutils literal notranslate"><span class="pre">disable_output_fake_quant</span></code> 实现高精度输出，如果输出是 <code class="docutils literal notranslate"><span class="pre">sigmoid</span></code>， <code class="docutils literal notranslate"><span class="pre">tanh</span></code> 等无法支持高精度输出的算子，且仍然希望这部分运行在BPU上，则不需要调用disable_output_fake_quant；对于_modules中存在但named_modules中没有的情况不能保证disable_output_fake_quant如预期工作，可以通过打印模型确认节点是否被禁用，如果没有被禁用则需要手动使用disable_fake_quant()摘除伪量化节点，详细用法参考 <a class="reference external" href="ai_toolchain_FAQS.html#id11">模型结构检查</a> 章节。
+通过打印模型可以看到伪量化结点有fake_quant_enable变量，该变量控制该结点是否做量化操作，为1则量化，为0则不量化。</p>
+<p><img alt="qat_15" src="../../_images/qat_15.png" /></p>
+<p>如不需要对输入输出量化可通过调用 <code class="docutils literal notranslate"><span class="pre">disable_input_fake_quant</span></code> 或 <code class="docutils literal notranslate"><span class="pre">disable_output_fake_quant</span></code> 将对应伪量化结点的 <code class="docutils literal notranslate"><span class="pre">fake_quant_enable</span></code> 置 <code class="docutils literal notranslate"><span class="pre">0</span></code>。使用方式见示例：</p>
+<p><img alt="qat_16" src="../../_images/qat_16.png" /></p>
+<p>在以上示例中仅对 <code class="docutils literal notranslate"><span class="pre">neck</span></code> 和 <code class="docutils literal notranslate"><span class="pre">head</span></code> 做了量化，neck的输入来自于backbone，未量化过，所以neck不需要调用 <code class="docutils literal notranslate"><span class="pre">disable_input_fake_quant</span></code>，而neck不是模型的最终输出，所以也不需要调用disable_output_fake_quant。head的输入来自neck，已经经过量化，所以head的输入不需要量化，同时head的输出是模型的最终输出，所以两个方法都需要调用。</p>
+</section>
+<section id="train-eval">
+<h5>量化状态train/eval配置<a class="headerlink" href="#train-eval" title="永久链接至标题"></a></h5>
+<p><strong>接口</strong>：set_qat_eval &amp;&amp; set_qat_train</p>
+<p><strong>作用</strong>：设置QAT模型 <code class="docutils literal notranslate"><span class="pre">train</span></code> 和 <code class="docutils literal notranslate"><span class="pre">eval</span></code> 的状态，控制伪量化的 <code class="docutils literal notranslate"><span class="pre">scale</span></code> 等参数的更新（该接口控制的是伪量化节点的train/eval状态，非模型的train/eval状态！）。</p>
+<p>打印模型可以看到伪量化结点有 <code class="docutils literal notranslate"><span class="pre">observer_enable</span></code> 变量，该变量控制伪量化的scale等参数是否更新。开启时值为1，伪量化的scale等参数在每次forward中都会根据observer统计到的min，max进行更新，关闭时为0，停止更新。</p>
+<p><img alt="qat_17" src="../../_images/qat_17.png" /></p>
+<p>通过调用 <code class="docutils literal notranslate"><span class="pre">set_qat_eval</span> <span class="pre">&amp;&amp;</span> <span class="pre">set_qat_train</span></code> 可以改变 <code class="docutils literal notranslate"><span class="pre">observer_enable</span></code> 的状态。当使用set_qat_eval 时observer_enable变为0，调用set_qat_train后，observer_enable将变为1。需要注意的是，当使用HorizonQConfig 时无需调用set_qat_eval &amp;&amp; set_qat_train接口，在内部逻辑中量化参数的更新会根据模型状态做调整，模型处于 <code class="docutils literal notranslate"><span class="pre">eval</span></code> 状态时，量化参数不再更新，处于training时量化参数更新。具体使用方法示例：</p>
+<p><img alt="qat_18" src="../../_images/qat_18.png" /></p>
+</section>
+</section>
+<section id="id11">
+<h4>模型结构检查<a class="headerlink" href="#id11" title="永久链接至标题"></a></h4>
+<p>为保证量化的正确性，建议您在  <code class="docutils literal notranslate"><span class="pre">prepare_qat_fx</span></code> 后，将已插入伪量化的节点的QAT模型进行打印，通过观察以下四点来对模型伪量化结构进行检查：</p>
+<ul class="simple">
+<li><p><strong>检查需量化的模型节点</strong></p></li>
+</ul>
+<p>对需插入伪量化节点的位置检查是否正确插入，标识为 <code class="docutils literal notranslate"><span class="pre">weight_fake_quant</span></code> 和 <code class="docutils literal notranslate"><span class="pre">activation_post_process</span></code>。下图为 <code class="docutils literal notranslate"><span class="pre">conv+BN+ReLU</span></code> 在prepare_qat时融合为 <code class="docutils literal notranslate"><span class="pre">ConvBnReLU2d</span></code>，从图中可以看出weight有了伪量化，weight的伪量化一般都是放在模块内。</p>
+<p><img alt="qat_19" src="../../_images/qat_19.png" /></p>
+<p>下图表明 <code class="docutils literal notranslate"><span class="pre">cls_seg_0</span></code> 模块的输出已经有了伪量化结点。输出的伪量化一般都放在模块外，且名称以 <code class="docutils literal notranslate"><span class="pre">activation_post_process</span></code> 结尾。</p>
+<p><img alt="qat_20" src="../../_images/qat_20.png" /></p>
+<ul class="simple">
+<li><p><strong>检查无需量化的模型节点</strong></p></li>
+</ul>
+<p>检查非必要模块是否插入了量化节点。<code class="docutils literal notranslate"><span class="pre">loss</span></code>,  <code class="docutils literal notranslate"><span class="pre">post_process</span></code> 等与inference无关或没有量化需求的模块不需要插入量化节点，否则会引入不必要的误差。<strong>同时强烈建议比照PTQ模型算子运行情况（BPU/CPU），检查QAT模型结构，将所有CPU算子的伪量化节点去掉，能减少部署时可能产生的转换问题</strong>。</p>
+<p><img alt="qat_21" src="../../_images/qat_21.png" /></p>
+<p>若出现无需量化的位置插入了伪量化节点可以通过查看节点所在位置，使用 <code class="docutils literal notranslate"><span class="pre">disable_fake_quant()</span></code> 手动去除量化节点。使用方法见示例：</p>
+<p><img alt="qat_22" src="../../_images/qat_22.png" /></p>
+<ul class="simple">
+<li><p><strong>模型输出节点的检查</strong></p></li>
+</ul>
+<p>查看输出的伪量化结点是否已经禁用。如果没有禁用，则需要调用 <code class="docutils literal notranslate"><span class="pre">disable_output_fake_quant</span></code> 将 <code class="docutils literal notranslate"><span class="pre">fake_quant_enable</span></code> 置 <code class="docutils literal notranslate"><span class="pre">0</span></code>，具体用法和注意事项见章节 <a class="reference external" href="ai_toolchain_FAQS.html#id10">输入/输出量化配置</a> 内容。</p>
+<p><img alt="qat_23" src="../../_images/qat_23.png" /></p>
+<ul class="simple">
+<li><p><strong>注册算子节点的检查</strong></p></li>
+</ul>
+<p>在import <code class="docutils literal notranslate"><span class="pre">HorizonPrepareCustomConfigDict</span></code> 时，程序会自动向pytorch注册几个 <code class="docutils literal notranslate"><span class="pre">固定scale</span></code> 的算子（sigmoid,tanh…）的量化方法，这一部分无需用户显式调用，程序自动完成。用户可以检查QAT模型中的sigmoid等算子的输出伪量化对应的scale是否为同样的固定值。</p>
+<p><img alt="qat_24" src="../../_images/qat_24.png" /></p>
+</section>
+<section id="id12">
+<h4>量化训练策略<a class="headerlink" href="#id12" title="永久链接至标题"></a></h4>
+<ul>
+<li><p>a. 开启calibration。从下图可以看到，如果不做calibration，初始的scale值为 <code class="docutils literal notranslate"><span class="pre">1</span></code>，做完calibration之后，该值应小于1，开启方法见章节 <a class="reference external" href="ai_toolchain_FAQS.html#qconfig-dict">qconfig_dict</a>。</p>
+<p><img alt="qat_25" src="../../_images/qat_25.png" /></p>
+<p><strong>注：calibration阶段，数据不要使用augmentation，前处理和推理阶段保持一致。</strong></p>
+</li>
+<li><p>b. 若使用多卡且batchsize较小，建议开启 <code class="docutils literal notranslate"><span class="pre">同步BN</span></code></p></li>
+<li><p>c. 绝大部分情况下，<code class="docutils literal notranslate"><span class="pre">batch</span> <span class="pre">size</span></code> 尽可能大一些，最好打满显存。有的时候太大也不好（一般发生在大于128时），具体取值需调参尝试。原理见：<a class="reference external" href="https://www.zhihu.com/question/61607442">怎么选取训练神经网络时的Batch size?</a></p></li>
+<li><p>d. 减弱data augmentation。由于量化误差的存在，QAT模型的拟合能力会弱于float模型。减弱并非全部关闭，可关闭较复杂的 <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">augmentation</span></code>,保留部分基础的data augmentation。</p></li>
+<li><p>e. 通过前处理改变输入分布，确保输入数据分布合理，均值为 <code class="docutils literal notranslate"><span class="pre">0</span></code>，最好是均匀分布，其次为高斯分布，避免长尾分布，强烈推荐用户将输入映射到 <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code>，尽量避免只有正/负数值域的表示。</p></li>
+<li><p>f. weight decay一般设置为 <code class="docutils literal notranslate"><span class="pre">4e-5</span></code>，可根据实际实验情况调整。weight decay过小导致weight方差过大，weight decay过大导致输出较大的任务（比如检测的bbox回归）输出层weight方差过大。</p></li>
+<li><p>g. learning rate一般从 <code class="docutils literal notranslate"><span class="pre">0.001</span></code> 左右开始设置，可根据实际实验情况调整。一般可以搭配 <code class="docutils literal notranslate"><span class="pre">StepLrUpdater</span></code> 做1-2次scale=0.1的decay。learning rate的最小值最好不要小于 <code class="docutils literal notranslate"><span class="pre">1e-6</span></code></p></li>
+<li><p>h. 不推荐使用warmup。QAT属于finetune任务，<code class="docutils literal notranslate"><span class="pre">warmup</span></code> 初期学习率过小，对QAT几乎没有加成，甚至会降低QAT精度。</p></li>
+<li><p>i. epoch长度不固定，一般选为 <code class="docutils literal notranslate"><span class="pre">float</span></code> epoch大小的十分之一到二分之一不等。</p></li>
+<li><p>j. 最优精度的QAT模型一般在第一个epoch结果的基础上提升不超过3个点，如果第一个epoch的指标较低，那么基本可以断定最后模型的结果不会很好。</p></li>
+<li><p>k. 如果单次训练的 <code class="docutils literal notranslate"><span class="pre">batch</span> <span class="pre">size</span></code> 较小，固定住BN的均值和方差可能取得意想不到的效果。示例见下：</p>
+<p><img alt="qat_26" src="../../_images/qat_26.png" /></p>
+</li>
+<li><p>l. 调整 <code class="docutils literal notranslate"><span class="pre">averaging_constant</span></code>，取值范围为 <code class="docutils literal notranslate"><span class="pre">（0,</span> <span class="pre">1]</span></code> 。伪量化结点中的 <code class="docutils literal notranslate"><span class="pre">observer</span></code> 通常采用 <code class="docutils literal notranslate"><span class="pre">滑动平均</span></code> 的方式更新，<code class="docutils literal notranslate"><span class="pre">averaging_constant</span></code> 控制当前值的影响程度。averaging_constant越大，当前值影响越大，反之影响越小。在scale初始化不靠谱时，调大averaging_constant效果较好；在训练稳定性较差或者数据集较小的任务，调小averaging_constant效果较好。averaging_constant定义见示例：</p>
+<p><img alt="qat_27" src="../../_images/qat_27.png" /></p>
+</li>
+<li><p>m. 多选用 <code class="docutils literal notranslate"><span class="pre">不同epoch</span></code> 的浮点模型做QAT，有时并非最好的浮点模型就能训出最好的QAT模型。最好的浮点模型往往处于过拟合的边缘，此时进行QAT不一定最好。</p></li>
+<li><p>n. 没有calibration的情况下 <code class="docutils literal notranslate"><span class="pre">Weight</span></code> 与 <code class="docutils literal notranslate"><span class="pre">fake</span> <span class="pre">quantize</span></code> 交替更新效果比较明显。<code class="docutils literal notranslate"><span class="pre">weight</span></code> 与 <code class="docutils literal notranslate"><span class="pre">fake</span> <span class="pre">quantize</span> <span class="pre">scale</span></code> 的收敛方向可能不一致，同时调整两者可能产生冲突。</p></li>
+</ul>
+</section>
+<section id="id13">
+<h4>量化精度验证<a class="headerlink" href="#id13" title="永久链接至标题"></a></h4>
+<section id="id14">
+<h5>精度验证<a class="headerlink" href="#id14" title="永久链接至标题"></a></h5>
+<p>QAT的精度验证过程与浮点精度验证原理相同，可直接复用浮点模型评测代码，见代码示例：</p>
+<p><img alt="qat_28" src="../../_images/qat_28.png" /></p>
+</section>
+<section id="id15">
+<h5>问题定位<a class="headerlink" href="#id15" title="永久链接至标题"></a></h5>
+<p>得到QAT模型精度以后，如果发现掉点问题，请按照如下步骤定位问题：</p>
+<p><img alt="qat_29" src="../../_images/qat_29.png" /></p>
+</section>
+</section>
+<section id="id16">
+<h4>模型编译<a class="headerlink" href="#id16" title="永久链接至标题"></a></h4>
+<p>模型上板需编译为 <code class="docutils literal notranslate"><span class="pre">.bin</span></code>，地平线提供以下两种方式实现：</p>
+<ul>
+<li><p><strong>export to onnx + hb_mapper makertbin 工具(推荐首选方式)</strong></p>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">export_to_onnx</span></code> 接口将qat_model导出 <code class="docutils literal notranslate"><span class="pre">qat_model.onnx</span></code>，再使用工具链 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">makertbin</span></code> 工具通过对 <code class="docutils literal notranslate"><span class="pre">yaml文件</span></code> 中的calibration_type设置为 <code class="docutils literal notranslate"><span class="pre">'load'</span></code>，即可实现将qat_model.onnx编译为.bin文件. 该方法的工具开发比较完善, 因此推荐用户优先使用该方法. export_to_onnx使用方法见示例：</p>
+<p><img alt="qat_30" src="../../_images/qat_30.png" /></p>
+</li>
+<li><p><strong>convert + compile</strong></p>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">convert</span></code> 将qat model转化为 <code class="docutils literal notranslate"><span class="pre">quantilized</span> <span class="pre">model</span></code>，再通过 <code class="docutils literal notranslate"><span class="pre">compile</span></code> 接口将quantilized model编译为可上板的 <code class="docutils literal notranslate"><span class="pre">.bin</span></code>，convert过程中会产出中间结果 <code class="docutils literal notranslate"><span class="pre">onnx_temp.onnx</span></code>，与后文介绍的 <code class="docutils literal notranslate"><span class="pre">export_to_onnx</span></code> 接口的产物相同。该方法由于尚在开发中, 因此部分功能实现并不完善，使用见示例：</p>
+<p><img alt="qat_31" src="../../_images/qat_31.png" /></p>
+</li>
+</ul>
+</section>
+<section id="id17">
+<h4>示例代码<a class="headerlink" href="#id17" title="永久链接至标题"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">torch.quantization.quantize_fx</span> <span class="kn">import</span> <span class="n">prepare_qat_fx</span>
+
+<span class="kn">from</span> <span class="nn">hemat.torch.quantization</span> <span class="kn">import</span> <span class="p">(</span>
+
+<span class="n">HorizonQConfig</span><span class="p">,</span>
+
+<span class="n">HorizonPrepareCustomConfigDict</span><span class="p">,</span>
+
+<span class="n">disable_output_fake_quant</span><span class="p">,</span>
+
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">hemat.torch.quantization</span> <span class="kn">import</span> <span class="n">set_qat_eval</span><span class="p">,</span> <span class="n">set_qat_train</span>
+
+<span class="kn">from</span> <span class="nn">horizon_nn.torch</span> <span class="kn">import</span> <span class="n">export_onnx</span><span class="p">,</span> <span class="n">convert</span>
+
+<span class="kn">from</span> <span class="nn">horizon_tc_ui.torch.qat_compile</span> <span class="kn">import</span> <span class="nb">compile</span>
+
+<span class="k">def</span> <span class="nf">load_model</span><span class="p">():</span>
+<span class="k">pass</span>
+<span class="k">def</span> <span class="nf">accuracy</span><span class="p">():</span>
+<span class="k">pass</span>
+<span class="k">def</span> <span class="nf">evaluate</span><span class="p">():</span>
+<span class="k">pass</span>
+<span class="k">def</span> <span class="nf">train</span><span class="p">():</span>
+<span class="k">pass</span>
+<span class="k">def</span> <span class="nf">prepare_data_loaders</span><span class="p">():</span>
+<span class="k">pass</span>
+
+<span class="n">data_loader</span> <span class="o">=</span> <span class="n">prepare_data_loaders</span><span class="p">()</span>
+<span class="n">float_model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">()</span><span class="c1"># 用户训练好的模型</span>
+
+<span class="c1"># 按照HorizonQConfig配置量化策略</span>
+<span class="n">qat_model</span> <span class="o">=</span> <span class="n">prepare_qat_fx</span><span class="p">(</span><span class="n">float_model</span><span class="p">,</span> <span class="n">HorizonQConfig</span><span class="p">,</span> <span class="n">HorizonPrepareCustomConfigDict</span><span class="p">)</span>
+
+<span class="c1"># 设置最后一层卷积高精度输出 (若无此要求, 该步骤可省略)</span>
+<span class="n">qat_model</span> <span class="o">=</span> <span class="n">disable_output_fake_quant</span><span class="p">(</span><span class="n">qat_model</span><span class="p">)</span>
+
+<span class="c1"># 检查一下QAT模型结构是否正确</span>
+<span class="c1"># print(qat_model)</span>
+
+<span class="k">for</span> <span class="n">nepoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epoch_size</span><span class="p">):</span>
+<span class="c1"># 设置模型为训练模式, 开启量化参数更新</span>
+<span class="n">qat_model</span> <span class="o">=</span> <span class="n">set_qat_train</span><span class="p">(</span><span class="n">qat_model</span><span class="p">)</span>
+<span class="n">train</span><span class="p">(</span><span class="n">qat_model</span><span class="p">)</span>
+
+<span class="c1"># 设置模型为评测模式, 停止量化参数更新</span>
+<span class="n">qat_model</span> <span class="o">=</span> <span class="n">set_qat_eval</span><span class="p">(</span><span class="n">qat_model</span><span class="p">)</span>
+<span class="n">top1</span><span class="p">,</span> <span class="n">top5</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">qat_model</span><span class="p">)</span>
+
+<span class="c1"># 将训练好的模型进行保存</span>
+<span class="n">save_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;state_dict&#39;</span><span class="p">:</span><span class="n">qat_model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()}</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">save_dict</span><span class="p">,</span><span class="s2">&quot;qat_best.pth&quot;</span><span class="p">)</span>
+
+<span class="c1"># 将qat模型导出为 onnx 格式</span>
+<span class="n">dummy_data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<span class="n">export_onnx</span><span class="p">(</span><span class="n">qat_model</span><span class="p">,</span> <span class="n">dummy_data</span><span class="p">,</span> <span class="n">export_name</span><span class="o">=</span><span class="s2">&quot;qat_model.onnx&quot;</span><span class="p">,</span><span class="n">opset_version</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+
+<span class="c1"># 得到 qat_model.onnx 之后, 就可以使用 hb_mapper makertbin工具进行后续的定点化及编译流程了.</span>
+<span class="c1"># 如果使用该方法的话, 流程至此就可以结束了.</span>
+
+<span class="c1"># 上述储存的pytorch模型在储存后读取方式的介绍.</span>
+<span class="n">float_model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">()</span>
+<span class="n">qat_model</span> <span class="o">=</span> <span class="n">prepare_qat_fx</span><span class="p">(</span><span class="n">float_model</span><span class="o">.</span><span class="n">train</span><span class="p">(),</span> <span class="n">HorizonQConfig</span><span class="p">,</span> <span class="n">HorizonPrepareCustomConfigDict</span><span class="p">)</span>
+<span class="n">state_dict</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;qat_best.pth&#39;</span><span class="p">)[</span><span class="s1">&#39;state_dict&#39;</span><span class="p">]</span>
+<span class="n">qat_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">state_dict</span><span class="p">)</span>
+
+<span class="c1"># 若不打算导出onnx模型, 由hb_mapper makertbin工具进行后续转换, 则需要使用</span>
+<span class="c1"># convert + compile 接口的组合.</span>
+<span class="c1"># 如果输入数据为yuv444 这种定点输入的数据, 则需要配置preprocess_setting</span>
+<span class="c1"># expected_input_type 为上板输入的数据类型, yuv444_128为yuv444数据减去128结果, 数据类型为int8</span>
+<span class="n">preprocess_setting</span> <span class="o">=</span> <span class="p">{</span>
+<span class="s2">&quot;img&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="s2">&quot;means&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">128.0</span><span class="p">]),</span>
+<span class="s2">&quot;scales&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">128.0</span><span class="p">]),</span>
+<span class="s2">&quot;original_input_type&quot;</span><span class="p">:</span> <span class="s2">&quot;yuv444&quot;</span><span class="p">,</span>
+<span class="s2">&quot;expected_input_type&quot;</span><span class="p">:</span> <span class="s2">&quot;yuv444_128&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="p">}</span>
+<span class="n">quantized_model</span> <span class="o">=</span> <span class="n">convert</span><span class="p">(</span>
+<span class="n">qat_model</span><span class="p">,</span> <span class="c1"># qat model</span>
+<span class="n">dummy_data</span><span class="p">,</span> <span class="c1"># dummy data, which is the input data to feed the qat model</span>
+<span class="n">march</span><span class="o">=</span><span class="s1">&#39;bernoulli2&#39;</span> <span class="c1"># bernoulli2 for xj3, bayes for j5</span>
+<span class="n">preprocess_setting</span><span class="o">=</span><span class="n">preprocess_setting</span><span class="p">,</span> <span class="c1">#定点输入的前处理</span>
+<span class="p">)</span>
+
+<span class="c1"># 将定点onnx模型转为异构bin模型</span>
+<span class="nb">compile</span><span class="p">(</span><span class="n">quantized_model</span><span class="p">,</span>
+<span class="s2">&quot;test.bin&quot;</span><span class="p">,</span>
+<span class="n">march</span><span class="o">=</span><span class="s2">&quot;bayes&quot;</span><span class="p">,</span>
+<span class="n">rt_input_type</span><span class="o">=</span><span class="s2">&quot;yuv444&quot;</span><span class="p">,</span>
+<span class="n">rt_input_layout</span><span class="o">=</span><span class="s2">&quot;NCHW&quot;</span><span class="p">,</span>
+<span class="n">opt</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>附录：</strong> <a class="reference external" href="https://pytorch.org/docs/1.11/quantization-support.html">Pytorch QAT社区-Quantization-Support</a></p>
+</section>
+</section>
+</section>
+<section id="transformer">
+<h2><span class="section-number">8.9.3.2. </span>Transformer使用说明<a class="headerlink" href="#transformer" title="永久链接至标题"></a></h2>
+<p>本章节将对各个transformer的概念及参数进行说明，并为您提供参考使用示例，方便您进行tranformer操作。</p>
+<p>在文档内容开始阅读前，以下内容请您注意：</p>
+<ul class="simple">
+<li><p>图片数据为 <code class="docutils literal notranslate"><span class="pre">三维数据</span></code>，但地平线提供的transformer都是以 <code class="docutils literal notranslate"><span class="pre">四维数据</span></code> 的方式来进行获取和处理的，transformer只会对输入数据中的 <code class="docutils literal notranslate"><span class="pre">第0张</span></code> 图片做该操作。</p></li>
+</ul>
+<section id="addtransformer">
+<h3>AddTransformer<a class="headerlink" href="#addtransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>对输入图片中的所有像素值做增加value的操作。该transformer会在输出时, 将数据格式转为float32。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>value: 对每个像素做增加的数值, 注意value的取值可以为负数, 如 -128。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 对图像数据做减去128的操作</span>
+  AddTransformer<span class="o">(</span>-128<span class="o">)</span>
+
+  <span class="c1"># 对图像数据做增加127的操作</span>
+  AddTransformer<span class="o">(</span><span class="m">127</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="meantransformer">
+<h3>MeanTransformer<a class="headerlink" href="#meantransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>对输入图片中的所有像素值做减去 mean_value 的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>means: 对每个像素做增加的数值, 注意value的取值可以为负数, 如 -128。</p></li>
+<li><p>data_format: 输入的layout类型，取值范围为[”CHW”,”HWC”], 默认 “CHW”。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 每个像素减去128.0 输入的类型为CHW</span>
+  MeanTransformer<span class="o">(</span>np.array<span class="o">([</span><span class="m">128</span>.0, <span class="m">128</span>.0, <span class="m">128</span>.0<span class="o">]))</span> 
+
+  <span class="c1"># 每个像素减去不同的数值，103.94, 116.78, 123.68，输入的类型为 HWC</span>
+  MeanTransformer<span class="o">(</span>np.array<span class="o">([</span><span class="m">103</span>.94, <span class="m">116</span>.78, <span class="m">123</span>.68<span class="o">])</span>, <span class="nv">data_format</span><span class="o">=</span><span class="s2">&quot;HWC&quot;</span><span class="o">)</span> 
+</pre></div>
+</div>
+</section>
+<section id="scaletransformer">
+<h3>ScaleTransformer<a class="headerlink" href="#scaletransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>对输入图片中的所有像素值做乘以data_scale系数的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>scale_value: 需要乘以的系数，如0.0078125 或者1/128。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 将取值范围-128~127，所有的像素的调整到-1~1之间</span>
+  ScaleTransformer<span class="o">(</span><span class="m">0</span>.0078125<span class="o">)</span> 
+  <span class="c1"># 或者</span>
+  ScaleTransformer<span class="o">(</span><span class="m">1</span>/128<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="normalizetransformer">
+<h3>NormalizeTransformer<a class="headerlink" href="#normalizetransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>用于对输入图片进行归一化的操作。该transformer会在输出时, 将数据格式转为float32。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>std：输入的第一张图片，需要除以的数值。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 将取值范围[-128, 127] 所有的像素的调整到-1~1之间</span>
+  NormalizeTransformer<span class="o">(</span><span class="m">128</span><span class="o">)</span> 
+</pre></div>
+</div>
+</section>
+<section id="transposetransformer">
+<h3>TransposeTransformer<a class="headerlink" href="#transposetransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>用于做layout转换的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>order: 对输入图片做layout转换后的顺序（顺序与原有的layout顺序有关）。如：HWC的顺序为0,1,2，需要转为CHW时，order为(2,0,1)。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># HWC转到CHW</span>
+  TransposeTransformer<span class="o">((</span><span class="m">2</span>, <span class="m">0</span>, <span class="m">1</span><span class="o">))</span>
+  <span class="c1"># CHW转到HWC</span>
+  TransposeTransformer<span class="o">((</span><span class="m">1</span>, <span class="m">2</span>, <span class="m">0</span><span class="o">))</span>
+</pre></div>
+</div>
+</section>
+<section id="hwc2chwtransformer">
+<h3>HWC2CHWTransformer<a class="headerlink" href="#hwc2chwtransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>用于将NHWC转换为NCHW的操作。</p>
+<p><strong>参数</strong>：不涉及。</p>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># NHWC转到NCHW</span>
+  HWC2CHWTransformer<span class="o">()</span>
+</pre></div>
+</div>
+</section>
+<section id="chw2hwctransformer">
+<h3>CHW2HWCTransformer<a class="headerlink" href="#chw2hwctransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>用于将NCHW转换为NHWC的操作。</p>
+<p><strong>参数</strong>：不涉及。</p>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># NCHW转到 NHWC</span>
+  CHW2HWCTransformer<span class="o">()</span>
+</pre></div>
+</div>
+</section>
+<section id="centercroptransformer">
+<h3>CenterCropTransformer<a class="headerlink" href="#centercroptransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>以直接截断取值的方式从图片中心裁剪出一个正方形的图片的操作。该transformer会在输出时, 将数据格式转为float32。当data_type的值为uint8时，输出为uint8。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>crop_size: 中心裁剪的正方形的边长size。</p></li>
+<li><p>data_type: 输出结果的类型，取值范围为[”float”, “uint8”]。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 以224*224的方式，做中心裁剪，默认输出类型为float32</span>
+  CenterCropTransformer<span class="o">(</span><span class="nv">crop_size</span><span class="o">=</span><span class="m">224</span><span class="o">)</span> 
+
+  <span class="c1"># 以224*224的方式，做中心裁剪，输出类型为uint8</span>
+  CenterCropTransformer<span class="o">(</span><span class="nv">crop_size</span><span class="o">=</span><span class="m">224</span>, <span class="nv">data_type</span><span class="o">=</span><span class="s2">&quot;uint8&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pilcentercroptransformer">
+<h3>PILCenterCropTransformer<a class="headerlink" href="#pilcentercroptransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>使用PIL的方式从图片中心裁剪出一个正方形的图片的操作。该transformer会在输出时, 将数据格式转为float32。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>size: 中心裁剪的正方形的边长size。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 以224*224的方式，使用PIL的方式做中心裁剪</span>
+  PILCenterCropTransformer<span class="o">(</span><span class="nv">size</span><span class="o">=</span><span class="m">224</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="longsidecroptransformer">
+<h3>LongSideCropTransformer<a class="headerlink" href="#longsidecroptransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>用于做长边裁剪的操作。该 transformer 会在输出时, 将数据格式转为float32。</p>
+<p>当宽度比高度的数值大时，会裁剪出一个中心以高度大小为准的正方形，如宽100，高70，裁剪之后大小为70*70。</p>
+<p>当高度比宽度的数值大时，会裁剪出一个中心以宽度大小不变，高度为差值的一半+宽度 的长方形，如宽70，高100，裁剪之后大小为 <code class="docutils literal notranslate"><span class="pre">70*（100-70）/2+70</span></code> ，即70* 85大小的长方形。</p>
+<p><strong>参数</strong>：不涉及。</p>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  LongSideCropTransformer<span class="o">()</span>
+</pre></div>
+</div>
+</section>
+<section id="padresizetransformer">
+<h3>PadResizeTransformer<a class="headerlink" href="#padresizetransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>使用填充的方式做图像放大的操作。该 transformer 会在输出时, 将数据格式转为float32。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>target_size：目标大小，值为元组，如(240,240)。</p></li>
+<li><p>pad_value：填充到数组中的值，默认值为127。</p></li>
+<li><p>pad_position：填充的位置，取值范围为[”boundary”， “bottom_right”]，默认值为 “boundary”。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 裁剪一个大小为512*512，填充到右下角，填充值为0</span>
+  PadResizeTransformer<span class="o">((</span><span class="m">512</span>, <span class="m">512</span><span class="o">)</span>, <span class="nv">pad_position</span><span class="o">=</span><span class="s1">&#39;bottom_right&#39;</span>, <span class="nv">pad_value</span><span class="o">=</span><span class="m">0</span><span class="o">)</span>
+
+  <span class="c1"># 裁剪一个大小为608*608，填充到边框，填充值为 127</span>
+  PadResizeTransformer<span class="o">(</span><span class="nv">target_size</span><span class="o">=(</span><span class="m">608</span>, <span class="m">608</span><span class="o">))</span>
+</pre></div>
+</div>
+</section>
+<section id="resizetransformer">
+<h3>ResizeTransformer<a class="headerlink" href="#resizetransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>用于调整图像大小的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul>
+<li><p>target_size：目标大小，值为元组，如(240,240)。</p></li>
+<li><p>mode：图片处理模式，取值范围为(”skimage”，”opencv”)，默认值为 “skimage”。</p></li>
+<li><p>method：插值的方法，此参数仅在mode为skimage时生效。取值范围为0-5，默认值为1，其中：</p>
+<ul class="simple">
+<li><p>0代表Nearest-neighbor；</p></li>
+<li><p>1代表Bi-linear(default)；</p></li>
+<li><p>2代表Bi-quadratic;</p></li>
+<li><p>3代表Bi-cubic;</p></li>
+<li><p>4代表Bi-quartic;</p></li>
+<li><p>5代表Bi-quintic。</p></li>
+</ul>
+</li>
+<li><p>data_type：输出的类型，取值范围为(uint8，float)，默认为float类型。当被设置为uint8时，输出类型为uint8 ，其他情况为float32。</p></li>
+<li><p>interpolation：插值的方法，此参数仅在mode为opencv时生效。默认为空，取值范围为(opencv的插值方式)，
+目前interpolation仅支持为空或opencv中的INTER_CUBIC两种插值方法，当interpolation为空时，默认使用INTER_LINEAR方式。</p>
+<p>以下为opencv中支持的插值方式及说明（目前未支持的插值方式将在后续迭代中逐步支持）：</p>
+<ul class="simple">
+<li><p>INTER_NEAREST，最近邻插值；</p></li>
+<li><p>INTER_LINEAR，双线性插值，当interpolation为空时，默认使用这种方法。</p></li>
+<li><p>INTER_CUBIC，双三次插值4x4像素邻域内的双立方插值。</p></li>
+<li><p>INTER_AREA，使用像素面积关系重采样。它可能是图像抽取的首选方法，因为它可以提供无莫尔条纹的结果。但是当图像被缩放时，它类似于INTER_NEAREST方法。</p></li>
+<li><p>INTER_LANCZOS4，8x8邻域的Lanczos插值。</p></li>
+<li><p>INTER_LINEAR_EXACT，位精确双线性插值。</p></li>
+<li><p>INTER_NEAREST_EXACT，位精确最近邻插值。这将产生与PIL、scikit-image或Matlab中的最近邻方法相同的结果。</p></li>
+<li><p>INTER_MAX，插值代码的掩码。</p></li>
+<li><p>WARP_FILL_OUTLIERS，标志，填充所有目标图像像素。如果其中一些对应于源图像中的异常值，则将它们设置为零。</p></li>
+<li><p>WARP_INVERSE_MAP，标志，逆变换。</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 将输入图片大小调整为224*224，采用 opencv 的方式处理图片，插值的方式为双线性，输出为float32</span>
+  ResizeTransformer<span class="o">(</span><span class="nv">target_size</span><span class="o">=(</span><span class="m">224</span>, <span class="m">224</span><span class="o">)</span>, <span class="nv">mode</span><span class="o">=</span><span class="s1">&#39;opencv&#39;</span>, <span class="nv">method</span><span class="o">=</span><span class="m">1</span><span class="o">)</span>
+
+  <span class="c1"># 将输入图片大小调整为256*256，采用skimage的方式处理图片，插值的方式为双线性，输出为float32</span>
+  ResizeTransformer<span class="o">(</span><span class="nv">target_size</span><span class="o">=(</span><span class="m">256</span>, <span class="m">256</span><span class="o">))</span>
+
+  <span class="c1"># 将输入图片大小调整为256*256，采用skimage的方式处理图片，插值的方式为双线性，输出为uint8</span>
+  ResizeTransformer<span class="o">(</span><span class="nv">target_size</span><span class="o">=(</span><span class="m">256</span>, <span class="m">256</span><span class="o">)</span>, <span class="nv">data_type</span><span class="o">=</span><span class="s2">&quot;uint8&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pilresizetransformer">
+<h3>PILResizeTransformer<a class="headerlink" href="#pilresizetransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>使用PIL库做调整图像大小的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>size：目标大小，值为元组，如(240,240)。</p></li>
+<li><p>interpolation：指定插值的方式，取值范围：(Image.NEAREST，Image.BILINEAR，Image.BICUBIC，Image.LANCZOS)， 默认值为Image.BILINEAR。</p>
+<ul>
+<li><p>Image.NEAREST：最近邻采样；</p></li>
+<li><p>Image.BILINEAR：线性插值；</p></li>
+<li><p>Image.BICUBIC：三次样条插值；</p></li>
+<li><p>Image.LANCZOS：高质量下采样滤波器。</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 将输入图片大小调整为256*256 插值的方式为线性插值</span>
+  PILResizeTransformer<span class="o">(</span><span class="nv">size</span><span class="o">=</span><span class="m">256</span><span class="o">)</span>
+
+  <span class="c1"># 将输入图片大小调整为256*256 插值的方式为高质量下采样滤波器</span>
+  PILResizeTransformer<span class="o">(</span><span class="nv">size</span><span class="o">=</span><span class="m">256</span>, <span class="nv">interpolation</span><span class="o">=</span>Image.LANCZOS<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="shortlongresizetransformer">
+<h3>ShortLongResizeTransformer<a class="headerlink" href="#shortlongresizetransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>按照原比例对输入图片进行缩放的操作，新图片的大小与设置的参数有关。操作方式如下：</p>
+<ol class="simple">
+<li><p>先以short_size的大小除以原图片的宽和高里最小值，以这个值为缩放比例系数。</p></li>
+<li><p>当缩放比例系数乘以原图片的宽和高中的最大值，得到的结果大于long_size的数值时，缩放比例系数将变更为long_size除以原图片的宽和高中的最大值。</p></li>
+<li><p>使用opencv中的resize方法，根据上方得到的缩放比例系数重新裁剪图片。</p></li>
+</ol>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>short_size：预期裁剪后的短边的长度。</p></li>
+<li><p>long_size：预期裁剪后的长边的长度。</p></li>
+<li><p>include_im：默认值为True，设置为True时, 会在返回时除了返回处理后的图片, 还会返回原图片。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 短边长度为20，长边长度为100，返回处理后的图片及原图片</span>
+  ShortLongResizeTransformer<span class="o">(</span><span class="nv">short_size</span><span class="o">=</span><span class="m">20</span>, <span class="nv">long_size</span><span class="o">=</span><span class="m">100</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="padtransformer">
+<h3>PadTransformer<a class="headerlink" href="#padtransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>通过用目标大小的size值除以输入图片宽或者高里的最大值为系数，然后使用这个系数乘以原有的宽高，resize图片。
+然后根据新图片的大小，除以size_divisor后向上取整后，再乘以size_divisor，为新的宽高，生成新的图片的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>size_divisor：大小除数 ，默认值为128。</p></li>
+<li><p>target_size：目标大小，默认值为512。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># pad大小为1024*1024</span>
+  PadTransformer<span class="o">(</span><span class="nv">size_divisor</span><span class="o">=</span><span class="m">1024</span>, <span class="nv">target_size</span><span class="o">=</span><span class="m">1024</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="shortsideresizetransformer">
+<h3>ShortSideResizeTransformer<a class="headerlink" href="#shortsideresizetransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>根据期望的短边的长度，使用现在的长短边的比例，中心裁剪出新的图片大小的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul>
+<li><p>short_size：预期的短边的长度。</p></li>
+<li><p>data_type：输出结果的类型，取值范围为(”float”,”uint8”)，默认取值”float32”, 以 float32 类型输出，设置为uint8时，输出类型将为uint8。</p></li>
+<li><p>interpolation：指定插值的方式，取值范围为 opencv 中采用的插值方式，默认为空。</p>
+<p>目前interpolation仅支持为空或opencv中的INTER_CUBIC两种插值方法，当interpolation为空时，默认使用INTER_LINEAR方式。</p>
+<p>以下为opencv中支持的插值方式及说明（目前未支持的插值方式将在后续迭代中逐步支持）：</p>
+<ul class="simple">
+<li><p>INTER_NEAREST，最近邻插值；</p></li>
+<li><p>INTER_LINEAR，双线性插值，当interpolation为空时，默认使用这种方法。</p></li>
+<li><p>INTER_CUBIC，双三次插值4x4像素邻域内的双立方插值。</p></li>
+<li><p>INTER_AREA，使用像素面积关系重采样。它可能是图像抽取的首选方法，因为它可以提供无莫尔条纹的结果。但是当图像被缩放时，它类似于INTER_NEAREST方法。</p></li>
+<li><p>INTER_LANCZOS4，8x8邻域的Lanczos插值。</p></li>
+<li><p>INTER_LINEAR_EXACT，位精确双线性插值。</p></li>
+<li><p>INTER_NEAREST_EXACT，位精确最近邻插值。这将产生与PIL、scikit-image或Matlab中的最近邻方法相同的结果。</p></li>
+<li><p>INTER_MAX，插值代码的掩码。</p></li>
+<li><p>WARP_FILL_OUTLIERS，标志，填充所有目标图像像素。如果其中一些对应于源图像中的异常值，则将它们设置为零。</p></li>
+<li><p>WARP_INVERSE_MAP，标志，逆变换。</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 将短边大小调整为256，插值方式为双线性插值</span>
+  ShortSideResizeTransformer<span class="o">(</span><span class="nv">short_size</span><span class="o">=</span><span class="m">256</span><span class="o">)</span>
+
+  <span class="c1"># 将短边大小调整为256，插值方式为8x8像素邻域内的Lanczos插值</span>
+  ShortSideResizeTransformer<span class="o">(</span><span class="nv">short_size</span><span class="o">=</span><span class="m">256</span>, <span class="nv">interpolation</span><span class="o">=</span>Image.LANCZOS4<span class="o">)</span> 
+</pre></div>
+</div>
+</section>
+<section id="paddedcentercroptransformer">
+<h3>PaddedCenterCropTransformer<a class="headerlink" href="#paddedcentercroptransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>使用填充的方式对图片中心进行裁剪的操作。</p>
+<p>.. attention::</p>
+<p>仅适用于EfficientNet-lite相关实例模型。</p>
+<p>计算方式为：</p>
+<ol class="simple">
+<li><p>计算系数，int((float( image_size ) / ( image_size + crop_pad ))。</p></li>
+<li><p>计算中心size的大小， 系数 * np.minimum( 原始图片的高度, 原始图片的宽度 ))。</p></li>
+<li><p>根据计算出来的size大小，做中心裁剪。</p></li>
+</ol>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>image_size：图片的大小，默认值为224。</p></li>
+<li><p>crop_pad：中心填充的大小，默认值为32。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 裁剪大小为240*240，填充值为32</span>
+  PaddedCenterCropTransformer<span class="o">(</span><span class="nv">image_size</span><span class="o">=</span><span class="m">240</span>, <span class="nv">crop_pad</span><span class="o">=</span><span class="m">32</span><span class="o">)</span>
+
+  <span class="c1"># 裁剪大小为224*224，填充值为32</span>
+  PaddedCenterCropTransformer<span class="o">()</span>
+</pre></div>
+</div>
+</section>
+<section id="bgr2rgbtransformer">
+<h3>BGR2RGBTransformer<a class="headerlink" href="#bgr2rgbtransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式由BGR转成RGB的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：数据格式，取值范围为(CHW,HWC)，默认值为CHW。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为NCHW时，做BGR转为RGB</span>
+  BGR2RGBTransformer<span class="o">()</span> 
+
+  <span class="c1"># layout为NHWC时，做BGR转为RGB</span>
+  BGR2RGBTransformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s2">&quot;HWC&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="rgb2bgrtransformer">
+<h3>RGB2BGRTransformer<a class="headerlink" href="#rgb2bgrtransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式由RGB转成BGR的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：数据格式，取值范围为(CHW,HWC)，默认值为CHW。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为NCHW时，做RGB转成BGR</span>
+  RGB2BGRTransformer<span class="o">()</span> 
+
+  <span class="c1"># layout为NHWC时，做RGB转成BGR</span>
+  RGB2BGRTransformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s2">&quot;HWC&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="rgb2graytransformer">
+<h3>RGB2GRAYTransformer<a class="headerlink" href="#rgb2graytransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式由RGB转成GRAY的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：输入的layout类型，取值范围(”CHW”,”HWC”)，默认为”CHW”。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为NCHW时，做RGB转成GRAY</span>
+  RGB2GRAYTransformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;CHW&#39;</span><span class="o">)</span>
+
+  <span class="c1"># layout为NHWC时，做RGB转成GRAY</span>
+  RGB2GRAYTransformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;HWC&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="bgr2graytransformer">
+<h3>BGR2GRAYTransformer<a class="headerlink" href="#bgr2graytransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式由 BGR 转成 GRAY 的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：输入的layout类型，取值范围 [”CHW”,”HWC”]，默认值为”CHW”。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为NCHW时，做BGR转成GRAY</span>
+  BGR2GRAYTransformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;CHW&#39;</span><span class="o">)</span>
+
+  <span class="c1"># layout为NHWC时，做BGR转成GRAY</span>
+  BGR2GRAYTransformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;HWC&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="rgb2gray-128transformer">
+<h3>RGB2GRAY_128Transformer<a class="headerlink" href="#rgb2gray-128transformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>输入格式由RGB转成GRAY_128的操作。GRAY_128取值范围为(-128,127)。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：输入的layout类型，取值范围为[”CHW”,”HWC”]，默认值为”CHW”，此项为必填项。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为NCHW时，做RGB转成GRAY_128</span>
+  RGB2GRAY_128Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;CHW&#39;</span><span class="o">)</span>
+
+  <span class="c1"># layout为NHWC时，做RGB转成GRAY_128</span>
+  RGB2GRAY_128Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;HWC&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="rgb2yuv444transformer">
+<h3>RGB2YUV444Transformer<a class="headerlink" href="#rgb2yuv444transformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式由RGB转成YUV444的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：输入的layout类型，取值范围为[”CHW”, “HWC”]，默认值为”CHW”，此项为必填项。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为NCHW时，做BGR转成YUV444</span>
+  BGR2YUV444Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;CHW&#39;</span><span class="o">)</span>
+
+  <span class="c1"># layout为NHWC时，做BGR转成YUV444</span>
+  BGR2YUV444Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;HWC&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="bgr2yuv444transformer">
+<h3>BGR2YUV444Transformer<a class="headerlink" href="#bgr2yuv444transformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式由BGR转成YUV444的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：输入的layout类型，取值范围为[”CHW”,”HWC”]，默认值为 “CHW”，此项为必填项。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为NCHW时，做BGR转成YUV444</span>
+  BGR2YUV444Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;CHW&#39;</span><span class="o">)</span>
+
+  <span class="c1"># layout为NHWC时，做BGR转成YUV444</span>
+  BGR2YUV444Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;HWC&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="bgr2yuv444-128transformer">
+<h3>BGR2YUV444_128Transformer<a class="headerlink" href="#bgr2yuv444-128transformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式由BGR转成YUV444_128的操作。YUV444_128取值范围为(-128,127)。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：输入的layout类型，取值范围为[”CHW”,”HWC”]，默认值为 “CHW”，此项为必填项。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为NCHW时，做BGR转成YUV444_128</span>
+  BGR2YUV444_128Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;CHW&#39;</span><span class="o">)</span> 
+
+  <span class="c1"># layout为NHWC时，做BGR转成YUV444_128</span>
+  BGR2YUV444_128Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;HWC&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="rgb2yuv444-128transformer">
+<h3>RGB2YUV444_128Transformer<a class="headerlink" href="#rgb2yuv444-128transformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式由RGB转成YUV444_128的操作。YUV444_128取值范围为(-128,127)。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：输入的layout类型，取值范围为[”CHW”,”HWC”]，默认值为”CHW”，此项为必填项。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为NCHW时，做RGB转成 YUV444_128</span>
+  RGB2YUV444_128Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;CHW&#39;</span><span class="o">)</span> 
+
+  <span class="c1"># layout为NHWC时，做RGB转成 YUV444_128</span>
+  RGB2YUV444_128Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;HWC&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="bgr2yuvbt601videotransformer">
+<h3>BGR2YUVBT601VIDEOTransformer<a class="headerlink" href="#bgr2yuvbt601videotransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式由BGR转成YUV_BT601_Video_Range的操作。</p>
+<p>YUV_BT601_Video_Range，某些摄像头输入数据都是YUV BT601(Video Range)格式的，取值范围为16~235，该transformer就是适配这种格式的数据产生的。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：输入的layout类型，取值范围为[”CHW”,”HWC”]，默认值为”CHW”，此项为必填项。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为 NCHW时，做BGR转成YUV_BT601_Video_Range</span>
+  BGR2YUVBT601VIDEOTransformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;CHW&#39;</span><span class="o">)</span>
+
+  <span class="c1"># layout为NHWC时，做BGR转成YUV_BT601_Video_Range</span>
+  BGR2YUVBT601VIDEOTransformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;HWC&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="rgb2yuvbt601videotransformer">
+<h3>RGB2YUVBT601VIDEOTransformer<a class="headerlink" href="#rgb2yuvbt601videotransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式由RGB转成YUV_BT601_Video_Range的操作。</p>
+<p>YUV_BT601_Video_Range，某些摄像头输入数据都是YUV BT601(Video Range)格式的，取值范围为16~235，该transformer就是适配这种格式的数据产生的。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：输入的layout类型，取值范围为[”CHW”,”HWC”]，默认值为”CHW”，此项为必填项。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为NCHW时，做RGB转成YUV_BT601_Video_Range</span>
+  RGB2YUVBT601VIDEOTransformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;CHW&#39;</span><span class="o">)</span>
+
+  <span class="c1"># layout为NHWC时，做RGB转成YUV_BT601_Video_Range</span>
+  RGB2YUVBT601VIDEOTransformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s1">&#39;HWC&#39;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="yuvtransformer">
+<h3>YUVTransformer<a class="headerlink" href="#yuvtransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式转成YUV444的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>color_sequence：颜色序列，此项为必填项。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 将BGR读入的图片转为YUV444</span>
+  YUVTransformer<span class="o">(</span><span class="nv">color_sequence</span><span class="o">=</span><span class="s2">&quot;BGR&quot;</span><span class="o">)</span>
+
+  <span class="c1"># 将RGB读入的图片转为YUV444</span>
+  YUVTransformer<span class="o">(</span><span class="nv">color_sequence</span><span class="o">=</span><span class="s2">&quot;RGB&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="reducechanneltransformer">
+<h3>ReduceChannelTransformer<a class="headerlink" href="#reducechanneltransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将C通道缩减为单通道的操作。该transformer主要是针对于C通道，如shape为1<em>3</em>224<em>224 改为1</em>1<em>224</em>224。 使用时layout一定要和data_format值对齐，避免造成删错通道。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：输入的layout类型，取值范围为[”CHW”, “HWC”]，默认值为”CHW”。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  
+  <span class="c1"># 删除layout为NCHW的C通道</span>
+  ReduceChannelTransformer<span class="o">()</span>
+  <span class="c1"># 或者</span>
+  ReduceChannelTransformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s2">&quot;CHW&quot;</span><span class="o">)</span> 
+
+  <span class="c1"># 删除layout为NHWC的C通道</span>
+  ReduceChannelTransformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s2">&quot;HWC&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="bgr2nv12transformer">
+<h3>BGR2NV12Transformer<a class="headerlink" href="#bgr2nv12transformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式由BGR转成NV12的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：输入的layout类型，取值范围为[”CHW”,”HWC”]，默认值为”CHW”。</p></li>
+<li><p>cvt_mode：cvt模式，取值范围为(rgb_calc，opencv)，默认值为rgb_calc。</p>
+<ul>
+<li><p>rgb_calc，采用mergeUV的方式处理图片；</p></li>
+<li><p>opencv，采用opencv的方式处理图片。</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为NCHW时，由BGR转为NV12，采用rgb_calc模式处理图片</span>
+  BGR2NV12Transformer<span class="o">()</span>
+  <span class="c1"># 或者</span>
+  BGR2NV12Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s2">&quot;CHW&quot;</span><span class="o">)</span> 
+
+  <span class="c1"># layout为NHWC时，由BGR转为NV12，采用opencv模式处理图片</span>
+  BGR2NV12Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s2">&quot;HWC&quot;</span>, <span class="nv">cvt_mode</span><span class="o">=</span><span class="s2">&quot;opencv&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="rgb2nv12transformer">
+<h3>RGB2NV12Transformer<a class="headerlink" href="#rgb2nv12transformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式由RGB转成NV12的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>data_format：输入的 layout 类型，取值范围 [”CHW”, “HWC”], 默认值为”CHW”。</p></li>
+<li><p>cvt_mode：cvt模式，取值范围为(rgb_calc,opencv)，默认值为rgb_calc。</p>
+<ul>
+<li><p>rgb_calc，采用mergeUV的方式处理图片；</p></li>
+<li><p>opencv，采用opencv的方式处理图片。</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为NCHW时，有RGB转为NV12，采用rgb_calc模式处理图片</span>
+  RGB2NV12Transformer<span class="o">()</span>
+  <span class="c1"># 或者</span>
+  RGB2NV12Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s2">&quot;CHW&quot;</span><span class="o">)</span> 
+
+  <span class="c1"># layout为NHWC时，有RGB转为NV12，采用opencv模式处理图片</span>
+  RGB2NV12Transformer<span class="o">(</span><span class="nv">data_format</span><span class="o">=</span><span class="s2">&quot;HWC&quot;</span>, <span class="nv">cvt_mode</span><span class="o">=</span><span class="s2">&quot;opencv&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="nv12toyuv444transformer">
+<h3>NV12ToYUV444Transformer<a class="headerlink" href="#nv12toyuv444transformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>将输入格式由NV12转成YUV444的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>target_size：目标大小，值为元组，如(240,240)。</p></li>
+<li><p>yuv444_output_layout：yuv444输出的layout，取值范围为(HWC,CHW)，默认值为”HWC”。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># layout为NCHW ，大小为768*768, nv12转yuv444 </span>
+  NV12ToYUV444Transformer<span class="o">(</span><span class="nv">target_size</span><span class="o">=(</span><span class="m">768</span>, <span class="m">768</span><span class="o">))</span>
+
+  <span class="c1"># layout为NHWC ，大小为224*224, nv12转yuv444 </span>
+  NV12ToYUV444Transformer<span class="o">((</span><span class="m">224</span>, <span class="m">224</span><span class="o">)</span>, <span class="nv">yuv444_output_layout</span><span class="o">=</span><span class="s2">&quot;HWC&quot;</span><span class="o">)</span> 
+</pre></div>
+</div>
+</section>
+<section id="warpaffinetransformer">
+<h3>WarpAffineTransformer<a class="headerlink" href="#warpaffinetransformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>用于做图像仿射变换的操作。</p>
+<p><strong>参数</strong>：</p>
+<ul class="simple">
+<li><p>input_shape：输入的shape值。</p></li>
+<li><p>scale：乘以的系数。</p></li>
+</ul>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 大小为512*512，长边长度为1.0</span>
+  WarpAffineTransformer<span class="o">((</span><span class="m">512</span>, <span class="m">512</span><span class="o">)</span>, <span class="m">1</span>.0<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="f32tos8transformer">
+<h3>F32ToS8Transformer<a class="headerlink" href="#f32tos8transformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>用于做输入格式从float32转换为int8的操作。</p>
+<p><strong>参数</strong>：不涉及。</p>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 输入格式从 float32转为 int8 </span>
+  F32ToS8Transformer<span class="o">()</span>
+</pre></div>
+</div>
+</section>
+<section id="f32tou8transformer">
+<h3>F32ToU8Transformer<a class="headerlink" href="#f32tou8transformer" title="永久链接至标题"></a></h3>
+<p><strong>说明</strong>：</p>
+<p>用于做输入格式从float32转换为uint8的操作。</p>
+<p><strong>参数</strong>：不涉及。</p>
+<p><strong>使用举例</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  <span class="c1"># 输入格式从 float32 转为 uint8 </span>
+  F32ToU8Transformer<span class="o">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="yolov5x">
+<h2><span class="section-number">8.9.3.3. </span>示例yolov5x模型使用说明<a class="headerlink" href="#yolov5x" title="永久链接至标题"></a></h2>
+<ol class="simple">
+<li><p>YOLOv5x模型：</p></li>
+</ol>
+<ul>
+<li><p>可以从URL:<a class="reference external" href="https://github.com/ultralytics/yolov5/releases/tag/v2.0">yolov5-2.0</a> 中下载相应的pt文件。</p>
+<p>在clone代码时，请确认您使用的Tags是 <code class="docutils literal notranslate"><span class="pre">v2.0</span></code> ，否则将导致转换失败。</p>
+</li>
+<li><p>md5sum码:</p></li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>md5sum</strong></th>
+<th><strong>File</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2e296b5e31bf1e1b6b8ea4bf36153ea5</td>
+<td>yolov5l.pt</td>
+</tr>
+<tr>
+<td>16150e35f707a2f07e7528b89c032308</td>
+<td>yolov5m.pt</td>
+</tr>
+<tr>
+<td>42c681cf466c549ff5ecfe86bcc491a0</td>
+<td>yolov5s.pt</td>
+</tr>
+<tr>
+<td>069a6baa2a741dec8a2d44a9083b6d6e</td>
+<td>yolov5x.pt</td>
+</tr>
+</tbody>
+</table><ul class="simple">
+<li><p>为了更好地适配后处理代码，我们在ONNX模型导出前对Github代码做了如下修改
+（代码参见：https://github.com/ultralytics/yolov5/blob/v2.0/models/yolo.py）：</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1"># x = x.copy()  # for profiling</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># inference output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">training</span> <span class="o">|=</span> <span class="bp">self</span><span class="o">.</span><span class="n">export</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nl</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  <span class="c1"># conv</span>
+            <span class="n">bs</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>  <span class="c1"># x(bs,255,20,20) to x(bs,3,20,20,85)</span>
+            <span class="c1">#  x[i] = x[i].view(bs, self.na, self.no, ny, nx).permute(0, 1, 3, 4, 2).contiguous()</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul>
+<li><p><strong>说明:</strong>
+去除了每个输出分支尾部从4维到5维的reshape（即不将channel从255拆分成3x85），然后将layout从NHWC转换成NCHW再输出。</p>
+<p>以下左图为修改前的模型某一输出节点的可视化图，右图则为修改后的对应输出节点可视化图。</p>
+<p><img alt="yolov5" src="../../_images/yolov5.png" /></p>
+</li>
+<li><p>下载完成后通过脚本 https://github.com/ultralytics/yolov5/blob/v2.0/models/export.py 进行pt文件到ONNX文件的转换。</p></li>
+<li><p><strong>注意事项</strong></p>
+<p>在使用export.py脚本时，请注意：</p>
+<ol class="simple">
+<li><p>由于地平线AI工具链支持的ONNX opset版本为 <code class="docutils literal notranslate"><span class="pre">10</span></code> 和 <code class="docutils literal notranslate"><span class="pre">11</span></code>，请将 <code class="docutils literal notranslate"><span class="pre">torch.onnx.export</span></code> 的 <code class="docutils literal notranslate"><span class="pre">opset_version</span></code> 参数根据您要使用的版本进行修改。</p></li>
+<li><p>将 <code class="docutils literal notranslate"><span class="pre">torch.onnx.export</span></code> 部分的默认输入名称参数由 <code class="docutils literal notranslate"><span class="pre">'images'</span></code>
+改为 <code class="docutils literal notranslate"><span class="pre">'data'</span></code>，与模型转换示例包的YOLOv5x示例脚本保持一致。</p></li>
+<li><p>将 <code class="docutils literal notranslate"><span class="pre">parser.add_argument</span></code> 部分中默认的数据输入尺寸640x640改为模型转换示例包YOLOv5x示例中的672x672。</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="checklist">
+<h2><span class="section-number">8.9.3.4. </span>模型精度调优checklist<a class="headerlink" href="#checklist" title="永久链接至标题"></a></h2>
+<p>请严格按照下图中步骤1-5来进行模型精度验证并保留每个步骤的代码和结果：</p>
+<p><img alt="model_accuracy_check" src="../../_images/model_accuracy_check.png" /></p>
+<p><strong>在进行排查前，请确认当前模型转换所用的Docker镜像或转换环境版本，并保留版本信息</strong></p>
+<section id="onnx">
+<h3>1. 验证浮点onnx模型的推理结果<a class="headerlink" href="#onnx" title="永久链接至标题"></a></h3>
+<p>进入模型转换环境，来测试浮点onnx模型(特指从DL框架导出的onnx模型)的单张结果，此步骤结果应与训练后的模型推理结果完全一致（nv12格式除外，可能会引入少许差异）</p>
+<p>可参考如下示例代码步骤，来确认浮点onnx模型的推理的步骤、数据预处理、后处理代码是否正确！</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+  <span class="kn">from</span> <span class="nn">horizon_tc_ui</span> <span class="kn">import</span> <span class="n">HB_ONNXRuntime</span>
+  <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+  <span class="kn">import</span> <span class="nn">cv2</span>
+
+  <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="n">input_name</span><span class="p">):</span>
+      <span class="c1"># BGR-&gt;RGB、Resize、CenterCrop···      </span>
+      <span class="c1"># HWC-&gt;CHW      </span>
+      <span class="c1"># normalization      </span>
+      <span class="k">return</span> <span class="n">data</span>
+
+  <span class="k">def</span> <span class="nf">main</span><span class="p">():</span> 
+      <span class="c1"># 加载模型文件</span>
+      <span class="n">sess</span> <span class="o">=</span> <span class="n">HB_ONNXRuntime</span><span class="p">(</span><span class="n">model_file</span><span class="o">=</span><span class="n">MODEL_PATH</span><span class="p">)</span>
+      <span class="c1"># 获取输入&amp;输出节点名称</span>
+      <span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="nb">input</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">sess</span><span class="o">.</span><span class="n">get_inputs</span><span class="p">()]</span>
+      <span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">sess</span><span class="o">.</span><span class="n">get_outputs</span><span class="p">()]</span>
+      <span class="c1"># 准备模型输入数据</span>
+      <span class="n">feed_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+      <span class="k">for</span> <span class="n">input_name</span> <span class="ow">in</span> <span class="n">input_names</span><span class="p">:</span>
+          <span class="n">feed_dict</span><span class="p">[</span><span class="n">input_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">input_name</span><span class="p">)</span>
+          
+      <span class="c1"># 原始浮点onnx，数据dtype=float32     </span>
+      <span class="n">outputs</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run_feature</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">feed_dict</span><span class="p">,</span> <span class="n">input_offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>     
+      
+      <span class="c1"># 后处理</span>
+      <span class="n">postprocess</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
+          
+  <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+      <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="yaml">
+<h3>2. 验证yaml配置文件以及前、后处理代码的正确性<a class="headerlink" href="#yaml" title="永久链接至标题"></a></h3>
+<p>测试 original_float.onnx 模型的单张结果，应与浮点onnx模型推理结果完全一致（nv12格式除外，由于nv12数据本身有损，可能会引入少许差异）</p>
+<p>使用开源工具 Netron 打开 <code class="docutils literal notranslate"><span class="pre">original_float.onnx</span></code> 模型，并查看预处理节点 <code class="docutils literal notranslate"><span class="pre">HzPreprocess</span></code> 算子的详细属性，获取我们 <code class="docutils literal notranslate"><span class="pre">数据预处理</span></code> 需要的参数：<code class="docutils literal notranslate"><span class="pre">data_format</span></code> 和 <code class="docutils literal notranslate"><span class="pre">input_type</span></code>。</p>
+<p>由于HzPreprocess节点的存在，会使得转换后的模型其预处理操作可能会和原始模型有所不同，该算子是在进行模型转换时，根据yaml配置文件中的配置参数（input_type_rt、input_type_train以及norm_type、mean_value、scale_value）来决定是否为模型加入HzPreprocess节点，预处理节点的生成细节，请参考PTQ原理及步骤详解章节的 <code class="docutils literal notranslate"><span class="pre">norm_type</span> <span class="pre">配置参数说明</span></code> 内容，另外预处理节点会出现在转换过程产生的所有产物中。</p>
+<p>理想状态下，这个HzPreprocess节点应该完成 input_type_rt 到 input_type_train 的完整转换， 但实际情况是整个type转换过程需要使用地平线AI芯片硬件完成，但ONNX模型里面并没有包含硬件转换的部分，因此ONNX的真实输入类型会使用一种中间类型，这种中间类型就是硬件对 input_type_rt 的处理结果类型， 故针对图像输入数据类型为：RGB/BGR/NV12/YUV444/GRAY，并且数据dtype= uint8的模型时，在预处理代码中需要做 <code class="docutils literal notranslate"><span class="pre">-128</span></code> 的操作，<code class="docutils literal notranslate"><span class="pre">featuremap</span></code> 数据类型因为使用的是float32，因此预处理代码中 <code class="docutils literal notranslate"><span class="pre">不需要-128</span></code> 的操作； original_float.onnx的数据layout(NCHW/NHWC)会保持和原始浮点模型的输入layout一致。</p>
+<p>可参考如下示例代码步骤，来确认 original_float.onnx 模型的推理的步骤、数据预处理、后处理代码是否正确！</p>
+<p><strong>数据预处理部分建议参考使用地平线模型转换 <code class="docutils literal notranslate"><span class="pre">horizon_model_convert_sample</span></code> 示例包中的caffe、onnx等示例模型的预处理步骤方法</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+  <span class="kn">from</span> <span class="nn">horizon_tc_ui</span> <span class="kn">import</span> <span class="n">HB_ONNXRuntime</span>
+  <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+  <span class="kn">import</span> <span class="nn">cv2</span>
+
+  <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="n">input_name</span><span class="p">):</span>
+      <span class="c1"># BGR-&gt;RGB、Resize、CenterCrop···      </span>
+      <span class="c1"># HWC-&gt;CHW（通过onnx模型输入节点的具体shape来判断是否需要做layout转换）</span>
+      <span class="c1"># normalization（若已通过yaml文件将norm操作放入了模型中，则不要在预处理中做重复操作）</span>
+      <span class="c1">#-128（图像输入模型，仅在使用hb_session.run接口时需要自行在预处理完成-128，其他接口通过input_offset控制即可）</span>
+      <span class="k">return</span> <span class="n">data</span>
+
+  <span class="k">def</span> <span class="nf">main</span><span class="p">():</span> 
+      <span class="c1"># 加载模型文件</span>
+      <span class="n">sess</span> <span class="o">=</span> <span class="n">HB_ONNXRuntime</span><span class="p">(</span><span class="n">model_file</span><span class="o">=</span><span class="n">MODEL_PATH</span><span class="p">)</span>
+      <span class="c1"># 获取输入&amp;输出节点名称</span>
+      <span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="nb">input</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">sess</span><span class="o">.</span><span class="n">get_inputs</span><span class="p">()]</span>
+      <span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">sess</span><span class="o">.</span><span class="n">get_outputs</span><span class="p">()]</span>
+      <span class="c1"># 准备模型输入数据</span>
+      <span class="n">feed_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+      <span class="k">for</span> <span class="n">input_name</span> <span class="ow">in</span> <span class="n">input_names</span><span class="p">:</span>
+          <span class="n">feed_dict</span><span class="p">[</span><span class="n">input_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">input_name</span><span class="p">)</span>
+      <span class="c1">#图像输入的模型（RGB/BGR/NV12/YUV444/GRAY），数据dtype= uint8     </span>
+      <span class="n">outputs</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">feed_dict</span><span class="p">,</span> <span class="n">input_offset</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>         
+      <span class="c1"># featuremap模型，数据dtype=float32, 若模型输入非featuremap，请注释掉下行代码！</span>
+      <span class="n">outputs</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run_feature</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">feed_dict</span><span class="p">,</span> <span class="n">input_offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>     
+      <span class="c1"># 混合多输入（即同时包含featuremap和图像输入）模型，若模型输入非多输入，请注释掉下行代码！</span>
+      <span class="n">outputs</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">hb_session</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">feed_dict</span><span class="p">)</span>  <span class="c1">#-128的操作需要在预处理时完成</span>
+      <span class="c1"># 后处理</span>
+      <span class="n">postprocess</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
+          
+  <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+      <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="id18">
+<h3>3. 验证模型的图优化阶段未引入精度误差<a class="headerlink" href="#id18" title="永久链接至标题"></a></h3>
+<p>测试 optimize_float.onnx 模型的单张结果，应与original_float.onnx推理结果完全一致</p>
+<p>使用开源工具 Netron 打开 <code class="docutils literal notranslate"><span class="pre">optimize_float.onnx</span></code> 模型，并查看预处理节点 <code class="docutils literal notranslate"><span class="pre">HzPreprocess</span></code> 算子的详细属性，获取我们数据预处理需要的参数：<code class="docutils literal notranslate"><span class="pre">data_format</span></code>和 <code class="docutils literal notranslate"><span class="pre">input_type</span></code>;</p>
+<p>optimize_float.onnx模型的推理可参考如下示例代码步骤，来确认 optimize_float.onnx 模型的推理的步骤、数据预处理、后处理代码是否正确！</p>
+<p><strong>数据预处理部分建议参考使用地平线模型转换 <code class="docutils literal notranslate"><span class="pre">horizon_model_convert_sample</span></code> 示例包中的caffe、onnx等示例模型的预处理步骤方法</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+  <span class="kn">from</span> <span class="nn">horizon_tc_ui</span> <span class="kn">import</span> <span class="n">HB_ONNXRuntime</span>
+  <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+  <span class="kn">import</span> <span class="nn">cv2</span>
+
+  <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="n">input_name</span><span class="p">):</span>
+      <span class="c1"># BGR-&gt;RGB、Resize、CenterCrop···      </span>
+      <span class="c1"># HWC-&gt;CHW（通过onnx模型输入节点的具体shape来判断是否需要做layout转换）</span>
+      <span class="c1"># normalization（若已通过yaml文件将norm操作放入了模型中，则不要在预处理中做重复操作）</span>
+      <span class="c1">#-128（图像输入模型，仅在使用hb_session.run接口时需要自行在预处理完成-128，其他接口通过input_offset控制即可）</span>
+      <span class="k">return</span> <span class="n">data</span>
+
+  <span class="k">def</span> <span class="nf">main</span><span class="p">():</span> 
+      <span class="c1"># 加载模型文件</span>
+      <span class="n">sess</span> <span class="o">=</span> <span class="n">HB_ONNXRuntime</span><span class="p">(</span><span class="n">model_file</span><span class="o">=</span><span class="n">MODEL_PATH</span><span class="p">)</span>
+      <span class="c1"># 获取输入&amp;输出节点名称</span>
+      <span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="nb">input</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">sess</span><span class="o">.</span><span class="n">get_inputs</span><span class="p">()]</span>
+      <span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">sess</span><span class="o">.</span><span class="n">get_outputs</span><span class="p">()]</span>
+      <span class="c1"># 准备模型输入数据</span>
+      <span class="n">feed_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+      <span class="k">for</span> <span class="n">input_name</span> <span class="ow">in</span> <span class="n">input_names</span><span class="p">:</span>
+          <span class="n">feed_dict</span><span class="p">[</span><span class="n">input_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">input_name</span><span class="p">)</span>
+      <span class="c1">#图像输入的模型（RGB/BGR/NV12/YUV444/GRAY），数据dtype= uint8     </span>
+      <span class="n">outputs</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">feed_dict</span><span class="p">,</span> <span class="n">input_offset</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>         
+      <span class="c1"># featuremap模型，数据dtype=float32, 若模型输入非featuremap，请注释掉下行代码！</span>
+      <span class="n">outputs</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run_feature</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">feed_dict</span><span class="p">,</span> <span class="n">input_offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>     
+      <span class="c1"># 混合多输入（即同时包含featuremap和图像输入）模型，若模型输入非多输入，请注释掉下行代码！</span>
+      <span class="n">outputs</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">hb_session</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">feed_dict</span><span class="p">)</span>  <span class="c1">#-128的操作需要在预处理时完成</span>
+      <span class="c1"># 后处理</span>
+      <span class="n">postprocess</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
+          
+  <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+      <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="id19">
+<h3>4. 验证量化精度是否满足预期<a class="headerlink" href="#id19" title="永久链接至标题"></a></h3>
+<p>测试quantized.onnx的精度指标。</p>
+<p>使用开源工具 Netron 打开 <code class="docutils literal notranslate"><span class="pre">quantized.onnx</span></code> 模型，并查看预处理节点 <code class="docutils literal notranslate"><span class="pre">HzPreprocess</span></code> 算子的详细属性，获取我们数据预处理需要的参数：<code class="docutils literal notranslate"><span class="pre">data_format</span></code>和 <code class="docutils literal notranslate"><span class="pre">input_type</span></code>;</p>
+<p>quantized.onnx模型的推理可参考如下示例代码步骤，来确认 quantized.onnx 模型的推理的步骤、数据预处理、后处理代码是否正确！</p>
+<p><strong>数据预处理部分建议参考使用地平线模型转换 <code class="docutils literal notranslate"><span class="pre">horizon_model_convert_sample</span></code> 示例包中的caffe、onnx等示例模型的预处理步骤方法</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+  <span class="kn">from</span> <span class="nn">horizon_tc_ui</span> <span class="kn">import</span> <span class="n">HB_ONNXRuntime</span>
+  <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+  <span class="kn">import</span> <span class="nn">cv2</span>
+
+  <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="n">input_name</span><span class="p">):</span>
+      <span class="c1"># BGR-&gt;RGB、Resize、CenterCrop···      </span>
+      <span class="c1"># HWC-&gt;CHW（通过onnx模型输入节点的具体shape来判断是否需要做layout转换）</span>
+      <span class="c1"># normalization（若已通过yaml文件将norm操作放入了模型中，则不要在预处理中做重复操作）</span>
+      <span class="c1">#-128（图像输入模型，仅在使用hb_session.run接口时需要自行在预处理完成-128，其他接口通过input_offset控制即可）</span>
+      <span class="k">return</span> <span class="n">data</span>
+
+  <span class="k">def</span> <span class="nf">main</span><span class="p">():</span> 
+      <span class="c1"># 加载模型文件</span>
+      <span class="n">sess</span> <span class="o">=</span> <span class="n">HB_ONNXRuntime</span><span class="p">(</span><span class="n">model_file</span><span class="o">=</span><span class="n">MODEL_PATH</span><span class="p">)</span>
+      <span class="c1"># 获取输入&amp;输出节点名称</span>
+      <span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="nb">input</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">sess</span><span class="o">.</span><span class="n">get_inputs</span><span class="p">()]</span>
+      <span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">sess</span><span class="o">.</span><span class="n">get_outputs</span><span class="p">()]</span>
+      <span class="c1"># 准备模型输入数据</span>
+      <span class="n">feed_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+      <span class="k">for</span> <span class="n">input_name</span> <span class="ow">in</span> <span class="n">input_names</span><span class="p">:</span>
+          <span class="n">feed_dict</span><span class="p">[</span><span class="n">input_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">input_name</span><span class="p">)</span>
+      <span class="c1">#图像输入的模型（RGB/BGR/NV12/YUV444/GRAY），数据dtype= uint8     </span>
+      <span class="n">outputs</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">feed_dict</span><span class="p">,</span> <span class="n">input_offset</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>         
+      <span class="c1"># featuremap模型，数据dtype=float32, 若模型输入非featuremap，请注释掉下行代码！</span>
+      <span class="n">outputs</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run_feature</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">feed_dict</span><span class="p">,</span> <span class="n">input_offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>     
+      <span class="c1"># 混合多输入（即同时包含featuremap和图像输入）模型，若模型输入非多输入，请注释掉下行代码！</span>
+      <span class="n">outputs</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">hb_session</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">feed_dict</span><span class="p">)</span>  <span class="c1">#-128的操作需要在预处理时完成</span>
+      <span class="c1"># 后处理</span>
+      <span class="n">postprocess</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
+          
+  <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+      <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="id20">
+<h3>5. 确保模型编译过程无误且板端推理代码正确<a class="headerlink" href="#id20" title="永久链接至标题"></a></h3>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">hb_model_verifier</span></code> 工具验证quantized.onnx和.bin的一致性，模型输出应至少满足小数点后2-3位对齐</p>
+<p>hb_model_verifier工具（详细介绍可参考）的使用方法，请参考PTQ原理及步骤详解章节的 <code class="docutils literal notranslate"><span class="pre">hb_model_verifier</span> <span class="pre">工具</span></code> 内容。</p>
+<p>若模型一致性校验通过，则请仔细检查开发板端的前、后处理代码！</p>
+<p>若quantized.onnx与.bin模型一致性校验失败，请联系地平线技术人员</p>
+</section>
+</section>
+<section id="id21">
+<h2><span class="section-number">8.9.3.5. </span>模型量化yaml配置文件模板<a class="headerlink" href="#id21" title="永久链接至标题"></a></h2>
+<section id="caffeyaml">
+<h3>caffe模型量化yaml文件模板<a class="headerlink" href="#caffeyaml" title="永久链接至标题"></a></h3>
+<p>请新建 caffe_config.yaml 文件，并直接拷贝以下内容，填写空白参数位置即可，参数的具体说明请参考PTQ原理及步骤详解章节内容</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="c1"># Copyright (c) 2020 Horizon Robotics.All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># The material in this file is confidential and contains trade secrets</span>
+<span class="c1"># of Horizon Robotics Inc. This is proprietary information owned by</span>
+<span class="c1"># Horizon Robotics Inc. No part of this work may be disclosed,</span>
+<span class="c1"># reproduced, copied, transmitted, or used in any way for any purpose,</span>
+<span class="c1"># without the express written permission of Horizon Robotics Inc.</span>
+
+<span class="c1"># 模型转化相关的参数</span>
+<span class="c1"># ------------------------------------</span>
+<span class="c1"># model conversion related parameters</span>
+<span class="n">model_parameters</span><span class="p">:</span>
+
+  <span class="c1"># Caffe浮点网络数据模型文件</span>
+  <span class="c1"># -----------------------------------------------------------</span>
+  <span class="c1"># the model file of floating-point Caffe neural network data</span>
+  <span class="c1"># 请配置需要转换的模型文件相对路径或绝对路径</span>
+  <span class="n">caffe_model</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># caffe_model: &#39;./horizon_x3_caffe.caffemodel&#39;</span>
+
+  <span class="c1"># Caffe网络描述文件</span>
+  <span class="c1"># ---------------------------------------------------------</span>
+  <span class="c1"># the file describes the structure of Caffe neural network</span>
+  <span class="c1"># 请配置需要转换的模型文件相对路径或绝对路径</span>
+  <span class="n">prototxt</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># prototxt: &#39;./horizon_x3_caffe.prototxt&#39;</span>
+
+  <span class="c1"># 适用BPU架构</span>
+  <span class="c1"># --------------------------------</span>
+  <span class="c1"># the applicable BPU architecture</span>
+  <span class="c1"># 保持默认，不要修改！</span>
+  <span class="n">march</span><span class="p">:</span> <span class="s2">&quot;bernoulli2&quot;</span>
+
+  <span class="c1"># 指定模型转换过程中是否输出各层的中间结果，如果为True，则输出所有层的中间输出结果，</span>
+  <span class="c1"># --------------------------------------------------------------------------------------</span>
+  <span class="c1"># specifies whether or not to dump the intermediate results of all layers in conversion</span>
+  <span class="c1"># if set to True, then the intermediate results of all layers shall be dumped</span>
+  <span class="c1"># 保持默认，不要修改！</span>
+  <span class="n">layer_out_dump</span><span class="p">:</span> <span class="kc">False</span>
+
+  <span class="c1"># 模型转换输出的结果的存放目录</span>
+  <span class="c1"># -----------------------------------------------------------</span>
+  <span class="c1"># the directory in which model conversion results are stored</span>
+  <span class="c1"># 保持默认，可不配置</span>
+  <span class="n">working_dir</span><span class="p">:</span> <span class="s1">&#39;model_output&#39;</span>
+
+  <span class="c1"># 模型转换输出的用于上板执行的模型文件的名称前缀</span>
+  <span class="c1"># -----------------------------------------------------------------------------------------</span>
+  <span class="c1"># model conversion generated name prefix of those model files used for dev board execution</span>
+  <span class="c1"># 模型转换后 输出的成果物 名字前缀， 可以根据自身需要配置</span>
+  <span class="n">output_model_file_prefix</span><span class="p">:</span> <span class="s1">&#39;horizon_x3&#39;</span>
+
+<span class="c1"># 模型输入相关参数, 若输入多个节点, 则应使用&#39;;&#39;进行分隔, 使用默认缺省设置则写None</span>
+<span class="c1"># ---------------------------------------------------------------------------------</span>
+<span class="c1"># model input related parameters,</span>
+<span class="c1"># please use &quot;;&quot; to seperate when inputting multiple nodes,</span>
+<span class="c1"># please use None for default setting</span>
+<span class="n">input_parameters</span><span class="p">:</span>
+
+  <span class="c1"># (选填) 模型输入的节点名称, 此名称应与模型文件中的名称一致, 否则会报错, 不填则会使用模型文件中的节点名称</span>
+  <span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+  <span class="c1"># (Optional) node name of model input,</span>
+  <span class="c1"># it shall be the same as the name of model file, otherwise an error will be reported,</span>
+  <span class="c1"># the node name of model file will be used when left blank</span>
+  <span class="c1"># 保持默认，可不配置</span>
+  <span class="n">input_name</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+
+  <span class="c1"># 网络实际执行时，输入给网络的数据格式，包括 nv12/rgb/bgr/yuv444/gray/featuremap,</span>
+  <span class="c1"># ------------------------------------------------------------------------------------------</span>
+  <span class="c1"># the data formats to be passed into neural network when actually performing neural network</span>
+  <span class="c1"># available options: nv12/rgb/bgr/yuv444/gray/featuremap,</span>
+  <span class="c1"># 此选项为 模型转换后在X3芯片上运行的数据类型，一般建议配置为nv12, 若想使用其他数据类型，请根据自身需要配置</span>
+  <span class="n">input_type_rt</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># input_type_rt: &#39;nv12&#39;</span>
+
+  <span class="c1"># 网络实际执行时输入的数据排布, 可选值为 NHWC/NCHW</span>
+  <span class="c1"># 若input_type_rt配置为nv12，则此处参数不需要配置</span>
+  <span class="c1"># ------------------------------------------------------------------</span>
+  <span class="c1"># the data layout formats to be passed into neural network when actually performing neural network, available options: NHWC/NCHW</span>
+  <span class="c1"># If input_type_rt is configured as nv12, then this parameter does not need to be configured</span>
+  <span class="n">input_layout_rt</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1">#input_layout_rt: &#39;&#39; 若input_type_rt配置为nv12，则此处参数不需要配置</span>
+  <span class="c1">#input_layout_rt: &#39;NHWC&#39; </span>
+
+  <span class="c1"># 网络训练时输入的数据格式，可选的值为rgb/bgr/gray/featuremap/yuv444</span>
+  <span class="c1"># --------------------------------------------------------------------</span>
+  <span class="c1"># the data formats in network training</span>
+  <span class="c1"># available options: rgb/bgr/gray/featuremap/yuv444</span>
+  <span class="c1"># 此选项配置来源：原始浮点模型训练框架中所使用训练的数据类型</span>
+  <span class="n">input_type_train</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># input_type_train: &#39;bgr&#39;</span>
+
+  <span class="c1"># 网络训练时输入的数据排布, 可选值为 NHWC/NCHW</span>
+  <span class="c1"># ------------------------------------------------------------------</span>
+  <span class="c1"># the data layout in network training, available options: NHWC/NCHW</span>
+  <span class="c1"># 此选项配置来源：原始浮点模型训练框架中所使用训练的数据排布</span>
+  <span class="n">input_layout_train</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># input_layout_train: &#39;NCHW&#39;</span>
+  <span class="c1"># input_layout_train: &#39;NHWC&#39;</span>
+
+  <span class="c1"># (选填) 模型网络的输入大小, 以&#39;x&#39;分隔, 不填则会使用模型文件中的网络输入大小，否则会覆盖模型文件中输入大小</span>
+  <span class="c1"># -------------------------------------------------------------------------------------------</span>
+  <span class="c1"># (Optional)the input size of model network, seperated by &#39;x&#39;</span>
+  <span class="c1"># note that the network input size of model file will be used if left blank</span>
+  <span class="c1"># otherwise it will overwrite the input size of model file</span>
+  <span class="c1"># 保持默认，可不配置</span>
+  <span class="n">input_shape</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+
+  <span class="c1"># 网络实际执行时，输入给网络的batch_size, 默认值为1</span>
+  <span class="c1"># ---------------------------------------------------------------------</span>
+  <span class="c1"># the data batch_size to be passed into neural network when actually performing neural network, default value: 1</span>
+  <span class="c1">#input_batch: 1</span>
+  
+  <span class="c1"># 网络输入的预处理方法，主要有以下几种：</span>
+  <span class="c1"># no_preprocess 不做任何操作，对应的 mean_value  或者 scale_value 都不需要配置！</span>
+  <span class="c1"># data_mean 减去通道均值mean_value</span>
+  <span class="c1"># data_scale 对图像像素乘以data_scale系数</span>
+  <span class="c1"># data_mean_and_scale 减去通道均值后再乘以scale系数，标识下方对应的 mean_value  和 scale_value 都需要配置！</span>
+  <span class="c1"># -------------------------------------------------------------------------------------------</span>
+  <span class="c1"># preprocessing methods of network input, available options:</span>
+  <span class="c1"># &#39;no_preprocess&#39; indicates that no preprocess will be made </span>
+  <span class="c1"># &#39;data_mean&#39; indicates that to minus the channel mean, i.e. mean_value</span>
+  <span class="c1"># &#39;data_scale&#39; indicates that image pixels to multiply data_scale ratio</span>
+  <span class="c1"># &#39;data_mean_and_scale&#39; indicates that to multiply scale ratio after channel mean is minused</span>
+  <span class="c1"># 若配置的是data_mean_and_scale，则下面的 mean_value 和 scale_value都必须配置，若norm_type 选择只有data_mean 或者 data_scale，那只用单独配置对应的 mean_value  或者 scale_value即可，并将没有使能的选项注释掉！</span>
+  <span class="n">norm_type</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># norm_type: &#39;data_mean_and_scale&#39;</span>
+
+  <span class="c1"># 图像减去的均值, 如果是通道均值，value之间必须用空格分隔</span>
+  <span class="c1"># --------------------------------------------------------------------------</span>
+  <span class="c1"># the mean value minused by image</span>
+  <span class="c1"># note that values must be seperated by space if channel mean value is used</span>
+  <span class="c1"># 根据norm_type来决定是否需要配置此选项，若norm_type 选择只有data_mean，则只需单独配置此选项并将data_scale注释掉； 反之注释掉此选项！</span>
+  <span class="n">mean_value</span><span class="p">:</span> 
+  <span class="c1"># mean_value: 128.0</span>
+  <span class="c1"># mean_value: 111.0 109.0 118.0</span>
+
+  <span class="c1"># 图像预处理缩放比例，如果是通道缩放比例，value之间必须用空格分隔</span>
+  <span class="c1"># ---------------------------------------------------------------------------</span>
+  <span class="c1"># scale value of image preprocess</span>
+  <span class="c1"># note that values must be seperated by space if channel scale value is used</span>
+  <span class="c1"># 根据norm_type来决定是否需要配置此选项，若norm_type 选择只有data_scale，则只需单独配置此选项并将data_mean注释掉； 反之注释掉此选项！</span>
+  <span class="n">scale_value</span><span class="p">:</span> 
+  <span class="c1"># scale_value: 0.0078125</span>
+  <span class="c1"># scale_value: 0.0078125 0.001215 0.003680</span>
+
+<span class="c1"># 模型量化相关参数</span>
+<span class="c1"># -----------------------------</span>
+<span class="c1"># model calibration parameters</span>
+<span class="n">calibration_parameters</span><span class="p">:</span>
+
+  <span class="c1"># 模型量化的参考图像的存放目录，图片格式支持Jpeg、Bmp等格式，输入的图片</span>
+  <span class="c1"># 应该是使用的典型场景，一般是从测试集中选择20~100张图片，另外输入</span>
+  <span class="c1"># 的图片要覆盖典型场景，不要是偏僻场景，如过曝光、饱和、模糊、纯黑、纯白等图片</span>
+  <span class="c1"># 若有多个输入节点, 则应使用&#39;;&#39;进行分隔</span>
+  <span class="c1"># -------------------------------------------------------------------------------------------------</span>
+  <span class="c1"># the directory where reference images of model quantization are stored</span>
+  <span class="c1"># image formats include JPEG, BMP etc.</span>
+  <span class="c1"># should be classic application scenarios, usually 20~100 images are picked out from test datasets</span>
+  <span class="c1"># in addition, note that input images should cover typical scenarios</span>
+  <span class="c1"># and try to avoid those overexposed, oversaturated, vague, </span>
+  <span class="c1"># pure blank or pure white images</span>
+  <span class="c1"># use &#39;;&#39; to seperate when there are multiple input nodes</span>
+  <span class="c1"># 请根据 02_preprocess.sh 脚本中的文件夹路径来配置</span>
+  <span class="n">cal_data_dir</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># cal_data_dir: &#39;./calibration_data_yuv_f32&#39;</span>
+
+  <span class="c1"># 校准数据二进制文件的数据存储类型，可选值为：float32, uint8</span>
+  <span class="c1"># calibration data binary file save type, available options: float32, uint8</span>
+  <span class="c1"># 保持默认，一般情况下都是float32数据，若非float32数据，请配置uint8</span>
+  <span class="n">cal_data_type</span><span class="p">:</span> <span class="s1">&#39;float32&#39;</span>
+
+  <span class="c1"># 如果输入的图片文件尺寸和模型训练的尺寸不一致时，并且preprocess_on为true，</span>
+  <span class="c1"># 则将采用默认预处理方法(skimage resize)，</span>
+  <span class="c1"># 将输入图片缩放或者裁减到指定尺寸，否则，需要用户提前把图片处理为训练时的尺寸</span>
+  <span class="c1"># ---------------------------------------------------------------------------------</span>
+  <span class="c1"># In case the size of input image file is different from that of in model training</span>
+  <span class="c1"># and that preprocess_on is set to True,</span>
+  <span class="c1"># shall the default preprocess method(skimage resize) be used</span>
+  <span class="c1"># i.e., to resize or crop input image into specified size</span>
+  <span class="c1"># otherwise user must keep image size as that of in training in advance</span>
+  <span class="c1"># preprocess_on: False</span>
+
+  <span class="c1"># 模型量化的算法类型，支持kl、max、default、load，通常采用default即可满足要求, 若为QAT导出的模型, 则应选择load</span>
+  <span class="c1"># ----------------------------------------------------------------------------------</span>
+  <span class="c1"># types of model quantization algorithms, usually default will meet the need</span>
+  <span class="c1"># available options:kl, max, default and load</span>
+  <span class="c1"># if converted model is quanti model exported from QAT , then choose `load`</span>
+  <span class="c1"># 保持默认</span>
+  <span class="n">calibration_type</span><span class="p">:</span> <span class="s1">&#39;default&#39;</span>
+
+  <span class="c1"># 该参数为&#39;max&#39;校准方法的参数，用以调整&#39;max&#39;校准的截取点。此参数仅在calibration_type为&#39;max&#39;时有效。</span>
+  <span class="c1"># 该参数取值范围：0.0 ~ 1.0。常用配置选项有：0.99999/0.99995/0.99990/0.99950/0.99900。</span>
+  <span class="c1"># ------------------------------------------------------------------------------------------------</span>
+  <span class="c1"># this is the parameter of the &#39;max&#39; calibration method and it is used for adjusting the intercept point of the &#39;max&#39; calibration.</span>
+  <span class="c1"># this parameter will only become valid when the calibration_type is specified as &#39;max&#39;.</span>
+  <span class="c1"># RANGE: 0.0 - 1.0. Typical options includes: 0.99999/0.99995/0.99990/0.99950/0.99900.</span>
+  <span class="c1"># max_percentile: 0.99996</span>
+
+<span class="c1"># 编译器相关参数</span>
+<span class="c1"># ----------------------------</span>
+<span class="c1"># compiler related parameters</span>
+<span class="n">compiler_parameters</span><span class="p">:</span>
+
+  <span class="c1"># 编译策略，支持bandwidth和latency两种优化模式;</span>
+  <span class="c1"># bandwidth以优化ddr的访问带宽为目标；</span>
+  <span class="c1"># latency以优化推理时间为目标</span>
+  <span class="c1"># -------------------------------------------------------------------------------------------</span>
+  <span class="c1"># compilation strategy, there are 2 available optimization modes: &#39;bandwidth&#39; and &#39;lantency&#39;</span>
+  <span class="c1"># the &#39;bandwidth&#39; mode aims to optimize ddr access bandwidth</span>
+  <span class="c1"># while the &#39;lantency&#39; mode aims to optimize inference duration</span>
+  <span class="c1"># 保持默认</span>
+  <span class="n">compile_mode</span><span class="p">:</span> <span class="s1">&#39;latency&#39;</span>
+
+  <span class="c1"># 设置debug为True将打开编译器的debug模式，能够输出性能仿真的相关信息，如帧率、DDR带宽占用等</span>
+  <span class="c1"># -----------------------------------------------------------------------------------</span>
+  <span class="c1"># the compiler&#39;s debug mode will be enabled by setting to True</span>
+  <span class="c1"># this will dump performance simulation related information</span>
+  <span class="c1"># such as: frame rate, DDR bandwidth usage etc.</span>
+  <span class="c1"># 保持默认</span>
+  <span class="n">debug</span><span class="p">:</span> <span class="kc">False</span>
+
+  <span class="c1"># 编译模型指定核数，不指定默认编译单核模型, 若编译双核模型，将下边注释打开即可</span>
+  <span class="c1"># -------------------------------------------------------------------------------------</span>
+  <span class="c1"># specifies number of cores to be used in model compilation </span>
+  <span class="c1"># as default, single core is used as this value left blank</span>
+  <span class="c1"># please delete the &quot;# &quot; below to enable dual-core mode when compiling dual-core model</span>
+  <span class="c1"># core_num: 2</span>
+
+  <span class="c1"># 优化等级可选范围为O0~O3</span>
+  <span class="c1"># O0不做任何优化, 编译速度最快，优化程度最低,</span>
+  <span class="c1"># O1-O3随着优化等级提高，预期编译后的模型的执行速度会更快，但是所需编译时间也会变长。</span>
+  <span class="c1"># 推荐用O2做最快验证</span>
+  <span class="c1"># ----------------------------------------------------------------------------------------------------------</span>
+  <span class="c1"># optimization level ranges between O0~O3</span>
+  <span class="c1"># O0 indicates that no optimization will be made </span>
+  <span class="c1"># the faster the compilation, the lower optimization level will be</span>
+  <span class="c1"># O1-O3: as optimization levels increase gradually, model execution, after compilation, shall become faster</span>
+  <span class="c1"># while compilation will be prolonged</span>
+  <span class="c1"># it is recommended to use O2 for fastest verification</span>
+  <span class="c1"># 保持默认</span>
+  <span class="n">optimize_level</span><span class="p">:</span> <span class="s1">&#39;O3&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="onnxyaml">
+<h3>onnx模型量化yaml文件模板<a class="headerlink" href="#onnxyaml" title="永久链接至标题"></a></h3>
+<p>请新建 onnx_config.yaml 文件，并直接拷贝以下内容，填写空白参数位置即可，参数的具体说明请参考PTQ原理及步骤详解章节内容</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="c1"># Copyright (c) 2020 Horizon Robotics.All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># The material in this file is confidential and contains trade secrets</span>
+<span class="c1"># of Horizon Robotics Inc. This is proprietary information owned by</span>
+<span class="c1"># Horizon Robotics Inc. No part of this work may be disclosed,</span>
+<span class="c1"># reproduced, copied, transmitted, or used in any way for any purpose,</span>
+<span class="c1"># without the express written permission of Horizon Robotics Inc.</span>
+
+<span class="c1"># 模型转化相关的参数</span>
+<span class="c1"># ------------------------------------</span>
+<span class="c1"># model conversion related parameters</span>
+<span class="n">model_parameters</span><span class="p">:</span>
+  <span class="c1"># Onnx浮点网络数据模型文件</span>
+  <span class="c1"># ---------------------------------------------------------------------------------------------------------</span>
+  <span class="c1"># the model file of floating-point Onnx neural network data</span>
+  <span class="c1"># 请配置需要转换的模型文件相对路径或绝对路径</span>
+  <span class="n">onnx_model</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># onnx_model: &#39;./horizon_x3_onnx.onnx&#39;</span>
+
+  <span class="c1"># 适用BPU架构</span>
+  <span class="c1"># --------------------------------</span>
+  <span class="c1"># the applicable BPU architecture</span>
+  <span class="c1"># 保持默认，不要修改！</span>
+  <span class="n">march</span><span class="p">:</span> <span class="s2">&quot;bernoulli2&quot;</span>
+
+  <span class="c1"># 指定模型转换过程中是否输出各层的中间结果，如果为True，则输出所有层的中间输出结果，</span>
+  <span class="c1"># --------------------------------------------------------------------------------------</span>
+  <span class="c1"># specifies whether or not to dump the intermediate results of all layers in conversion</span>
+  <span class="c1"># if set to True, then the intermediate results of all layers shall be dumped</span>
+  <span class="c1"># 保持默认，不要修改！</span>
+  <span class="n">layer_out_dump</span><span class="p">:</span> <span class="kc">False</span>
+
+  <span class="c1"># 模型转换输出的结果的存放目录</span>
+  <span class="c1"># -----------------------------------------------------------</span>
+  <span class="c1"># the directory in which model conversion results are stored</span>
+  <span class="c1"># 保持默认，可不配置</span>
+  <span class="n">working_dir</span><span class="p">:</span> <span class="s1">&#39;model_output&#39;</span>
+
+  <span class="c1"># 模型转换输出的用于上板执行的模型文件的名称前缀</span>
+  <span class="c1"># -----------------------------------------------------------------------------------------</span>
+  <span class="c1"># model conversion generated name prefix of those model files used for dev board execution</span>
+  <span class="c1"># 模型转换后 输出的成果物 名字前缀， 可以根据自身需要配置</span>
+  <span class="n">output_model_file_prefix</span><span class="p">:</span> <span class="s1">&#39;horizon_x3&#39;</span>
+
+<span class="c1"># 模型输入相关参数, 若输入多个节点, 则应使用&#39;;&#39;进行分隔, 使用默认缺省设置则写None</span>
+<span class="c1"># ---------------------------------------------------------------------------------</span>
+<span class="c1"># model input related parameters,</span>
+<span class="c1"># please use &quot;;&quot; to seperate when inputting multiple nodes,</span>
+<span class="c1"># please use None for default setting</span>
+<span class="n">input_parameters</span><span class="p">:</span>
+
+  <span class="c1"># (选填) 模型输入的节点名称, 此名称应与模型文件中的名称一致, 否则会报错, 不填则会使用模型文件中的节点名称</span>
+  <span class="c1"># --------------------------------------------------------------------------------------------------------</span>
+  <span class="c1"># (Optional) node name of model input,</span>
+  <span class="c1"># it shall be the same as the name of model file, otherwise an error will be reported,</span>
+  <span class="c1"># the node name of model file will be used when left blank</span>
+  <span class="c1"># 保持默认，可不配置</span>
+  <span class="n">input_name</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+
+  <span class="c1"># 网络实际执行时，输入给网络的数据格式，包括 nv12/rgb/bgr/yuv444/gray/featuremap,</span>
+  <span class="c1"># ------------------------------------------------------------------------------------------</span>
+  <span class="c1"># the data formats to be passed into neural network when actually performing neural network</span>
+  <span class="c1"># available options: nv12/rgb/bgr/yuv444/gray/featuremap,</span>
+  <span class="c1"># 此选项为 模型转换后在X3芯片上运行的数据类型，一般建议配置为nv12, 若想使用其他数据类型，请根据自身需要配置</span>
+  <span class="n">input_type_rt</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># input_type_rt: &#39;nv12&#39;</span>
+
+  <span class="c1"># 网络实际执行时输入的数据排布, 可选值为 NHWC/NCHW</span>
+  <span class="c1"># 若input_type_rt配置为nv12，则此处参数不需要配置</span>
+  <span class="c1"># ------------------------------------------------------------------</span>
+  <span class="c1"># the data layout formats to be passed into neural network when actually performing neural network, available options: NHWC/NCHW</span>
+  <span class="c1"># If input_type_rt is configured as nv12, then this parameter does not need to be configured</span>
+  <span class="n">input_layout_rt</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1">#input_layout_rt: &#39;&#39; 若input_type_rt配置为nv12，则此处参数不需要配置</span>
+  <span class="c1">#input_layout_rt: &#39;NHWC&#39; </span>
+
+  <span class="c1"># 网络训练时输入的数据格式，可选的值为rgb/bgr/gray/featuremap/yuv444</span>
+  <span class="c1"># --------------------------------------------------------------------</span>
+  <span class="c1"># the data formats in network training</span>
+  <span class="c1"># available options: rgb/bgr/gray/featuremap/yuv444</span>
+  <span class="c1"># 此选项配置来源：原始浮点模型训练框架中所使用训练的数据类型</span>
+  <span class="n">input_type_train</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># input_type_train: &#39;bgr&#39;</span>
+
+  <span class="c1"># 网络训练时输入的数据排布, 可选值为 NHWC/NCHW</span>
+  <span class="c1"># ------------------------------------------------------------------</span>
+  <span class="c1"># the data layout in network training, available options: NHWC/NCHW</span>
+  <span class="c1"># 此选项配置来源：原始浮点模型训练框架中所使用训练的数据排布</span>
+  <span class="n">input_layout_train</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># input_layout_train: &#39;NCHW&#39;</span>
+  <span class="c1"># input_layout_train: &#39;NHWC&#39;</span>
+
+  <span class="c1"># (选填) 模型网络的输入大小, 以&#39;x&#39;分隔, 不填则会使用模型文件中的网络输入大小，否则会覆盖模型文件中输入大小</span>
+  <span class="c1"># -------------------------------------------------------------------------------------------</span>
+  <span class="c1"># (Optional)the input size of model network, seperated by &#39;x&#39;</span>
+  <span class="c1"># note that the network input size of model file will be used if left blank</span>
+  <span class="c1"># otherwise it will overwrite the input size of model file</span>
+  <span class="c1"># 保持默认，可不配置</span>
+  <span class="n">input_shape</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+
+  <span class="c1"># 网络实际执行时，输入给网络的batch_size, 默认值为1</span>
+  <span class="c1"># ---------------------------------------------------------------------</span>
+  <span class="c1"># the data batch_size to be passed into neural network when actually performing neural network, default value: 1</span>
+  <span class="c1">#input_batch: 1</span>
+  
+  <span class="c1"># 网络输入的预处理方法，主要有以下几种：</span>
+  <span class="c1"># no_preprocess 不做任何操作，对应的 mean_value  或者 scale_value 都不需要配置！</span>
+  <span class="c1"># data_mean 减去通道均值mean_value</span>
+  <span class="c1"># data_scale 对图像像素乘以data_scale系数</span>
+  <span class="c1"># data_mean_and_scale 减去通道均值后再乘以scale系数，标识下方对应的 mean_value  和 scale_value 都需要配置！</span>
+  <span class="c1"># -------------------------------------------------------------------------------------------</span>
+  <span class="c1"># preprocessing methods of network input, available options:</span>
+  <span class="c1"># &#39;no_preprocess&#39; indicates that no preprocess will be made </span>
+  <span class="c1"># &#39;data_mean&#39; indicates that to minus the channel mean, i.e. mean_value</span>
+  <span class="c1"># &#39;data_scale&#39; indicates that image pixels to multiply data_scale ratio</span>
+  <span class="c1"># &#39;data_mean_and_scale&#39; indicates that to multiply scale ratio after channel mean is minused</span>
+  <span class="c1"># 若配置的是data_mean_and_scale，则下面的 mean_value 和 scale_value都必须配置，若norm_type 选择只有data_mean 或者 data_scale，那只用单独配置对应的 mean_value  或者 scale_value即可，并将没有使能的选项注释掉！</span>
+  <span class="n">norm_type</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># norm_type: &#39;data_mean_and_scale&#39;</span>
+
+  <span class="c1"># 图像减去的均值, 如果是通道均值，value之间必须用空格分隔</span>
+  <span class="c1"># --------------------------------------------------------------------------</span>
+  <span class="c1"># the mean value minused by image</span>
+  <span class="c1"># note that values must be seperated by space if channel mean value is used</span>
+  <span class="c1"># 根据norm_type来决定是否需要配置此选项，若norm_type 选择只有data_mean，则只需单独配置此选项并将data_scale注释掉； 反之注释掉此选项！</span>
+  <span class="n">mean_value</span><span class="p">:</span> 
+  <span class="c1"># mean_value: 128.0</span>
+  <span class="c1"># mean_value: 111.0 109.0 118.0</span>
+
+  <span class="c1"># 图像预处理缩放比例，如果是通道缩放比例，value之间必须用空格分隔</span>
+  <span class="c1"># ---------------------------------------------------------------------------</span>
+  <span class="c1"># scale value of image preprocess</span>
+  <span class="c1"># note that values must be seperated by space if channel scale value is used</span>
+  <span class="c1"># 根据norm_type来决定是否需要配置此选项，若norm_type 选择只有data_scale，则只需单独配置此选项并将data_mean注释掉； 反之注释掉此选项！</span>
+  <span class="n">scale_value</span><span class="p">:</span> 
+  <span class="c1"># scale_value: 0.0078125</span>
+  <span class="c1"># scale_value: 0.0078125 0.001215 0.003680</span>
+
+<span class="c1"># 模型量化相关参数</span>
+<span class="c1"># -----------------------------</span>
+<span class="c1"># model calibration parameters</span>
+<span class="n">calibration_parameters</span><span class="p">:</span>
+
+  <span class="c1"># 模型量化的参考图像的存放目录，图片格式支持Jpeg、Bmp等格式，输入的图片</span>
+  <span class="c1"># 应该是使用的典型场景，一般是从测试集中选择20~100张图片，另外输入</span>
+  <span class="c1"># 的图片要覆盖典型场景，不要是偏僻场景，如过曝光、饱和、模糊、纯黑、纯白等图片</span>
+  <span class="c1"># 若有多个输入节点, 则应使用&#39;;&#39;进行分隔</span>
+  <span class="c1"># -------------------------------------------------------------------------------------------------</span>
+  <span class="c1"># the directory where reference images of model quantization are stored</span>
+  <span class="c1"># image formats include JPEG, BMP etc.</span>
+  <span class="c1"># should be classic application scenarios, usually 20~100 images are picked out from test datasets</span>
+  <span class="c1"># in addition, note that input images should cover typical scenarios</span>
+  <span class="c1"># and try to avoid those overexposed, oversaturated, vague, </span>
+  <span class="c1"># pure blank or pure white images</span>
+  <span class="c1"># use &#39;;&#39; to seperate when there are multiple input nodes</span>
+  <span class="c1"># 请根据 02_preprocess.sh 脚本中的文件夹路径来配置</span>
+  <span class="n">cal_data_dir</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># cal_data_dir: &#39;./calibration_data_yuv_f32&#39;</span>
+
+  <span class="c1"># 校准数据二进制文件的数据存储类型，可选值为：float32, uint8</span>
+  <span class="c1"># calibration data binary file save type, available options: float32, uint8</span>
+  <span class="c1"># 保持默认，一般情况下都是float32数据，若非float32数据，请配置uint8</span>
+  <span class="n">cal_data_type</span><span class="p">:</span> <span class="s1">&#39;float32&#39;</span>
+
+  <span class="c1"># 如果输入的图片文件尺寸和模型训练的尺寸不一致时，并且preprocess_on为true，</span>
+  <span class="c1"># 则将采用默认预处理方法(skimage resize)，</span>
+  <span class="c1"># 将输入图片缩放或者裁减到指定尺寸，否则，需要用户提前把图片处理为训练时的尺寸</span>
+  <span class="c1"># ---------------------------------------------------------------------------------</span>
+  <span class="c1"># In case the size of input image file is different from that of in model training</span>
+  <span class="c1"># and that preprocess_on is set to True,</span>
+  <span class="c1"># shall the default preprocess method(skimage resize) be used</span>
+  <span class="c1"># i.e., to resize or crop input image into specified size</span>
+  <span class="c1"># otherwise user must keep image size as that of in training in advance</span>
+  <span class="c1"># preprocess_on: False</span>
+
+  <span class="c1"># 模型量化的算法类型，支持kl、max、default、load，通常采用default即可满足要求, 若为QAT导出的模型, 则应选择load</span>
+  <span class="c1"># ----------------------------------------------------------------------------------</span>
+  <span class="c1"># types of model quantization algorithms, usually default will meet the need</span>
+  <span class="c1"># available options:kl, max, default and load</span>
+  <span class="c1"># if converted model is quanti model exported from QAT , then choose `load`</span>
+  <span class="c1"># 保持默认</span>
+  <span class="n">calibration_type</span><span class="p">:</span> <span class="s1">&#39;default&#39;</span>
+
+  <span class="c1"># 该参数为&#39;max&#39;校准方法的参数，用以调整&#39;max&#39;校准的截取点。此参数仅在calibration_type为&#39;max&#39;时有效。</span>
+  <span class="c1"># 该参数取值范围：0.0 ~ 1.0。常用配置选项有：0.99999/0.99995/0.99990/0.99950/0.99900。</span>
+  <span class="c1"># ------------------------------------------------------------------------------------------------</span>
+  <span class="c1"># this is the parameter of the &#39;max&#39; calibration method and it is used for adjusting the intercept point of the &#39;max&#39; calibration.</span>
+  <span class="c1"># this parameter will only become valid when the calibration_type is specified as &#39;max&#39;.</span>
+  <span class="c1"># RANGE: 0.0 - 1.0. Typical options includes: 0.99999/0.99995/0.99990/0.99950/0.99900.</span>
+  <span class="c1"># max_percentile: 0.99996</span>
+
+<span class="c1"># 编译器相关参数</span>
+<span class="c1"># ----------------------------</span>
+<span class="c1"># compiler related parameters</span>
+<span class="n">compiler_parameters</span><span class="p">:</span>
+
+  <span class="c1"># 编译策略，支持bandwidth和latency两种优化模式;</span>
+  <span class="c1"># bandwidth以优化ddr的访问带宽为目标；</span>
+  <span class="c1"># latency以优化推理时间为目标</span>
+  <span class="c1"># -------------------------------------------------------------------------------------------</span>
+  <span class="c1"># compilation strategy, there are 2 available optimization modes: &#39;bandwidth&#39; and &#39;lantency&#39;</span>
+  <span class="c1"># the &#39;bandwidth&#39; mode aims to optimize ddr access bandwidth</span>
+  <span class="c1"># while the &#39;lantency&#39; mode aims to optimize inference duration</span>
+  <span class="c1"># 保持默认</span>
+  <span class="n">compile_mode</span><span class="p">:</span> <span class="s1">&#39;latency&#39;</span>
+
+  <span class="c1"># 设置debug为True将打开编译器的debug模式，能够输出性能仿真的相关信息，如帧率、DDR带宽占用等</span>
+  <span class="c1"># -----------------------------------------------------------------------------------</span>
+  <span class="c1"># the compiler&#39;s debug mode will be enabled by setting to True</span>
+  <span class="c1"># this will dump performance simulation related information</span>
+  <span class="c1"># such as: frame rate, DDR bandwidth usage etc.</span>
+  <span class="c1"># 保持默认</span>
+  <span class="n">debug</span><span class="p">:</span> <span class="kc">False</span>
+
+  <span class="c1"># 编译模型指定核数，不指定默认编译单核模型, 若编译双核模型，将下边注释打开即可</span>
+  <span class="c1"># -------------------------------------------------------------------------------------</span>
+  <span class="c1"># specifies number of cores to be used in model compilation </span>
+  <span class="c1"># as default, single core is used as this value left blank</span>
+  <span class="c1"># please delete the &quot;# &quot; below to enable dual-core mode when compiling dual-core model</span>
+  <span class="c1"># core_num: 2</span>
+
+  <span class="c1"># 优化等级可选范围为O0~O3</span>
+  <span class="c1"># O0不做任何优化, 编译速度最快，优化程度最低,</span>
+  <span class="c1"># O1-O3随着优化等级提高，预期编译后的模型的执行速度会更快，但是所需编译时间也会变长。</span>
+  <span class="c1"># 推荐用O2做最快验证</span>
+  <span class="c1"># ----------------------------------------------------------------------------------------------------------</span>
+  <span class="c1"># optimization level ranges between O0~O3</span>
+  <span class="c1"># O0 indicates that no optimization will be made </span>
+  <span class="c1"># the faster the compilation, the lower optimization level will be</span>
+  <span class="c1"># O1-O3: as optimization levels increase gradually, model execution, after compilation, shall become faster</span>
+  <span class="c1"># while compilation will be prolonged</span>
+  <span class="c1"># it is recommended to use O2 for fastest verification</span>
+  <span class="c1"># 保持默认</span>
+  <span class="n">optimize_level</span><span class="p">:</span> <span class="s1">&#39;O3&#39;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="x3bpu">
+<h2><span class="section-number">8.9.3.6. </span>x3多核bpu使用说明<a class="headerlink" href="#x3bpu" title="永久链接至标题"></a></h2>
+<p>因X3中有2颗BPU核，所以在BPU使用中存在单核模型和双核模型的情况，多核BPU的使用注意事项参考文档：<a class="reference external" href="https://developer.horizon.ai/forumDetail/136488103547258549">X3多核BPU的合理使用技巧与建议</a></p>
+</section>
+<section id="binbatch">
+<h2><span class="section-number">8.9.3.7. </span>定点.bin模型上板多batch使用说明<a class="headerlink" href="#binbatch" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>1.模型转换时，在yaml配置文件里通过input_batch配置batch_size；</p></li>
+<li><p>2.上板bin模型输入时，以原始模型维度1×3×224×224，修改input_batch为10，也就是10×3×224×224这个维度举例：</p></li>
+<li><p>准备数据：
+Image图像数据：设置 <code class="docutils literal notranslate"><span class="pre">aligned_shape</span> <span class="pre">=</span> <span class="pre">valid_shape</span></code> ，然后按单张数据准备的方式，把10张图片依次按顺序写入申请的内存空间；
+FeatureMap数据：按aligned_shape把数据padding好，然后按单batch数据准备的方式，把10份数据依次按顺序写入申请的内存空间，模型推理流程和单batch模型推理流程一致；</p></li>
+</ul>
+</section>
+<section id="id22">
+<h2><span class="section-number">8.9.3.8. </span>应用开发技巧说明<a class="headerlink" href="#id22" title="永久链接至标题"></a></h2>
+<section id="id23">
+<h3>多模型控制策略<a class="headerlink" href="#id23" title="永久链接至标题"></a></h3>
+<p>多模型场景中，每个模型都需要使用有限的计算资源完成推理，不可避免地会出现计算资源地争夺情况。为了便于您控制多模型的执行，地平线提供了模型优先级的控制策略供您使用。</p>
+<section id="id24">
+<h4>模型优先级控制<a class="headerlink" href="#id24" title="永久链接至标题"></a></h4>
+<p>X3芯片BPU计算单元硬件本身没有任务抢占功能，对于每一个推理任务，一旦它进到BPU模型计算之后，在该任务执行完成之前都会一直占用BPU，其他任务只能排队等待。
+此时很容易出现BPU计算资源被一个大模型推理任务所独占，进而影响其他高优先级模型的推理任务执行。
+针对这种问题，Runtime SDK基于模型的优先级通过软件的方式实现了BPU资源抢占的功能。</p>
+<p>其中有以下点需要被关注：</p>
+<ul class="simple">
+<li><p>编译后的数据指令模型在BPU上进行推理计算时，它将表现为1个或者多个function-call 的调用，其中function-call是BPU的执行粒度，多个function-call调用任务将在BPU的硬件队列上按序进行调度，当一个模型所有的function-call都执行完成，
+那么一个模型推理任务也就执行完成了。</p></li>
+<li><p>基于上述描述，BPU模型任务抢占粒度设计为function-call更为简单，即BPU执行完一个function-call之后，暂时挂起当前模型，然后切入执行另外一个模型，当新模型执行完成之后，再恢复原来模型的状态继续运行。但是这里存在两个问题，
+第一是经过编译器编译出来的模型function-call都是merge在一起，此时模型只有一个大的function-call，它无法被抢占；
+第二是每个function-call的执行时间比较长或者不固定，也会造成抢占时机不固定，影响抢占效果。</p></li>
+</ul>
+<p>为了解决上述的两个问题，地平线在模型转换工具和系统软件都给予了支持，下面分别介绍其实现原理和操作方法：</p>
+<ul class="simple">
+<li><p>首先，在 <strong>模型转换</strong> 阶段，可以在模型的yaml配置文件中的编译器相关参数（即 <code class="docutils literal notranslate"><span class="pre">compiler_parameters</span></code> ）中，
+通过 <code class="docutils literal notranslate"><span class="pre">max_time_per_fc</span></code> 参数（以微秒为单位，默认取值为 <code class="docutils literal notranslate"><span class="pre">0</span></code>，即不做限制。）来设置每个function-call的执行时间。
+假设某function-call执行时间为10ms，如将其 <code class="docutils literal notranslate"><span class="pre">max_time_per_fc</span></code> 设置为 <code class="docutils literal notranslate"><span class="pre">500</span></code>，
+则这个function-call将会被拆分成20个。</p></li>
+<li><p>其次，系统软件层面设计了 <code class="docutils literal notranslate"><span class="pre">BPLAT_CORELIMIT</span></code> 环境变量用于设置可抢占的粒度。
+如将此参数设置为 <code class="docutils literal notranslate"><span class="pre">2</span></code>，则高优先级被调度执行的时间为前面2个低优先级function-call的处理时间。
+如果为 <code class="docutils literal notranslate"><span class="pre">0</span></code>，则不抢占。因此，为了尽早执行高优先级的任务，可在 <strong>上板</strong> 时，先运行 <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">BPLAT_CORELIMIT=1</span></code> 将此环境变量的取值设置为 <code class="docutils literal notranslate"><span class="pre">1</span></code>。
+这样当系统底层收到模型的function-call时，会判断其优先级，对于优先级高的function-call则放入单独队列，以便能够在一个function-call
+执行完成之后，抢占到BPU资源。</p></li>
+<li><p>接着，由于模型抢占机制是在libdnn中实现的，继续设置 <code class="docutils literal notranslate"><span class="pre">dnn</span></code> 的 <code class="docutils literal notranslate"><span class="pre">infer</span></code> 接口提供的 <code class="docutils literal notranslate"><span class="pre">hbDNNInferCtrlParam.priority</span></code>
+参数。如：配置 <code class="docutils literal notranslate"><span class="pre">infer</span></code> 任务为 <code class="docutils literal notranslate"><span class="pre">HB_DNN_PRIORITY_PREEMP(255)</span></code>，则为抢占任务，可支持function-call级别抢占；
+您也可以配置优先级为 <code class="docutils literal notranslate"><span class="pre">[0,255]</span></code> 的任意等级，在同等条件下的执行队列中(粒度为任务)，优先级越高的task会更优先执行。
+需要说明的是，目前DNN内部最多支持8个任务同时进行。抢占任务不受此限制。
+即若已经有8个任务正在运行，提交非抢占任务需要等待正在运行的任务数小于8才可以开始运行，提交抢占任务可以直接开始运行。</p></li>
+</ul>
+</section>
+</section>
+<section id="id25">
+<h3>应用调优建议<a class="headerlink" href="#id25" title="永久链接至标题"></a></h3>
+<p>地平线建议的应用调优策略包括工程任务调度和算法任务整合两个方面。</p>
+<p><strong>工程任务调度</strong> 方面，我们推荐您使用一些workflow调度管理工具，充分发挥不同任务阶段的并行能力。
+一般AI应用可以简单拆分为输入前处理、模型推理、输出后处理三个阶段，在简易流程下，其处理流程如下图。</p>
+<p><img alt="app_optimization_1" src="../../_images/app_optimization_1.png" /></p>
+<p>充分利用workflow管理实现不同任务阶段并行后，理想的任务处理流程将达到下图效果。</p>
+<p><img alt="app_optimization_2" src="../../_images/app_optimization_2.png" /></p>
+<p><strong>算法任务整合</strong> 方面，地平线推荐您使用多任务模型。</p>
+<p>这样一方面可以在一定程度上避免多模型调度管理的困难；另一方面多任务模型也能充分共享主干网络的计算量，较于使用各个独立的模型，可以在整个AI应用级别明显减少计算量，从而达到更高的整体性能。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="8.9. 量化工具链类" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../../feedback.html" class="btn btn-neutral float-right" title="9. 建议反馈" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

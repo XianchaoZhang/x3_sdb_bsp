@@ -1,0 +1,48 @@
+# sample_vps_zoom 使用说明
+
+## 程序功能
+
+`sample_vps_zoom` 程序使用 `vps` 的硬件模块 `ipu` 和 `pym` 对 `YUV` 图像中的部分区域做多倍放大处理，对处理后的 `YUV`图像编码成 `H264` 视频流，可以直接使用 `MPC-BE` 等工具进行预览，类似电子云台中的`zoom` 功能。整个程序的 `Pipeline` 如下图所示：
+
+![Pipeline](_static/_images/vps_zoom/vps_zoom_pipeline.png)
+
+如 `Pipeline` 所示，程序通过 `vps0` 读取 `YUV` 图像，`vps0 chn1` 和 `vps1` 绑定，通过 `ipu` 和 `pym` 做 `crop` 及放大后，将数据送给 `venc` 的 `chn1` 做 `H264` 编码，形成 `zoom` 放大的效果，同时 `vps0 chn2` 和 `venc chn0` 绑定做 `H264` 编码， `vps0 chn3` 和 `venc chn2` 绑定做 `H264` 编码。
+
+## 功能使用
+
+### 程序部署
+
+把 `sample/sample_vps_zoom/sample_vps_zoom` 和 `19201080.yuv` 文件上传到开发板后，给程序赋予可执行权限 `chmod a+x sample_vps_zoom`, 然后执行程序 `./sample_vps_zoom`。
+
+### 运行效果说明
+
+`YUV` 图片通过回灌方式，利用 `ipu`, `pym`, `venc` 模块编码成平滑放大的zoom `H264` 码流。效果可以下载此码流查看。
+
+[vps0_chn1_vps1_chn5_venc0.h264](https://horizonrobotics.feishu.cn/file/boxcn166Nyv2Pmg2YKUrWQu39bb)
+
+## 程序开发
+
+### 源码结构
+```
+.
+|-- 19201080.yuv      # 回灌使用NV12格式文件 
+|-- main.c            # 主程序
+`-- Makefile          # 编译makefile
+```
+
+### 编译
+
+当前代码通过一个Makefile文件配置编译
+
+依赖的多媒体头文件和库文件分别在BSP SDK的appsdk目录和system/rootfs_yocto/root目录下，编译时需要注意这两个依赖目录位置是否存在
+
+安装交叉编译工具链后，执行 make 命令直接可以编译生成 sample_vps_zoom 程序：
+```
+cd sample/sample_vps_zoom
+$ make clean # 清理源码，保持干净的代码环境
+$ make
+... ... # 一大段编译打印
+$ ls
+19201080.yuv  main.c  main.o  Makefile  sample_vps_zoom
+$ make install # 把产出物安装到 out 目录下
+```

@@ -1,0 +1,187 @@
+# X3J3平台UBoot启动流程文档
+
+## 启动流程
+
+启动流程图
+
+   如下图所示，图中蓝色框图部分为XJ3新增内容，黄色框图部分是uboot基本流程。
+
+## Uboot新增内容说明
+
+    本章主要针对新增代码进行介绍，下方“涉及代码路径”为以uboot代码根目录为基准的相对路径；下方“开关和关闭方法”中，“宏”为defconfig中的编译选项宏。
+
+hb_unique_id_get
+
+   **功能：**获取XJ3开发板的unique id
+
+   **开启和关闭方法：**直接修改源代码增减这部分内容
+
+   **涉及代码路径：**
+
+board/hobot/common/board.c
+
+disable_cnn
+
+   **功能：**关闭CNN模块的时钟
+
+   **开启或关闭方法：**直接修改源代码增减这部分内容
+
+   **涉及代码路径：**
+
+board/hobot/common/board.c
+
+veeprom_init
+
+   **功能：**veeprom保存IP地址、MAC地址和OTA相关标志位，使用OTA功能必须初始化
+
+   **开启或关闭方法：**直接修改源代码增减这部分内容
+
+   **涉及代码路径：**
+
+common/veeprom.c
+
+board/hobot/common/board.c
+
+bif\_recover_reset_func
+
+   **功能：**将响应pin脚配置为bifspi的reset pin脚
+
+   **开启或关闭方法：**直接修改源代码增减这部分内容
+
+   **涉及代码路径：**
+
+board/hobot/common/board.c
+
+apbooting
+
+   **功能：**支持AP启动模式
+
+   **开启或关闭方法：**直接修改源代码增减这部分内容
+
+   **涉及代码路径：**
+
+board/hobot/common/board.c
+
+hb_ap_communication
+
+   **功能：**支持执行AP侧发送的命令
+
+   **开启或关闭方法：**通过下方宏控制
+
+CONFIG_AP_CP_COMN_MODE
+
+   **涉及代码路径：**
+
+board/hobot/common/board.c
+
+spacc_init和pka_init
+
+   **功能：**安全芯片IP相关驱动，支持RSA、HASH和AES硬件加速
+
+   **开启或关闭方法：**通过下方宏控制
+
+CONFIG_HBOT_SECURE_ENGINE
+
+CONFIG_HBOT_SECURE_COMPONENT
+
+   **涉及代码路径：**
+
+board/hobot/common/board.c
+
+drivers/scomp/scomp.c
+
+drivers/crypto/secure_engine/hb_pka.c
+
+drivers/crypto/secure_engine/hb_spacc.c
+
+   备注：本节由系统版本0922开放支持。
+
+hb_env_and_boardid_init
+
+   **功能：**环境变量处理，OTA升级流程处理
+
+   **开启或关闭方法：**直接修改源代码增减这部分内容
+
+   **涉及代码路径：**
+
+common/ota.c
+
+cmd/ota.c
+
+board/hobot/common/board.c
+
+hb_usb_dtb_config和hb_usb_env_init
+
+   **功能：**支持usb启动模式
+
+   **开启或关闭方法：**直接修改源代码增减这部分内容，并通过以下宏控制
+
+CONFIG_CMD_FASTBOOT
+
+CONFIG_CMD_USB
+
+CONFIG_CMD_USB_MASS_STORAGE
+
+CONFIG_FASTBOOT
+
+CONFIG_USB_FUNCTION_FASTBOOT
+
+CONFIG_FASTBOOT_OEM_GPT_EXTEND
+
+CONFIG_USB
+
+CONFIG_DM_USB
+
+   **涉及代码路径：**
+
+drivers/usb/\*
+
+board/hobot/common/board.c
+
+hb_swinfo_boot
+
+   **功能：**支持memdump相关功能
+
+   **开启或关闭方法：**直接修改源码增减这部分功能，并通过下方宏控制dump起始位置
+
+HB_SWINFO_DUMP_OFFSET
+
+   **涉及代码路径：**
+
+cmd/swinfo.c
+
+board/hobot/common/board.c
+
+setup\_boot_action
+
+   **功能：**用于进入特殊的启动模式，目前包括Fastboot以及eMMC UMS功能
+
+   **开启或关闭方法：**直接修改源码增减这部分功能
+
+   **涉及代码路径：**
+
+board/hobot/common/board.c
+
+avb_verify
+
+   **功能：**安全启动，校验boot和system分区完整性
+
+   **开启或关闭方法：**boot command中不使用avb_verify，或/并且修改以下宏
+
+CONFIG_AVB_VERIFY
+
+CONFIG_LIBAVB
+
+CONFIG_ANDROID_BOOT_IMAGE
+
+CONFIG_UDP_FUNCTION_FASTBOOT
+
+   **涉及代码路径：**
+
+common/avb_verify.c
+
+cmd/avb.c
+
+lib/libavb/avb_crypto.c
+
+lib/libavb/avb_vbmeta_image.c

@@ -1,0 +1,24 @@
+# 常用外设支持列表
+
+| Device Type     | Part Number  | Description                | Driver available |
+| --------------- | ------------ | -------------------------- | ---------------- |
+| Eth phy         | RTL8201F     | Megabit  phy               | Y                |
+| Eth phy         | RTL8211F     | Gigabit  phy               | Y                |
+| Eth phy         | RTL8211FI_CG | Gigabit  phy               | Y                |
+| Eth phy         | YT8521       | Gigabit  phy               | N                |
+| Audio codec     | ES8238       | Audio codec                | Y                |
+| Audio codec     | ES7210       | Audio codec                | Y                |
+| Audio codec     | ES8323S      | Audio codec                | N                |
+| Audio codec     | WM8960       | Audio codec                | Y                |
+| Audio codec     | NAU8810Y     | Audio codec                | N                |
+| LCD  panel      | JC080HD003   | Mipi  lcd  panel, 800*1280 | Y                |
+| LCD  panel      | ZJ101B001    | Mipi lcd panel, 800*1280   | Y                |
+| LCD  panel      | JC101HD115   | Mipi lcd panel, 800*1280   | Y                |
+| Video convert   | LT8618sxb    | BT/RGB  to HDMI            | Y                |
+| Video  convert  | LT9211       | HDMI  to Mipi  dsi         | Y                |
+| WIFI            | AP6212       | Wifi/BT  module            | Y                |
+| WIFI            | TUSB8041     | Wifi/BT  module            | Y                |
+| USB 3.0 hub     | RTL5411      | USB  3.0 hub               | N/A              |
+| USB  3.0 hub    | TUSB8041     | USB  3.0 hub               | N/A              |
+| USB 3.0 to SATA | JMS561       | USB  3.0 to SATA           | N                |
+| USB 3.0 to SATA | JMS578       | USB  3.0 to SATA           | N                |

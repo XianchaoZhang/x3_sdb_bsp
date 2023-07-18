@@ -1,0 +1,14 @@
+{
+    "server_EN":1,
+    "group_number":2,
+    "group_0": {
+        "node_number":4,
+        "primary":[0,0],
+        "secondary":[[1,0], [1,1], [1,2], [1,3]]
+    },
+    "group_1": {
+        "node_number":4,
+        "primary":[0,1],
+        "secondary":[[1,4], [1,5], [1,6], [1,7]]
+    }
+}

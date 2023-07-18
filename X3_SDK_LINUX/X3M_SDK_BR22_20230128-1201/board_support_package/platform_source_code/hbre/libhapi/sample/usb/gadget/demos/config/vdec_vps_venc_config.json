@@ -1,0 +1,286 @@
+{
+  "need_cam": 1,
+  "cam_num": 4,
+  "vps_dump": 0,
+  "vps_layer_dump": 4,
+  "cam0": {
+    "grp_num": 1,
+    "grp0": {
+            "vin_fd": 0,
+            "vin_vps_mode": 1,
+            "need_clk": 1,
+            "need_md": 0,
+            "need_chnfd": 0,
+            "need_dis": 0,
+            "need_gdc": 0,
+            "grp_frame_depth": 1,
+            "chn_num": 7,
+        "chn0": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn1": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn2": {
+            "ipu_chn_en": 1,
+            "pym_chn_en": 0,
+            "scale_en": 1,
+            "width": 1920,
+            "height": 1080,
+            "frame_depth": 5
+        },
+        "chn3": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn4": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn5": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn6": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 5
+        }
+    }
+  },
+  "cam1": {
+    "grp_num": 1,
+    "grp0": {
+        "vin_fd": 0,
+        "vin_vps_mode": 1,
+        "need_clk": 1,
+        "need_md": 0,
+        "need_chnfd": 0,
+        "need_dis": 0,
+        "need_gdc": 0,
+        "grp_frame_depth": 1,
+        "chn_num": 7,
+        "chn0": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn1": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn2": {
+            "ipu_chn_en": 1,
+            "pym_chn_en": 0,
+            "scale_en": 1,
+            "width": 1920,
+            "height": 1080,
+            "frame_depth": 5
+        },
+        "chn3": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn4": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn5": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn6": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 5
+        }
+    }
+  },
+  "cam2": {
+    "grp_num": 1,
+    "grp0": {
+        "vin_fd": 0,
+        "vin_vps_mode": 1,
+        "need_clk": 1,
+        "need_md": 0,
+        "need_chnfd": 0,
+        "need_dis": 0,
+        "need_gdc": 0,
+        "grp_frame_depth": 1,
+        "chn_num": 7,
+        "chn0": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn1": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn2": {
+            "ipu_chn_en": 1,
+            "pym_chn_en": 0,
+            "scale_en": 1,
+            "width": 1920,
+            "height": 1080,
+            "frame_depth": 5
+        },
+        "chn3": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn4": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn5": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn6": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 5
+        }
+    }
+  },
+  "cam3": {
+	"grp_num": 1,
+	"grp0": {
+        "vin_fd": 0,
+        "vin_vps_mode": 1,
+        "need_clk": 1,
+        "need_md": 0,
+        "need_chnfd": 0,
+        "need_dis": 0,
+        "need_gdc": 0,
+        "grp_frame_depth": 1,
+        "chn_num": 7,
+        "chn0": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn1": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn2": {
+            "ipu_chn_en": 1,
+            "pym_chn_en": 0,
+            "scale_en": 1,
+            "width": 1920,
+            "height": 1080,
+            "frame_depth": 5
+        },
+        "chn3": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn4": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn5": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 8
+        },
+        "chn6": {
+            "ipu_chn_en": 0,
+            "pym_chn_en": 0,
+            "scale_en": 0,
+            "width": 3840,
+            "height": 2160,
+            "frame_depth": 5
+        }
+    }
+  }
+}

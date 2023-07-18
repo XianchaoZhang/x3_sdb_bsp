@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.19. X3 mipi 屏适配说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.3.20. Wi-Fi 驱动调试指南" href="33-WIFI_Driver_Debug_Guide.html" />
+    <link rel="prev" title="4.3.18.5. USB端口调试使用指南" href="usb_develop_guide/22-USB_Gadget_User_Guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.3.19. X3 mipi 屏适配说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mipi-dsi">4.3.19.1. mipi-dsi显示屏调试</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.19. </span>X3 mipi 屏适配说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="usb_develop_guide/22-USB_Gadget_User_Guide.html" class="btn btn-neutral float-left" title="4.3.18.5. USB端口调试使用指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="33-WIFI_Driver_Debug_Guide.html" class="btn btn-neutral float-right" title="4.3.20. Wi-Fi 驱动调试指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="x3-mipi">
+<h1><span class="section-number">4.3.19. </span>X3 mipi 屏适配说明<a class="headerlink" href="#x3-mipi" title="永久链接至标题"></a></h1>
+<p><strong>如何适配一个新的mipi-dsi显示屏（开源驱动）</strong></p>
+<p>用户如果想点亮一个新的<code class="docutils literal notranslate"><span class="pre">mipi-dsi</span></code>显示屏，可以从<code class="docutils literal notranslate"><span class="pre">hobot_iar_cdev.c</span></code>文件中的<code class="docutils literal notranslate"><span class="pre">hobot_iar_store</span></code>函数入手，该函数实现驱动与用户的交互，接收并解析用户的echo指令。例如用户输入<code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">dsi720p</span> <span class="pre">&gt;</span> <span class="pre">/sys/devices/virtual/graphics/iar_cdev/iar_test_attr</span></code>，那么驱动将会执行以下代码：</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=NDcwMWQ0NjYxNmQ1MjExZDE5ZTJjZDE2NTk5MGI1ODNfYnJlZUZpdDkwMDFtUzNhbGozV0NjcXZQaEluaVZRTEhfVG9rZW46Ym94Y25pQmw4bjJXU1pZeWRPMEJmWkxiNXJkXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image002.png" /></p>
+<p>该段代码即可点亮一个<code class="docutils literal notranslate"><span class="pre">mipi-dsi</span></code>屏幕，点亮一个<code class="docutils literal notranslate"><span class="pre">mipi-dsi</span></code>屏幕的流程如下：</p>
+<p><img alt="Generated" src="../../_images/clip_image004.png" /></p>
+<p>其中<code class="docutils literal notranslate"><span class="pre">user_config_display</span></code>函数来配置<code class="docutils literal notranslate"><span class="pre">iar</span></code>模块硬件，主要包括输入输出分辨率的配置，显示方式配置等，用户可以根据需求添加新的display_type，目前支持的mipi-dsi显示屏的分辨率有<code class="docutils literal notranslate"><span class="pre">720*1280</span></code>，<code class="docutils literal notranslate"><span class="pre">1280*720</span></code>和<code class="docutils literal notranslate"><span class="pre">1080*1920</span></code>,如果客户屏幕是目前驱动支持的分辨率就不需要添加新的display_type, 用户添加新的display_type后，配置可参考目前支持的mipi-dsi的配置，只需要修改分辨率即可，其他配置不用改。</p>
+<p><code class="docutils literal notranslate"><span class="pre">set_mipi_display</span></code>函数用来配置<code class="docutils literal notranslate"><span class="pre">mipi-dsi</span> <span class="pre">core</span></code>和屏幕，输入参数为屏幕类型，0为<code class="docutils literal notranslate"><span class="pre">1080*1920</span></code>的屏幕，1和2为<code class="docutils literal notranslate"><span class="pre">720*1280</span></code>类型的屏幕。</p>
+<p>关于不同的屏幕类型，涉及到的不同配置如下：</p>
+<ul class="simple">
+<li><p>MIPI_HSFREQRANGE</p></li>
+</ul>
+<p>涉及代码如图</p>
+<p><img alt="img" src="../../_images/clip_image006.jpg" /></p>
+<p>可以看到对于<code class="docutils literal notranslate"><span class="pre">1080*1920</span></code>的屏幕该参数配置的值是<code class="docutils literal notranslate"><span class="pre">0x23</span></code>, 对于<code class="docutils literal notranslate"><span class="pre">720*1280</span></code>的屏幕该参数配置的值是<code class="docutils literal notranslate"><span class="pre">0x16</span></code>, 该参数的具体含义如下<code class="docutils literal notranslate"><span class="pre">（drivers/media/platform/hobot/mipi/hobot_mipi_dphy.c</span> <span class="pre">g_pll_sel_table）</span></code>：</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjIzYWVhN2QyNzkyZmNiMzY2MGI0ZmU5NjIyOGQ2YzJfUWY4aTlGSnlEY3pvdzNadjJHVDRmWk9obVloUERiSGFfVG9rZW46Ym94Y240T08zdER6aVRuTEVKbHFmbzNqc0RjXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image007.png" /></p>
+<p>例如，<code class="docutils literal notranslate"><span class="pre">0x23</span></code>表示频率范围是<code class="docutils literal notranslate"><span class="pre">235Mbps~250Mbps</span></code>, <code class="docutils literal notranslate"><span class="pre">0x16</span></code>表示频率范围是<code class="docutils literal notranslate"><span class="pre">425Mbps~475Mbps</span></code>，iar屏幕对应的频率的计算公式如下(屏幕分辨率宽+hbp+hfp+hs)*(屏幕分辨率高+vbp+vfp+vs)*(每个像素bit)*(帧率)/4，比如屏幕的分辨率是800*1280，每个像素24bit，4lane，那套用公式就是(800+8+48+52)*(1280+6+16+15)*24*60/4，计算出是430Mbps那么就是选0x16，一般调试720*1280/800*1280的屏幕分辨率都选0x16。</p>
+<ul class="simple">
+<li><p>mipi_dphy_config</p></li>
+</ul>
+<p>用户可以默认用panel_no为2的配置</p>
+<ul class="simple">
+<li><p>mipi_dsi_video_cofing</p></li>
+</ul>
+<p>该函数主要用来配置mipi-dsi屏幕的时序，配置参数来源于mipi-dsi屏幕的硬件手册。该函数的输入参数为struct video_timing, 该结构体定义如下</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTZkOWRmOTJhYjA2ZTMwMTNjOWM4OWVlMmRjZWU3YTBfVzN6aDE3cmYwdmJKR0poSTUzZ3BBY1ZTajIzc2JhM3hfVG9rZW46Ym94Y25wbDV6OU0zd0lCaDFUZnVTZkdlM2RjXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image008.png" /></p>
+<p>vid_pkt_size: configures the video packet size</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=NzlkNDg3MjE3NTQwYTYxOTM4ZmZiNjlkMzUyNTk4NGJfSVllRTRDR1l1TWZzcndIVnRsZnluSFphTXY3Uk1wTkRfVG9rZW46Ym94Y25lNEFYdzFhUFZIYjNNZWF6ZGhlWEJnXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image010.png" /></p>
+<p>vid_num_chunks: configures the number of chunks to use.The data in each chunk has the size provided by vid_pkt_size.</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=NTUxNTc2YmUzZmJkNzNmNzdjNTgzZGJmNThjYzBiMGFfZlNrbVNSSXFBNFFWcFBWVkQ1YUlXYVpFZ0xtQzdUZ1NfVG9rZW46Ym94Y25sYXNwR0lYdVRYbm9iWEFMTkRQQ01jXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image012.png" /></p>
+<p>通常没有特殊需求时该参数设置为0即可</p>
+<p>vid_null_size: configures the size of the null packets</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=YTNjYjI4ODNiYTc1NjE5M2E3NWQzN2Y1YzNiMmY0MTNfY29WQVlFcmFzN1VEd2hBRk02cFRSa0tXT29iZFROdU1fVG9rZW46Ym94Y25wVHk2bzJ5b1NKbndMWmhRNW5LbVFiXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image014.png" /></p>
+<p>通常没有特殊需求是该参数设置为0即可</p>
+<p>vid_hsa: configures the video HSA time</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=MzdkYjhlM2NkMzc2YjQzOTE3M2Q0ZGU1ZGMyN2ZiYzFfRmxpeFVvMXd4V0Z4SVpGTGFaUXpHSjJ4MnZ6dU1FVXBfVG9rZW46Ym94Y25OaGRsVW4yY2VMOHo0QzBnWDZnSndlXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image016.png" /></p>
+<p>vid_hbp: configures the video HBP time</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=MDBkMmQyNzlmNDFhMDQ5YzlkMDJjN2IwNWViYWViNmNfWmdQd3poSktyREpORkt0emx3THJmZHh2eTh5elRTd3BfVG9rZW46Ym94Y25CQ0RFeGxzN2dUY2xMN2o3TGIxeXloXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image018.png" /></p>
+<p>vid_hline_time: configures the overall time for each video line</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjU5ODk0MDBkZTBkM2M5OGRkMmFlNTk5MWI0ZmViM2FfM1hseDFIZ2FLTHdCNkxzVGJjR0xxaWNFNUdCc3pXTGtfVG9rZW46Ym94Y25MOVdsUlRUdkVtMzl2bXZZcFB6cEpoXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image020.png" /></p>
+<p>vid_vsa: configures the VSA period</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDMxM2JiMzFjODVhZjc0OWI3NjhmOGMyNWQ1ODUxMmVfa0V3NlI3NU1Qd2pnN1h5eUhHaUp1cUxWaUdSNkZnNTRfVG9rZW46Ym94Y24zU3dROTRGYjVLZndaMTBoeXZJS1ZoXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image022.png" /></p>
+<p>vid_vbp: configures the VBP period</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTczNzRiNWNlM2QzNWRhODJjNzY4ODRhZjYxMDNhYjdfZFZPWXhNcVlaUlhJV2RrdlR5cGJnTGNmWW12UG1VVVJfVG9rZW46Ym94Y25iY1hOOHFFWGR3b1MyMzFPaWFEQkNnXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image024.png" /></p>
+<p>vid_vfp: configures the VFP period</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=NzY4ZWMwOTljMjdhM2FhYjdjODUxYjk2ZWZiODAyYThfRXpzeVZPb01HQVhlVHAwTFFTMVhKTFlHRUprcmhVeEFfVG9rZW46Ym94Y25Fa0J1Z0FjRUFMZzBmRW90ZEduMkxlXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image026.png" /></p>
+<p>vid_vactive_line: configures the vertical resolution of video</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=N2ZhYzQyZGRjYTM4Y2M0NDc5ZTUzOGJiNGQzMWU5NTJfYUZDVFlrNlRva1J5c0ZHVkd6ZG4wZ0FLamw3ZTU3cnpfVG9rZW46Ym94Y25jNzdZcmdZYTFNNUl5RUtxbE1CdnFkXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image028.png" /></p>
+<ul class="simple">
+<li><p>mipi_dsi_panel_init</p></li>
+</ul>
+<p>该函数用来配置屏幕，具体的配置序列由屏厂提供，屏幕配置示例代码可以参考下面</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmE4ZmE5ZTc3YzM0YTI3ZmVjMTQwYmJiM2UxMTY5ZjhfZldtUzdFcFR6ZTNtNzhnWmxMWXNRRWtZNXNnVHIyU29fVG9rZW46Ym94Y24yMDJZNXJFaDltUUp1c3F5SGRpaE5jXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image030.png" /></p>
+<p>用户需要根据屏厂提供的屏幕配置序列构造一个结构体数组，该数组中的每一个成员代表一条配置指令，构造好初始化序列数组后就可以按找上图方式，根据不同的配置指令类型调用对应的配置函数进行指令配置。初始化序列数组如下图形式：</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTc0OTRhNDBhYTQ0MTJkZmY5YTBlMjk0NjdlZGQ3ZTZfeHQzV2h0dlJDNjhKNVJSM09GVXZkaHFxVDVWajFjaXRfVG9rZW46Ym94Y25Oc3N2RnRkcFBCVGJndkR3RzRrVFBiXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image032.png" /></p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=YjM4NDRlNTAxYjM1YjcyOTkwMGQ5ZmIwMGNlOWQxMGFfMHRsUmV6M1gwMEdaUlBNZm9JZXZhWGZ5OU5FS1VGaG9fVG9rZW46Ym94Y255U1pVNkZtOGs2c2Fkek1QV3VscWZkXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image034.png" /></p>
+<p>其中cmd_type包含以下几种：</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=NzU0NTQ3OGM4ZWQzZWJkMDYwY2JkNWJlMWRlMTI4YzJfZ3RZV2FDYTd0MDkwQXNjTlppaG1XVk91NUtJRFM1RWdfVG9rZW46Ym94Y25SRkpDYzZHZlNFOWFnbE1KMlhOWWtnXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image035.png" /></p>
+<p>其中MIPI_LCP表示长包，对应mipi屏幕配置协议中的0x39 data type</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=MjNmMzA3OTc3OWYyNzM1Njk4YzFkODdlODg5NTEyMDZfMWpkWUV5bWJtZnRjNUZGRUxaekQ2OER5YUptU0pwR2xfVG9rZW46Ym94Y25aSzJSSmdDV1NZS200dHNZR1B1T3llXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image037.png" /></p>
+<p>MIPI_S1P表示带一个参数的短包，对应mipi屏幕配置协议中的0x15 data type</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=MzBjODQxZmVhMzg3MGI0NDExMzZiMWVlMDQxODc4ZGVfQkFqZE00M2hUbWtwdmw0UkwzbllpbmpvNW9saDJmNk5fVG9rZW46Ym94Y25tNW9GbHNTMmlKTDNHdWkyNHR6WjBmXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image039.png" /></p>
+<p>MIPI_SNP表示不带参数的短包，对应mipi屏幕配置协议中的0x5 data type</p>
+<p><img alt="https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=OTE5MjkyZGIzYmFiZTJmN2YzMzE3NjhkNWE5NzQ4ZWFfM25MZ0c3dDFoSnhrZHhQWUJOb1pmdFhkMGZ2a0tjRkJfVG9rZW46Ym94Y240QjdJd3BOSUxhSHJVa0FyNDJVU2tnXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA" src="../../_images/clip_image041.png" /></p>
+<p>MIPI_SLP不属于屏幕配置指令，而是单纯的sleep命令，用来保证屏幕配置的时序需求</p>
+<p>MIPI_OFF不属于屏幕配置指令，代表屏幕配置序列结束</p>
+<p>屏幕配置完成后调用mipi_dsi_set_mode(0)来结束屏幕配置，使mipi-dsi core进入正常的工作模式</p>
+<section id="mipi-dsi">
+<h2><span class="section-number">4.3.19.1. </span>mipi-dsi显示屏调试<a class="headerlink" href="#mipi-dsi" title="永久链接至标题"></a></h2>
+<p>mipi-dsi输出从芯片角度看由两个硬件IP组成，分别是<code class="docutils literal notranslate"><span class="pre">iar</span> <span class="pre">core</span></code>和<code class="docutils literal notranslate"><span class="pre">mipi-dsi</span> <span class="pre">core</span></code>，<code class="docutils literal notranslate"><span class="pre">iar</span> <span class="pre">core</span></code>输出并行信号给到<code class="docutils literal notranslate"><span class="pre">mipi-dsi</span> <span class="pre">core</span></code>。因此mipi-dsi屏幕调试需要调好两个硬件IP，两个硬件IP有各自的时序参数。</p>
+<p>通常的调试方法是先调<code class="docutils literal notranslate"><span class="pre">mipi-dsi</span> <span class="pre">core</span></code>，再调<code class="docutils literal notranslate"><span class="pre">iar</span> <span class="pre">core</span></code></p>
+<ul class="simple">
+<li><p>Mipi-dsi core调试</p></li>
+</ul>
+<p>根据mipi-dsi屏幕手册，填入mip-dsi core相关的时序参数，时序参数参考上一节中的介绍，主要需要填入的包括hsfrequency range还有struct video_timing结构体。然后设置mipi-dsi core进入pattern模式，pattern模式包括横条color bar和竖条的color bar，看这两种pattern模式是否都显示正常，如果都显示正常就可以固定mipi-dsi core这个IP的时序参数，如果pattern模式不正常可能需要在现有的mipi-dsi的时序参数下进行微调，微调时可以通过参数变化和屏幕显示现象变化发现规律，按照规律调整即可。pattern正常显示的标准为横条和竖条颜色正常，位置正常没有串位现象，没有严重闪动现象，由于之前调试中可能mipi-dsi core的时钟没有完全匹配，会导致后面即使正常了也会使屏幕有轻微闪动，这种轻微闪动属于正常现象。</p>
+<p>Mipi-dsi core进入pattern模式的方法：</p>
+<p>通过这个函数设置即可</p>
+<p><img alt="img" src="../../_images/clip_image043.jpg" /></p>
+<p><img alt="img" src="../../_images/clip_image045.png" /></p>
+<p><img alt="img" src="../../_images/clip_image047.png" /></p>
+<p><img alt="img" src="../../_images/clip_image049.jpg" /></p>
+<p><img alt="img" src="../../_images/clip_image051.jpg" /></p>
+<p><img alt="img" src="../../_images/clip_image053.jpg" /></p>
+<ul class="simple">
+<li><p>Iar core 调试</p></li>
+</ul>
+<p>Iar core除了基本的分辨率设置，主要需要调试的也是时序参数，时序参数主要包括pixel clock和struct disp_timing这个结构体。</p>
+<p><img alt="img" src="../../_images/clip_image054.png" /></p>
+<p>其中disp_timing中的参数含义如下：</p>
+<p><img alt="img" src="../../_images/clip_image056.jpg" /></p>
+<p><img alt="img" src="../../_images/clip_image058.jpg" /></p>
+<p>如果是标准分辨率，这些时序配置可以参考CEA协议进行配置：</p>
+<p><img alt="img" src="../../_images/clip_image060.jpg" /></p>
+<p><img alt="img" src="../../_images/clip_image062.jpg" /></p>
+<p><img alt="img" src="../../_images/clip_image064.jpg" /></p>
+<p><img alt="img" src="../../_images/clip_image066.jpg" /></p>
+<p><img alt="img" src="../../_images/clip_image068.png" /></p>
+<p><img alt="img" src="../../_images/clip_image070.jpg" /></p>
+<p><img alt="img" src="../../_images/clip_image072.jpg" /></p>
+<p><img alt="img" src="../../_images/clip_image074.jpg" /></p>
+<p><img alt="img" src="../../_images/clip_image076.jpg" /></p>
+<p><img alt="img" src="../../_images/clip_image078.png" /></p>
+<p>详细时序图可以参考以下链接：</p>
+<p><a class="reference external" href="http://www.doc88.com/p-33579663436.html">EIA-CEA-861-B - 道客巴巴 (doc88.com)</a></p>
+<p><img alt="img" src="../../_images/clip_image080.png" /></p>
+<p>如果是非标准分辨率，可以找一个接近的分辨率进行设置，然后再那个时序参数上进行微调。如果有图像显示，只是有闪烁或串位现象说明参数差的不多，微调即可，如果图像完全没有的话可以先试着调整pixel clk。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usb_develop_guide/22-USB_Gadget_User_Guide.html" class="btn btn-neutral float-left" title="4.3.18.5. USB端口调试使用指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="33-WIFI_Driver_Debug_Guide.html" class="btn btn-neutral float-right" title="4.3.20. Wi-Fi 驱动调试指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

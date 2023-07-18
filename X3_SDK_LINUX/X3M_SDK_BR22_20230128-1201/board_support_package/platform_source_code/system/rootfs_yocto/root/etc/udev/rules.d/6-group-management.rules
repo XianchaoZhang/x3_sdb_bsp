@@ -1,0 +1,34 @@
+#creat OWNER/GROUP 
+ACTION=="add", KERNEL=="bpu*", GROUP="bpu", OWNER="bpu", MODE="0664", RUN+="/bin/chown bpu:bpu %k"
+
+ACTION=="add", KERNEL=="vpu*", GROUP="mm", OWNER="mm", MODE="0664", RUN+="/bin/chown mm:mm %k"
+ACTION=="add", KERNEL=="jpu*", GROUP="mm", OWNER="mm", MODE="0664", RUN+="/bin/chown mm:mm %k"
+
+ACTION=="add", KERNEL=="sif*", GROUP="vio", OWNER="sif", MODE="0664", RUN+="/bin/chown sif:vio %k"
+ACTION=="add", KERNEL=="mipi*", GROUP="vio", OWNER="mipi", MODE="0664", RUN+="/bin/chown mipi:vio %k"
+ACTION=="add", KERNEL=="ipu*", GROUP="vio", OWNER="ipu", MODE="0664", RUN+="/bin/chown ipu:vio %k"
+ACTION=="add", KERNEL=="isp*", GROUP="vio", OWNER="isp", MODE="0664", RUN+="/bin/chown isp:vio %k"
+ACTION=="add", KERNEL=="pym*", GROUP="vio", OWNER="pym", MODE="0664", RUN+="/bin/chown pym:vio %k"
+ACTION=="add", KERNEL=="ldc*", GROUP="vio", OWNER="ldc", MODE="0664", RUN+="/bin/chown ldc:vio %k"
+ACTION=="add", KERNEL=="iar*", GROUP="vio", OWNER="iar", MODE="0664", RUN+="/bin/chown iar:vio %k"
+ACTION=="add", KERNEL=="ac_*", GROUP="vio", OWNER="ac", MODE="0664", RUN+="/bin/chown ac:vio %k"
+ACTION=="add", KERNEL=="dwe*", GROUP="vio", OWNER="dwe", MODE="0664", RUN+="/bin/chown dwe:vio %k"
+ACTION=="add", KERNEL=="video*", GROUP="vio", OWNER="video", MODE="0664", RUN+="/bin/chown video:vio %k"
+ACTION=="add", KERNEL=="vio_*", GROUP="vio", OWNER="vio", MODE="0664", RUN+="/bin/chown vio:vio %k"
+ACTION=="add", KERNEL=="v4l*", GROUP="vio", OWNER="v4l", MODE="0664", RUN+="/bin/chown v4l:vio %k"
+
+ACTION=="add", KERNEL=="console*", GROUP="peri", OWNER="console", MODE="0664", RUN+="/bin/chown console:peri %k"
+ACTION=="add", KERNEL=="i2c*", GROUP="peri", OWNER="i2c", MODE="0664", RUN+="/bin/chown i2c:peri %k"
+ACTION=="add", KERNEL=="rtc*", GROUP="peri", OWNER="rtc", MODE="0664", RUN+="/bin/chown rtc:peri %k"
+ACTION=="add", KERNEL=="tty[0-5]", GROUP="peri", OWNER="tty", MODE="0664", RUN+="/bin/chown tty:peri %k"
+ACTION=="add", KERNEL=="ttyS*", GROUP="peri", OWNER="ttySX", MODE="0664", RUN+="/bin/chown ttySX:peri %k"
+ACTION=="add", KERNEL=="ubi_ctrl", GROUP="peri", OWNER="ubi", MODE="0664", RUN+="/bin/chown ubi:peri %k"
+ACTION=="add", KERNEL=="log_*", GROUP="log", OWNER="log", MODE="0664", RUN+="/bin/chown log:log %k"
+
+ACTION=="add", KERNEL=="ion", GROUP="vio", OWNER="ion", MODE="0664", RUN+="/bin/chown ion:vio %k"
+ACTION=="add", KERNEL=="port_*", GROUP="vio", OWNER="port", MODE="0664", RUN+="/bin/chown port:vio %k"
+ACTION=="add", KERNEL=="hmipc", GROUP="vio", OWNER="hmipc", MODE="0664", RUN+="/bin/chown hmipc:vio %k"
+ACTION=="add", KERNEL=="gdc*", GROUP="vio", OWNER="gdc", MODE="0664", RUN+="/bin/chown gdc:vio %k"
+
+SUBSYSTEM=="sound", GROUP="peri", OWNER="sound", OPTIONS+="static_node=snd/seq", OPTIONS+="static_node=snd/timer"
+ACTION=="add", SUBSYSTEM=="sound", GROUP="peri", OWNER="sound", MODE="0664", RUN+="/bin/chown sound:peri %k"

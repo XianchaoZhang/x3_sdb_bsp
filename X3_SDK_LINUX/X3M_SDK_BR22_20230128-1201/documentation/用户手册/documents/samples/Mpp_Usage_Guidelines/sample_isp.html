@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.2.3. sample_isp 使用说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="3.2.4. sample_vps 使用说明" href="sample_vps.html" />
+    <link rel="prev" title="3.2.2. get_isp_data 使用说明" href="get_isp_data.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">3. Demo使用指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Typical_Application_Scenarios/index.html">3.1. 典型应用场景</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">3.2. VIO使用指引</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="get_sif_data.html">3.2.1. get_sif_data 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_isp_data.html">3.2.2. get_isp_data 使用说明</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">3.2.3. sample_isp 使用说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">3.2.3.1. 程序功能</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">3.2.3.2. 功能使用</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id3">程序部署</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">命令解释：</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">3.2.3.3. 程序开发</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id6">源码结构</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id7">编译</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps.html">3.2.4. sample_vps 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps_zoom.html">3.2.5. sample_vps_zoom 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_osd.html">3.2.6. sample_osd 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html">3.2.7. sample video codec 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vot.html">3.2.8. sample_vot 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_lcd.html">3.2.9. sample_lcd 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_usb_cam_4k60.html">3.2.10. sample_usb_cam_4k60 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html">3.2.11. Sunrise_camera用户使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html">3.2.12. Sunrise_camera开发说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">3. </span>Demo使用指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">3.2. </span>VIO使用指引</a> &raquo;</li>
+      <li><span class="section-number">3.2.3. </span>sample_isp 使用说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="get_isp_data.html" class="btn btn-neutral float-left" title="3.2.2. get_isp_data 使用说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="sample_vps.html" class="btn btn-neutral float-right" title="3.2.4. sample_vps 使用说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sample-isp">
+<h1><span class="section-number">3.2.3. </span>sample_isp 使用说明<a class="headerlink" href="#sample-isp" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">3.2.3.1. </span>程序功能<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">sample_isp</span></code>程序完成<code class="docutils literal notranslate"><span class="pre">isp</span></code>图像接口初始化，主要功能是调用每一个<code class="docutils literal notranslate"><span class="pre">isp</span></code>图像进行接口动态设置/获取参数，并返回测试结果</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">3.2.3.2. </span>功能使用<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<section id="id3">
+<h3>程序部署<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>把 <code class="docutils literal notranslate"><span class="pre">sample/sample_isp/sample_isp</span></code> 文件上传到开发板后，给程序赋予可执行权限 <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">a+x</span> <span class="pre">sample_isp</span></code>, 然后执行程序 <code class="docutils literal notranslate"><span class="pre">./sample_isp</span></code>，注意此程序运行前需要有当前的sensor程序在运行中，sensor的程序可以直接使用Sunrise_camera, <code class="docutils literal notranslate"><span class="pre">sample_isp</span></code>运行过程如下</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod +x sample_isp
+<span class="c1"># ./sample_isp</span>
+<span class="o">============================================</span>
+APP: ./sample_isp
+a: AE
+b: AF
+c: AWB
+d: BL
+e: DEMOSAIC
+f: SHARPEN
+g: GAMMA
+h: IRIDIX
+i: CNR
+j: SINTER
+k: TEMPER
+l: SCENE_MODES
+m: FIRMWARE STATE
+n: MODULE CONTROL
+o: REGISTER
+p: LIBREG_AE
+q: LIBREG_AWB
+r: LIBREG_AF
+s: METERING AE<span class="o">(</span><span class="nb">read</span> only<span class="o">)</span>
+t: METERING AWB<span class="o">(</span><span class="nb">read</span> only<span class="o">)</span>
+u: METERING AF<span class="o">(</span><span class="nb">read</span> only<span class="o">)</span>
+v: METERING AE_5BIN<span class="o">(</span><span class="nb">read</span> only<span class="o">)</span>
+w: METERING_DATA_TIME<span class="o">(</span><span class="nb">read</span> only<span class="o">)</span>
+x: SWITCH SCENCE
+A: CSC
+B: MESH SHADING
+C: MESH SHADING LUT
+D: RADIAL SHADING
+E: RADIAL SHADING LUT
+F: IRIDIX STRENGTH LEVEL
+G: IDX_IRQ_SYNC
+H: IDX_AWB_ZONE
+I: IDX_AF_ZONE
+L: IDX_AF_KERNEL
+M: IDX_AEROI_INFO
+N: IDX_LUMA_INFO
+O: IDX_AEPARAM_INFO
+J: IDX_AE5BIN_ZONE
+K: IDX_AE_ZONE
+P: IDX_AE_EX
+y: Help
+Q: <span class="nv">Exit</span>
+<span class="o">============================================</span>
+ISP_TEST&gt;
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>命令解释：<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>a： 获取/设置AE属性</p>
+<p>b： 示例中暂不支持</p>
+<p>c:  获取/设置AWB属性</p>
+<p>d:  获取/设置BlackLevel属性</p>
+<p>e:  获取/设置Demosaic属性</p>
+<p>f:  获取/设置SHARPEN属性</p>
+<p>g:  获取/设置GAMMA属性</p>
+<p>h:  获取/设置IRIDIX属性</p>
+<p>i:  获取/设置CNR属性</p>
+<p>j:  获取/设置SINTER属性</p>
+<p>k:  获取/设置TEMPER属性</p>
+<p>l:  获取/设置SCENE_MODES属性</p>
+<p>m:  获取/设置FWSTATE属性</p>
+<p>n:  获取/设置ModuleControl属性</p>
+<p>o:  获取/设置Register寄存器</p>
+<p>p:  注册AE回调接口</p>
+<p>q:  注册AWB回调接口</p>
+<p>r:  注册AF回调接口</p>
+<p>s:  获取AE统计信息</p>
+<p>t:  获取AWB统计信息</p>
+<p>u:  获取AF统计信息</p>
+<p>v:  获取AE_5BIN统计信息</p>
+<p>w:  获取最新的统计信息(代码里面默认获取AWB，可以仿照代码通过传参获取AE,AF统计信息)</p>
+<p>x:  切换isp效果库(so库需要跟isp_test文件同一目录)</p>
+<p>A:  获取/设置CSC属性</p>
+<p>B:  获取/设置MESH_SHADING属性</p>
+<p>C:  获取/设置MESH SHADING LUT属性</p>
+<p>D:  获取/设置RADIAL SHADING属性</p>
+<p>E:  获取/设置RADIAL SHADING LUT属性</p>
+<p>F:  获取/设置IRIDIX STRENGTH LEVEL属性</p>
+<p>G:  获取帧同步开始/结束时间</p>
+<p>H:  设置AWB_ZONE属性</p>
+<p>I:  设置AF_ZONE属性</p>
+<p>L:  获取/设置AF_KERNEL_INFO属性</p>
+<p>M:  获取/设置AEROI信息</p>
+<p>N:  获取LUMA信息</p>
+<p>O:  获取/设置AEParam信息</p>
+<p>J:  设置AE5BIN_ZONE属性</p>
+<p>K:  设置AEZONE属性</p>
+<p>P:  获取/设置AE额外属性</p>
+<p>y:  帮助信息</p>
+<p>Q:  退出程序</p>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">3.2.3.3. </span>程序开发<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<section id="id6">
+<h3>源码结构<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
+├── main.c				# 主程序
+├── Makefile			# 编译makefile
+└── Readme.md			# 程序说明
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h3>编译<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<p>当前代码通过一个Makefile文件配置编译</p>
+<p>依赖的多媒体头文件和库文件分别在BSP SDK的appsdk目录和system/rootfs_yocto/root目录下，编译时需要注意这两个依赖目录位置是否存在</p>
+<p>安装交叉编译工具链后，执行 make 命令直接可以编译生成 sample_isp 程序</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd sample/sample_isp
+$ make clean # 清理源码，保持干净的代码环境
+$ make
+... ... # 一大段编译打印
+$ ls
+main.c  main.o  Makefile  sample_isp
+$ make install # 把产出物安装到 out 目录下
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="get_isp_data.html" class="btn btn-neutral float-left" title="3.2.2. get_isp_data 使用说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="sample_vps.html" class="btn btn-neutral float-right" title="3.2.4. sample_vps 使用说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+#! /bin/sh
+
+print_usage()
+{
+	echo "Usage:"
+	echo "hrut_camt_frmrate camindex [0|1|2] [pps_offset]"
+	echo "1/2/3/4: for compatibility this is must but no use"
+	echo "10fps: 0, 20fps: 1, 30fps: 2"
+	echo "pps_offset: unit in nanosecond(ns)"
+	echo "-----------------------------------"
+}
+
+CAMTYPE=`hrut_390camtype`
+case $CAMTYPE in
+    0)
+        hrut_camt_frmrate_type0 $@
+    ;;
+    1)
+        hrut_camt_frmrate_type1 $@
+    ;;
+    *)
+        hrut_camt_frmrate_type0 $@
+    ;;
+esac
+
+

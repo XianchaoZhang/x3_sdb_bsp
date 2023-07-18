@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.18.3. USB眼图测试 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+    <link rel="next" title="4.3.18.4. USB Phy常见参数调试" href="21-USB_Phy_Tunning_Guide.html" />
+    <link rel="prev" title="4.3.18.2. USB3.0 TX 电气特性测试" href="20-01-USB3-Tx-Eye_pattern_test.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">4.3.18. USB开发调试指南</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="19-USB_Development_Guide.html">4.3.18.1. USB开发指南</a></li>
+<li class="toctree-l4"><a class="reference internal" href="20-01-USB3-Tx-Eye_pattern_test.html">4.3.18.2. USB3.0 TX 电气特性测试</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">4.3.18.3. USB眼图测试</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id1">前言</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id2">原理</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#usb2-0">usb2.0眼图测试原理</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#usb3-0">usb3.0眼图测试原理</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#id3">usb2.0 主机端</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">usb2.0 设备端</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id5">usb3.0 主机端</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id6">usb3.0 设备端</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id7">附件</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="21-USB_Phy_Tunning_Guide.html">4.3.18.4. USB Phy常见参数调试</a></li>
+<li class="toctree-l4"><a class="reference internal" href="22-USB_Gadget_User_Guide.html">4.3.18.5. USB端口调试使用指南</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3.18. </span>USB开发调试指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.18.3. </span>USB眼图测试</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="20-01-USB3-Tx-Eye_pattern_test.html" class="btn btn-neutral float-left" title="4.3.18.2. USB3.0 TX 电气特性测试" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="21-USB_Phy_Tunning_Guide.html" class="btn btn-neutral float-right" title="4.3.18.4. USB Phy常见参数调试" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usb">
+<h1><span class="section-number">4.3.18.3. </span>USB眼图测试<a class="headerlink" href="#usb" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2>前言<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>示波器厂家都有相应眼图测试的文档, 指导,
+配套夹具等。详细可结合示波器厂家文档进行信号测试。</p>
+<p>本文主要是对x3m本身如何进入test mode, compliance mode等测试模式进行一些描述。</p>
+<p>主要包含usb2.0主机, usb2.0设备, usb3.0主机, usb3.0设备 四个部分。</p>
+</section>
+<section id="id2">
+<h2>原理<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<section id="usb2-0">
+<h3>usb2.0眼图测试原理<a class="headerlink" href="#usb2-0" title="永久链接至标题"></a></h3>
+<ol>
+<li><p><strong>参考usb2.0协议 “<strong>7.1.20 Test Mode Support</strong>” 章节</strong></p>
+<p><img alt="Generated" src="../../../_images/a6a7f51ca89134ed360786c928dacb5d.png" /></p>
+<p><img alt="Generated" src="../../../_images/c38aa1623eccb79d895f95251b76b02e.png" /></p>
+<p>即协议规定主机, hub, 设备控制器都需要支持Test_Mode, 并且其中一项Test
+Packet模式即包含眼图Pattern信号。</p>
+</li>
+<li><p><strong>关于如何进出Test Mode</strong></p>
+<ul>
+<li><p><strong>待测件为Device或者Hub</strong></p>
+<p><img alt="Generated" src="../../../_images/d4ac9ca0fdd90ece0b469a3047d24e1a.png" /></p>
+<p>即对于device/hub等设备来说, 标准的SetFeature和SetPortFeature即需要支持测试模式.
+详细可参考usb2.0协议 “<strong>9.4.9 Set Feature</strong>”</p>
+<p><img alt="Generated" src="../../../_images/5299c4a0f487eb3d9c7011364dd163a9.png" /></p>
+<p><img alt="Generated" src="../../../_images/b717d4fedb5cc472595213bed03aca01.png" /></p>
+<p>对于x3m做设备, 同样可以简单地通过相应寄存器控制进入Test Mode.</p>
+<p>查看DWC_usb3_programming.pdf手册, “<strong>1.3.2 DCTL</strong>”章节,
+可以通过bit[4:1]的TSTCTL位进行控制. 使进入Test_Packet模式.</p>
+<p><img alt="Generated" src="../../../_images/58c5c49a08c85b0bffb7fa6ab6de0ae5.png" /></p>
+</li>
+<li><p><strong>待测件为主机</strong></p>
+<p>x3m使用的是dwc3控制器, 符合xhci协议. 参看xhci 1.2协议 “**5.4.9.2 USB2 Protocol
+PORTPMSC Definition **”章节. “<strong>Table 5-30: USB2 Port Power Management Status
+and Control Register Bit Definitions (PORTPMSC)</strong>”表格.</p>
+<p><img alt="Generated" src="../../../_images/1839dfbb9cc9a56fa2721e67ea828f7e.png" /></p>
+<p>即可以通过usb2.0 PORTPMSC寄存器, 可以控制该端口进入测试模式. 其中Test
+Packet模式可以输出眼图pattern信号。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>总结</strong></p>
+<p>usb2.0 device/hub/host眼图测试主要是进入协议规定的Test Mode的Test Packet模式.</p>
+<p>设备端/hub可以通过上游主机/hub发送标准的SetFeature或SetPortFeature命令进入测试模式.</p>
+<p>对于x3m可以直接操作dwc3 DCTL寄存器的TSTCTL位进行控制, 进入Test Packet模式.</p>
+<p>主机端如果符合xhci协议, 可以通过usb2.0 PORTPMSC寄存器进入.</p>
+</li>
+</ol>
+</section>
+<section id="usb3-0">
+<h3>usb3.0眼图测试原理<a class="headerlink" href="#usb3-0" title="永久链接至标题"></a></h3>
+<ol>
+<li><p><strong>参考usb3.0协议文档, “<strong>6.4.4 Compliance Pattern</strong>”等章节</strong></p>
+<p>usb3.0眼图测试主要是需要进入Compliance模式. 生成对应的Compliance Pattern信号.
+信号详细时序见下图,</p>
+<p><img alt="Generated" src="../../../_images/3b3eefc44aadea86924670693391e05d.png" /></p>
+</li>
+<li><p><strong>usb3.0信号测试包括Tx Compliance Test和Rx Compliance Test测试.</strong></p>
+<ul>
+<li><p><strong>Tx相对简单, 拓补图如下：</strong></p>
+<p><img alt="Generated" src="../../../_images/e93764f8906f808568b161091240c885.png" /></p>
+<p>即只要测试设备/主机 Tx打出来的Compliance Pattern信号就可以了.</p>
+</li>
+<li><p><strong>Rx是接收方向信号, 故测试需要有信号生成器, 并形成一个回环模式进行测试.</strong>
+拓补图如下:</p>
+<p><img alt="Generated" src="../../../_images/379316e989d2a0ec43222a63acad84be.png" /></p>
+<p>即待测装置工作在loopback模式, 误码仪打对应的pattern,
+并通过回环后的信号进行校验和检查, 判断信号质量和完整性.</p>
+<p>根据立科的一些文档描述, 实际测试环境类似下图,</p>
+<p><img alt="Generated" src="../../../_images/bc34b5b6d548ba24fc3a11ddfe402e7e.png" /></p>
+<p><img alt="Generated" src="../../../_images/0315e5cb4d96ee3d6c94e4fe2d82fd48.png" /></p>
+</li>
+</ul>
+</li>
+<li><p><strong>关于如何进出Compliance Mode</strong></p>
+<ul>
+<li><p><strong>待测件为Device或Hub</strong></p>
+<p>参考usb3.0协议文档, “<strong>Figure 7-13</strong>”图示,</p>
+<p><img alt="Generated" src="../../../_images/2c2ea70ce8fafe2f3e7ea2b0aaea83c7.png" /></p>
+<p><img alt="Generated" src="../../../_images/55d9e8c4dba797f96f950abec7e12e8e.png" /></p>
+<p>其中标准的一种设备进入Compliance模式的方式就是第一个LFPS.Polling超时进入.</p>
+<p>故不使用命令行方式, 可以按照示波器操作指示, 使得设备进入Compliance测试模式.</p>
+<p>当然x3m dwc3控制器也可以通过命令/寄存器方式进入Compliance模式.</p>
+<p>参考dwc3手册, “<strong>1.3.2 DCTL</strong>”寄存器, bit [8: 5] ULSTCHNGREQ位.
+只要设置为10即可以进入Compliance模式.</p>
+<p><img alt="Generated" src="../../../_images/78b9244dad7c075132415928d53e4d05.png" /></p>
+</li>
+<li><p><strong>待测件为主机</strong></p>
+<p>x3m dwc3符合xhci协议, 参看xhci协议文档”<strong>5.4.8 Port Status and Control Register
+(PORTSC)</strong>”寄存器详情. Bit [8:5]位设置成10即控制对应端口进入Compliance模式.</p>
+<p><img alt="Generated" src="../../../_images/e8c3fcb0ccea688112c5452a409cb296.png" /></p>
+</li>
+</ul>
+</li>
+<li><p><strong>关于如何进入Loopback模式</strong></p>
+<p><img alt="Generated" src="../../../_images/7835843c0960ec89f0fd0d669774b5e9.png" /></p>
+<p><img alt="Generated" src="../../../_images/af73474fb0310410b20d005580e20339.png" /></p>
+<p><img alt="Generated" src="../../../_images/61cd818d6c67832e94093151906af9cf.png" /></p>
+<p><img alt="Generated" src="../../../_images/b1ab0c236bec2cbf042970a9007e0ac0.png" /></p>
+<p>根据”<strong>7.5.4.7.2 Exit from Polling.Idle</strong>”章节描述, 以及相应图示,
+usb3.0控制器在link training的Polling.Configuration阶段, 如果监测到TS2
+pattern中的Loopback bit位, 就会自动配置usb3.0 phy进入Loopback模式。</p>
+</li>
+<li><p>总结</p>
+<p>usb3.0 device/hub/host眼图测试主要是进入协议规定的Compliance模式.</p>
+<p>作为设备或Hub可以正确配置示波器软件, 使得第一个LFPS.Polling超时,
+并进入Compliance模式.</p>
+<p>或者直接可以通过DCTL寄存器的ULSTCHNGREQ使设备进入到Compliance模式. 针对usb3.0
+Rx的信号测试, 需要使得装置进入Loopback模式,
+并利用误码仪等设备进行信号质量测试和校验.</p>
+<p>如果待测件是usb host, 则可以通过控制PORTSC寄存器的Port Link
+State位控制进入对应端口到Compliance模式.</p>
+<p>故以下主要详细记录下各角色下如何进入对应眼图测试模式, 以及测试环境需求.</p>
+</li>
+</ol>
+</section>
+</section>
+<section id="id3">
+<h2>usb2.0 主机端<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<ol>
+<li><p><strong>以泰克为例, 眼图/信号测试软件及夹具如下</strong></p>
+<p><img alt="Generated" src="../../../_images/f309fc3372c0b9178ebea4366293e23c.png" /></p>
+<p><img alt="Generated" src="../../../_images/3a54e53ad7880e535c4082e24653243d.png" /></p>
+</li>
+<li><p><strong>泰克的usb2.0 host眼图测试连接方式</strong></p>
+<p><img alt="Generated" src="../../../_images/b781e6e2f1c005a9c25f6fc75afffdc7.png" /></p>
+<p><img alt="Generated" src="../../../_images/fcfaae65f6578e4f9792a97a62e4d9e0.png" /></p>
+<p>即如果待测器件为x86 PC usb2.0 host口, 则可利用HSElecticalTestTool等windows软件,
+将对应主机端口切换到测试模式。</p>
+<p>而对于x3m dwc3控制器来说, 无法运行类似软件.</p>
+<p>可通过以下脚本使端口进入Test Packet模式.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PWD</span>:<span class="nv">$PATH</span>
+
+<span class="c1"># Reg Offset &amp; bit-field</span>
+<span class="nv">USBCMD</span><span class="o">=</span>0x0
+<span class="nv">PORTSC_HS</span><span class="o">=</span>0x420
+<span class="nv">PORTPMSC_HS</span><span class="o">=</span>0x424
+<span class="nv">PORTSC_SS</span><span class="o">=</span>0x430
+<span class="nv">PORTPMSC_SS</span><span class="o">=</span>0x434
+<span class="nv">GUSB3PIPECTL</span><span class="o">=</span>0xC2c0
+
+<span class="nv">HCRST</span><span class="o">=[</span><span class="m">1</span>:1<span class="o">]</span>
+<span class="nv">PLS</span><span class="o">=[</span><span class="m">8</span>:5<span class="o">]</span>
+<span class="nv">PP</span><span class="o">=[</span><span class="m">9</span>:9<span class="o">]</span>
+<span class="nv">HstPrtCmpl</span><span class="o">=[</span><span class="m">30</span>:30<span class="o">]</span>
+<span class="nv">TestMode</span><span class="o">=[</span><span class="m">31</span>:28<span class="o">]</span>
+
+<span class="c1"># switch to host mode in default</span>
+
+<span class="nb">echo</span> host &gt; /sys/devices/platform/soc/b2000000.usb/b2000000.dwc3/role
+<span class="c1">#</span>
+<span class="c1"># Start to Reset &amp; Enter Compliance mode</span>
+<span class="c1">#</span>
+hbx3dbg.arm -w USB+<span class="nv">$USBCMD</span>  <span class="nv">$HCRST</span>  <span class="m">1</span>
+usleep <span class="m">1000</span>
+hbx3dbg.arm -r USB+<span class="nv">$USBCMD</span>  <span class="nv">$HCRST</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    hbx3dbg.arm -w USB+<span class="nv">$PORTPMSC_HS</span>  <span class="nv">$TestMode</span> <span class="o">=</span> <span class="m">0</span>
+    <span class="nv">var</span><span class="o">=</span><span class="k">$(</span>hbx3dbg.arm -r USB+<span class="nv">$PORTPMSC_HS</span>  <span class="nv">$TestMode</span><span class="k">)</span>
+    <span class="nb">echo</span> <span class="s2">&quot;reset port test mode: </span><span class="si">${</span><span class="nv">var</span><span class="p">:</span><span class="nv">0</span><span class="p">-3</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    hbx3dbg.arm -w USB+<span class="nv">$PORTPMSC_HS</span>  <span class="nv">$TestMode</span> <span class="o">=</span> <span class="m">4</span>
+
+    <span class="nv">var</span><span class="o">=</span><span class="k">$(</span>hbx3dbg.arm -r USB+<span class="nv">$PORTPMSC_HS</span>  <span class="nv">$TestMode</span><span class="k">)</span>
+    <span class="nb">echo</span> <span class="s2">&quot;set port test mode to: </span><span class="si">${</span><span class="nv">var</span><span class="p">:</span><span class="nv">0</span><span class="p">-3</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">else</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Host Controller Reset Faill!!&quot;</span>
+<span class="k">fi</span>
+</pre></div>
+</div>
+<p>脚本和工具可以下面链接下载.<br /><a class="reference external" href="../../../_files/usb2_host_enter_test_packet.sh">usb2_host_enter_test_packet.sh</a><br /><a class="reference external" href="../../../_files/hbx3dbg.arm">hbx3dbg.arm</a></p>
+</li>
+</ol>
+</section>
+<section id="id4">
+<h2>usb2.0 设备端<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<ol>
+<li><p><strong>以泰克为例, 眼图/信号测试软件及夹具如下</strong></p>
+<p><img alt="Generated" src="../../../_images/c5794fbdfc826876fce63e7aeda6c5f6.png" /></p>
+<p><img alt="Generated" src="../../../_images/5d04c950ac8d545f43571c31f9442004.png" /></p>
+<p>即待测装置为设备, 可以通过上行win10 PC运行相应软件,
+通过SetFeature标准命令将设备切换到Test Packet模式.</p>
+<p>同时也可以通过命令行进行切换, 即DCTL寄存器的TSTCTL位进行控制.</p>
+<p>sysfs系统中有现成的testmode文件节点可以控制:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /sys/kernel/debug/usb/b2000000.dwc3/testmode
+no <span class="nb">test</span>
+
+<span class="nb">echo</span> <span class="s2">&quot;test_packet&quot;</span> &gt; /sys/kernel/debug/usb/b2000000.dwc3/testmode
+
+cat /sys/kernel/debug/usb/b2000000.dwc3/testmode
+test_packet
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="id5">
+<h2>usb3.0 主机端<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<p>usb3.0信号完整性测试, 包含Tx Compliance Test和 Rx Compliance Test.</p>
+<p>Rx测试环境和方法相对复杂, 先介绍Tx信号测试.</p>
+<ul class="simple">
+<li><p><strong>Tx Compliance Test</strong></p></li>
+</ul>
+<ol>
+<li><p>核心</p>
+<p>通过PortSC寄存器控制待测端口进入Compliance模式.</p>
+</li>
+<li><p>夹具和环境
+<img alt="Generated" src="../../../_images/59fd8d91c8cb5af96bbb868e0efaeeab1.png" /></p>
+<p><img alt="Generated" src="../../../_images/7ca5709b9e6e5536b214a3b6510b80841.png" /></p>
+</li>
+<li><p>相关脚本</p>
+<ul class="simple">
+<li><p><a class="reference external" href="../../../_files/usb_enter_CP0.sh">usb_enter_CP0.sh</a> 进入CP0模式</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reg Offset &amp; bit-field</span>
+<span class="nv">USBCMD</span><span class="o">=</span>0x0
+<span class="nv">PORTSC_HS</span><span class="o">=</span>0x420
+<span class="nv">PORTSC_SS</span><span class="o">=</span>0x430
+<span class="nv">GUSB3PIPECTL</span><span class="o">=</span>0xC2c0
+
+<span class="nv">HCRST</span><span class="o">=[</span><span class="m">1</span>:1<span class="o">]</span>
+<span class="nv">PLS</span><span class="o">=[</span><span class="m">8</span>:5<span class="o">]</span>
+<span class="nv">PP</span><span class="o">=[</span><span class="m">9</span>:9<span class="o">]</span>
+<span class="nv">HstPrtCmpl</span><span class="o">=[</span><span class="m">30</span>:30<span class="o">]</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># Start to Reset &amp; Enter Compliance mode</span>
+<span class="c1">#</span>
+hbx3dbg.arm -w USB+<span class="nv">$USBCMD</span>  <span class="nv">$HCRST</span>  <span class="m">1</span>
+usleep <span class="m">1000</span>
+hbx3dbg.arm -r USB+<span class="nv">$USBCMD</span>  <span class="nv">$HCRST</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    hbx3dbg.arm -w USB+<span class="nv">$PORTSC_SS</span>  <span class="nv">$PLS</span> <span class="o">=</span> 0xA
+    hbx3dbg.arm -w USB+<span class="nv">$PORTSC_SS</span>  <span class="nv">$PP</span>  <span class="o">=</span> 0x0
+    hbx3dbg.arm -w USB+<span class="nv">$GUSB3PIPECTL</span>  <span class="nv">$HstPrtCmpl</span> <span class="o">=</span> <span class="m">1</span>
+<span class="k">else</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Host Controller Reset Faill!!&quot;</span>
+<span class="k">fi</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><a class="reference external" href="../../../_files/usb_next_CP.sh">usb_next_CP.sh</a> 控制进入Compliance Pattern模式</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reg Offset &amp; bit-field</span>
+<span class="nv">USBCMD</span><span class="o">=</span>0x0
+<span class="nv">PORTSC_HS</span><span class="o">=</span>0x420
+<span class="nv">PORTSC_SS</span><span class="o">=</span>0x430
+<span class="nv">GUSB3PIPECTL</span><span class="o">=</span>0xC2c0
+
+<span class="nv">HCRST</span><span class="o">=[</span><span class="m">1</span>:1<span class="o">]</span>
+<span class="nv">PLS</span><span class="o">=[</span><span class="m">8</span>:5<span class="o">]</span>
+<span class="nv">PP</span><span class="o">=[</span><span class="m">9</span>:9<span class="o">]</span>
+<span class="nv">HstPrtCmpl</span><span class="o">=[</span><span class="m">30</span>:30<span class="o">]</span>
+
+
+<span class="c1">#</span>
+<span class="c1"># Next Compliance mode</span>
+<span class="c1">#</span>
+hbx3dbg.arm -r USB+<span class="nv">$GUSB3PIPECTL</span>  <span class="nv">$HstPrtCmpl</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq <span class="m">1</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    hbx3dbg.arm -w USB+<span class="nv">$GUSB3PIPECTL</span>  <span class="nv">$HstPrtCmpl</span> <span class="o">=</span> <span class="m">0</span>
+    usleep <span class="m">1000</span>
+    hbx3dbg.arm -w USB+<span class="nv">$GUSB3PIPECTL</span>  <span class="nv">$HstPrtCmpl</span> <span class="o">=</span> <span class="m">1</span>
+<span class="k">else</span>
+    <span class="nb">echo</span> <span class="s2">&quot;USB is not in the Compliance mode, run usb_enter_CP0.sh first&quot;</span>
+<span class="k">fi</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>详细测试步骤请参考文档</p>
+<p><a class="reference external" href="20-USB3-Tx-Eye_pattern_test">USB3.0 TX 电气特性测试</a></p>
+<ul class="simple">
+<li><p><strong>Rx Compliance Test</strong></p></li>
+</ul>
+<p>usb3.0 Rx电气特性测试, 也可以称之为收容限测试(Rx Tolerance Compliance Test).
+测试过程中, 不需要输入任何的测试命令, 只要搭建好测试环境, USB3.0
+控制器在连接到测试仪器后, 会自动进入Loopback Mode, 开始进行Rx 测试. 由于USB3.0
+Rx测试环境搭建比较复杂, 并且不同示波器, 测试步骤有所不同,
+所以下文没有提供详细的Rx测试方法, 请参考测试示波器的操作说明.</p>
+<p>本文简单介绍下进入Loopback Mode的原理, 以及确认进入Loopback mode的方法.</p>
+<ol>
+<li><p>进入Loopback Mode的流程, 可参考章节2的原理部分或参考usb3.0协议.
+具体操作得参考示波器的文档说明, 实际原理如下图,</p>
+<p><img alt="Generated" src="../../../_images/ef153d481541588ac01544b5033bc754.png" /></p>
+<p>即USB3.0控制器在link training的Polling.Configuration的阶段, 如果监测到TS2
+Pattern中的bit位, 就会自动配置USB3.0 phy进入loopback模式。</p>
+</li>
+<li><p>判断进入Loopback mode的方法</p>
+<p>参考xhci1.2协议, PORTSC寄存器 bit [8:5], Port Link State读取出来是11,
+在usb3.0中即代表Loopback模式的含义.</p>
+<p><img alt="Generated" src="../../../_images/beb20579a0c9e9f9e41130f9c1f6a258.png" /></p>
+<p><img alt="Generated" src="../../../_images/8f0236fa0ff2fa06ca509d585b3dab8e.png" /></p>
+<p>具体测试环境和步骤可以参考对应仪器厂家的说明文档。</p>
+</li>
+</ol>
+</section>
+<section id="id6">
+<h2>usb3.0 设备端<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>usb3.0设备端眼图/信号测试同样包括Tx, Rx两条通路的测试.</p>
+<p>核心同样是需要进入对应的Compliance Test模式和Loopback回环测试模式.</p>
+<ul class="simple">
+<li><p><strong>dwc3设备端如何进入Compliance模式</strong></p></li>
+</ul>
+<ol>
+<li><p>通过示波器的设置, 使得link traning过程中LFPS.Polling过程超时,
+待测装置就能自动进入Compliance测试模式.</p></li>
+<li><p>直接控制dwc3 DCTL寄存器控制phy进入Compliance模式</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Set DCTL.RUN_STOP <span class="o">=</span> <span class="m">0</span>
+DCTL. <span class="nv">ULSTCHNGREQ</span> <span class="o">=</span> <span class="m">10</span>
+Set DCTL.RUN_STOP <span class="o">=</span> <span class="m">1</span>  <span class="c1"># here the link should go to compliance mode  </span>
+
+Once <span class="k">in</span> compliance ,
+alternatively write DCTL. <span class="nv">ULSTCHNGREQ</span> <span class="o">=</span> <span class="m">0</span> <span class="p">&amp;</span> DCTL. <span class="nv">ULSTCHNGREQ</span> <span class="o">=</span> <span class="m">10</span> to enter into
+next compliance mode
+</pre></div>
+</div>
+<p>同样可以利用/sys/kernel/debug/usb/b2000000.dwc3/link_state文件节点进行link
+state切换.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="s2">&quot;Compliance&quot;</span> &gt; /sys/kernel/debug/usb/b2000000.dwc3/link_state    <span class="c1"># 切状态到Compliance</span>
+
+<span class="nb">echo</span> <span class="s2">&quot;Loopback&quot;</span> &gt; /sys/kernel/debug/usb/b2000000.dwc3/link_state    <span class="c1"># 切状态到Loopback</span>
+</pre></div>
+</div>
+<p>注: 该强制方式得实际再验证下, 目前xj3 sdb/dvb板子试了不行.</p>
+<p>同样, usb3.0做为设备, 测试Rx信号同样需要利用Loopback回环模式,
+外部使用误码仪进行测试.</p>
+</li>
+</ol>
+</section>
+<section id="id7">
+<h2>附件<a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<p><a class="reference external" href="../../../_files/usb2_host_enter_test_packet.sh">usb2_host_enter_test_packet.sh</a><br /><a class="reference external" href="../../../_files/hbx3dbg.arm">hbx3dbg.arm</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="20-01-USB3-Tx-Eye_pattern_test.html" class="btn btn-neutral float-left" title="4.3.18.2. USB3.0 TX 电气特性测试" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="21-USB_Phy_Tunning_Guide.html" class="btn btn-neutral float-right" title="4.3.18.4. USB Phy常见参数调试" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

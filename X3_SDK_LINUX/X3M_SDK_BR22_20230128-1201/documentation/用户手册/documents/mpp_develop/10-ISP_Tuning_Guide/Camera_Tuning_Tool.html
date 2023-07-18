@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5.10.4. Hobot player工具指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="5.10.5. 生成ISP效果库" href="Generate_ISP_Lib.html" />
+    <link rel="prev" title="5.10.3. ISP工具指南" href="Control_Tool_Guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">5. 多媒体开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../1-Overview_zh_CN.html">5.1. 系统概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2-System_Control_zh_CN.html">5.2. 系统控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3-Video_Input_zh_CN.html">5.3. 视频输入</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4-Graphic_System_API_Reference_Manual.html">5.4. ISP图像系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5-Video_Processing_zh_CN.html">5.5. 视频处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6-Region_Processing_zh_CN.html">5.6. 区域处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../7-Video_Output_zh_CN.html">5.7. 视频输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../8-Video_Encode_zh_CN.html">5.8. 视频编码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9-Video_Decode_zh_CN.html">5.9. 视频解码</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">5.10. 图像调试指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ISP_Tuning_User_Guide.html">5.10.1. ISP图像调试指引</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sensor_Bring_Up.html">5.10.2. X3 Camera点亮说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Control_Tool_Guide.html">5.10.3. ISP工具指南</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">5.10.4. Hobot player工具指南</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">5.10.4.1. Hobot player 功能说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">5.10.4.2. Hobot player 使用说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id3">Hobot player网络传输</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">Hobot player静态图片</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Generate_ISP_Lib.html">5.10.5. 生成ISP效果库</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html">5.10.6. GDC 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Image_Quality_Evaluation.html">5.10.7. 图像质量测评</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Expand_Content.html">5.10.8. ISP 调试视频教程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html">5.11. 查询多媒体模块调试信息</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../12-Media_Processing_Performance_Debug_Guide.html">5.12. 多媒体性能调试</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">5. </span>多媒体开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">5.10. </span>图像调试指南</a> &raquo;</li>
+      <li><span class="section-number">5.10.4. </span>Hobot player工具指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="Control_Tool_Guide.html" class="btn btn-neutral float-left" title="5.10.3. ISP工具指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Generate_ISP_Lib.html" class="btn btn-neutral float-right" title="5.10.5. 生成ISP效果库" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="hobot-player">
+<h1><span class="section-number">5.10.4. </span>Hobot player工具指南<a class="headerlink" href="#hobot-player" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">5.10.4.1. </span>Hobot player 功能说明<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>Hobot player
+用于isp-tuning查看图像效果的辅助调试工具。工具的界面如图3所示。图1中各部件的说明如表3所示。<img alt="C:\Users\YONGYO~1.DUA\AppData\Local\Temp\企业微信截图_15863374366121.png" src="../../_images/8a2ba489371c0be1ded79dcab2a9283e.png" /></p>
+<p><em>Figure 3: Hobot player界面示意图.</em></p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>序号</th>
+<th>功能</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>显示图片的frame-id</td>
+<td>该ID为硬件编号，0-65536循环</td>
+</tr>
+<tr>
+<td>2</td>
+<td>显示图片的尺寸信息</td>
+<td>图像实际尺寸信息</td>
+</tr>
+<tr>
+<td>3</td>
+<td>网络传输/静态显示切换</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>网络连接/断开</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>打开RAW图显示界面</td>
+<td>最多支持dol4</td>
+</tr>
+<tr>
+<td>6</td>
+<td>图像存储配置</td>
+<td>可以存储连续多帧图像</td>
+</tr>
+<tr>
+<td>7</td>
+<td>配置网络和端口号</td>
+<td>X3设备网络IP及连接端口号</td>
+</tr>
+<tr>
+<td>8</td>
+<td>配置RAW图存储路径</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>配置YUV图存储路径</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>确认配置</td>
+<td></td>
+</tr>
+</tbody>
+</table><p><em>Table 3: Hobot player功能列表.</em></p>
+<p>Hobot player
+软件包含图片网络传输/显示功能和静态图片辅助分析功能。网络传输显示功能规格如表4所示。</p>
+<p><em>note 1: yuv和video不能同时支持，raw图dump只支持在offline时候使用。</em></p>
+<p><em>note 2：raw图显示时将raw10/12/14/16取高位压缩成raw8转为rgb显示。</em></p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>功能</th>
+<th>说明</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>raw</td>
+<td>支持raw 8/10/12/14/16</td>
+<td>offline 模式支持</td>
+</tr>
+<tr>
+<td>yuv</td>
+<td>支持nv12</td>
+<td>online/offline模式支持</td>
+</tr>
+<tr>
+<td>video</td>
+<td>支持h264/h265</td>
+<td>online/offline模式支持</td>
+</tr>
+</tbody>
+</table><p><em>Table 4: Hobot player 网络传输显示规格.</em></p>
+<p>静态图片辅助分析功能如表5所示，该部分包括图片存储，rgb 统计信息显示，网格，zoom
+等功能。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>功能</th>
+<th>说明</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>图片硬件帧号</td>
+<td>帧号为硬件帧号，0-65535循环</td>
+<td>网络传输时有效</td>
+</tr>
+<tr>
+<td>图片尺寸信息</td>
+<td>宽/高信息</td>
+<td></td>
+</tr>
+<tr>
+<td>保存一定数量raw图</td>
+<td>保存的raw 为mipi-raw格式</td>
+<td>网络传输时有效</td>
+</tr>
+<tr>
+<td>保存一定数量yuv图</td>
+<td>保存的yuv 为nv12 格式</td>
+<td>网络传输时有效</td>
+</tr>
+<tr>
+<td>raw/yuv 转bmp/jpeg</td>
+<td>该转换为第三方库，非硬件</td>
+<td></td>
+</tr>
+<tr>
+<td>显示本地raw/yuv/bmp/jpeg图像</td>
+<td>使用前需指定图像信息，否则会显示错误 支持raw8/10/12/14/16 支持nv12</td>
+<td>静态显示时有效</td>
+</tr>
+<tr>
+<td>图像增加网格/zoom</td>
+<td>支持放大/缩小固定比例 支持ctrl+滑轮放大/缩小 支持右键拖动 支持显示/设置网格</td>
+<td>静态显示时有效</td>
+</tr>
+<tr>
+<td>显示rgb通道统计信息</td>
+<td></td>
+<td>静态显示时有效</td>
+</tr>
+<tr>
+<td>画面效果调整</td>
+<td>支持gamma/awb/ob/gain 支持clip(rgb 通道信息)</td>
+<td>静态显示时有效</td>
+</tr>
+<tr>
+<td>mipi-raw转arm-raw</td>
+<td></td>
+<td>静态显示时有效</td>
+</tr>
+</tbody>
+</table><p><em>Table 5: Hobot player辅助调试功能.</em></p>
+</section>
+<section id="id2">
+<h2><span class="section-number">5.10.4.2. </span>Hobot player 使用说明<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<section id="id3">
+<h3>Hobot player网络传输<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>online 模式：支持获取yuv/video。online模式，vio
+应用程序需配置数据通路为sensor-sif-isp-ldc-ipu-ddr 模式，yuv图像信息从IPU获取。</p>
+<p>offline 模式: 支持获取raw/yuv(或video)。offline 模式，vio
+应用程序需配置数据通路为sensor-sif-ddr-sif-isp-ldc-ipu-ddr模式，raw
+图像信息从sif 获取，yuv图像信息从IPU 获取。</p>
+<p>使用步骤：</p>
+<p>1. 确保X3 与PC 端网络连接成功。</p>
+<p>2. 串口(或SSH)登陆XJ3系统，把SDK下的hbre/sensors/xxx/start_xxx.sh拷贝到板子的/app目录，进入/app/xxx/目录，执行sh start_xxx.sh，待板子端tuning_tool程序跑起来之后，启动PC端的Hobot player
+server。执行该项需交互输入sensor类型，运行模式和运行时间。注意：imx327
+接在J200位置，I2C5。运行过程如图4所示。</p>
+<p>3. PC
+端点击<img alt="C:\Users\YONGYO~1.DUA\AppData\Local\Temp\企业微信截图_15863375714963.png" src="../../_images/29e2948f573738fe289af217f7ce99ca.png" />打开Hobot
+player，配置图3中的标号7的网络信息，点击图3中标号10的ok选项保存配置，同时点击图3中的标号4的connect建立连接，查看图像信息。</p>
+<p><img alt="../../_images/20220519-220549.png" src="../../_images/20220519-220549.png" /></p>
+<p><em>Figure 4: Hobot player图像显示.</em></p>
+</section>
+<section id="id4">
+<h3>Hobot player静态图片<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>打开本地图片时需要切换到静态显示模式，同时配置图片的的基本信息，包括图片类型，尺寸等。配置信息如图5所示，模块1为图形信息，包括选择raw/yuv/bmp/jpeg，及各种模式下的特性和图片尺寸。例如，打开1080p，12Bbits的mipi-raw图片点击图标<img alt="C:\Users\YONGYO~1.DUA\AppData\Local\Temp\企业微信截图_15868466583106.png" src="../../_images/445c71f04376cbcf4081d33a195b107f.png" />配置pic_type为PIC_RAW，raw_type配置为MIPI_RAW，pix_length配置为RAW_BIT_12，width配置为1920，height配置为1080，然后点击<img alt="C:\Users\YONGYO~1.DUA\AppData\Local\Temp\企业微信截图_15868467265768.png" src="../../_images/291eac4f287c5f22b8e8979a692f6840.png" />选择需要打开的图像。点击<img alt="C:\Users\YONGYO~1.DUA\AppData\Local\Temp\企业微信截图_15868472169835.png" src="../../_images/ec6d034a73bc69ddbc4895cb4bf28847.png" />可以显示当前图片RGB三通道的统计信息，统计信息如图6所示。点击<img alt="C:\Users\YONGYO~1.DUA\AppData\Local\Temp\企业微信截图_15868473028086.png" src="../../_images/e8f9526b1ad0d9a4c73d2be8c55953b0.png" />调整图像效果，调整参数如图7所示，可以修改gamma/awb/ob/clip
+信息，修改具体参数然后点击enable_ca生效。当前打开的图像为mipi-raw，则可点击<img alt="C:\Users\YONGYO~1.DUA\AppData\Local\Temp\企业微信截图_15868468183785.png" src="../../_images/c3005705bbf2a5bc700868d3c9bdbfe4.png" />转换mipi-raw为arm-raw。</p>
+<p><em>note 1: 统计信息显示窗口自适应统计信息大小，不支持放大功能。</em></p>
+<p><img alt="C:\Users\YONGYO~1.DUA\AppData\Local\Temp\企业微信截图_15847626315696.png" src="../../_images/bb485481377086b19fbcb62b6fcd58ef.png" /></p>
+<p><em>Figure 5: Hobot player图像显示.</em></p>
+<p><img alt="../../_images/9e8dcf38d50734820a99e53d47232ea2.png" src="../../_images/9e8dcf38d50734820a99e53d47232ea2.png" /></p>
+<p><em>Figure 6: Hobot player rgb统计信息.</em></p>
+<p><img alt="C:\Users\YONGYO~1.DUA\AppData\Local\Temp\企业微信截图_158683258122.png" src="../../_images/f12939c9a95a251d5396f262af16021d.png" /></p>
+<p><em>Figure 7: Hobot player图像效果调整.</em></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Control_Tool_Guide.html" class="btn btn-neutral float-left" title="5.10.3. ISP工具指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Generate_ISP_Lib.html" class="btn btn-neutral float-right" title="5.10.5. 生成ISP效果库" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

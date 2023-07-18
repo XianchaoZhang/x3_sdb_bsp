@@ -1,0 +1,11 @@
+#!/bin/sh
+
+conf_path=/tmp/hb_lob.conf
+if [ -f "${conf_path}" ];then
+	. ${conf_path}
+else
+	ROTATESIZE=2048
+	ROTATEGENS=50
+fi
+
+/usr/bin/logcat -v time -f /userdata/log/usr/message -r$ROTATESIZE -n $ROTATEGENS

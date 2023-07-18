@@ -1,0 +1,1 @@
+userdata /dev/mmcblk0p12 cipher=aes-cbc-plain,size=128 /etc/init.d/fde_default.bin

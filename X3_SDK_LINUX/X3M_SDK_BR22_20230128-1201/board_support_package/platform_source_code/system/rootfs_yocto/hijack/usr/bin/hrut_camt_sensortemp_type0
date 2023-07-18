@@ -1,0 +1,67 @@
+#! /bin/sh
+
+print_usage()
+{
+	echo "Usage:"
+	echo "hrut_camt_sensortemp camindex [loop]"
+	echo "camindex 1/2/3/4: for compatibility this is must but no use"
+	echo "-----------------------------------"
+}
+
+log=/tmp/config_log
+echo "----------" >> $log
+
+if [ -f /usr/bin/api_cmd ];then
+	echo "api_cmd is in system" >> $log
+else
+	echo "no api_cmd found, exit" >> $log
+	echo "CmdRetValue: 8"
+	echo "CmdRetResult: 0"
+	exit 1
+fi
+
+i2c_slave_addr="0x6d"
+
+if [ $# -ge 2 ]; then #means need to read forever
+	while true
+	do
+		api_cmd -a $i2c_slave_addr -I 0xC0 1 34000000385200000201 -o /tmp/result.bin >> $log 2>&1
+		if [ $? -eq 0 ];then
+			temp=`bin_to_number -t 0 -i 0 -l 1 -f /tmp/result.bin`
+			temperature=$(($temp-50))
+		else
+			temperature=-1
+		fi
+		echo "temperature:$temperature"
+		usleep 100000
+		api_cmd -a $i2c_slave_addr -I 0xC0 1 34000000205400000201 -o /tmp/result.bin >> $log 2>&1
+		if [ $? -eq 0 ];then
+			temp=`bin_to_number -t 0 -i 0 -l 1 -f /tmp/result.bin`
+			err_value=`printf "0x%02x\n" ${temp}`
+		else
+			err_value=0xff
+		fi
+		echo "status:$err_value"
+		usleep 100000
+	done
+else #if only need to read once
+	api_cmd -a $i2c_slave_addr -I 0xC0 1 34000000385200000201 -o /tmp/result.bin >> $log 2>&1
+	if [ $? -eq 0 ];then
+		temp=`bin_to_number -t 0 -i 0 -l 1 -f /tmp/result.bin`
+		temperature=$(($temp-50))
+	else
+		temperature=-1
+	fi
+	echo "temperature:$temperature"
+	usleep 100000
+	api_cmd -a $i2c_slave_addr -I 0xC0 1 34000000205400000201 -o /tmp/result.bin >> $log 2>&1
+	if [ $? -eq 0 ];then
+		temp=`bin_to_number -t 0 -i 0 -l 1 -f /tmp/result.bin`
+		err_value=`printf "0x%02x\n" ${temp}`
+	else
+		err_value=0xff
+	fi
+	echo "status:$err_value"
+	usleep 100000
+fi
+echo "----------" >> $log

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.2.7. sample video codec 使用说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="3.2.8. sample_vot 使用说明" href="sample_vot.html" />
+    <link rel="prev" title="3.2.6. sample_osd 使用说明" href="sample_osd.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">3. Demo使用指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Typical_Application_Scenarios/index.html">3.1. 典型应用场景</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">3.2. VIO使用指引</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="get_sif_data.html">3.2.1. get_sif_data 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_isp_data.html">3.2.2. get_isp_data 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_isp.html">3.2.3. sample_isp 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps.html">3.2.4. sample_vps 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps_zoom.html">3.2.5. sample_vps_zoom 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_osd.html">3.2.6. sample_osd 使用说明</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">3.2.7. sample video codec 使用说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">3.2.7.1. 程序功能</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">3.2.7.2. 程序部署</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#sample-vdec-basic">sample_vdec_basic</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sample-venc-basic">sample_venc_basic</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sample-vdec-two-channel">sample_vdec_two_channel</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sample-venc-two-channel">sample_venc_two_channel</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">3.2.7.3. 运行效果说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id4">sample_vdec_basic</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id5">sample_venc_basic</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id6">sample_vdec_two_channel</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id7">sample_venc_two_channel</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">3.2.7.4. 编译</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vot.html">3.2.8. sample_vot 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_lcd.html">3.2.9. sample_lcd 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_usb_cam_4k60.html">3.2.10. sample_usb_cam_4k60 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html">3.2.11. Sunrise_camera用户使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html">3.2.12. Sunrise_camera开发说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">3. </span>Demo使用指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">3.2. </span>VIO使用指引</a> &raquo;</li>
+      <li><span class="section-number">3.2.7. </span>sample video codec 使用说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="sample_osd.html" class="btn btn-neutral float-left" title="3.2.6. sample_osd 使用说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="sample_vot.html" class="btn btn-neutral float-right" title="3.2.8. sample_vot 使用说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sample-video-codec">
+<h1><span class="section-number">3.2.7. </span>sample video codec 使用说明<a class="headerlink" href="#sample-video-codec" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">3.2.7.1. </span>程序功能<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">sample_vdec_basic</span></code> 实现最基础解码功能，读取本地H264/H265/MJPEG文件，进行解码保存NV12结果</p>
+<p><code class="docutils literal notranslate"><span class="pre">sample_venc_basic</span></code> 实现最基础编码功能，读取NV12图像，编码为H264（或H265或MJPEG），并保存为本地文件</p>
+<p><code class="docutils literal notranslate"><span class="pre">sample_vdec_two_channel</span></code> 面向需要多通道同时解码的场景，在<code class="docutils literal notranslate"><span class="pre">sample_vdec_basic</span></code> 基础上增加一路解码通道，实现双通道解码功能。读取本地H264/H265/MJPEG文件，两路同时进行解码分别保存NV12文件。</p>
+<p><code class="docutils literal notranslate"><span class="pre">sample_venc_two_channel</span></code> 面向需要多通道同时编码的场景，在<code class="docutils literal notranslate"><span class="pre">sample_venc_basic</span></code> 基础上增加一路编码通道，实现双通道编码功能。读取本地NV12文件，两路同时进行解码分别保存H264（或H265或MJPEG）。</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">3.2.7.2. </span>程序部署<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<section id="sample-vdec-basic">
+<h3>sample_vdec_basic<a class="headerlink" href="#sample-vdec-basic" title="永久链接至标题"></a></h3>
+<p>把编译生成的<code class="docutils literal notranslate"><span class="pre">sample_vdec_basic</span></code> 和需要解码的文件上传到开发板后，给程序赋予可执行权限 <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">a+x</span> <span class="pre">sample_vdec_basic</span></code>, 然后执行程序 <code class="docutils literal notranslate"><span class="pre">./sample_vdec_basic</span> <span class="pre">-w</span> <span class="pre">width</span> <span class="pre">-h</span> <span class="pre">height</span> <span class="pre">-t</span> <span class="pre">ecode_type</span> <span class="pre">-f</span> <span class="pre">file</span></code></p>
+<p>其中width为图像宽所包含像素个数</p>
+<p>height为为图像高所包含的像素格式</p>
+<p>encode_tyep可以为h264\h265\mjpeg</p>
+<p>file为要解码的文件名</p>
+</section>
+<section id="sample-venc-basic">
+<h3>sample_venc_basic<a class="headerlink" href="#sample-venc-basic" title="永久链接至标题"></a></h3>
+<p>把编译生成的<code class="docutils literal notranslate"><span class="pre">sample_venc_basic</span></code> 和需要解码的文件上传到开发板后，给程序赋予可执行权限 <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">a+x</span> <span class="pre">sample_venc_basic</span></code>, 然后执行程序 <code class="docutils literal notranslate"><span class="pre">./sample_venc_basic</span> <span class="pre">-w</span> <span class="pre">width</span> <span class="pre">-h</span> <span class="pre">height</span> <span class="pre">-t</span> <span class="pre">ecode_type</span> <span class="pre">-f</span> <span class="pre">file0</span> <span class="pre">-g</span> <span class="pre">file1</span></code></p>
+<p>其中width为图像宽所包含像素个数</p>
+<p>height为为图像高所包含的像素格式</p>
+<p>encode_tyep可以为h264\h265\mjpeg</p>
+<p>file0为要编码的文件名需要为NV12格式</p>
+<p>file1为要编码的文件名需要为NV12格式，其width和height需要和file0保持一样</p>
+</section>
+<section id="sample-vdec-two-channel">
+<h3>sample_vdec_two_channel<a class="headerlink" href="#sample-vdec-two-channel" title="永久链接至标题"></a></h3>
+<p>把编译生成的<code class="docutils literal notranslate"><span class="pre">sample_vdec_two_channel</span></code> 和需要解码的文件上传到开发板后，给程序赋予可执行权限 <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">a+x</span> <span class="pre">sample_vdec_two_channel</span></code>, 然后执行程序 <code class="docutils literal notranslate"><span class="pre">./sample_vdec_two_channel</span> <span class="pre">-w</span> <span class="pre">width</span> <span class="pre">-h</span> <span class="pre">height</span> <span class="pre">-t</span> <span class="pre">ecode_type</span> <span class="pre">-f</span> <span class="pre">file</span></code></p>
+<p>其中width为图像宽所包含像素个数</p>
+<p>height为为图像高所包含的像素格式</p>
+<p>encode_tyep可以为h264\h265\mjpeg</p>
+<p>file为要解码的文件名</p>
+</section>
+<section id="sample-venc-two-channel">
+<h3>sample_venc_two_channel<a class="headerlink" href="#sample-venc-two-channel" title="永久链接至标题"></a></h3>
+<p>把编译生成的<code class="docutils literal notranslate"><span class="pre">sample_venc_two_channel</span></code> 和需要解码的文件上传到开发板后，给程序赋予可执行权限 <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">a+x</span> <span class="pre">sample_venc_two_channel</span></code>, 然后执行程序 <code class="docutils literal notranslate"><span class="pre">./sample_venc_two_channel</span> <span class="pre">-w</span> <span class="pre">width</span> <span class="pre">-h</span> <span class="pre">height</span> <span class="pre">-t</span> <span class="pre">ecode_type</span> <span class="pre">-f</span> <span class="pre">file0</span> <span class="pre">-g</span> <span class="pre">file1</span></code></p>
+<p>其中width为图像宽所包含像素个数</p>
+<p>height为为图像高所包含的像素格式</p>
+<p>encode_tyep可以为h264\h265\mjpeg</p>
+<p>file0为要编码的文件名需要为NV12格式</p>
+<p>file1为要编码的文件名需要为NV12格式，其width和height需要和file0保持一样</p>
+</section>
+</section>
+<section id="id3">
+<h2><span class="section-number">3.2.7.3. </span>运行效果说明<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<section id="id4">
+<h3>sample_vdec_basic<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>在当前运行目录下生成decode.nv12，该文件内容随着解码内容更新</p>
+</section>
+<section id="id5">
+<h3>sample_venc_basic<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>在当前运行目录下生成sample_venc.h264/sample_venc.h265/sample_venc.jpg。H264/H265文件内容为交替显示是file1和file2</p>
+</section>
+<section id="id6">
+<h3>sample_vdec_two_channel<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<p>在当前运行目录下生成sample_decode_ch0.nv12和sample_decode_ch1.nv12，该文件内容随着解码内容更新。</p>
+</section>
+<section id="id7">
+<h3>sample_venc_two_channel<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<p>在当前运行目录下生成sample_venc_ch0.h264（sample_venc_ch0.h265/sample_venc_ch0.jpg）和sample_venc_ch1.h264（sample_venc_ch1.h265/sample_venc_ch1.jpg）。H264/H265文件内容为交替显示是file1和file2</p>
+</section>
+</section>
+<section id="id8">
+<h2><span class="section-number">3.2.7.4. </span>编译<a class="headerlink" href="#id8" title="永久链接至标题"></a></h2>
+<p>在sdk下执行make命令编译</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sample_osd.html" class="btn btn-neutral float-left" title="3.2.6. sample_osd 使用说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="sample_vot.html" class="btn btn-neutral float-right" title="3.2.8. sample_vot 使用说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

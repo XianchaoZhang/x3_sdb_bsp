@@ -1,0 +1,92 @@
+#!/bin/sh
+white_list=$1
+option=$2
+save_path="/tmp/tmp_whitelist"
+
+function usage()
+{
+    echo "$0 <file> <option>"
+    echo "file:"
+    echo "   system partition's white list"
+    echo "option:"
+    echo "   save: save the files in system partition's white list"
+    echo "   restore: restore the files in system partition's white list"
+}
+
+function white_list_save()
+{
+    local file_whitelist="$white_list"
+    rm -rf $save_path
+    mkdir -p $save_path
+
+    if [ -f $file_whitelist ];then
+        while read line;do
+            # skip note line and blank line
+            if [ x"${line:0:1}" == x"#" ] || [ -z $line ];then
+                continue
+            fi
+
+            cp -rf "$line" "$save_path/"
+        done < $file_whitelist
+    fi
+
+    cp -rf "$file_whitelist" "$save_path/"
+}
+
+function file_restore()
+{
+    local line=$1
+    local path=${line%/*}
+    local file=${line##*/}
+
+    if [ -z $path ];then
+        cp -rf "$save_path/$file" /
+    else
+        cp -rf "$save_path/$file" "$path"
+    fi
+}
+
+function white_list_restore()
+{
+    local file_whitelist="$white_list"
+
+    if [ ! -d $save_path ];then
+        echo "Please first save system partition's white list !"
+        usage
+        exit 1
+    fi
+
+    if [ -f $file_whitelist ];then
+        while read line;do
+            # skip note line and blank line
+            if [ x"${line:0:1}" == x"#" ] || [ -z $line ];then
+                continue
+            fi
+
+            file_restore $line
+        done < $file_whitelist
+    fi
+
+    rm -rf $save_path
+}
+
+if [ ! -f $white_list ];then
+    echo "system partition's white list $1 not exist!"
+    usage
+    exit 1
+fi
+
+if [ x"$option" = x"save" ];then
+    # save the file/directory in whitelist
+    white_list_save
+elif [ x"$option" = x"restore" ];then
+    # restore the file/directory in whitelist
+    white_list_restore
+else
+    echo "option $2 not support !"
+    usage
+    exit 1
+fi
+
+sync
+exit 0

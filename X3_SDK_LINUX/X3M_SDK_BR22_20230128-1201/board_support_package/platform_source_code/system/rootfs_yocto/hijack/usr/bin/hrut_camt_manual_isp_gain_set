@@ -1,0 +1,78 @@
+#! /bin/sh
+
+print_usage()
+{
+	echo "Usage:"
+	echo "hrut_camt_manual_isp_gain_set camindex value"
+	echo "1/2/3/4: single camera index"
+	echo "value: float, 1.0~31.99"
+	echo "-----------------------------------"
+}
+
+log=/tmp/config_log
+echo "----------" >> $log
+
+if [ $# -ne 2 ];then
+	echo "error: Parameter wrong" >> $log
+	echo "CmdRetValue: 6"
+	echo "CmdRetResult: 0"
+	print_usage
+	exit 1;
+fi
+
+if [ -f /usr/bin/api_cmd ];then
+	echo "api_cmd is in system" >> $log
+else
+	echo "no api_cmd found, exit" >> $log
+	echo "CmdRetValue: 8"
+	echo "CmdRetResult: 0"
+	exit 1
+fi
+
+i2c_slave_addr="0x6d"
+flag_file="/tmp/camera_1_flag"
+
+if [ -f $flag_file ];then
+	echo "camera is configurable and frmrate is set" >> $log
+else
+	echo "camera is not configurable" >> $log
+	echo "CmdRetValue: 1"
+	echo "CmdRetResult: 0"
+	exit 1
+fi
+
+#set manual exposure mode first
+echo "enable manaul exposure mode" >> $log
+api_cmd -a $i2c_slave_addr -I 0x55 max 050007000100010001 >> $log 2>&1
+if [ $? -ne 0 ];then
+    echo "set auto exposure mode failed" >> $log
+    echo "CmdRetValue: 10"
+    echo "CmdRetResult: 0"
+    exit 2
+fi
+
+#enable isp gain
+echo "enable isp gain..." >> $log
+api_cmd -a $i2c_slave_addr -I 0x55 max 05001E000100010001 >> $log  2>&1
+if [ $? -ne 0 ];then
+    echo "set auto exposure mode failed" >> $log
+    echo "CmdRetValue: 20"
+    echo "CmdRetResult: 0"
+    exit 2
+fi
+
+echo "set gain value..." >> $log
+#set gain
+value=`number_format -t 2 -d $2`
+echo 05001F0001000400$value >> $log
+data=05001F0001000400$value
+api_cmd -a $i2c_slave_addr -I 0x55 max $data >> $log  2>&1
+if [ $? -eq 0 ];then
+	touch $gain_file >> $log 2>&1
+    echo "CmdRetValue: 0"
+    echo "CmdRetResult: 0"
+else
+    echo "CmdRetValue: 255"
+    echo "CmdRetResult: 0"
+fi
+echo "----------" >> $log

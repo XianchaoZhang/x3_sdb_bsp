@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.18.4. USB Phy常见参数调试 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+    <link rel="next" title="4.3.18.5. USB端口调试使用指南" href="22-USB_Gadget_User_Guide.html" />
+    <link rel="prev" title="4.3.18.3. USB眼图测试" href="20-02-USB-Eye_pattern_test.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">4.3.18. USB开发调试指南</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="19-USB_Development_Guide.html">4.3.18.1. USB开发指南</a></li>
+<li class="toctree-l4"><a class="reference internal" href="20-01-USB3-Tx-Eye_pattern_test.html">4.3.18.2. USB3.0 TX 电气特性测试</a></li>
+<li class="toctree-l4"><a class="reference internal" href="20-02-USB-Eye_pattern_test.html">4.3.18.3. USB眼图测试</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">4.3.18.4. USB Phy常见参数调试</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#usb2-0-phy">USB2.0 Phy常见参数调试</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#usb3-phy-reg2">USB3_PHY_REG2</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#x3m-usb2-0-host">某客户x3m usb2.0 host眼图</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id1">参数调节方式</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id2">更多手册描述信息摘取</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#usb3-0-phy">USB3.0 Phy常见参数调试</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id3">1. 展频</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id5">2. 去加重</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id8">3. 幅度</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#id9">参考文档</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id10">附件</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="22-USB_Gadget_User_Guide.html">4.3.18.5. USB端口调试使用指南</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3.18. </span>USB开发调试指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.18.4. </span>USB Phy常见参数调试</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="20-02-USB-Eye_pattern_test.html" class="btn btn-neutral float-left" title="4.3.18.3. USB眼图测试" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="22-USB_Gadget_User_Guide.html" class="btn btn-neutral float-right" title="4.3.18.5. USB端口调试使用指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usb-phy">
+<h1><span class="section-number">4.3.18.4. </span>USB Phy常见参数调试<a class="headerlink" href="#usb-phy" title="永久链接至标题"></a></h1>
+<section id="usb2-0-phy">
+<h2>USB2.0 Phy常见参数调试<a class="headerlink" href="#usb2-0-phy" title="永久链接至标题"></a></h2>
+<p>以下记录下usb2.0 phy相关可调整参数.</p>
+<p>主要集中在sysctrl模块寄存器中. (基地址: 0xA1000000)</p>
+<section id="usb3-phy-reg2">
+<h3>USB3_PHY_REG2<a class="headerlink" href="#usb3-phy-reg2" title="永久链接至标题"></a></h3>
+<p>地址: 0xA10005BC</p>
+<p>默认值: 0x00031233</p>
+<p><img alt="Generated" src="../../../_images/6dc163803b26e402b8ccc8edec30932f.jpg" /></p>
+<p><img alt="Generated" src="../../../_images/ee2d86ab30428c05589cadd838384903.jpg" /></p>
+<p>usb2.0 phy相关可调参数如上图所示:</p>
+<ul class="simple">
+<li><p>TXREFTUNE: usb2.0直流电平等级调整</p></li>
+<li><p>TXRISETUNE: 上升沿下降沿时间调整</p></li>
+<li><p>TXRESTUNE: USB source阻抗调整</p></li>
+<li><p>TXPREEMPPULSETUNE: 预加重时长控制</p></li>
+<li><p>TXPREEMPAMPTUNE: 预加重电流控制</p></li>
+<li><p>TXHSXVTUNE: D+和D-交叉时, 可调节的电压</p></li>
+</ul>
+</section>
+<section id="x3m-usb2-0-host">
+<h3>某客户x3m usb2.0 host眼图<a class="headerlink" href="#x3m-usb2-0-host" title="永久链接至标题"></a></h3>
+<p><img alt="Generated" src="../../../_images/65d8f0332f4916be6005ae5dd4a87e6a.jpg" /></p>
+<p>从眼图压外模的情况, 建议可以调节以下参数看看眼图情况。</p>
+<ul class="simple">
+<li><p>TXREFTUNE(usb2.0直流电平等级调整)</p></li>
+<li><p>TXRISETUNE(上升沿下降沿时间调整)</p></li>
+<li><p>TXPREEMPPULSETUNE(预加重时长控制)</p></li>
+<li><p>TXPREEMPAMPTUNE(预加重电流控制)</p></li>
+</ul>
+</section>
+<section id="id1">
+<h3>参数调节方式<a class="headerlink" href="#id1" title="永久链接至标题"></a></h3>
+<ol>
+<li><p>直接使用devmem命令进行参数修改</p>
+<p>如， 修改TXREFTUNE usb2.0 DC直流电平为-10%</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-hynix1G-2666:~# devmem 0xa10005bc
+0x00031233
+root@x3sdbx3-hynix1G-2666:~#
+root@x3sdbx3-hynix1G-2666:~# devmem 0xa10005bc <span class="m">32</span> 0x21233
+root@x3sdbx3-hynix1G-2666:~# devmem 0xa10005bc
+0x00021233
+</pre></div>
+</div>
+</li>
+<li><p>使用地平线<a class="reference external" href="../../../_files/hbx3dbg.arm">hbx3dbg.arm</a>工具进行寄存器操作</p>
+<p>如，修改TXREFTUNE usb2.0 DC直流电平为-10%</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. 读取TXREFTUNE值</span>
+./hbx3dbg.arm -r sys_ctl+0x05bc <span class="o">[</span><span class="m">16</span>:13<span class="o">]</span>
+R: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5bc <span class="o">[</span><span class="m">16</span>:13<span class="o">]</span> <span class="o">=</span> 0x8           <span class="c1"># 默认值0x1000</span>
+
+./hbx3dbg.arm -w sys_ctl+0x05bc <span class="o">[</span><span class="m">16</span>:13<span class="o">]</span> 0x0
+W: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5bc <span class="o">=</span> 0x00021233      ,Modify <span class="o">[</span><span class="m">16</span>:13<span class="o">]</span> as 0x0  <span class="c1"># 将TXREFTUNE改为0x0</span>
+
+./hbx3dbg.arm -r sys_ctl+0x05bc <span class="o">[</span><span class="m">16</span>:13<span class="o">]</span>
+R: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5bc <span class="o">[</span><span class="m">16</span>:13<span class="o">]</span> <span class="o">=</span> 0x0           <span class="c1"># 确定TXREFTUNE修改为0x0, -10%电平</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="id2">
+<h3>更多手册描述信息摘取<a class="headerlink" href="#id2" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>TXREFTUNE</p></li>
+</ul>
+<p><img alt="Generated" src="../../../_images/e1aac9ce7390d8b9f77ac3ceec0d4e68.jpg" /></p>
+<ul class="simple">
+<li><p>TXRISETUNE</p></li>
+</ul>
+<p><img alt="Generated" src="../../../_images/bb167a195d51b82d6da45d813aaaef16.jpg" /></p>
+<ul class="simple">
+<li><p>TXRESTUNE</p></li>
+</ul>
+<p><img alt="Generated" src="../../../_images/708fb1560faf4077957d9229df9ffcb5.jpg" /></p>
+<ul class="simple">
+<li><p>TXPREEMPPULSETUNE</p></li>
+</ul>
+<p><img alt="Generated" src="../../../_images/d6181888b2fb186e138cdaecc9e70f9b.jpg" /></p>
+<ul class="simple">
+<li><p>TXPREEMPAMPTUNE</p></li>
+</ul>
+<p><img alt="Generated" src="../../../_images/ef28fd31679a38544cfdb4ddc7e4db45.jpg" /></p>
+<ul class="simple">
+<li><p>TXHSXVTUNE</p></li>
+</ul>
+<p><img alt="Generated" src="../../../_images/52aef4ad245181b927a9903b3fd5adf6.jpg" /></p>
+</section>
+</section>
+<section id="usb3-0-phy">
+<h2>USB3.0 Phy常见参数调试<a class="headerlink" href="#usb3-0-phy" title="永久链接至标题"></a></h2>
+<p>Synopsys usb3.0 phy有些参数可以tunning。 比如幅度, 去加重, 展频等。</p>
+<p>以下记录一下.</p>
+<section id="id3">
+<h3>1. 展频<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<section id="id4">
+<h4>解释: (截取维基百科的)<a class="headerlink" href="#id4" title="永久链接至标题"></a></h4>
+<p><strong>扩频</strong>（Spread Spectrum，SS）是将传输信号的频谱（spectrum）打散到较其原始带宽更宽的一种通信技术，常用于无线通信领域。</p>
+<p>作用有很多, 和我们相关的主要是</p>
+<ul class="simple">
+<li><p>降低<a class="reference external" href="https://zh.wikipedia.org/wiki/%E9%9B%BB%E7%A3%81%E5%B9%B2%E6%93%BE">电磁干扰</a>（Electromagnetic Interference，EMI）</p></li>
+</ul>
+<p>若对电子设备的时脉产生器（Clock generator）做扩频，也就是刻意在时脉信号（Clock
+signal）中添加抖动（jitter），则可以将特定造成电磁干扰的能量由特定频率打散，进而减轻其干扰程度，本质上和通信技术的扩频是相同的。</p>
+<p>在<a class="reference external" href="https://zh.wikipedia.org/wiki/%E4%B8%AA%E4%BA%BA%E8%AE%A1%E7%AE%97%E6%9C%BA">个人计算机</a>的<a class="reference external" href="https://zh.wikipedia.org/wiki/BIOS">BIOS</a>设置中常常可以看到“Spread
+Spectrum”的选项。此处这个选项的主要目的是用于降低电磁干扰，依据不同的系统配置可能能够有效降低电磁辐射的量。但是副作用是降低了信号的清晰度，对超频之后的系统稳定性影响较大。</p>
+<p>简单来说, 展频也就是将固定的频率打散在一定范围内。 频谱上, 把能量”平均”了。
+这样, 对于EMC(电磁兼容性)上更良好。</p>
+</section>
+<section id="x3m-usb">
+<h4>x3m usb展频设置<a class="headerlink" href="#x3m-usb" title="永久链接至标题"></a></h4>
+<p><img alt="Generated" src="../../../_images/28f2fe1a6d209d6c20e292ad919614ac.png" /></p>
+<p>寄存器: 0xa10005b4</p>
+<p>可以尝试的调试:</p>
+<ol>
+<li><p><strong>关闭展频功能</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./hbx3dbg.arm -r sys_ctl+0x5b4
+R: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5b4 <span class="o">=</span> 0x4002802a
+
+./hbx3dbg.arm -r sys_ctl+0x5b4 <span class="o">[</span><span class="m">17</span>:17<span class="o">]</span>
+R: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5b4 <span class="o">[</span><span class="m">17</span>:17<span class="o">]</span> <span class="o">=</span> 0x1         <span class="c1"># 代表ssc展频功能是开的</span>
+
+./hbx3dbg.arm -w sys_ctl+0x5b4 <span class="o">[</span><span class="m">17</span>:17<span class="o">]</span> 0x0
+W: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5b4 <span class="o">=</span> 0x4000802a      ,Modify <span class="o">[</span><span class="m">17</span>:17<span class="o">]</span> as 0x0  <span class="c1"># 关闭展频功能</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>ssc_range调整</strong></p>
+<p>可以设置为0, 1, 2三个值, 默认是0.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./hbx3dbg.arm -r sys_ctl+0x5b4 <span class="o">[</span><span class="m">20</span>:18<span class="o">]</span>
+R: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5b4 <span class="o">[</span><span class="m">20</span>:18<span class="o">]</span> <span class="o">=</span> 0x0             <span class="c1"># ssc_range, 默认是0</span>
+
+./hbx3dbg.arm -w sys_ctl+0x5b4 <span class="o">[</span><span class="m">20</span>:18<span class="o">]</span> 0x1
+W: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5b4 <span class="o">=</span> 0x4004802a      ,Modify <span class="o">[</span><span class="m">20</span>:18<span class="o">]</span> as 0x1 <span class="c1"># 设置成1</span>
+
+./hbx3dbg.arm -w sys_ctl+0x5b4 <span class="o">[</span><span class="m">20</span>:18<span class="o">]</span> 0x2
+W: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5b4 <span class="o">=</span> 0x4008802a      ,Modify <span class="o">[</span><span class="m">20</span>:18<span class="o">]</span> as 0x2 <span class="c1"># 设置成2</span>
+</pre></div>
+</div>
+<p><img alt="Generated" src="../../../_images/49a6d5725c98d059e5e0cee09de5a4d6.png" /></p>
+</li>
+</ol>
+</section>
+</section>
+<section id="id5">
+<h3>2. 去加重<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<section id="id6">
+<h4>解释:<a class="headerlink" href="#id6" title="永久链接至标题"></a></h4>
+<p>Q. 什么是去加重/预加重??</p>
+<p>A. 可参考知乎https://zhuanlan.zhihu.com/p/30010064</p>
+<p>预加重保持信号的低频部分不变，提升信号的高频部分；而去加重衰减信号的低频部分，保持高频部分。预加重/去加重的目的都是提升信号中高频部分的能量，以补偿信道对高频部分衰减过大。</p>
+<p><img alt="Generated" src="../../../_images/5c3750b1c4f447b8ae1950d726511656.png" /></p>
+</section>
+<section id="id7">
+<h4>x3m usb去加重调参<a class="headerlink" href="#id7" title="永久链接至标题"></a></h4>
+<p><img alt="Generated" src="../../../_images/1da79983349df0765f038fc4921799bb.png" /></p>
+<p>寄存器0xa10005c0</p>
+<p>默认采用的是3.5db的去加重, 取值范围是0 ~ 63. 目前默认值是28.</p>
+<p>可以按需进行调整.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2. 加强3.5db 去加重值</span>
+./hbx3dbg.arm -r sys_ctl+0x5c0 <span class="o">[</span><span class="m">15</span>:10<span class="o">]</span>
+R: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5c0 <span class="o">[</span><span class="m">15</span>:10<span class="o">]</span> <span class="o">=</span> 0x1c         <span class="c1"># 3.5db去加重, 默认值28</span>
+
+./hbx3dbg.arm -w sys_ctl+0x5c0 <span class="o">[</span><span class="m">15</span>:10<span class="o">]</span> <span class="m">63</span>
+W: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5c0 <span class="o">=</span> 0x9fdcfc2a      ,Modify <span class="o">[</span><span class="m">15</span>:10<span class="o">]</span> as 0x3f <span class="c1"># 将3.5db去加重改到最大值63</span>
+
+./hbx3dbg.arm -w sys_ctl+0x5c0 <span class="o">[</span><span class="m">15</span>:10<span class="o">]</span> <span class="m">0</span>
+W: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5c0 <span class="o">=</span> 0x9fdc002a      ,Modify <span class="o">[</span><span class="m">15</span>:10<span class="o">]</span> as 0x0   <span class="c1"># 将3.5db去加重改到最小值0</span>
+</pre></div>
+</div>
+<p>如果要使用6db去加重, 可尝试先更改usb控制器的寄存器 GUSB3PIPECTL [2:1]
+(待确认运行时改是否有效…否则得改代码开机初始化配置好)</p>
+<p><img alt="Generated" src="../../../_images/9ce9b24b489e6d2b22a918d5bff4d210.png" /></p>
+<p>寄存器, 0xb200c2c0</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./hbx3dbg.arm -r usb+0xc2c0 <span class="o">[</span><span class="m">2</span>:1<span class="o">]</span>
+R: <span class="o">(</span>0xb2000000<span class="o">)</span>+0xc2c0 <span class="o">[</span><span class="m">2</span>:1<span class="o">]</span> <span class="o">=</span> 0x1             <span class="c1"># 默认用的是01, 即3.5db的去加重</span>
+
+./hbx3dbg.arm -w usb+0xc2c0 <span class="o">[</span><span class="m">2</span>:1<span class="o">]</span> <span class="m">2</span>            <span class="c1"># 使用6db的去加重</span>
+W: <span class="o">(</span>0xb2000000<span class="o">)</span>+0xc2c0 <span class="o">=</span> 0x010e0004     ,Modify <span class="o">[</span><span class="m">2</span>:1<span class="o">]</span> as 0x2
+
+<span class="c1"># 然后更改0xa10005c0 [21:16]位</span>
+./hbx3dbg.arm -r sys_ctl+0x5c0 <span class="o">[</span><span class="m">21</span>:16<span class="o">]</span>
+R: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5c0 <span class="o">[</span><span class="m">21</span>:16<span class="o">]</span> <span class="o">=</span> 0x1c           <span class="c1"># 默认是28</span>
+
+./hbx3dbg.arm -w sys_ctl+0x5c0 <span class="o">[</span><span class="m">21</span>:16<span class="o">]</span> <span class="m">63</span>
+W: <span class="o">(</span>0xa1000000<span class="o">)</span>+0x5c0 <span class="o">=</span> 0x9fff702a      ,Modify <span class="o">[</span><span class="m">21</span>:16<span class="o">]</span> as 0x3f  <span class="c1"># 设置成63, 增大去加重</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id8">
+<h3>3. 幅度<a class="headerlink" href="#id8" title="永久链接至标题"></a></h3>
+<section id="x3m-usb-tx">
+<h4>x3m usb tx幅度调整<a class="headerlink" href="#x3m-usb-tx" title="永久链接至标题"></a></h4>
+<p><img alt="Generated" src="../../../_images/1158cda8e56d03cbbeda1d0060483a42.png" /></p>
+<p><img alt="Generated" src="../../../_images/c8d13c7c8ba92a405a8c769528c3e67a.png" /></p>
+<p>和幅度相关的两个寄存器是 tx_vboost_lvl和pcs_tx_swing_full。</p>
+<p>具体计算公式见上图。</p>
+<p>tx_vboost_lvl 取值范围 0 ~ 7, 默认值4</p>
+<p>pcs_tx_swing_full取值范围0 ~ 127, 默认值127</p>
+<p>寄存器是0xa10005c0</p>
+<p>具体效果可以调下这两个值看看… 比如:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 最小值</span>
+./hbx3dbg.arm -w sys_ctl+0x5c0 <span class="o">[</span><span class="m">31</span>:29<span class="o">]</span> 0x0     <span class="c1"># tx_vboost_lvl = 0</span>
+./hbx3dbg.arm -w sys_ctl+0x5c0 <span class="o">[</span><span class="m">28</span>:22<span class="o">]</span> 0x0     <span class="c1"># pcs_tx_swing_full = 0</span>
+...
+./hbx3dbg.arm -w sys_ctl+0x5c0 <span class="o">[</span><span class="m">28</span>:22<span class="o">]</span> <span class="m">127</span>     <span class="c1"># pcs_tx_swing_full = 127</span>
+
+<span class="c1"># 偏大值</span>
+./hbx3dbg.arm -w sys_ctl+0x5c0 <span class="o">[</span><span class="m">31</span>:29<span class="o">]</span> 0x4     <span class="c1"># tx_vboost_lvl = 4</span>
+./hbx3dbg.arm -w sys_ctl+0x5c0 <span class="o">[</span><span class="m">28</span>:22<span class="o">]</span> 0x0     <span class="c1"># pcs_tx_swing_full = 0</span>
+...
+./hbx3dbg.arm -w sys_ctl+0x5c0 <span class="o">[</span><span class="m">28</span>:22<span class="o">]</span> <span class="m">127</span>     <span class="c1"># pcs_tx_swing_full = 127</span>
+
+<span class="c1"># 最大值</span>
+./hbx3dbg.arm -w sys_ctl+0x5c0 <span class="o">[</span><span class="m">31</span>:29<span class="o">]</span> 0x7     <span class="c1"># tx_vboost_lvl = 7</span>
+./hbx3dbg.arm -w sys_ctl+0x5c0 <span class="o">[</span><span class="m">28</span>:22<span class="o">]</span> 0x0     <span class="c1"># pcs_tx_swing_full = 0</span>
+...
+./hbx3dbg.arm -w sys_ctl+0x5c0 <span class="o">[</span><span class="m">28</span>:22<span class="o">]</span> <span class="m">127</span>     <span class="c1"># pcs_tx_swing_full = 127</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="id9">
+<h2>参考文档<a class="headerlink" href="#id9" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>x2a_sysctrl_sw_reg.xls</p></li>
+<li><p>dwc_ap_usb3.0_femtophy_tsmc16ffc_08V18V_databook.pdf</p></li>
+</ul>
+</section>
+<section id="id10">
+<h2>附件<a class="headerlink" href="#id10" title="永久链接至标题"></a></h2>
+<p><a class="reference external" href="../../../_files/hbx3dbg.arm">hbx3dbg.arm</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="20-02-USB-Eye_pattern_test.html" class="btn btn-neutral float-left" title="4.3.18.3. USB眼图测试" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="22-USB_Gadget_User_Guide.html" class="btn btn-neutral float-right" title="4.3.18.5. USB端口调试使用指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,2 @@
+#enable adb when usb switch to device mode
+ACTION=="remove", KERNEL=="xhci-hcd.0.auto", RUN+="/etc/init.d/adbd adbd_hotplug"

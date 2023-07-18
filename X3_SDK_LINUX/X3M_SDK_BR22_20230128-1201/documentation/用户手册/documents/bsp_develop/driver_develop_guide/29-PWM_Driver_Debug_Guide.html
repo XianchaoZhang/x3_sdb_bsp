@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.9. PWM 驱动调试指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.3.10. BPU驱动sysfs调试接口" href="16-BPU_Driver_sysfs_Interface_zh_CN.html" />
+    <link rel="prev" title="4.3.8. SPI调试指南" href="14-SPI_Debug_Guide_zh_CN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.3.9. PWM 驱动调试指南</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.3.9.1. 驱动代码</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id2">代码路径</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id3">内核配置</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#dts">DTS节点配置</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">4.3.9.2. 测试</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.9. </span>PWM 驱动调试指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="14-SPI_Debug_Guide_zh_CN.html" class="btn btn-neutral float-left" title="4.3.8. SPI调试指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="16-BPU_Driver_sysfs_Interface_zh_CN.html" class="btn btn-neutral float-right" title="4.3.10. BPU驱动sysfs调试接口" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pwm">
+<h1><span class="section-number">4.3.9. </span>PWM 驱动调试指南<a class="headerlink" href="#pwm" title="永久链接至标题"></a></h1>
+<p>X3有两类控制器：一类是标准PWM，有3组，每组三个，共9个，另一类是LPWM，主要用于支持Sensor的同步曝光。</p>
+<ul class="simple">
+<li><p>PWM 默认支持频率范围是192MHz到46.8KHz，每组PWM的占空比寄存器RATIO精度为8bit。</p></li>
+<li><p>LPWM 默认支持频率范围是100KHz到24.4Hz，没有占空比寄存器，只有一个高电平持续时间HIGH，HIGH寄存器配置单位是us，所以LPWM的占空比与频率有关。</p></li>
+<li><p>LPWM是为了Sensor 同步设计的，不是一个通用的PWM，<strong>单纯PWM功能建议使用PWM。</strong></p></li>
+</ul>
+<section id="id1">
+<h2><span class="section-number">4.3.9.1. </span>驱动代码<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<section id="id2">
+<h3>代码路径<a class="headerlink" href="#id2" title="永久链接至标题"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">drivers</span><span class="o">/</span><span class="n">pwm</span><span class="o">/</span><span class="n">pwm</span><span class="o">-</span><span class="n">hobot</span><span class="o">.</span><span class="n">c</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>内核配置<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Device</span> <span class="n">Drivers</span>
+    <span class="o">-&gt;</span>  <span class="n">Pulse</span><span class="o">-</span><span class="n">Width</span> <span class="n">Modulation</span> <span class="p">(</span><span class="n">PWM</span><span class="p">)</span> <span class="n">Support</span>
+        <span class="o">-&gt;</span>  <span class="n">Hobot</span> <span class="n">PWM</span> <span class="n">controller</span> <span class="n">support</span>
+        <span class="o">-&gt;</span>  <span class="n">Hobot</span> <span class="n">lite</span> <span class="n">PWM</span> <span class="n">controller</span> <span class="n">support</span>
+</pre></div>
+</div>
+</section>
+<section id="dts">
+<h3>DTS节点配置<a class="headerlink" href="#dts" title="永久链接至标题"></a></h3>
+<p>在<code class="docutils literal notranslate"><span class="pre">hobot-xj3.dtsi</span></code>这个文件里面有<code class="docutils literal notranslate"><span class="pre">pwm</span></code>和<code class="docutils literal notranslate"><span class="pre">lpwm</span></code>的配置，一般来讲不需要做任何修改。</p>
+<div class="highlight-dts notranslate"><div class="highlight"><pre><span></span>/* arch/arm64/boot/dts/hobot/hobot-xj3.dtsi */
+lpwm: lpwm@0xA500D000 {
+    compatible = &quot;hobot,hobot-lpwm&quot;;
+    reg = &lt;0 0xA5018000 0 0x1000&gt;;
+    interrupt-parent = &lt;&amp;gic&gt;;
+    interrupts = &lt;0 68 4&gt;;
+    pinctrl-names = &quot;lpwm0&quot;, &quot;lpwm1&quot;,&quot;lpwm2&quot;,&quot;lpwm3&quot;, &quot;lpwm_pps&quot;;
+    pinctrl-0 = &lt;&amp;lpwm0_func&gt;;
+    pinctrl-1 = &lt;&amp;lpwm1_func&gt;;
+    pinctrl-2 = &lt;&amp;lpwm2_func&gt;;
+    pinctrl-3 = &lt;&amp;lpwm3_func&gt;;
+    pinctrl-4 = &lt;&amp;lpwm_pps&gt;;
+    clocks = &lt;&amp;lpwm_mclk&gt;;
+    clock-names = &quot;lpwm_mclk&quot;;
+    status = &quot;disabled&quot;;
+};
+
+pwm_c0: pwm@0xA500D000 {
+    compatible = &quot;hobot,hobot-pwm&quot;;
+    #pwm-cells = &lt;3&gt;;
+    reg = &lt;0 0xA500D000 0 0x1000&gt;;
+    interrupt-parent = &lt;&amp;gic&gt;;
+    interrupts = &lt;0 44 4&gt;;
+    pinctrl-names = &quot;pwm0&quot;, &quot;pwm1&quot;,&quot;pwm2&quot;;
+    pinctrl-0 = &lt;&amp;pwm0_func&gt;;
+    pinctrl-1 = &lt;&amp;pwm1_func&gt;;
+    pinctrl-2 = &lt;&amp;pwm2_func&gt;;
+    clocks = &lt;&amp;pwm0_mclk&gt;;
+    clock-names = &quot;pwm_mclk&quot;;
+    status = &quot;disabled&quot;;
+};
+...
+</pre></div>
+</div>
+<p>当需要使能对应串口的时候，可以到对应的板级文件修改，这里以<code class="docutils literal notranslate"><span class="pre">hobot-x3-sdb_v4.dts</span></code>为例，使能<code class="docutils literal notranslate"><span class="pre">pwm0-2</span></code>、<code class="docutils literal notranslate"><span class="pre">pwm3-5</span></code>。</p>
+<div class="highlight-dts notranslate"><div class="highlight"><pre><span></span><span class="cm">/* arch/arm64/boot/dts/hobot/hobot-x3-sdb_v4.dts */</span>
+<span class="p">...</span>
+<span class="o">&amp;</span><span class="na">pwm_c0</span> <span class="p">{</span>
+	<span class="kr">status</span> <span class="o">=</span> <span class="s">&quot;okay&quot;</span><span class="p">;</span>
+	<span class="n">pinctrl-0</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="na">pwm0_func</span><span class="o">&gt;</span><span class="p">;</span>
+	<span class="n">pinctrl-1</span> <span class="o">=</span> <span class="o">&lt;&gt;</span><span class="p">;</span>
+	<span class="n">pinctrl-2</span> <span class="o">=</span> <span class="o">&lt;&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="o">&amp;</span><span class="na">pwm_c1</span> <span class="p">{</span>
+	<span class="kr">status</span> <span class="o">=</span> <span class="s">&quot;okay&quot;</span><span class="p">;</span>
+	<span class="n">pinctrl-0</span> <span class="o">=</span> <span class="o">&lt;&gt;</span><span class="p">;</span>
+	<span class="n">pinctrl-1</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="na">pwm4_func</span><span class="o">&gt;</span><span class="p">;</span>
+	<span class="n">pinctrl-2</span> <span class="o">=</span> <span class="o">&lt;&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id4">
+<h2><span class="section-number">4.3.9.2. </span>测试<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>用户可以使用如下脚本进行<code class="docutils literal notranslate"><span class="pre">pwm</span></code>功能测试，并进行信号测量，验证<code class="docutils literal notranslate"><span class="pre">pwm</span></code>工作是否正常。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">8</span> <span class="m">8</span> <span class="m">8</span> <span class="m">8</span>  &gt; /proc/sys/kernel/printk
+<span class="k">for</span> i <span class="k">in</span> <span class="m">0</span> <span class="m">3</span>
+<span class="k">do</span>
+        <span class="nb">cd</span> /sys/class/pwm/pwmchip<span class="si">${</span><span class="nv">i</span><span class="si">}</span>
+        <span class="nb">echo</span> <span class="m">0</span> &gt; <span class="nb">export</span>
+        <span class="nb">echo</span> <span class="m">1</span> &gt; <span class="nb">export</span>
+        <span class="nb">echo</span> <span class="m">2</span> &gt; <span class="nb">export</span>
+ 
+        <span class="nb">cd</span> pwm0
+        <span class="nb">echo</span> <span class="m">10000</span> &gt; period
+        <span class="nb">echo</span> <span class="m">3000</span>  &gt; duty_cycle
+        <span class="nb">echo</span> <span class="m">1</span> &gt; <span class="nb">enable</span>
+  
+        <span class="nb">cd</span> ../pwm1
+        <span class="nb">echo</span> <span class="m">10000</span> &gt; period
+        <span class="nb">echo</span> <span class="m">1000</span>  &gt; duty_cycle
+        <span class="nb">echo</span> <span class="m">1</span> &gt; <span class="nb">enable</span>
+ 
+        <span class="nb">cd</span> ../pwm2
+        <span class="nb">echo</span> <span class="m">10000</span> &gt; period
+        <span class="nb">echo</span> <span class="m">1000</span>  &gt; duty_cycle
+        <span class="nb">echo</span> <span class="m">1</span> &gt; <span class="nb">enable</span>
+<span class="k">done</span>
+<span class="c1">#以下是进行寄存器读取</span>
+<span class="nb">echo</span> <span class="s2">&quot;pwm0 pinctrl:`devmem 0xa6004010 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;pwm1 pinctrl:`devmem 0xa6004058 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;pwm2 pinctrl:`devmem 0xa600405C 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;pwm3 pinctrl:`devmem 0xa6004060 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;pwm4 pinctrl:`devmem 0xa6004064 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;pwm5 pinctrl:`devmem 0xa6004048 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;pwm6 pinctrl:`devmem 0xa600404C 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;pwm7 pinctrl:`devmem 0xa6004030 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;pwm8 pinctrl:`devmem 0xa6004034 32`&quot;</span>
+ 
+<span class="nb">echo</span> <span class="s2">&quot;Regs of PWM 0 1 2:&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_EN      `devmem 0xA500d000 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_SLICE   `devmem 0xA500d004 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_FREQ    `devmem 0xA500d008 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_FREQ1   `devmem 0xA500d00C 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_RATIO   `devmem 0xA500d014 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_SRCPND  `devmem 0xA500d01C 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_INTMASK `devmem 0xA500d020 32`&quot;</span>
+ 
+<span class="nb">echo</span> <span class="s2">&quot;Regs of PWM 3 4 5:&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_EN      `devmem 0xA500e000 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_SLICE   `devmem 0xA500e004 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_FREQ    `devmem 0xA500e008 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_FREQ1   `devmem 0xA500e00C 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_RATIO   `devmem 0xA500e014 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_SRCPND  `devmem 0xA500e01C 32`&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;PWM_INTMASK `devmem 0xA500e020 32`&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="14-SPI_Debug_Guide_zh_CN.html" class="btn btn-neutral float-left" title="4.3.8. SPI调试指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="16-BPU_Driver_sysfs_Interface_zh_CN.html" class="btn btn-neutral float-right" title="4.3.10. BPU驱动sysfs调试接口" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

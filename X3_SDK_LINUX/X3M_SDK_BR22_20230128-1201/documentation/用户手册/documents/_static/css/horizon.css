@@ -1,0 +1,19 @@
+.wy-body-for-nav {
+	background: #edf0f2
+}
+
+.wy-grid-for-nav {
+	position: relative;
+	margin: 0 auto;
+}
+
+.wy-nav-side {
+	left: auto;
+}
+
+@media screen and (max-width:768px){
+	.wy-nav-side {
+		left: -300px;
+	}
+}
+

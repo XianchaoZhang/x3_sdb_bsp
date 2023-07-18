@@ -1,0 +1,85 @@
+#!/bin/sh
+
+pipe="/tmp/otapipe"
+resetreason="normal"
+file="/userdata/cache/command"
+resetreason_bin="/usr/bin/hrut_resetreason"
+unzip_path="/userdata/cache/verify_tmp"
+
+ota_logpath="/ota"
+if [ ! -d "$ota_logpath" ];then
+    ota_logpath="/userdata/cache"
+    if [ ! -d "$ota_logpath" ];then
+        ota_logpath="/tmp/cache"
+    fi
+fi
+ota_info="${ota_logpath}/info"
+
+function printinfo()
+{
+    local log=$1
+
+    echo "[OTA_INFO] ${log}" > /dev/ttyS0
+    echo "[OTA_INFO]${log}[OFNI_ATO]" >> $ota_info
+}
+
+function get_resetreason()
+{
+    resetreason=$($resetreason_bin)
+}
+
+
+get_resetreason
+
+if [ x"$resetreason" = x"recovery" ];then
+    if [ ! -f $file ] || [ ! -d $unzip_path ];then
+        printinfo "$file or $unzip_path not exist"
+        exit 1
+    else
+        command=$(cat $file)
+        printinfo "$command"
+        $command
+    fi
+
+else
+
+    if [[ ! -p $pipe ]]; then
+        mkfifo $pipe
+    fi
+
+    if [[ ! -p $pipe ]]; then
+        printinfo "Error: mkfifo /tmp/otapipe failed! "
+        exit 1
+    fi
+
+    while true
+    do
+    if read line <$pipe; then
+        val=$(echo $line | awk '{print $1}')
+        partition=$(echo $line | awk '{print $2}')
+
+        if [[ "$val" == 'up_partition.sh' ]] || [[ "$val" == '/usr/bin/up_partition.sh' ]];then
+            # upgrade app, not kill hbipc
+            if [ x"$partition" != x"app" ];then
+                # kill hbipc service
+                tmp=$(ps |grep hbipc-utilsd |grep -v grep)
+                if [ ! -z "$tmp" ];then
+                    printinfo "kill progress hbipc-utilsd"
+                    killall -9 hbipc-utilsd
+                fi
+            fi
+
+            # delay 3s
+            sleep 3
+
+            # execute ota upgrade procedure
+            printinfo "ota pipe get upgrade info : $line"
+            $line
+
+            sleep 20
+        else
+            sleep 1
+        fi
+    fi
+    done
+fi

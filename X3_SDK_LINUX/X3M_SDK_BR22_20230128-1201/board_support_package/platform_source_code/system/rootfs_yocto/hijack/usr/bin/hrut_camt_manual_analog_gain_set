@@ -1,0 +1,25 @@
+#! /bin/sh
+
+print_usage()
+{
+	echo "Usage:"
+	echo "hrut_camt_manual_analog_gain_set camindex value"
+	echo "1/2/3/4: single camera index"
+	echo "value: uint32, 1~100"
+	echo "-----------------------------------"
+}
+
+CAMTYPE=`hrut_390camtype`
+case $CAMTYPE in
+    0)
+        hrut_camt_manual_analog_gain_set_type0 $@
+    ;;
+    1)
+        hrut_camt_manual_analog_gain_set_type1 $@
+    ;;
+    *)
+        hrut_camt_manual_analog_gain_set_type0 $@
+    ;;
+esac
+
+

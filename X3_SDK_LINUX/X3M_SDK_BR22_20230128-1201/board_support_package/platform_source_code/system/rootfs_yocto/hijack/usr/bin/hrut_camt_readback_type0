@@ -1,0 +1,133 @@
+#! /bin/sh
+
+print_usage()
+{
+	echo "Usage:"
+	echo "hrut_camt_readback camindex [0|1]"
+	echo "camindex 1/2/3/4: for compatibility this is must but no use"
+	echo "0:exposure mode"
+	echo "1:auto exposure value"
+	echo "2:manual exposure value"
+	echo "3: ISP gain mode"
+	echo "4: ISP gain value"
+	echo "5: analog gain value"
+	echo "6: fps value"
+	echo "7: pps offset value"
+	echo "-----------------------------------"
+}
+
+log=/tmp/config_log
+echo "----------" >> $log
+
+if [ $# -ne 2 ];then
+	echo "error: Parameter wrong" >> $log
+	echo "CmdRetValue: 1"
+	echo "CmdRetResult: 0"
+	print_usage
+	exit 1;
+fi
+
+if [ -f /usr/bin/api_cmd ];then
+	echo "api_cmd is in system" >> $log
+else
+	echo "no api_cmd found, exit" >> $log
+	echo "CmdRetValue: 8"
+	echo "CmdRetResult: 0"
+	exit 1
+fi
+
+i2c_slave_addr="0x6d"
+
+if [ $2 -eq 0 ];then
+    echo "readback exposure mode" >> $log
+    api_cmd -a $i2c_slave_addr -I 0x51 1 0500000007000000 -o /tmp/result.bin >> $log 2>&1
+	if [ $? -eq 0 ];then
+		echo "CmdRetValue: 0"
+		echo -n "CmdRetResult: "
+		echo `bin_to_number -t 0 -i 0 -l 1 -f /tmp/result.bin`
+	else
+		echo "CmdRetValue: 255"
+		echo "CmdRetResult: 0"
+	fi
+elif [ $2 -eq 1 ];then
+    echo "readback auto exposure target value" >> $log
+    api_cmd -a $i2c_slave_addr -I 0x51 4 050000000d000000 -o /tmp/result.bin >> $log 2>&1
+	if [ $? -eq 0 ];then
+		echo "CmdRetValue: 0"
+		echo -n "CmdRetResult: "
+		echo `bin_to_number -t 2 -i 0 -l 4 -f /tmp/result.bin`
+	else
+		echo "CmdRetValue: 255"
+		echo "CmdRetResult: 0"
+	fi
+elif [ $2 -eq 2 ];then
+    echo "readback manual exposure value" >> $log
+    api_cmd -a $i2c_slave_addr -I 0x51 2 0500000008000000 -o /tmp/result.bin >> $log 2>&1
+	if [ $? -eq 0 ];then
+		echo "CmdRetValue: 0"
+		echo -n "CmdRetResult: "
+		echo `bin_to_number -t 1 -i 0 -l 2 -f /tmp/result.bin`
+	else
+		echo "CmdRetValue: 255"
+		echo "CmdRetResult: 0"
+	fi
+elif [ $2 -eq 3 ];then
+    echo "readback isp gain mode" >> $log
+    api_cmd -a $i2c_slave_addr -I 0x51 1 050000001E000000 -o /tmp/result.bin >> $log 2>&1
+	if [ $? -eq 0 ];then
+		echo "CmdRetValue: 0"
+		echo -n "CmdRetResult: "
+		echo `bin_to_number -t 0 -i 0 -l 1 -f /tmp/result.bin`
+	else
+		echo "CmdRetValue: 255"
+		echo "CmdRetResult: 0"
+	fi
+elif [ $2 -eq 4 ];then
+    echo "readback isp gain value" >> $log
+    api_cmd -a $i2c_slave_addr -I 0x51 4 050000001F000000 -o /tmp/result.bin >> $log 2>&1
+	if [ $? -eq 0 ];then
+		echo "CmdRetValue: 0"
+		echo -n "CmdRetResult: "
+		echo `bin_to_number -t 2 -i 0 -l 4 -f /tmp/result.bin`
+	else
+		echo "CmdRetValue: 255"
+		echo "CmdRetResult: 0"
+	fi
+elif [ $2 -eq 5 ];then
+    echo "readback analog gain value" >> $log
+    api_cmd -a $i2c_slave_addr -I 0xc0 4 34000000180000000201 -o /tmp/result.bin >> $log 2>&1
+	if [ $? -eq 0 ];then
+		echo "CmdRetValue: 0"
+		echo -n "CmdRetResult: "
+		echo `bin_to_number -t 3 -i 0 -l 4 -f /tmp/result.bin`
+	else
+		echo "CmdRetValue: 255"
+		echo "CmdRetResult: 0"
+	fi
+elif [ $2 -eq 6 ];then
+    echo "readback fps value" >> $log
+    api_cmd -a $i2c_slave_addr -I 0x42 max -o /tmp/result.bin >> $log 2>&1
+	if [ $? -eq 0 ];then
+		echo "CmdRetValue: 0"
+		echo -n "CmdRetResult: "
+		echo `bin_to_number -t 2 -i 20 -l 4 -f /tmp/result.bin`
+	else
+		echo "CmdRetValue: 255"
+		echo "CmdRetResult: 0"
+	fi
+#elif [ $2 -eq 7 ];then
+#    echo "pps offset value" >> $log
+#    prev_hex=`creg-apb $offset_register`
+#    prev_decimal=`printf "%d" 0x${prev_hex}`
+#    echo $prev_decimal >> $log
+#    let prev_data=$prev_decimal*5+5
+#    echo "CmdRetValue: 0"
+#    echo "CmdRetResult: $prev_data"
+else
+    echo "wrong parameters" >> $log
+	echo "CmdRetValue: 1"
+	echo "CmdRetResult: 0"
+    print_usage
+    exit 1;
+fi
+echo "----------" >> $log

@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.8.1. X3 DDR支持列表和板级配置 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.8.2. NAND/NOR Flash Memory 支持列表" href="NAND_NOR_FLASH_Memory_Supporting_List.html" />
+    <link rel="prev" title="4.8. X3 Approved Vendor List" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../driver_develop_guide/index.html">4.3. 驱动开发指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.8. X3 Approved Vendor List</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.8.1. X3 DDR支持列表和板级配置</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#k4f8e304hb-mgcj">4.8.1.1. K4F8E304HB-MGCJ</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#mbps">3200Mbps</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id1">2666Mbps</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id2">备注</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#nt6an256t32av-j2">4.8.1.2. NT6AN256T32AV-J2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mt53e1g32d2fw-046aut-a">4.8.1.3. MT53E1G32D2FW-046AUT:A</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#k4f6e3s4hm-mgcj">4.8.1.4. K4F6E3S4HM-MGCJ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#h9hcnnnbkumlxr-nee">4.8.1.5. H9HCNNNBKUMLXR-NEE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nt6an512t32av-j1">4.8.1.6. NT6AN512T32AV-J1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mt53d1024m32d4dt-046aat">4.8.1.7. MT53D1024M32D4DT-046AAT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#k4fbe3d4hm-mgcj">4.8.1.8. K4FBE3D4HM-MGCJ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#h9hcnnn8kumlhr-nme">4.8.1.9. H9HCNNN8KUMLHR-NME</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mt40a256m16ly-062e">4.8.1.10. MT40A256M16LY-062E</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#k4a4g165wf">4.8.1.11. K4A4G165WF</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#k4a8g165wc-bctd">4.8.1.12. K4A8G165WC-BCTD</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="NAND_NOR_FLASH_Memory_Supporting_List.html">4.8.2. NAND/NOR Flash Memory 支持列表</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sensor_Supporting_List.html">4.8.3. Sensor 支持列表</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Perpheral_Supporting_List.html">4.8.4. 常用外设支持列表</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.8. </span>X3 Approved Vendor List</a> &raquo;</li>
+      <li><span class="section-number">4.8.1. </span>X3 DDR支持列表和板级配置</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="4.8. X3 Approved Vendor List" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="NAND_NOR_FLASH_Memory_Supporting_List.html" class="btn btn-neutral float-right" title="4.8.2. NAND/NOR Flash Memory 支持列表" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="x3-ddr">
+<h1><span class="section-number">4.8.1. </span>X3 DDR支持列表和板级配置<a class="headerlink" href="#x3-ddr" title="永久链接至标题"></a></h1>
+<p>X3 当前支持的ddr芯片列表如下</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Type</th>
+<th>Vendor</th>
+<th>Model</th>
+<th>Part  Number</th>
+<th>Freq on  X3 (Mbps)</th>
+<th>Size</th>
+<th>Temperature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LPDDR4</td>
+<td>Samsung</td>
+<td>K4F8E304HB-MGCJ</td>
+<td>0x0108</td>
+<td>3200</td>
+<td>8Gbit</td>
+<td>-25 ~ 85℃</td>
+</tr>
+<tr>
+<td>LPDDR4</td>
+<td>Samsung</td>
+<td>K4F8E304HB-MGCJ</td>
+<td>0x0108</td>
+<td>2666</td>
+<td>8Gbit</td>
+<td>-25 ~ 85℃</td>
+</tr>
+<tr>
+<td>LPDDR4</td>
+<td>Nanya</td>
+<td>NT6AN256T32AV-J2</td>
+<td></td>
+<td>2666</td>
+<td>8Gbit</td>
+<td>-30 ~ 105℃</td>
+</tr>
+<tr>
+<td>LPDDR4</td>
+<td>Micron</td>
+<td>MT53E1G32D2FW-046AUT:A</td>
+<td>0xff20</td>
+<td>3200</td>
+<td>32Gbit</td>
+<td>-40 ~ 90℃</td>
+</tr>
+<tr>
+<td>LPDDR4</td>
+<td>Samsung</td>
+<td>K4F6E3S4HM-MGCJ</td>
+<td>0x110</td>
+<td>3200</td>
+<td>16Gbit</td>
+<td>-25 ~ 85℃</td>
+</tr>
+<tr>
+<td>LPDDR4</td>
+<td>Hynix</td>
+<td>H9HCNNNBKUMLXR-NEE</td>
+<td>0x0610</td>
+<td>3200</td>
+<td>16Gbit</td>
+<td>-25 ~ 85℃</td>
+</tr>
+<tr>
+<td>LPDDR4</td>
+<td>Nanya</td>
+<td>NT6AN512T32AV-J1</td>
+<td></td>
+<td>3200</td>
+<td>16Gbit</td>
+<td>-30 ~ 105℃</td>
+</tr>
+<tr>
+<td>LPDDR4</td>
+<td>Micron</td>
+<td>MT53D1024M32D4DT-046AAT</td>
+<td>0xff10</td>
+<td>2666</td>
+<td>32Gbit</td>
+<td>-40 ~ 105℃</td>
+</tr>
+<tr>
+<td>LPDDR4</td>
+<td>Samsung</td>
+<td>K4FBE3D4HM-MGCJ</td>
+<td>0x1010</td>
+<td>3200</td>
+<td>32Gbit</td>
+<td>-25 ~ 85℃</td>
+</tr>
+<tr>
+<td>LPDDR4</td>
+<td>Hynix</td>
+<td>H9HCNNN8KUMLHR-NME</td>
+<td>0x608</td>
+<td>2666</td>
+<td>8Gbit</td>
+<td>-25 ~ 85℃</td>
+</tr>
+<tr>
+<td>DDR4</td>
+<td>Micron</td>
+<td>MT40A256M16LY-062E  AIT</td>
+<td>0xAAAA</td>
+<td>3200</td>
+<td>4Gbit*2</td>
+<td>-40 ~  95℃</td>
+</tr>
+<tr>
+<td>DDR4</td>
+<td>Samsung</td>
+<td>K4A4G165WF</td>
+<td>0xff30</td>
+<td>2640</td>
+<td>4Gbit*2</td>
+<td>-10 ~ 70℃</td>
+</tr>
+<tr>
+<td>DDR4</td>
+<td>Samsung</td>
+<td>K4A8G165WC-BCTD</td>
+<td>0xBBBB</td>
+<td>2666</td>
+<td>8Gbit*2</td>
+<td>0 ~ 95℃</td>
+</tr>
+</tbody>
+</table><section id="k4f8e304hb-mgcj">
+<h2><span class="section-number">4.8.1.1. </span>K4F8E304HB-MGCJ<a class="headerlink" href="#k4f8e304hb-mgcj" title="永久链接至标题"></a></h2>
+<section id="mbps">
+<h3>3200Mbps<a class="headerlink" href="#mbps" title="永久链接至标题"></a></h3>
+<p><strong>板级配置</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span># DDR参数配置
+# 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot; &quot;3733&quot; &quot;4266&quot;
+export HR_DDR_FREQ=&quot;3200&quot;
+# 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;
+export HR_DDR_MANUFACTURE=&quot;samsung&quot;
+# ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot; &quot;DDR3L&quot;
+export HR_DDR_TYPR=&#39;LPDDR4&#39;
+# ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;,可不配置，支持自动识别
+export HR_DDR_CAPACITY=&quot;0&quot;
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+</pre></div>
+</div>
+<p><strong>miniboot/ddr对应代码</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">lpddr4_write_para_data</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">DDR_FREQC_3200</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">K4F8E304HBMGCJ</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3>2666Mbps<a class="headerlink" href="#id1" title="永久链接至标题"></a></h3>
+<p><strong>板级配置</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span># DDR参数配置
+# 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot; &quot;3733&quot; &quot;4266&quot;
+export HR_DDR_FREQ=&quot;2666&quot;
+# 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;
+export HR_DDR_MANUFACTURE=&quot;samsung&quot;
+# ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot; &quot;DDR3L&quot;
+export HR_DDR_TYPR=&#39;LPDDR4&#39;
+# ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;,可不配置，支持自动识别
+export HR_DDR_CAPACITY=&quot;0&quot;
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+</pre></div>
+</div>
+<p><strong>miniboot/ddr对应代码</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">lpddr4_write_para_data</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">DDR_FREQC_2666</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">K4F8E304HBMGCJ</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3>备注<a class="headerlink" href="#id2" title="永久链接至标题"></a></h3>
+<p>兼容K4F8E3S4HDMGCJ这颗ddr，仅生产工艺不同</p>
+<p>K4F8E304HBMGCJ是20nm工艺</p>
+<p>K4F8E3S4HDMGCJ是18nm工艺</p>
+<p>两种ddr共用参数</p>
+</section>
+</section>
+<section id="nt6an256t32av-j2">
+<h2><span class="section-number">4.8.1.2. </span>NT6AN256T32AV-J2<a class="headerlink" href="#nt6an256t32av-j2" title="永久链接至标题"></a></h2>
+<p><strong>参数特殊说明</strong></p>
+<p>参数兼容 K4F8E304HB-MGCJ</p>
+<p><strong>板级配置</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span># DDR参数配置
+# 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot; &quot;3733&quot; &quot;4266&quot;
+export HR_DDR_FREQ=&quot;2666&quot;
+# 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;
+export HR_DDR_MANUFACTURE=&quot;samsung&quot;
+# ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot; &quot;DDR3L&quot;
+export HR_DDR_TYPR=&#39;LPDDR4&#39;
+# ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;,可不配置，支持自动识别
+export HR_DDR_CAPACITY=&quot;0&quot;
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+</pre></div>
+</div>
+<p><strong>miniboot/ddr对应代码</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">lpddr4_write_para_data</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">DDR_FREQC_2666</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">K4F8E304HBMGCJ</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="mt53e1g32d2fw-046aut-a">
+<h2><span class="section-number">4.8.1.3. </span>MT53E1G32D2FW-046AUT:A<a class="headerlink" href="#mt53e1g32d2fw-046aut-a" title="永久链接至标题"></a></h2>
+<p><strong>参数特殊说明</strong></p>
+<p>代码里面的part_number是0xff20</p>
+<p>在程序运行时实际读出来的应该是 0xff18</p>
+<p>get_ddr_mr_info:cs_num=2, mr5=0xff, mr8=0x18</p>
+<p><strong>板级配置</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span># DDR参数配置
+# 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot; &quot;3733&quot; &quot;4266&quot;
+export HR_DDR_FREQ=&quot;3200&quot;
+# 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;
+export HR_DDR_MANUFACTURE=&quot;micron&quot;
+# ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot; &quot;DDR3L&quot;
+export HR_DDR_TYPR=&#39;LPDDR4&#39;
+# ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;,可不配置，支持自动识别
+export HR_DDR_CAPACITY=&quot;0&quot;
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+</pre></div>
+</div>
+<p><strong>miniboot/ddr对应代码</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">lpddr4_write_para_data</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">DDR_FREQC_3200</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">MT53E1G32D2FW_046AUTA</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="k4f6e3s4hm-mgcj">
+<h2><span class="section-number">4.8.1.4. </span>K4F6E3S4HM-MGCJ<a class="headerlink" href="#k4f6e3s4hm-mgcj" title="永久链接至标题"></a></h2>
+<p><strong>参数特殊说明</strong></p>
+<p>HR_DDR_ALTERNATIVE=2</p>
+<p><strong>板级配置</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span># DDR参数配置
+# 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot; &quot;3733&quot; &quot;4266&quot;
+export HR_DDR_FREQ=&quot;3200&quot;
+# 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;
+export HR_DDR_MANUFACTURE=&quot;samsung&quot;
+# ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot; &quot;DDR3L&quot;
+export HR_DDR_TYPR=&#39;LPDDR4&#39;
+# ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;,可不配置，支持自动识别
+export HR_DDR_CAPACITY=&quot;0&quot;
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=2
+</pre></div>
+</div>
+<p><strong>miniboot/ddr对应代码</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">lpddr4_write_para_data</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">DDR_FREQC_3200</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">K4F6E3S4HMMGCJ</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="h9hcnnnbkumlxr-nee">
+<h2><span class="section-number">4.8.1.5. </span>H9HCNNNBKUMLXR-NEE<a class="headerlink" href="#h9hcnnnbkumlxr-nee" title="永久链接至标题"></a></h2>
+<p><strong>参数特殊说明</strong></p>
+<p>与K4F6E3S4HM-MGCJ参数兼容</p>
+<p><strong>板级配置</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span># DDR参数配置
+# 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot; &quot;3733&quot; &quot;4266&quot;
+export HR_DDR_FREQ=&quot;3200&quot;
+# 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;
+export HR_DDR_MANUFACTURE=&quot;samsung&quot;
+# ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot; &quot;DDR3L&quot;
+export HR_DDR_TYPR=&#39;LPDDR4&#39;
+# ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;,可不配置，支持自动识别
+export HR_DDR_CAPACITY=&quot;0&quot;
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=2
+</pre></div>
+</div>
+<p><strong>miniboot/ddr对应代码</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">lpddr4_write_para_data</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">DDR_FREQC_3200</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">K4F6E3S4HMMGCJ</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="nt6an512t32av-j1">
+<h2><span class="section-number">4.8.1.6. </span>NT6AN512T32AV-J1<a class="headerlink" href="#nt6an512t32av-j1" title="永久链接至标题"></a></h2>
+<p><strong>参数特殊说明</strong></p>
+<p>与K4F6E3S4HM-MGCJ参数兼容</p>
+<p><strong>板级配置</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span># DDR参数配置
+# 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot; &quot;3733&quot; &quot;4266&quot;
+export HR_DDR_FREQ=&quot;3200&quot;
+# 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;
+export HR_DDR_MANUFACTURE=&quot;samsung&quot;
+# ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot; &quot;DDR3L&quot;
+export HR_DDR_TYPR=&#39;LPDDR4&#39;
+# ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;,可不配置，支持自动识别
+export HR_DDR_CAPACITY=&quot;0&quot;
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=2
+</pre></div>
+</div>
+<p><strong>miniboot/ddr对应代码</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">lpddr4_write_para_data</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">DDR_FREQC_3200</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">K4F6E3S4HMMGCJ</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="mt53d1024m32d4dt-046aat">
+<h2><span class="section-number">4.8.1.7. </span>MT53D1024M32D4DT-046AAT<a class="headerlink" href="#mt53d1024m32d4dt-046aat" title="永久链接至标题"></a></h2>
+<p><strong>参数特殊说明</strong></p>
+<p>无</p>
+<p><strong>板级配置</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span># DDR参数配置
+# 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot; &quot;3733&quot; &quot;4266&quot;
+export HR_DDR_FREQ=&quot;2666&quot;
+# 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;
+export HR_DDR_MANUFACTURE=&quot;micron&quot;
+# ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot; &quot;DDR3L&quot;
+export HR_DDR_TYPR=&#39;LPDDR4&#39;
+# ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;,可不配置，支持自动识别
+export HR_DDR_CAPACITY=&quot;0&quot;
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+</pre></div>
+</div>
+<p><strong>miniboot/ddr对应代码</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">lpddr4_write_para_data</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">DDR_FREQC_2666</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">MT53D1024M32D4DT</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="k4fbe3d4hm-mgcj">
+<h2><span class="section-number">4.8.1.8. </span>K4FBE3D4HM-MGCJ<a class="headerlink" href="#k4fbe3d4hm-mgcj" title="永久链接至标题"></a></h2>
+<p><strong>参数特殊说明</strong></p>
+<p>HR_DDR_ALTERNATIVE=3</p>
+<p><strong>part_number:</strong></p>
+<p>代码里面的part_number是0x1010</p>
+<p>在程序运行时实际读出来的应该是 0x110</p>
+<p>get_ddr_mr_info:cs_num=1, mr5=0x1, mr8=0x10</p>
+<p>这么处理是为了和三星 K4F6E3S4HM-MGCJ 2GB 芯片做区分</p>
+<p><strong>板级配置</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span># DDR参数配置
+# 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot; &quot;3733&quot; &quot;4266&quot;
+export HR_DDR_FREQ=&quot;3200&quot;
+# 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;
+export HR_DDR_MANUFACTURE=&quot;samsung&quot;
+# ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot; &quot;DDR3L&quot;
+export HR_DDR_TYPR=&#39;LPDDR4&#39;
+# ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;,可不配置，支持自动识别
+export HR_DDR_CAPACITY=&quot;0&quot;
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=3
+</pre></div>
+</div>
+<p><strong>miniboot/ddr对应代码</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="n">lpddr4_write_para_data</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">DDR_FREQC_3200</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">K4FBE3D4HM_THCL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="h9hcnnn8kumlhr-nme">
+<h2><span class="section-number">4.8.1.9. </span>H9HCNNN8KUMLHR-NME<a class="headerlink" href="#h9hcnnn8kumlhr-nme" title="永久链接至标题"></a></h2>
+<p><strong>参数特殊说明</strong></p>
+<p>容量会识别成1152M</p>
+<p>total_sz = 1152</p>
+<p><strong>板级配置</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span># DDR参数配置
+# 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot; &quot;3733&quot; &quot;4266&quot;
+export HR_DDR_FREQ=&quot;2666&quot;
+# 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;
+export HR_DDR_MANUFACTURE=&quot;hynix&quot;
+# ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot; &quot;DDR3L&quot;
+export HR_DDR_TYPR=&#39;LPDDR4&#39;
+# ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;,可不配置，支持自动识别
+export HR_DDR_CAPACITY=&quot;0&quot;
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+</pre></div>
+</div>
+<p><strong>miniboot/ddr对应代码</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">lpddr4_write_para_data</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">DDR_FREQC_2666</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">H9HCNNN8KUMLHR</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="mt40a256m16ly-062e">
+<h2><span class="section-number">4.8.1.10. </span>MT40A256M16LY-062E<a class="headerlink" href="#mt40a256m16ly-062e" title="永久链接至标题"></a></h2>
+<p><strong>参数特殊说明</strong></p>
+<p>无</p>
+<p><strong>板级配置</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span># DDR参数配置
+# 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot; &quot;3733&quot; &quot;4266&quot;
+export HR_DDR_FREQ=&quot;3200&quot;
+# 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;
+export HR_DDR_MANUFACTURE=&quot;micron&quot;
+# ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot; &quot;DDR3L&quot;
+export HR_DDR_TYPR=&#39;DDR4&#39;
+# ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;,可不配置，支持自动识别
+export HR_DDR_CAPACITY=&quot;0&quot;
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+</pre></div>
+</div>
+<p><strong>miniboot/ddr对应代码</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ddr4_write_para_data</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">DDR_FREQC_3200</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">MT40A256M16LY</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="k4a4g165wf">
+<h2><span class="section-number">4.8.1.11. </span>K4A4G165WF<a class="headerlink" href="#k4a4g165wf" title="永久链接至标题"></a></h2>
+<p><strong>参数特殊说明</strong></p>
+<p>无</p>
+<p><strong>板级配置</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span># DDR参数配置
+# 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot; &quot;3733&quot; &quot;4266&quot;
+export HR_DDR_FREQ=&quot;2640&quot;
+# 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;
+export HR_DDR_MANUFACTURE=&quot;samsung&quot;
+# ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot; &quot;DDR3L&quot;
+export HR_DDR_TYPR=&#39;DDR4&#39;
+# ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;,可不配置，支持自动识别
+export HR_DDR_CAPACITY=&quot;0&quot;
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+</pre></div>
+</div>
+<p><strong>miniboot/ddr对应代码</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ddr4_write_para_data</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">DDR_FREQC_2640</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">K4A4G165WF_BCTD</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="k4a8g165wc-bctd">
+<h2><span class="section-number">4.8.1.12. </span>K4A8G165WC-BCTD<a class="headerlink" href="#k4a8g165wc-bctd" title="永久链接至标题"></a></h2>
+<p><strong>参数特殊说明</strong></p>
+<p>无</p>
+<p><strong>板级配置</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span># DDR参数配置
+# 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot; &quot;3733&quot; &quot;4266&quot;
+export HR_DDR_FREQ=&quot;2666&quot;
+# 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;
+export HR_DDR_MANUFACTURE=&quot;samsung&quot;
+# ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot; &quot;DDR3L&quot;
+export HR_DDR_TYPR=&#39;DDR4&#39;
+# ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;,可不配置，支持自动识别
+export HR_DDR_CAPACITY=&quot;0&quot;
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+</pre></div>
+</div>
+<p><strong>miniboot/ddr对应代码</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ddr4_write_para_data</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="n">DDR_FREQC_2666</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">K4A8G165WC</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="4.8. X3 Approved Vendor List" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="NAND_NOR_FLASH_Memory_Supporting_List.html" class="btn btn-neutral float-right" title="4.8.2. NAND/NOR Flash Memory 支持列表" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

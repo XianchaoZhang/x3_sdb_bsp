@@ -1,0 +1,121 @@
+#! /bin/sh
+
+print_usage()
+{
+    echo "GW5200 firmware tool"
+	echo "usage: hrut_ispota --version"
+	echo "       hrut_ispota --update isp.rom"
+}
+
+CheckStringInFile()
+{
+	if [ $# -ne 2 ];then
+		echo "Function Called Wrong"
+		return 1
+	fi
+	if [ ! -f $1 ];then
+		echo "File is not exist"
+		return 2
+	fi
+	grep -q "$2" $1 > /dev/null 2>&1
+	if [ $? -ne 0 ];then
+		return 3
+	else
+		return 0
+	fi
+}
+
+
+if [ $# -lt 1 ];then
+	echo "Parameter format is wrong"
+	print_usage
+	exit 1;
+fi
+
+[ -z $i2c_slave_addr ] && i2c_slave_addr="0x6d"
+
+
+if [ $1 = "--version" ];then
+	api_cmd -I -a $i2c_slave_addr 0x01 max
+elif [ $1 = "--update" -a $# -eq 2 ];then
+	# first, create /tmp/xxxxx.log file to log the output of command
+	ls_date=`date +%Y%m%d%H%M%S`
+	filepath="/tmp/"$ls_date".log"
+	touch $filepath
+	if [ $? -ne 0 ];then
+		echo "/tmp/  has no enough space"
+		exit 9
+	fi
+	# output message will be put into the file
+    
+    echo "Prepare to enter recovery mode"
+    api_cmd -I -a $i2c_slave_addr 0x12 noquery 0100000000000000 > $filepath 2>&1 & { sleep 2; kill  -9 $! > /dev/null 2>&1; }
+    CheckStringInFile $filepath "success"
+    if [ $? -ne 0 ];then       # command failed, may be in recovery mode
+        i2c_bootloader /usr/bin/failsafefw.bin
+        if [ $? -ne 0 ];then
+            echo "ISP is in unknown mode!!! Please check if the ISP has been rightly programed"
+            exit 10
+        fi
+        sleep 2
+    fi
+    sleep 1
+    
+    echo "Status checking..."
+    api_cmd -I -a $i2c_slave_addr 0x10 max > $filepath 2>&1 & { sleep 2; kill  -9 $! > /dev/null 2>&1; }   # { cmd; } command end up of ;
+    CheckStringInFile $filepath "04 00 00 00"
+    if [ $? -ne 0 ];then
+        echo "Enter failsafe mode failed"
+        exit 10
+    fi
+    sleep 1
+    
+    # spec 1.0
+    is_10_spec=0
+    echo "try disable the NOR read only mode"
+    api_cmd -I -a $i2c_slave_addr 0x19 max AD > $filepath 2>&1
+    CheckStringInFile $filepath "(Done)"
+    if [ $? -eq 0 ];then
+        echo "update base on 1.0"
+        is_10_spec=1
+    else
+        echo "update base on 0.9"
+    fi
+    sleep 1
+    
+    echo "Prepare to download firmware"
+    if [ $is_10_spec -eq 1 ];then
+        #file_length=`wc -c < $2`
+        #file_hex=`printf "%08x" $file_length`
+        #hex0=`echo $file_hex | cut -c7-8`
+        #hex1=`echo $file_hex | cut -c5-6`
+        #hex2=`echo $file_hex | cut -c3-4`
+        #hex3=`echo $file_hex | cut -c1-2`
+        #api_cmd -I 0x84 max ee000000$hex0$hex1$hex2$hex3 -i $2
+        api_cmd -I -a $i2c_slave_addr 0x84 max eeffffff00000001 -i $2
+    else
+        api_cmd -I -a $i2c_slave_addr 0x84 max ee -i $2
+    fi
+    if [ $? -ne 0 ];then
+        echo "Update failed"
+        exit 11
+    fi
+    exit 0
+elif [ $1 = "--jbf" -a $# -eq 2 ];then
+    echo "not support JBF update now"
+    exit 13
+    file_length=`wc -c < $2`
+    file_hex=`printf "%08x" $file_length`
+    hex0=`echo $file_hex | cut -c7-8`
+    hex1=`echo $file_hex | cut -c5-6`
+    hex2=`echo $file_hex | cut -c3-4`
+    hex3=`echo $file_hex | cut -c1-2`
+    api_cmd -I -a $i2c_slave_addr -v1 0x90 0 0000150001ff3505$hex0$hex1$hex2$hex3 -i $2
+    if [ $? -ne 0 ];then
+        echo "Update JBF failed"
+        exit 12
+    fi
+    exit 0
+else
+	print_usage
+fi

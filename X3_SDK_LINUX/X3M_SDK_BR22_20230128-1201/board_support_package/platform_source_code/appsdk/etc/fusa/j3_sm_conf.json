@@ -1,0 +1,107 @@
+{
+	"enable": 1,
+	"fhti": 148,
+	"soc_temp_th1": -40,
+	"soc_temp_th2": 125,
+	"soc_temp_th3": 130,
+	"soc_temp_dur_th": 396,
+	"dbc_cnt": 2,
+	"dbc_time": 132,
+	"sram_model": "/app/libfusa/model/gen_loadstore1280k_hbm_1x320x256x16.hbm",
+	"thread_attr": {
+		"testlib_exe": {
+			"policy": "SCHED_FIFO",
+			"priority": 1
+		},
+		"testlib_diag": {
+			"policy": "SCHED_FIFO",
+			"priority": 2
+		},
+		"kernel_diag": {
+			"policy": "SCHED_FIFO",
+			"priority": 2
+		},
+		"bpu_sram_check": {
+			"policy": "SCHED_FIFO",
+			"priority": 1
+		},
+		"qa_master": {
+			"name": "qa_master",
+			"policy": "SCHED_FIFO",
+			"priority": 1
+		},
+		"qa_slave": {
+			"name": "qa_slave",
+			"policy": "SCHED_FIFO",
+			"priority": 1
+		}
+	},
+	"testlib_tc": {
+		"enable": 1,
+		"ddr_ecc": 1,
+		"bpu_sram_check": 1,
+		"ddr_dataline": 1,
+		"safety_reg": 1,
+		"soc_temp": 1,
+		"flash_check": 1,
+		"qa_btwn_acore": 1,
+		"ddr_ecc_func": 1
+	},
+	"kmodules": {
+		"enable": 1,
+		"mipi_host_0": 1,
+		"mipi_host_1": 1,
+		"mipi_host_2": 1,
+		"mipi_host_3": 1,
+		"mipi_dev": 1,
+		"sif": 1,
+		"ipu": 1,
+		"ipu_size": 1,
+		"isp": 1,
+		"vio_frame_lost": 1,
+		"spi_0": 1,
+		"spi_1": 1,
+		"spi_2": 1,
+		"i2c_0": 1,
+		"i2c_1": 1,
+		"i2c_2": 1,
+		"i2c_3": 1,
+		"i2c_4": 1,
+		"i2c_5": 1,
+		"emmc": 1,
+		"pym": 1,
+		"mpu": 1,
+		"ethernet": 1,
+		"gdc_0": 1,
+		"gdc_1": 1,
+		"bpu_0": 1,
+		"bpu_1": 1,
+		"uart_0": 1,
+		"uart_1": 1,
+		"uart_2": 1,
+		"uart_3": 1,
+		"qspi": 1,
+		"acore_cal": 1
+	},
+	"external_tc": {
+		"enable": 1,
+		"bif_spi": 1,
+		"prg_flow": 1,
+		"prg_err": 1,
+		"image_to": 1,
+		"bpu_fc_to": 1,
+		"com_spi": 1,
+		"com_eth": 1,
+		"com_uart": 1
+	},
+	"camera": [
+		{
+			"name": "cam_1",
+			"i2c_bus": 1,
+			"serial_addr": "0x40",
+			"deserial_addr": "0x48",
+			"camera_addr": "0x18",
+			"enable": 1
+		}
+	]
+}

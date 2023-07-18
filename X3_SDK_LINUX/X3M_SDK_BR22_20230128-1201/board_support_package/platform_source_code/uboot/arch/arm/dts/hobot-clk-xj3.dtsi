@@ -1,0 +1,633 @@
+/{
+	#address-cells = <2>;
+	#size-cells = <2>;
+	clocks {
+		compatible = "hobot,x3-clk";
+		reg = <0x0 0xA1000000 0x0 0x500
+         0x0 0xA4300000 0x0 0x1000>;
+
+		osc_clk: osc_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,fixed-clk";
+			clock-freq = <24000000>;
+		};
+
+		timer_div_mclk: timer_div_mclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,fixed-factor-clk";
+			clocks = <&osc_clk>;
+			clk-div = <24>;
+			clk-mult = <1>;
+			status = "disabled";
+		};
+
+		armpll1_clk: armpll1_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,laintpll-clk";
+			clocks = <&osc_clk>;
+			offset = <0x0 0x4 0x8>;
+		};
+
+		syspll_clk: syspll_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,laintpll-clk";
+			clocks = <&osc_clk>;
+			offset = <0x10 0x14 0x18>;
+		};
+
+		armpll2_clk: armpll2_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,fixed-factor-clk";
+			clocks = <&syspll_clk>;
+			clk-div = <2>;
+			clk-mult = <1>;
+		};
+
+		arm_pllmux_clk: arm_pllmux_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,mux-clk";
+			clocks = <&armpll1_clk>, <&armpll2_clk>;
+			offset = <0x300>;
+			bits = <0>;
+			field = <0x1>;
+		};
+
+		acp_aclk: acp_aclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,gate-clk";
+			clocks = <&acp_div_aclk>;
+			offset = <0x100 0x104 0x108 0x208>;
+			bits = <0 0 0 0>;
+			field = <1 1 1 1>;
+			status = "disabled";
+		};
+
+		sys_pllmux_clk: sys_pllmux_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,mux-clk";
+			clocks = <&osc_clk>, <&syspll_clk>;
+			offset = <0x300>;
+			bits = <24>;
+			field = <1>;
+		};
+
+		cpu_divclk: cpu_divclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&arm_pllmux_clk>;
+			offset = <0x204>;
+			bits = <0>;
+			field = <3>;
+			status = "okay";
+		};
+		cpu_mux_clk: cpu_mux_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,mux-clk";
+			clocks = <&osc_clk>, <&cpu_divclk>;
+			offset = <0x300>;
+			bits = <4>;
+			field = <0x1>;
+			status = "okay";
+		};
+
+		ace_div_aclk: ace_div_aclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&cpu_mux_clk>;
+			offset = <0x204>;
+			bits = <4>;
+			field = <3>;
+			status = "disabled";
+		};
+
+		acp_div_aclk: acp_div_aclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&cpu_mux_clk>;
+			offset = <0x200>;
+			bits = <0>;
+			field = <3>;
+			status = "disabled";
+		};
+
+		cpu_div_cntclk: cpu_div_cntclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&cpu_mux_clk>;
+			offset = <0x200>;
+			bits = <4>;
+			field = <3>;
+			status = "disabled";
+		};
+
+		cpu_cntclk: cpu_cntclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,gate-clk";
+			clocks = <&cpu_div_cntclk>;
+			offset = <0x100 0x104 0x108 0x208>;
+			bits = <11 11 11 1>;
+			field = <1 1 1 1>;
+			status = "disabled";
+		};
+
+
+		sys_noc_div_aclk: sys_noc_div_aclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&cpu_mux_clk>;
+			offset = <0x204>;
+			bits = <8>;
+			field = <3>;
+			status = "disabled";
+		};
+
+		sys_ap_div_aclk: sys_ap_div_aclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&cpu_mux_clk>;
+			offset = <0x204>;
+			bits = <16>;
+			field = <3>;
+			status = "okay";
+		};
+
+		sys_dmac_aclk: sys_dmac_aclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,gate-clk";
+			clocks = <&sys_ap_div_aclk>;
+			offset = <0x100 0x104 0x108 0x0>;
+			bits = <7 7 7 32>;
+			field = <1 1 1>;
+			status = "disabled";
+		};
+
+
+		sys_qspi_aclk: sys_qspi_aclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,gate-clk";
+			clocks = <&sys_ap_div_aclk>;
+			offset = <0x100 0x104 0x108 0x0>;
+			bits = <6 6 6 32>;
+			field = <1 1 1>;
+			status = "okay";
+		};
+
+		eth0_ephy_1stdiv_clk: eth0_ephy_1stdiv_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&sys_pllmux_clk>;
+			offset = <0x380>;
+			bits = <12>;
+			field = <5>;
+			status = "okay";
+		};
+
+		eth0_ephy_2nddiv_clk: eth0_ephy_2nddiv_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&eth0_ephy_1stdiv_clk>;
+			offset = <0x380>;
+			bits = <20>;
+			field = <3>;
+			status = "okay";
+		};
+
+		cx_div_dbgclk: cx_div_dbgclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&cpu_mux_clk>;
+			offset = <0x210>;
+			bits = <0>;
+			field = <3>;
+			status = "disabled";
+		};
+
+		armv8pil_clk: armv8pil_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,gate-clk";
+			clocks = <&cx_div_dbgclk>;
+			offset = <0x110 0x114 0x118 0x0>;
+			bits = <3 3 3 32>;
+			field = <1 1 1>;
+			status = "disabled";
+		};
+
+		syspll_vco_clk: syspll_vco_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,fixed-factor-clk";
+			clocks = <&osc_clk>;
+			clk-div = <1>;
+			clk-mult = <125>;
+		};
+
+		syspll_vco_pllmux_clk: syspll_vco_pllmux_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,mux-clk";
+			clocks = <&osc_clk>, <&syspll_vco_clk>;
+			offset = <0x300>;
+			bits = <17>;
+			field = <1>;
+		};
+
+		peripll_clk: peripll_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,laintpll-clk";
+			clocks = <&osc_clk>;
+			offset = <0x50 0x54 0x58>;
+		};
+
+		peri_pllmux_clk: peri_pllmux_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,mux-clk";
+			clocks = <&osc_clk>, <&peripll_clk>;
+			offset = <0x300>;
+			bits = <20>;
+			field = <1>;
+		};
+
+		peri_div_aclk: peri_div_aclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x250>;
+			bits = <0>;
+			field = <3>;
+			status = "disabled";
+		};
+
+		peri_aclk: peri_aclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,gate-clk";
+			clocks = <&peri_div_aclk>;
+			offset = <0x150 0x154 0x158 0x258>;
+			bits = <0 0 0 0>;
+			field = <1 1 1 1>;
+			status = "disabled";
+		};
+
+		uart0_mclk: uart0_mclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-gate-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x250 0x150 0x154 0x158>;
+			bits = <4 1 1 1>;
+			field = <4 1 1 1>;
+		};
+
+		spi0_mclk: spi0_mclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-gate-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x250 0x150 0x154 0x158>;
+			bits = <8 5 5 5>;
+			field = <4 1 1 1>;
+			status = "disabled";
+		};
+
+		spi1_mclk: spi1_mclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-gate-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x250 0x150 0x154 0x158>;
+			bits = <8 6 6 6>;
+			field = <4 1 1 1>;
+			status = "disabled";
+		};
+
+		spi2_mclk: spi2_mclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-gate-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x250 0x150 0x154 0x158>;
+			bits = <8 7 7 7>;
+			field = <4 1 1 1>;
+			status = "disabled";
+		};
+		i2c0_mclk: i2c0_mclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-gate-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x250 0x150 0x154 0x158>;
+			bits = <16 11 11 11>;
+			field = <4 1 1 1>;
+			status = "okay";
+		};
+/*
+		i2c1_mclk: i2c1_mclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-gate-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x250 0x150 0x154 0x158>;
+			bits = <16 12 12 12>;
+			field = <4 1 1 1>;
+			status = "disabled";
+		};
+
+		i2c2_mclk: i2c2_mclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-gate-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x250 0x150 0x154 0x158>;
+			bits = <16 13 13 13>;
+			field = <4 1 1 1>;
+			status = "disabled";
+		};
+
+		i2c3_mclk: i2c3_mclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-gate-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x250 0x150 0x154 0x158>;
+			bits = <16 14 14 14>;
+			field = <4 1 1 1>;
+			status = "disabled";
+		};
+
+		i2c4_mclk: i2c4_mclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-gate-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x250 0x150 0x154 0x158>;
+			bits = <16 23 23 23>;
+			field = <4 1 1 1>;
+			status = "disabled";
+		};
+
+		i2c5_mclk: i2c5_mclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-gate-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x250 0x150 0x154 0x158>;
+			bits = <16 24 24 24>;
+			field = <4 1 1 1>;
+			status = "disabled";
+		};
+*/
+		sd0_div_clk: sd0_div_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x320>;
+			bits = <0>;
+			field = <4>;
+			status = "okay";
+		};
+
+		sd0_cclk: sd0_cclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,endiv-clk";
+			clocks = <&sd0_div_clk>;
+			offset = <0x320 0x150 0x154 0x158 0x258>;
+			bits = <4 15 15 15 1>;
+			field = <4 1 1 1 1>;
+			status = "okay";
+		};
+
+		sd1_div_clk: sd1_div_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x330>;
+			bits = <0>;
+			field = <4>;
+			status = "okay";
+		};
+
+		sd1_cclk: sd1_cclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,endiv-clk";
+			clocks = <&sd1_div_clk>;
+			offset = <0x330 0x150 0x154 0x158 0x258>;
+			bits = <4 16 16 16 2>;
+			field = <4 1 1 1 1>;
+			status = "okay";
+		};
+
+		sd2_div_clk: sd2_div_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&peri_pllmux_clk>;
+			offset = <0x340>;
+			bits = <0>;
+			field = <4>;
+			status = "okay";
+		};
+
+		sd2_cclk: sd2_cclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,endiv-clk";
+			clocks = <&sd2_div_clk>;
+			offset = <0x340 0x150 0x154 0x158 0x258>;
+			bits = <4 25 25 25 3>;
+			field = <4 1 1 1 1>;
+			status = "okay";
+		};
+
+		eth0_prediv_clk: eth0_prediv_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&sys_pllmux_clk>;
+			offset = <0x380>;
+			bits = <0>;
+			field = <5>;
+			status = "okay";
+		};
+
+		eth0_clk: eth0_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,endiv-clk";
+			clocks = <&eth0_prediv_clk>;
+			offset = <0x380 0x150 0x154 0x158 0x258>;
+			bits = <8 17 17 17 4>;
+			field = <3 1 1 1 1>;
+			status = "okay";
+		};
+
+
+		utmi_lst_div_clk: utmi_lst_div_clk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,div-clk";
+			clocks = <&sys_pllmux_clk>;
+			offset = <0x250>;
+			bits = <20>;
+			field = <4>;
+			status = "disabled";
+		};
+
+		utmi_mclk: utmi_mclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,endiv-clk";
+			clocks = <&utmi_lst_div_clk>;
+			offset = <0x250 0x150 0x154 0x158 0x258>;
+			bits = <24 20 20 20 9>;
+			field = <4 1 1 1 1>;
+			status = "disabled";
+		};
+
+		pipe_mclk: pipe_mclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			clocks = <&sys_pllmux_clk>;
+			compatible = "hobot,endiv-clk";
+			offset = <0x250 0x150 0x154 0x158 0x258>;
+			bits = <28 21 21 21 8>;
+			field = <4 1 1 1 1>;
+			status = "disabled";
+		};
+
+		sys_usb_aclk: sys_usb_aclk {
+			u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+			compatible = "hobot,gate-clk";
+			clocks = <&sys_ap_div_aclk>;
+			offset = <0x150 0x154 0x158 0x0>;
+			bits = <22 22 22 32>;
+			field = <1 1 1>;
+			status = "disabled";
+		};
+
+		viopll_clk: viopll_clk {
+			u-boot,dm-pre-reloc;
+                        #clock-cells = <0>;
+                        compatible = "hobot,laintpll-clk";
+                        clocks = <&osc_clk>;
+                        offset = <0x40 0x44 0x48>;
+			status = "okay";
+                };
+
+		vio_pllmux_clk: vio_pllmux_clk {
+			u-boot,dm-pre-reloc;
+                        #clock-cells = <0>;
+                        compatible = "hobot,mux-clk";
+                        clocks = <&osc_clk>, <&viopll_clk>;
+                        offset = <0x300>;
+                        bits = <16>;
+                        field = <1>;
+			status = "okay";
+                };
+
+                viopll2_clk: viopll2_clk {
+			u-boot,dm-pre-reloc;
+                        #clock-cells = <0>;
+                        compatible = "hobot,laintpll-clk";
+                        clocks = <&osc_clk>;
+                        offset = <0xB0 0xB4 0xB8>;
+			status = "okay";
+                };
+
+                vio2_pllmux_clk: vio2_pllmux_clk {
+                        u-boot,dm-pre-reloc;
+			#clock-cells = <0>;
+                        compatible = "hobot,mux-clk";
+                        clocks = <&osc_clk>, <&viopll2_clk>;
+                        offset = <0x300>;
+                        bits = <17>;
+                        field = <1>;
+			status = "okay";
+                };
+
+		mipi_phy_ref_1stdiv_clk: mipi_phy_ref_1stdiv_clk {
+			u-boot,dm-pre-reloc;
+                        #clock-cells = <0>;
+                        compatible = "hobot,div-clk";
+                        clocks = <&vio_pllmux_clk>;
+                        offset = <0x244>;
+                        bits = <0>;
+                        field = <5>;
+			status = "okay";
+                };
+
+                mipi_dev_ref_clk: mipi_dev_ref_clk {
+			u-boot,dm-pre-reloc;
+                        #clock-cells = <0>;
+                        compatible = "hobot,div-gate-clk";
+                        clocks = <&mipi_phy_ref_1stdiv_clk>;
+                        offset = <0x244 0x140 0x144 0x148>;
+                        bits = <5 3 3 3>;
+                        field = <3 1 1 1>;
+			status = "okay";
+                };
+
+		iar_pix_src_clk: iar_pix_src_clk {
+			u-boot,dm-pre-reloc;
+                        #clock-cells = <0>;
+                        compatible = "hobot,mux-clk";
+                        clocks = <&vio_pllmux_clk>, <&vio2_pllmux_clk>;
+                        offset = <0x240>;
+                        bits = <31>;
+                        field = <1>;
+			status = "okay";
+                };
+
+                iar_pix_1stdiv_clk: iar_pix_1stdiv_clk {
+			u-boot,dm-pre-reloc;
+                        #clock-cells = <0>;
+                        compatible = "hobot,div-clk";
+                        clocks = <&iar_pix_src_clk>;
+                        offset = <0x240>;
+                        bits = <16>;
+                        field = <5>;
+			status = "okay";
+                };
+
+		iar_pix_clk: iar_pix_clk {
+			u-boot,dm-pre-reloc;
+                        #clock-cells = <0>;
+                        compatible = "hobot,endiv-clk";
+                        clocks = <&iar_pix_1stdiv_clk>;
+                        offset = <0x240 0x140 0x144 0x148 0x248 0x310>;
+                        bits = <21 2 2 2 1 12>;
+                        field = <3 1 1 1 1 1>;
+			status = "okay";
+                };
+
+	};
+};

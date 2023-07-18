@@ -1,0 +1,91 @@
+# sample_vot 使用说明
+
+## 程序功能
+
+`sample_vot程序`完成`VOT`模块的初始化，实现从当前目录读取一帧nv12的图片数据送到`VOT`的bt1120输出显示功能
+
+## 功能使用
+
+### 程序部署
+
+把 `sample/sample_vot/sample_vot` 和 `1280_720yuv8.yuv`、`1920_1080yuv8.yuv` 文件上传到开发板后，给程序赋予可执行权限 `chmod a+x sample_vot`, 然后执行程序 `./sample_vot 1080P30`。
+
+```bash
+chmod +x sample_vot
+# ./sample_vot 1080P60
+root@x3sdbx3-samsung2G-3200:/userdata# ./sample_vot 1080P60
+[   26.051955] channel id is 0, enable is 0, reg value is 0x4ef00f.
+[   26.052744] channel id is 1, enable is 0, reg value is 0x4ef00f.
+[   26.053520] channel id is 2, enable is 0, reg value is 0x4ef00f.
+[   26.054339] channel id is 3, enable is 0, reg value is 0x4ef00f.
+stLayer width:1920[   26.055263] channel id is 0, enable is 1, reg value is 0x14ef00f.
+stLayer height:1080
+libiar: hb_disp_set_timing done!
+stChnAttr priority :2
+stChnAttr src width :1920
+stChnAttr src height :1080
+stChnAttr s32X :0
+stChnAttr s32Y :0
+stChnAttr u32DstWidth :1920
+stChnAttr u32DstHeight :1080
+[   26.056165] iar_output_stream.
+stCrop width :1920
+stCrop height :1080
+[   26.059304] channel id is 0, enable is 1, reg value is 0x14ef00f.
+framesize:3110400
+
+（注意如果是X3 SDB生态板子，那么带的参数只支持1080P60/1080P30，如果是客户自己使用的sil902x的bt1120转换hdmi芯片，那么参数可以是如下：
+	1080P60
+	1080P59.94
+	1080P50
+	1080P30
+	1080P29.97
+	1080P25
+	1080I60
+	1080I59.94
+	1080I50
+	720P60
+	720P59.94
+	720P50
+	720P29.97）
+
+
+```
+
+### 运行效果说明
+
+程序通过把`1920_1080yuv8.yuv`读到内存，并通过接口把数据送到`VOT`模块的`bt1120`接口,然后通过`hdmi`转换芯片输出`hdmi`效果到显示设备如下图
+
+![](_static/_images/sample_vot/20220520-163716.jpg)
+
+## 程序开发
+
+### 源码结构
+
+```
+.
+├── 1280_720yuv8.yuv			# 回灌使用720P的NV12格式文件
+├── 1920_1080yuv8.yuv			# 回灌使用1080P的NV12格式文件
+├── Makefile					# 编译makefile
+├── Readme.md					# 程序说明
+└── vot.c						# 主程序
+```
+
+### 编译
+
+当前代码通过一个Makefile文件配置编译
+
+依赖的多媒体头文件和库文件分别在BSP SDK的appsdk目录和system/rootfs_yocto/root目录下，编译时需要注意这两个依赖目录位置是否存在
+
+安装交叉编译工具链后，执行 make 命令直接可以编译生成 sample_vot 程序
+
+```
+cd sample/sample_vot
+$ make clean # 清理源码，保持干净的代码环境
+$ make
+... ... # 一大段编译打印
+$ ls
+1280_720yuv8.yuv  1920_1080yuv8.yuv  vot.c  vot.o  Makefile  sample_vot
+$ make install # 把产出物安装到 out 目录下
+```
+

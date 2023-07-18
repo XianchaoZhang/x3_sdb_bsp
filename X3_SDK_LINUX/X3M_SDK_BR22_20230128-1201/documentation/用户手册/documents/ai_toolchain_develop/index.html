@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6. 量化工具链开发指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="6.1. 简介" href="preface_toolchain_overview.html" />
+    <link rel="prev" title="5.12. 多媒体性能调试" href="../mpp_develop/12-Media_Processing_Performance_Debug_Guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. 量化工具链开发指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="preface_toolchain_overview.html">6.1. 简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env_install.html">6.2. 环境安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">6.3. 快速体验</a></li>
+<li class="toctree-l2"><a class="reference internal" href="horizon_ai_toolchain_user_guide/index.html">6.4. 训练后量化(PTQ)使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="horizon_runtime_samples/index.html">6.5. 上板运行(runtime)应用开发说明</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">6. </span>量化工具链开发指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../mpp_develop/12-Media_Processing_Performance_Debug_Guide.html" class="btn btn-neutral float-left" title="5.12. 多媒体性能调试" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="preface_toolchain_overview.html" class="btn btn-neutral float-right" title="6.1. 简介" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">6. </span>量化工具链开发指南<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="preface_toolchain_overview.html">6.1. 简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env_install.html">6.2. 环境安装</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="env_install.html#id2">6.2.1. 交付物使用说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="env_install.html#id3">6.2.1.1. 源码目录结构说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="env_install.html#id4">6.2.2. 开发机部署</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="env_install.html#id5">6.2.2.1. 开发机准备</a></li>
+<li class="toctree-l3"><a class="reference internal" href="env_install.html#docker">6.2.2.2. 使用Docker环境</a></li>
+<li class="toctree-l3"><a class="reference internal" href="env_install.html#id6">6.2.2.3. 手工安装环境</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="env_install.html#id8">6.2.3. 开发板部署</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="env_install.html#id10">6.2.3.1. 补充文件准备</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="env_install.html#id11">6.2.4. 版本管理工具使用说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="env_install.html#ddk-vcs-list">6.2.4.1. ddk_vcs list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="env_install.html#ddk-vcs-install">6.2.4.2. ddk_vcs install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="env_install.html#ddk-vcs-uninstall">6.2.4.3. ddk_vcs uninstall</a></li>
+<li class="toctree-l3"><a class="reference internal" href="env_install.html#ddk-vcs-patch">6.2.4.4. ddk_vcs patch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="env_install.html#ddk-vcs-show">6.2.4.5. ddk_vcs show</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">6.3. 快速体验</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#id2">6.3.1. 开发环境准备</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#id3">6.3.2. 模型准备</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#id4">6.3.3. 模型验证</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#id5">6.3.4. 模型转换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#id6">6.3.5. 模型性能验证</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#id7">6.3.5.1. 静态性能评估</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#id8">6.3.5.2. 动态性能评估</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#id9">6.3.6. 模型精度验证</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#python">6.3.6.1. 开发机Python环境验证</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#c">6.3.6.2. 开发板C++环境验证</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#id10">6.3.7. 公版模型性能精度指标</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="horizon_ai_toolchain_user_guide/index.html">6.4. 训练后量化(PTQ)使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/index.html">6.4.1. PTQ原理及步骤详解</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html">6.4.1.1. 简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#op-restrictions">6.4.1.2. 模型算子约束</a></li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#fp-model-preparation">6.4.1.3. 模型准备</a></li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#model-check">6.4.1.4. 模型验证</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#hb-mapper-checker">使用 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">checker</span></code> 工具验证模型</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#id6">检查异常处理</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#check-result">检查结果解读</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#id9">检查结果的调优指导</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#model-conversion">6.4.1.5. 模型转换</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#prepare-calibration-data">准备校准数据</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#hb-mapper-makertbin">使用 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">makertbin</span></code> 工具转换模型</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#yaml">模型转换yaml配置参数说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#hzpreprocess">预处理HzPreprocess算子说明</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#conversion-interpretation">转换内部过程解读</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#id14">转换结果解读</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#conversion-output">转换产出物解读</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#performance-evaluation">6.4.1.6. 模型性能分析与调优</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#hb-perf">使用 <code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 工具估计性能</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#id19">开发板实测性能</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#model-performance-optimization">模型性能优化</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#performance-affecting-parameters">检查影响模型性能的yaml参数</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#cpu">处理CPU算子</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#id22">高性能模型设计建议</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#bpu">BPU面向高效率模型优化</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#accuracy-evaluation">6.4.1.7. 模型精度分析与调优</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#id24">模型精度分析</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#accuracy-optimization">精度调优</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#id26">精度有明显损失（4%以上）</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#id28">较小精度损失提升</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#qat">使用QAT量化感知训练方案进一步提升模型精度</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#id30">6.4.1.8. 其它工具使用说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#id31"><code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 工具</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#hb-pack"><code class="docutils literal notranslate"><span class="pre">hb_pack</span></code> 工具</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#hb-model-info"><code class="docutils literal notranslate"><span class="pre">hb_model_info</span></code> 工具</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#hb-model-modifier"><code class="docutils literal notranslate"><span class="pre">hb_model_modifier</span></code> 工具</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#hb-model-verifier"><code class="docutils literal notranslate"><span class="pre">hb_model_verifier</span></code> 工具</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_ai_toolchain_user_guide/ptq_user_guide/chapter_model_conversion.html#hb-eval-preprocess"><code class="docutils literal notranslate"><span class="pre">hb_eval_preprocess</span></code> 工具</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="horizon_ai_toolchain_user_guide/supported_op_list_and_restrictions.html">6.4.2. 模型算子支持列表</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="horizon_ai_toolchain_user_guide/supported_op_list_and_restrictions.html#id2">6.4.2.1. 使用限制说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_ai_toolchain_user_guide/supported_op_list_and_restrictions.html#caffe">6.4.2.2. 支持的Caffe算子列表</a></li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_ai_toolchain_user_guide/supported_op_list_and_restrictions.html#onnx">6.4.2.3. 支持的ONNX算子列表</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="horizon_runtime_samples/index.html">6.5. 上板运行(runtime)应用开发说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/index.html">6.5.1. 模型上板运行示例说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html">6.5.1.1. 简介</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#id3">示例代码包结构介绍</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#id4">6.5.1.2. 环境构建</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#id5">开发板准备</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#id7">编译</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#id10">6.5.1.3. 示例使用</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#basic-samples">basic_samples 示例</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#quick-start">quick_start</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#api-tutorial">api_tutorial</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#advanced-samples">advanced_samples</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#misc">misc</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#id11">6.5.1.4. 辅助工具和常用操作</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#id12">日志</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#id13">示例日志</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_sample/basic-sample.html#dnn-api">模型推理 DNN API日志</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/index.html">6.5.2. 模型推理接口使用说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html">6.5.2.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id3">6.5.2.2. 数据类型和数据结构</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id4">版本信息类</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hb-dnn-version-major"><code class="docutils literal notranslate"><span class="pre">HB_DNN_VERSION_MAJOR</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hb-dnn-version-minor"><code class="docutils literal notranslate"><span class="pre">HB_DNN_VERSION_MINOR</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hb-dnn-version-patch"><code class="docutils literal notranslate"><span class="pre">HB_DNN_VERSION_PATCH</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id5">模型类</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hb-dnn-tensor-max-dimensions"><code class="docutils literal notranslate"><span class="pre">HB_DNN_TENSOR_MAX_DIMENSIONS</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hb-dnn-initialize-infer-ctrl-param"><code class="docutils literal notranslate"><span class="pre">HB_DNN_INITIALIZE_INFER_CTRL_PARAM</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbpackeddnnhandle-t"><code class="docutils literal notranslate"><span class="pre">hbPackedDNNHandle_t</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnhandle-t"><code class="docutils literal notranslate"><span class="pre">hbDNNHandle_t</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnntaskhandle-t"><code class="docutils literal notranslate"><span class="pre">hbDNNTaskHandle_t</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnntensorlayout"><code class="docutils literal notranslate"><span class="pre">hbDNNTensorLayout</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnndatatype"><code class="docutils literal notranslate"><span class="pre">hbDNNDataType</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnntensorshape"><code class="docutils literal notranslate"><span class="pre">hbDNNTensorShape</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnquantishift"><code class="docutils literal notranslate"><span class="pre">hbDNNQuantiShift</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnquantiscale"><code class="docutils literal notranslate"><span class="pre">hbDNNQuantiScale</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnquantitype"><code class="docutils literal notranslate"><span class="pre">hbDNNQuantiType</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnntensorproperties"><code class="docutils literal notranslate"><span class="pre">hbDNNTensorProperties</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnntaskpriority"><code class="docutils literal notranslate"><span class="pre">hbDNNTaskPriority</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnntensor"><code class="docutils literal notranslate"><span class="pre">hbDNNTensor</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnroi"><code class="docutils literal notranslate"><span class="pre">hbDNNRoi</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnninferctrlparam"><code class="docutils literal notranslate"><span class="pre">hbDNNInferCtrlParam</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id6">系统类</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbbpucore"><code class="docutils literal notranslate"><span class="pre">hbBPUCore</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdspcore"><code class="docutils literal notranslate"><span class="pre">hbDSPCore</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbsysmem"><code class="docutils literal notranslate"><span class="pre">hbSysMem</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbsysmemflushflag"><code class="docutils literal notranslate"><span class="pre">hbSysMemFlushFlag</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id7">前处理类</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hb-dnn-initialize-resize-ctrl-param"><code class="docutils literal notranslate"><span class="pre">HB_DNN_INITIALIZE_RESIZE_CTRL_PARAM</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnresizetype"><code class="docutils literal notranslate"><span class="pre">hbDNNResizeType</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnresizectrlparam">hbDNNResizeCtrlParam</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id8">插件类</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnlayercreator"><code class="docutils literal notranslate"><span class="pre">hbDNNLayerCreator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#api">6.5.2.3. API接口</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id9">版本信息</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnngetversion"><code class="docutils literal notranslate"><span class="pre">hbDNNGetVersion()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id10">模型加载/释放</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnninitializefromfiles"><code class="docutils literal notranslate"><span class="pre">hbDNNInitializeFromFiles()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnninitializefromddr"><code class="docutils literal notranslate"><span class="pre">hbDNNInitializeFromDDR()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnrelease"><code class="docutils literal notranslate"><span class="pre">hbDNNRelease()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id11">模型信息</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnngetmodelnamelist"><code class="docutils literal notranslate"><span class="pre">hbDNNGetModelNameList()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnngetmodelhandle"><code class="docutils literal notranslate"><span class="pre">hbDNNGetModelHandle()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnngetinputcount"><code class="docutils literal notranslate"><span class="pre">hbDNNGetInputCount()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnngetinputname"><code class="docutils literal notranslate"><span class="pre">hbDNNGetInputName()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnngetinputtensorproperties"><code class="docutils literal notranslate"><span class="pre">hbDNNGetInputTensorProperties()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnngetoutputcount"><code class="docutils literal notranslate"><span class="pre">hbDNNGetOutputCount()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnngetoutputname"><code class="docutils literal notranslate"><span class="pre">hbDNNGetOutputName()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnngetoutputtensorproperties"><code class="docutils literal notranslate"><span class="pre">hbDNNGetOutputTensorProperties()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id12">模型推理</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnninfer"><code class="docutils literal notranslate"><span class="pre">hbDNNInfer()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnroiinfer"><code class="docutils literal notranslate"><span class="pre">hbDNNRoiInfer()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnwaittaskdone"><code class="docutils literal notranslate"><span class="pre">hbDNNWaitTaskDone()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnreleasetask"><code class="docutils literal notranslate"><span class="pre">hbDNNReleaseTask()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id14">内存操作</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbsysallocmem"><code class="docutils literal notranslate"><span class="pre">hbSysAllocMem()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbsysalloccachedmem"><code class="docutils literal notranslate"><span class="pre">hbSysAllocCachedMem()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbsysflushmem"><code class="docutils literal notranslate"><span class="pre">hbSysFlushMem()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbsysfreemem"><code class="docutils literal notranslate"><span class="pre">hbSysFreeMem()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbsyswritemem"><code class="docutils literal notranslate"><span class="pre">hbSysWriteMem()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbsysreadmem"><code class="docutils literal notranslate"><span class="pre">hbSysReadMem()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbsysregistermem"><code class="docutils literal notranslate"><span class="pre">hbSysRegisterMem()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbsysunregistermem"><code class="docutils literal notranslate"><span class="pre">hbSysUnregisterMem()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id15">前处理</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnresize"><code class="docutils literal notranslate"><span class="pre">hbDNNResize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id16">插件</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnregisterlayercreator"><code class="docutils literal notranslate"><span class="pre">hbDNNRegisterLayerCreator()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#hbdnnunregisterlayercreator"><code class="docutils literal notranslate"><span class="pre">hbDNNUnregisterLayerCreator()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id17">6.5.2.4. 数据排布及对齐规则</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id18">数据排布</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#bpu">BPU对齐限制规则</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id19">模型输入要求</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#stride">stride要求</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#nv12">NV12介绍</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#yuv">YUV格式</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id20">NV12排布</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id21">6.5.2.5. 错误码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id22">6.5.2.6. 配置信息</a></li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id23">6.5.2.7. 开发机模拟器使用注意事项</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/index.html">6.5.3. 模型上板分析工具说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html">6.5.3.1. 简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#hrt-model-exec">6.5.3.2. hrt_model_exec 工具使用说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#id2">输入参数描述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#id3">使用说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#model-info"><code class="docutils literal notranslate"><span class="pre">model_info</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#id4"><code class="docutils literal notranslate"><span class="pre">输入参数补充说明</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#infer"><code class="docutils literal notranslate"><span class="pre">infer</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#id5"><code class="docutils literal notranslate"><span class="pre">多输入模型说明</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#id6"><code class="docutils literal notranslate"><span class="pre">输入参数补充说明</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#perf"><code class="docutils literal notranslate"><span class="pre">perf</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#latency"><code class="docutils literal notranslate"><span class="pre">多线程Latency数据说明</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#id7"><code class="docutils literal notranslate"><span class="pre">输入参数补充说明</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#hrt-bin-dump">6.5.3.3. hrt_bin_dump 工具使用说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#id8">输入参数描述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#id9">使用说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/horizon_runtime_tools/hrt_tools.html#id10">示例说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/index.html">6.5.4. 公版模型精度评测说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/model_accuracy.html">6.5.4.1. 公版模型性能精度指标</a></li>
+<li class="toctree-l3"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html">6.5.4.2. 评测方法说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id2">简介</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id4">示例代码包结构</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id5">示例模型</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id7">公共数据集</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id8">环境构建</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id9">开发板准备</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id11">编译环境准备</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id14">测评示例使用说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id15">性能评测</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id16">测评脚本使用说明</a></li>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id17">命令行参数说明</a></li>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id18">配置文件说明</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id19">精度评测</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#data-preprocess">数据预处理</a></li>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id21">数据挂载</a></li>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id22">模型推理</a></li>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id24">精度计算</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id25">模型集成</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id26">后处理文件添加</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id27">增加模型运行脚本及配置文件</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id28">辅助工具和常用操作</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id29">日志系统使用说明</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id30">示例日志</a></li>
+<li class="toctree-l6"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#api-dnn">模型推理API DNN日志</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#id32">算子耗时说明</a></li>
+<li class="toctree-l5"><a class="reference internal" href="horizon_runtime_samples/ai_benchmark/ai-benchmark.html#dump">dump工具</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../mpp_develop/12-Media_Processing_Performance_Debug_Guide.html" class="btn btn-neutral float-left" title="5.12. 多媒体性能调试" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="preface_toolchain_overview.html" class="btn btn-neutral float-right" title="6.1. 简介" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

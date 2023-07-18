@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.17. 看门狗驱动调试指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.3.18. USB开发调试指南" href="usb_develop_guide/index.html" />
+    <link rel="prev" title="4.3.16. RTC 调试指南" href="26-RTC_Driver_Debug_Guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.17. </span>看门狗驱动调试指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="26-RTC_Driver_Debug_Guide.html" class="btn btn-neutral float-left" title="4.3.16. RTC 调试指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="usb_develop_guide/index.html" class="btn btn-neutral float-right" title="4.3.18. USB开发调试指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">4.3.17. </span>看门狗驱动调试指南<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>代码路径</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">drivers</span><span class="o">/</span><span class="n">watchdog</span><span class="o">/</span><span class="n">hobot_wdt</span><span class="o">.</span><span class="n">c</span> <span class="c1"># watchdog 驱动代码源文件</span>
+<span class="n">include</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">watchdog</span><span class="o">.</span><span class="n">h</span> <span class="c1"># watchdog 驱动代码头文件</span>
+</pre></div>
+</div>
+<p>dts配置</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">arch</span><span class="o">/</span><span class="n">arm64</span><span class="o">/</span><span class="n">boot</span><span class="o">/</span><span class="n">dts</span><span class="o">/</span><span class="n">hobot</span><span class="o">/</span><span class="n">hobot</span><span class="o">-</span><span class="n">xj3</span><span class="o">.</span><span class="n">dtsi</span> <span class="o">*/</span>
+<span class="n">watchdog</span><span class="p">:</span> <span class="n">watchdog</span><span class="o">@</span><span class="mh">0xA1002000</span> <span class="p">{</span>
+    <span class="n">compatible</span> <span class="o">=</span> <span class="s2">&quot;hobot,hobot-wdt&quot;</span><span class="p">;</span>
+    <span class="n">reg</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">0</span> <span class="mh">0xA1002000</span> <span class="mi">0</span> <span class="mh">0x1000</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="n">clocks</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">timer0_mclk</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="n">clock</span><span class="o">-</span><span class="n">names</span> <span class="o">=</span> <span class="s2">&quot;watchdog_mclk&quot;</span><span class="p">;</span>
+    <span class="n">interrupt</span><span class="o">-</span><span class="n">parent</span> <span class="o">=</span> <span class="o">&lt;&amp;</span><span class="n">gic</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="n">interrupts</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">0</span> <span class="mi">15</span> <span class="mi">4</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="n">pet</span><span class="o">-</span><span class="n">time</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">6</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="n">bark</span><span class="o">-</span><span class="n">time</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">11</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="n">bite</span><span class="o">-</span><span class="n">time</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">15</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;disabled&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="o">/*</span> <span class="n">arch</span><span class="o">/</span><span class="n">arm64</span><span class="o">/</span><span class="n">boot</span><span class="o">/</span><span class="n">dts</span><span class="o">/</span><span class="n">hobot</span><span class="o">/</span><span class="n">hobot</span><span class="o">-</span><span class="n">x3</span><span class="o">-</span><span class="n">sdb</span><span class="o">.</span><span class="n">dts</span> <span class="o">*/</span>
+<span class="o">&amp;</span><span class="n">watchdog</span> <span class="p">{</span>
+	<span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="o">/*</span> <span class="n">arch</span><span class="o">/</span><span class="n">arm64</span><span class="o">/</span><span class="n">boot</span><span class="o">/</span><span class="n">dts</span><span class="o">/</span><span class="n">hobot</span><span class="o">/</span><span class="n">hobot</span><span class="o">-</span><span class="n">xj3</span><span class="o">-</span><span class="n">xvb</span><span class="o">.</span><span class="n">dtsi</span> <span class="o">*/</span>
+<span class="o">&amp;</span><span class="n">watchdog</span> <span class="p">{</span>
+	<span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>内核配置</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">arch</span><span class="o">/</span><span class="n">arm64</span><span class="o">/</span><span class="n">configs</span><span class="o">/</span><span class="n">xj3_debug_defconfig</span> <span class="o">*/</span>
+<span class="n">CONFIG_WATCHDOG</span><span class="o">=</span><span class="n">y</span>
+<span class="n">CONFIG_WATCHDOG_CORE</span><span class="o">=</span><span class="n">y</span>
+<span class="c1"># CONFIG_WATCHDOG_NOWAYOUT is not set</span>
+<span class="n">CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED</span><span class="o">=</span><span class="n">y</span>
+<span class="c1"># CONFIG_WATCHDOG_SYSFS is not set</span>
+<span class="c1">#</span>
+<span class="c1"># Watchdog Device Drivers</span>
+<span class="c1">#</span>
+<span class="c1"># CONFIG_SOFT_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_GPIO_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_XILINX_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_ZIIRAVE_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_ARM_SP805_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_ARM_SBSA_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_CADENCE_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_DW_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_MAX63XX_WATCHDOG is not set</span>
+<span class="n">CONFIG_HOBOT_WATCHDOG</span><span class="o">=</span><span class="n">y</span>
+<span class="c1"># CONFIG_HOBOT_WATCHDOG_ENABLE is not set/*打开这个选项系统会自动喂狗*/</span>
+<span class="n">CONFIG_HOBOT_WATCHDOG_TEST</span><span class="o">=</span><span class="n">y</span>
+<span class="c1"># CONFIG_MEN_A21_WDT is not set</span>
+
+<span class="o">/*</span> <span class="n">arch</span><span class="o">/</span><span class="n">arm64</span><span class="o">/</span><span class="n">configs</span><span class="o">/</span><span class="n">xj3_debug_defconfig</span> <span class="o">*/</span>
+<span class="n">CONFIG_WATCHDOG</span><span class="o">=</span><span class="n">y</span>
+<span class="n">CONFIG_WATCHDOG_CORE</span><span class="o">=</span><span class="n">y</span>
+<span class="c1"># CONFIG_WATCHDOG_NOWAYOUT is not set</span>
+<span class="n">CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED</span><span class="o">=</span><span class="n">y</span>
+<span class="c1"># CONFIG_WATCHDOG_SYSFS is not set</span>
+
+<span class="c1">#</span>
+<span class="c1"># Watchdog Device Drivers</span>
+<span class="c1">#</span>
+<span class="c1"># CONFIG_SOFT_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_GPIO_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_XILINX_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_ZIIRAVE_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_ARM_SP805_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_ARM_SBSA_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_CADENCE_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_DW_WATCHDOG is not set</span>
+<span class="c1"># CONFIG_MAX63XX_WATCHDOG is not set</span>
+<span class="n">CONFIG_HOBOT_WATCHDOG</span><span class="o">=</span><span class="n">y</span>
+<span class="n">CONFIG_HOBOT_WATCHDOG_ENABLE</span><span class="o">=</span><span class="n">y</span><span class="o">/*</span><span class="n">打开这个选项系统会自动喂狗</span><span class="o">*/</span>
+<span class="c1"># CONFIG_HOBOT_WATCHDOG_TEST is not set</span>
+<span class="c1"># CONFIG_MEN_A21_WDT is not set</span>
+</pre></div>
+</div>
+<p>使用示例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt; //UNIX标准函数定义
+#include &lt;sys/types.h&gt;
+#include &lt;sys/stat.h&gt;
+#include &lt;fcntl.h&gt;  //文件控制定义
+#include &lt;termios.h&gt;    //PPSIX终端控制定义
+#include &lt;errno.h&gt;  //错误号定义
+#include &lt;pthread.h&gt;
+#include &lt;linux/watchdog.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/ioctl.h&gt;
+
+int watchdogfd;
+int feeddog = 1;
+
+void* feeddogthread()
+{
+	int feeddogvalue;
+	int returnval;
+
+	feeddogvalue = 65535;
+
+	while (feeddog) {
+		//每隔10秒，将重载看门狗计数寄存器的值
+		printf(&quot;feed dog\n&quot;);
+		returnval = write(watchdogfd, &amp;feeddogvalue, sizeof(int));
+		sleep(10);
+	}
+}
+
+int main()
+{
+	pthread_t watchdogThd;
+	//int watchdogfd;
+	int returnval;
+	char readline[32], *p;
+
+	//打开看门狗设备
+	if ((watchdogfd = open(&quot;/dev/watchdog&quot;, O_RDWR|O_NONBLOCK)) &lt; 0) {
+		printf(&quot;cannot open the watchdog device\n&quot;);
+		exit(0);
+	}
+
+	int timeout = 15;
+	int timeleft;
+    ioctl(watchdogfd, WDIOC_SETTIMEOUT, &amp;timeout);
+    printf(&quot;The timeout was set to %d seconds\n&quot;, timeout);
+
+	//创建喂狗线程
+	returnval = pthread_create(&amp;watchdogThd, NULL, feeddogthread, NULL);
+	if (returnval &lt; 0)
+		printf(&quot;cannot create feeddog thread\n&quot;);
+
+	while (1) {
+		printf(&quot;Command (e quit): &quot;);
+		memset(readline, &#39;\0&#39;, sizeof(readline));
+        fgets(readline, sizeof(readline), stdin);
+    
+        /* 去字符串前部空字符 */
+        p = readline;
+        while(*p == &#39; &#39; || *p == &#39;\t&#39;)
+                p++;
+
+        switch(*p) {
+        case &#39;g&#39;:
+        	ioctl(watchdogfd, WDIOC_GETTIMEOUT, &amp;timeout);
+    		printf(&quot;The timeout was is %d seconds\n&quot;, timeout);
+    		break;
+    	case &#39;e&#39;:
+			printf(&quot;Close watchdog an exit safety!\n&quot;);
+			//write(watchdogfd, &quot;V&quot;, 1);
+			int disable_dog = WDIOS_DISABLECARD;
+			ioctl(watchdogfd, WDIOC_SETOPTIONS, &amp;disable_dog);
+			close(watchdogfd);
+			break;
+		case &#39;s&#39;:
+			printf(&quot;stop feed dog\n&quot;);
+			feeddog = 0;
+			break;
+		case &#39;t&#39;:
+			ioctl(watchdogfd, WDIOC_GETTIMELEFT, &amp;timeleft);
+    		printf(&quot;The timeout was is %d seconds\n&quot;, timeleft);
+    		break;
+		case &#39;r&#39;: 
+			printf(&quot;we don&#39;t close watchdog. The machine will reboot in a few seconds!\n&quot;);
+			printf(&quot;wait......\n&quot;);
+			break;
+		default:
+			printf(&quot;get error char: %c\n&quot;, *p);
+        }
+		
+	}
+
+	return 0;
+}
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="26-RTC_Driver_Debug_Guide.html" class="btn btn-neutral float-left" title="4.3.16. RTC 调试指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="usb_develop_guide/index.html" class="btn btn-neutral float-right" title="4.3.18. USB开发调试指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

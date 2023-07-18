@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6.5.3.1. 简介 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+    <link rel="next" title="6.5.4. 公版模型精度评测说明" href="../ai_benchmark/index.html" />
+    <link rel="prev" title="6.5.3. 模型上板分析工具说明" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">6. 量化工具链开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../preface_toolchain_overview.html">6.1. 简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../env_install.html">6.2. 环境安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html">6.3. 快速体验</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../horizon_ai_toolchain_user_guide/index.html">6.4. 训练后量化(PTQ)使用说明</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">6.5. 上板运行(runtime)应用开发说明</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../horizon_runtime_sample/index.html">6.5.1. 模型上板运行示例说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../bpu_sdk_api_doc/index.html">6.5.2. 模型推理接口使用说明</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">6.5.3. 模型上板分析工具说明</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">6.5.3.1. 简介</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hrt-model-exec">6.5.3.2. hrt_model_exec 工具使用说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id2">输入参数描述</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id3">使用说明</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#model-info"><code class="docutils literal notranslate"><span class="pre">model_info</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#infer"><code class="docutils literal notranslate"><span class="pre">infer</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#perf"><code class="docutils literal notranslate"><span class="pre">perf</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hrt-bin-dump">6.5.3.3. hrt_bin_dump 工具使用说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id8">输入参数描述</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id9">使用说明</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id10">示例说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../ai_benchmark/index.html">6.5.4. 公版模型精度评测说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html"><span class="section-number">6. </span>量化工具链开发指南</a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">6.5. </span>上板运行(runtime)应用开发说明</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">6.5.3. </span>模型上板分析工具说明</a> &raquo;</li>
+      <li><span class="section-number">6.5.3.1. </span>简介</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="6.5.3. 模型上板分析工具说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../ai_benchmark/index.html" class="btn btn-neutral float-right" title="6.5.4. 公版模型精度评测说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">6.5.3.1. </span>简介<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>本章节介绍地平线量化工具链中模型上板推理的快速验证工具，使用工具可以快速获取 <code class="docutils literal notranslate"><span class="pre">***.bin</span></code> 模型的信息、模型推理的性能、模型debug等内容。</p>
+</section>
+<section id="hrt-model-exec">
+<h1><span class="section-number">6.5.3.2. </span>hrt_model_exec 工具使用说明<a class="headerlink" href="#hrt-model-exec" title="永久链接至标题"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">hrt_model_exec</span></code> 工具，可以快速在开发板上评测模型的推理性能、获取模型信息等。</p>
+<p>目前工具提供了三类功能，如下表所示：</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 24%" />
+<col style="width: 62%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>编号</strong></p></td>
+<td><p><strong>子命令</strong></p></td>
+<td><p><strong>说明</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">model_info</span></code></p></td>
+<td><p>获取模型信息，如：模型的输入输出信息等。</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">infer</span></code></p></td>
+<td><p>执行模型推理，获取模型推理结果。</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">perf</span></code></p></td>
+<td><p>执行模型性能分析，获取性能分析结果。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>工具也可以通过 <code class="docutils literal notranslate"><span class="pre">-v</span></code> 或者 <code class="docutils literal notranslate"><span class="pre">--version</span></code> 命令，查看工具的 <code class="docutils literal notranslate"><span class="pre">dnn</span></code> 预测库版本号。</p>
+<p>例如： hrt_model_exec -v 或 hrt_model_exec –version</p>
+</div>
+<section id="id2">
+<h2>输入参数描述<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>在开发板上运行 <code class="docutils literal notranslate"><span class="pre">hrt_model_exec</span></code> 、 <code class="docutils literal notranslate"><span class="pre">hrt_model_exec</span> <span class="pre">-h</span></code> 或 <code class="docutils literal notranslate"><span class="pre">hrt_model_exec</span> <span class="pre">--help</span></code> 获取工具的使用参数详情。
+如下图中所示：</p>
+<img alt="../../../_images/hrt_model_exec_help.png" src="../../../_images/hrt_model_exec_help.png" />
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 31%" />
+<col style="width: 9%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>编号</strong></p></td>
+<td><p><strong>参数</strong></p></td>
+<td><p><strong>类型</strong></p></td>
+<td><p><strong>说明</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">model_file</span></code></p></td>
+<td><p>string</p></td>
+<td><p>模型文件路径，多个路径可通过逗号分隔。</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">model_name</span></code></p></td>
+<td><p>string</p></td>
+<td><p>指定模型中某个模型的名称。</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">core_id</span></code></p></td>
+<td><p>int</p></td>
+<td><p>指定运行核。</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input_file</span></code></p></td>
+<td><p>string</p></td>
+<td><p>模型输入信息，多个可通过逗号分隔。</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">roi_infer</span></code></p></td>
+<td><p>bool</p></td>
+<td><p>使能resizer模型推理。</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">roi</span></code></p></td>
+<td><p>string</p></td>
+<td><p>指定推理resizer模型时所需的roi区域。</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">frame_count</span></code></p></td>
+<td><p>int</p></td>
+<td><p>执行模型运行帧数。</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dump_intermediate</span></code></p></td>
+<td><p>string</p></td>
+<td><p>dump模型每一层输入和输出。</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">enable_dump</span></code></p></td>
+<td><p>bool</p></td>
+<td><p>使能dump模型输入和输出。</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dump_precision</span></code></p></td>
+<td><p>int</p></td>
+<td><p>控制txt格式输出float型数据的小数点位数。</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hybrid_dequantize_process</span></code></p></td>
+<td><p>bool</p></td>
+<td><p>控制txt格式输出float类型数据。</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dump_format</span></code></p></td>
+<td><p>string</p></td>
+<td><p>dump模型输入和输出的格式。</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dump_txt_axis</span></code></p></td>
+<td><p>int</p></td>
+<td><p>控制txt格式输入输出的换行规则。</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">enable_cls_post_process</span></code></p></td>
+<td><p>bool</p></td>
+<td><p>使能分类后处理。</p></td>
+</tr>
+<tr class="row-even"><td><p>15</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">perf_time</span></code></p></td>
+<td><p>int</p></td>
+<td><p>执行模型运行时间。</p></td>
+</tr>
+<tr class="row-odd"><td><p>16</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">thread_num</span></code></p></td>
+<td><p>int</p></td>
+<td><p>指定程序运行线程数。</p></td>
+</tr>
+<tr class="row-even"><td><p>17</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">profile_path</span></code></p></td>
+<td><p>string</p></td>
+<td><p>模型性能/调度性能统计数据的保存路径。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id3">
+<h2>使用说明<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p>本节介绍 <code class="docutils literal notranslate"><span class="pre">hrt_model_exec</span></code> 工具的三个子功能的具体使用方法</p>
+<section id="model-info">
+<h3><code class="docutils literal notranslate"><span class="pre">model_info</span></code><a class="headerlink" href="#model-info" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>概述</p></li>
+</ul>
+<p>该参数用于获取模型信息，模型支持范围：QAT模型，PTQ模型。
+该参数与 <code class="docutils literal notranslate"><span class="pre">model_file</span></code> 一起使用，用于获取模型的详细信息；
+模型的信息包括：模型输入输出信息 <code class="docutils literal notranslate"><span class="pre">hbDNNTensorProperties</span></code> 和模型的分段信息 <code class="docutils literal notranslate"><span class="pre">stage</span></code> ；模型的分段信息是：一张图片可以分多个阶段进行推理，stage信息为[x1, y1, x2, y2]，分别为图片推理的左上角和右下角坐标，目前地平线J5的bayes架构支持这类分段模型的推理，xj3上模型均为1个stage。</p>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>不指定 <code class="docutils literal notranslate"><span class="pre">model_name</span></code> ，则会输出模型中所有模型信息，指定 <code class="docutils literal notranslate"><span class="pre">model_name</span></code> ，则只输出对应模型的信息。</p>
+</div>
+<ul class="simple">
+<li><p>示例说明</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>单模型</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrt_model_exec</span> <span class="n">model_info</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>多模型（输出所有模型信息）</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrt_model_exec</span> <span class="n">model_info</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span><span class="p">,</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>多模型–pack模型（输出指定模型信息）</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrt_model_exec</span> <span class="n">model_info</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span> <span class="o">--</span><span class="n">model_name</span><span class="o">=</span><span class="n">xx</span>
+</pre></div>
+</div>
+<img alt="../../../_images/model_info.png" src="../../../_images/model_info.png" />
+<section id="id4">
+<h4><code class="docutils literal notranslate"><span class="pre">输入参数补充说明</span></code><a class="headerlink" href="#id4" title="永久链接至标题"></a></h4>
+<ul class="simple">
+<li><p>重复输入</p></li>
+</ul>
+<p>若重复指定参数输入，则会发生参数覆盖的情况，例如：获取模型信息时重复指定了两个模型文件，则会取后面指定的参数输入 <code class="docutils literal notranslate"><span class="pre">yyy.bin</span></code>：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrt_model_exec</span> <span class="n">model_info</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">yyy</span><span class="o">.</span><span class="n">bin</span>
+</pre></div>
+</div>
+<p>若重复指定输入时，未加命令行参–model_file，则会取命令行参数后面的值，未加参数的不识别，
+例如：下例会忽略 <code class="docutils literal notranslate"><span class="pre">yyy.bin</span></code>，参数值为 <code class="docutils literal notranslate"><span class="pre">xxx.bin</span></code>：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrt_model_exec</span> <span class="n">model_info</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span> <span class="n">yyy</span><span class="o">.</span><span class="n">bin</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="infer">
+<h3><code class="docutils literal notranslate"><span class="pre">infer</span></code><a class="headerlink" href="#infer" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>概述</p></li>
+</ul>
+<p>该参数用于输入自定义图片后，模型推理一帧，并给出模型推理结果。
+该参数需要与 <code class="docutils literal notranslate"><span class="pre">input_file</span></code> 一起使用，指定输入图片路径，工具会根据模型信息resize图片。</p>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>程序单线程运行单帧数据，输出模型运行的时间。</p>
+</div>
+<ul class="simple">
+<li><p>示例说明</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>单模型</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrt_model_exec</span> <span class="n">infer</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span> <span class="o">--</span><span class="n">input_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">jpg</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>多模型</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrt_model_exec</span> <span class="n">infer</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span><span class="p">,</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span> <span class="o">--</span><span class="n">model_name</span><span class="o">=</span><span class="n">xx</span> <span class="o">--</span><span class="n">input_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">jpg</span>
+</pre></div>
+</div>
+<img alt="../../../_images/infer.png" src="../../../_images/infer.png" />
+<ul class="simple">
+<li><p>可选参数</p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>参数</p></td>
+<td><p>说明</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">core_id</span></code></p></td>
+<td><p>指定模型推理的核id，0：任意核，1：core0，2：core1；默认为 <code class="docutils literal notranslate"><span class="pre">0</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">roi_infer</span></code></p></td>
+<td><p>使能resizer模型推理；若模型输入包含resizer源，设置为 <code class="docutils literal notranslate"><span class="pre">true</span></code>，默认为 <code class="docutils literal notranslate"><span class="pre">false</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">roi</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">roi_infer</span></code> 为 <code class="docutils literal notranslate"><span class="pre">true</span></code> 时生效，设置推理resizer模型时所需的 <code class="docutils literal notranslate"><span class="pre">roi</span></code> 区域以分号间隔。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">frame_count</span></code></p></td>
+<td><p>设置 <code class="docutils literal notranslate"><span class="pre">infer</span></code> 运行帧数，单帧重复推理，可与 <code class="docutils literal notranslate"><span class="pre">enable_dump</span></code> 并用，验证输出一致性，默认为 <code class="docutils literal notranslate"><span class="pre">1</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dump_intermediate</span></code></p></td>
+<td><p>dump模型每一层输入数据和输出数据，默认值 <code class="docutils literal notranslate"><span class="pre">0</span></code>，不dump数据。 <code class="docutils literal notranslate"><span class="pre">1</span></code>：输出文件类型为 <code class="docutils literal notranslate"><span class="pre">bin</span></code>；
+<code class="docutils literal notranslate"><span class="pre">2</span></code>：输出类型为 <code class="docutils literal notranslate"><span class="pre">bin</span></code> 和 <code class="docutils literal notranslate"><span class="pre">txt</span></code>，其中BPU节点输出为aligned数据； <code class="docutils literal notranslate"><span class="pre">3</span></code>：输出类型为 <code class="docutils literal notranslate"><span class="pre">bin</span></code> 和 <code class="docutils literal notranslate"><span class="pre">txt</span></code>，其中BPU节点输出为valid数据。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">enable_dump</span></code></p></td>
+<td><p>dump模型输出数据，默认为 <code class="docutils literal notranslate"><span class="pre">false</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dump_precision</span></code></p></td>
+<td><p>控制txt格式输出float型数据的小数点位数，默认为 <code class="docutils literal notranslate"><span class="pre">9</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hybrid_dequantize_process</span></code></p></td>
+<td><p>控制txt格式输出float类型数据，若输出为定点数据将其进行反量化处理，目前只支持四维模型。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dump_format</span></code></p></td>
+<td><p>dump模型输出文件的类型，可选参数为 <code class="docutils literal notranslate"><span class="pre">bin</span></code> 或 <code class="docutils literal notranslate"><span class="pre">txt</span></code>，默认为 <code class="docutils literal notranslate"><span class="pre">bin</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dump_txt_axis</span></code></p></td>
+<td><p>dump模型txt格式输出的换行规则；若输出维度为n，则参数范围为[0, n], 默认为 <code class="docutils literal notranslate"><span class="pre">4</span></code>。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enable_cls_post_process</span></code></p></td>
+<td><p>使能分类后处理，目前只支持ptq分类模型，默认 <code class="docutils literal notranslate"><span class="pre">false</span></code>。</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id5">
+<h4><code class="docutils literal notranslate"><span class="pre">多输入模型说明</span></code><a class="headerlink" href="#id5" title="永久链接至标题"></a></h4>
+<p>工具 <code class="docutils literal notranslate"><span class="pre">infer</span></code> 推理功能支持多输入模型的推理，支持图片输入、二进制文件输入以及文本文件输入，输入数据用逗号隔开。
+模型的输入信息可以通过 <code class="docutils literal notranslate"><span class="pre">model_info</span></code> 进行查看。</p>
+<ul class="simple">
+<li><p>示例说明</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrt_model_exec</span> <span class="n">infer</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span> <span class="o">--</span><span class="n">input_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">jpg</span><span class="p">,</span><span class="nb">input</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h4><code class="docutils literal notranslate"><span class="pre">输入参数补充说明</span></code><a class="headerlink" href="#id6" title="永久链接至标题"></a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">input_file</span></code></p></li>
+</ul>
+<p>图片类型的输入，其文件名后缀必须为 <code class="docutils literal notranslate"><span class="pre">bin</span></code> / <code class="docutils literal notranslate"><span class="pre">JPG</span></code> / <code class="docutils literal notranslate"><span class="pre">JPEG</span></code> / <code class="docutils literal notranslate"><span class="pre">jpg</span></code> / <code class="docutils literal notranslate"><span class="pre">jpeg</span></code> 中的一种，feature输入后缀名必须为 <code class="docutils literal notranslate"><span class="pre">bin</span></code> / <code class="docutils literal notranslate"><span class="pre">txt</span></code> 中的一种。
+每个输入之间需要用英文字符的逗号隔开 <code class="docutils literal notranslate"><span class="pre">,</span></code>，例如： <code class="docutils literal notranslate"><span class="pre">xxx.jpg,input.txt</span></code>。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">enable_cls_post_process</span></code></p></li>
+</ul>
+<p>使能分类后处理。子命令为 <code class="docutils literal notranslate"><span class="pre">infer</span></code> 时配合使用，目前只支持在PTQ分类模型的后处理时使用，变量为 <code class="docutils literal notranslate"><span class="pre">true</span></code> 时打印分类结果。
+参见下图：</p>
+<img alt="../../../_images/enable_cls_post_process.png" src="../../../_images/enable_cls_post_process.png" />
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">roi_infer</span></code></p></li>
+</ul>
+<p>若模型包含resizer输入源， <code class="docutils literal notranslate"><span class="pre">infer</span></code> 和 <code class="docutils literal notranslate"><span class="pre">perf</span></code> 功能都需要设置 <code class="docutils literal notranslate"><span class="pre">roi_infer</span></code> 为true，并且配置与输入源一一对应的 <code class="docutils literal notranslate"><span class="pre">input_file</span></code> 和 <code class="docutils literal notranslate"><span class="pre">roi</span></code> 参数。
+如：模型有三个输入，输入源顺序分别为[<code class="docutils literal notranslate"><span class="pre">ddr</span></code>, <code class="docutils literal notranslate"><span class="pre">resizer</span></code>, <code class="docutils literal notranslate"><span class="pre">resizer</span></code>]，则推理两组输入数据的命令行如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">infer</span>
+<span class="n">hrt_model_exec</span> <span class="n">infer</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span> <span class="o">--</span><span class="n">input_file</span><span class="o">=</span><span class="s2">&quot;xx0.bin,xx1.jpg,xx2.jpg,xx3.bin,xx4.jpg,xx5.jpg&quot;</span>  <span class="o">--</span><span class="n">roi</span><span class="o">=</span><span class="s2">&quot;2,4,123,125;6,8,111,113;27,46,143,195;16,28,131,183&quot;</span>
+<span class="o">//</span> <span class="n">perf</span>
+<span class="n">hrt_model_exec</span> <span class="n">perf</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span> <span class="o">--</span><span class="n">input_file</span><span class="o">=</span><span class="s2">&quot;xx0.bin,xx1.jpg,xx2.jpg,xx3.bin,xx4.jpg,xx5.jpg&quot;</span>   <span class="o">--</span><span class="n">roi</span><span class="o">=</span><span class="s2">&quot;2,4,123,125;6,8,111,113;27,46,143,195;16,28,131,183&quot;</span>
+</pre></div>
+</div>
+<p>每个 <code class="docutils literal notranslate"><span class="pre">roi</span></code> 输入之间需要用英文字符的分号隔开。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dump_intermediate</span></code></p></li>
+</ul>
+<p>dump模型每一层节点的输入数据和输出数据。 <code class="docutils literal notranslate"><span class="pre">dump_intermediate=0</span></code> 时，默认dump功能关闭；
+<code class="docutils literal notranslate"><span class="pre">dump_intermediate=1</span></code> 时，模型中每一层节点输入数据和输出数据以 <code class="docutils literal notranslate"><span class="pre">bin</span></code> 方式保存，其中 <code class="docutils literal notranslate"><span class="pre">BPU</span></code> 节点输出为 <code class="docutils literal notranslate"><span class="pre">aligned</span></code> 数据；
+<code class="docutils literal notranslate"><span class="pre">dump_intermediate=2</span></code> 时，模型中每一层节点输入数据和输出数据以 <code class="docutils literal notranslate"><span class="pre">bin</span></code> 和 <code class="docutils literal notranslate"><span class="pre">txt</span></code> 两种方式保存，其中 <code class="docutils literal notranslate"><span class="pre">BPU</span></code> 节点输出为 <code class="docutils literal notranslate"><span class="pre">aligned</span></code> 数据；
+<code class="docutils literal notranslate"><span class="pre">dump_intermediate=3</span></code> 时，模型中每一层节点输入数据和输出数据以 <code class="docutils literal notranslate"><span class="pre">bin</span></code> 和 <code class="docutils literal notranslate"><span class="pre">txt</span></code> 两种方式保存，其中 <code class="docutils literal notranslate"><span class="pre">BPU</span></code> 节点输出为 <code class="docutils literal notranslate"><span class="pre">valid</span></code> 数据。
+如： 模型有两个输入，输入源顺序分别为[<code class="docutils literal notranslate"><span class="pre">pyramid</span></code>， <code class="docutils literal notranslate"><span class="pre">ddr</span></code>]，将模型每一层节点的输入和输出保存为 <code class="docutils literal notranslate"><span class="pre">bin</span></code> 文件，其中 <code class="docutils literal notranslate"><span class="pre">BPU</span></code> 节点输出按 <code class="docutils literal notranslate"><span class="pre">aligned</span></code> 类型保存，则推理命令行如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrt_model_exec</span> <span class="n">infer</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span> <span class="o">--</span><span class="n">input_file</span><span class="o">=</span><span class="s2">&quot;xx0.jpg,xx1.bin&quot;</span>  <span class="o">--</span><span class="n">dump_intermediate</span><span class="o">=</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">dump_intermediate</span></code> 参数支持 <code class="docutils literal notranslate"><span class="pre">infer</span></code> 和 <code class="docutils literal notranslate"><span class="pre">perf</span></code> 两种模式。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hybrid_dequantize_process</span></code></p></li>
+</ul>
+<p>控制txt格式输出float类型数据。 <code class="docutils literal notranslate"><span class="pre">hybrid_dequantize_process</span></code> 参数在 <code class="docutils literal notranslate"><span class="pre">enable_dump=true</span></code> 时生效。
+当 <code class="docutils literal notranslate"><span class="pre">enable_dump=true</span></code> 时，若设置 <code class="docutils literal notranslate"><span class="pre">hybrid_dequantize_process=true</span></code> ，反量化整型输出数据，将所有输出按float类型保存为 <code class="docutils literal notranslate"><span class="pre">txt</span></code> 文件，其中模型输出为 <code class="docutils literal notranslate"><span class="pre">valid</span></code> 数据，支持配置 <code class="docutils literal notranslate"><span class="pre">dump_txt_axis</span></code> 和 <code class="docutils literal notranslate"><span class="pre">dump_precision</span></code>；
+若设置 <code class="docutils literal notranslate"><span class="pre">hybrid_dequantize_process=false</span></code> ，直接保存模型输出的 <code class="docutils literal notranslate"><span class="pre">aligned</span></code> 数据，不做任何处理。
+如： 模型有3个输出，输出Tensor数据类型顺序分别为[float，int32，int16]， 输出txt格式float类型的 <code class="docutils literal notranslate"><span class="pre">valid</span></code> 数据， 则推理命令行如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">输出float类型数据</span>
+<span class="n">hrt_model_exec</span> <span class="n">infer</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span> <span class="o">--</span><span class="n">input_file</span><span class="o">=</span><span class="s2">&quot;xx.bin&quot;</span>  <span class="o">--</span><span class="n">enable_dump</span><span class="o">=</span><span class="n">true</span> <span class="o">--</span><span class="n">hybrid_dequantize_process</span><span class="o">=</span><span class="n">true</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">hybrid_dequantize_process</span></code> 参数目前只支持四维模型。</p>
+</section>
+</section>
+<section id="perf">
+<h3><code class="docutils literal notranslate"><span class="pre">perf</span></code><a class="headerlink" href="#perf" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>概述</p></li>
+</ul>
+<p>该参数用于测试模型的推理性能。
+使用此工具命令，用户无需输入数据，程序会根据模型信息自动构造模型的输入tensor，tensor数据为随机数。
+程序默认单线程运行200帧数据，当指定perf_time参数时，frame_count参数失效，程序会执行指定时间后退出。
+程序运行完成后，会输出模型运行的程序线程数、帧数、模型推理总时间，模型推理平均latency，帧率信息等。</p>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>程序每200帧打印一次性能信息：latnecy的最大、最小、平均值，不足200帧程序运行结束打印一次。</p>
+</div>
+<ul class="simple">
+<li><p>示例说明</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>单模型</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrt_model_exec</span> <span class="n">perf</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>多模型</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrt_model_exec</span> <span class="n">perf</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span><span class="p">,</span><span class="n">xxx</span><span class="o">.</span><span class="n">bin</span> <span class="o">--</span><span class="n">model_name</span><span class="o">=</span><span class="n">xx</span>
+</pre></div>
+</div>
+<img alt="../../../_images/perf.png" src="../../../_images/perf.png" />
+<ul class="simple">
+<li><p>可选参数</p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 81%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>参数</p></td>
+<td><p>说明</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">core_id</span></code></p></td>
+<td><p>指定模型推理的核id，0：任意核，1：core0，2：core1；默认为 <code class="docutils literal notranslate"><span class="pre">0</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">input_file</span></code></p></td>
+<td><p>模型输入信息，多个可通过逗号分隔。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">roi_infer</span></code></p></td>
+<td><p>使能resizer模型推理；若模型输入包含resizer源，设置为 <code class="docutils literal notranslate"><span class="pre">true</span></code>，默认为 <code class="docutils literal notranslate"><span class="pre">false</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">roi</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">roi_infer</span></code> 为 <code class="docutils literal notranslate"><span class="pre">true</span></code> 时生效，设置推理resizer模型时所需的 <code class="docutils literal notranslate"><span class="pre">roi</span></code> 区域以分号间隔。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">frame_count</span></code></p></td>
+<td><p>设置 <code class="docutils literal notranslate"><span class="pre">perf</span></code> 运行帧数，当perf_time为0时生效，默认为 <code class="docutils literal notranslate"><span class="pre">200</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dump_intermediate</span></code></p></td>
+<td><p>dump模型每一层输入数据和输出数据，默认值 <code class="docutils literal notranslate"><span class="pre">0</span></code>，不dump数据。 <code class="docutils literal notranslate"><span class="pre">1</span></code>：输出文件类型为 <code class="docutils literal notranslate"><span class="pre">bin</span></code>；
+<code class="docutils literal notranslate"><span class="pre">2</span></code>：输出类型为 <code class="docutils literal notranslate"><span class="pre">bin</span></code> 和 <code class="docutils literal notranslate"><span class="pre">txt</span></code>，其中BPU节点输出为aligned数据； <code class="docutils literal notranslate"><span class="pre">3</span></code>：输出类型为 <code class="docutils literal notranslate"><span class="pre">bin</span></code> 和 <code class="docutils literal notranslate"><span class="pre">txt</span></code>，其中BPU节点输出为valid数据。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">perf_time</span></code></p></td>
+<td><p>设置 <code class="docutils literal notranslate"><span class="pre">perf</span></code> 运行时间，单位：分钟，默认为 <code class="docutils literal notranslate"><span class="pre">0</span></code>。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">thread_num</span></code></p></td>
+<td><p>设置程序运行线程数，范围[1, 8], 默认为 <code class="docutils literal notranslate"><span class="pre">1</span></code>, 设置大于8时按照8个线程处理。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">profile_path</span></code></p></td>
+<td><p>统计工具日志产生路径，运行产生profiler.log，分析op耗时和调度耗时。</p></td>
+</tr>
+</tbody>
+</table>
+<section id="latency">
+<h4><code class="docutils literal notranslate"><span class="pre">多线程Latency数据说明</span></code><a class="headerlink" href="#latency" title="永久链接至标题"></a></h4>
+<p>多线程的目的是为了充分利用BPU资源，多线程共同处理 <code class="docutils literal notranslate"><span class="pre">frame_count</span></code> 帧数据或执行perf_time时间，直至数据处理完成/执行时间结束程序结束。
+在多线程 <code class="docutils literal notranslate"><span class="pre">perf</span></code> 过程中可以执行以下命令，实时获取BPU资源占用率情况。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hrut_somstatus -n <span class="m">10000</span> –d <span class="m">1</span>
+</pre></div>
+</div>
+<p>输出内容如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">=====================</span><span class="nv">1</span><span class="o">=====================</span>
+temperature--&gt;
+        CPU      : <span class="m">37</span>.5 <span class="o">(</span>C<span class="o">)</span>
+cpu frequency--&gt;
+              min       cur     max
+        cpu0: <span class="m">240000</span>    <span class="m">1200000</span> <span class="m">1200000</span>
+        cpu1: <span class="m">240000</span>    <span class="m">1200000</span> <span class="m">1200000</span>
+        cpu2: <span class="m">240000</span>    <span class="m">1200000</span> <span class="m">1200000</span>
+        cpu3: <span class="m">240000</span>    <span class="m">1200000</span> <span class="m">1200000</span>
+bpu status information----&gt;
+            min        cur             max             ratio
+        bpu0: <span class="m">400000000</span> <span class="m">1000000000</span>      <span class="m">1000000000</span>      <span class="m">0</span>
+        bpu1: <span class="m">400000000</span> <span class="m">1000000000</span>      <span class="m">1000000000</span>      <span class="m">0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>在 <code class="docutils literal notranslate"><span class="pre">perf</span></code> 模式下，单线程的latency时间表示模型的实测上板性能，
+而多线程的latency数据表示的是每个线程的模型单帧处理时间，其相对于单线程的时间要长，但是多线程的总体处理时间减少，其帧率是提升的。</p>
+</div>
+</section>
+<section id="id7">
+<h4><code class="docutils literal notranslate"><span class="pre">输入参数补充说明</span></code><a class="headerlink" href="#id7" title="永久链接至标题"></a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">profile_path</span></code></p></li>
+</ul>
+<p>profile日志文件产生目录。
+该参数通过设置环境变量 <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">HB_DNN_PROFILER_LOG_PATH=${path}</span></code> 查看模型运行过程中OP以及任务调度耗时。
+一般设置 <code class="docutils literal notranslate"><span class="pre">--profile_path=&quot;.&quot;</span></code> 即可，代表在当前目录下生成日志文件，日志文件为profiler.log。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">thread_num</span></code></p></li>
+</ul>
+<p>线程数(并行度)，数值表示最多有多少个任务在并行处理。
+测试延时时，数值需要设置为1，没有资源抢占发生，延时测试更准确。
+测试吞吐时，建议设置&gt;2 (BPU核心个数)，调整线程数使BPU利用率尽量高，吞吐测试更准确。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">双核FPS</span>
+<span class="n">hrt_model_exec</span> <span class="n">perf</span> <span class="o">--</span><span class="n">model_file</span> <span class="n">xxx</span><span class="o">.</span><span class="n">bin</span> <span class="o">--</span><span class="n">thread_num</span> <span class="mi">8</span> <span class="o">--</span><span class="n">core_id</span> <span class="mi">0</span>
+<span class="o">//</span> <span class="n">Latency</span>
+<span class="n">hrt_model_exec</span> <span class="n">perf</span> <span class="o">--</span><span class="n">model_file</span> <span class="n">xxx</span><span class="o">.</span><span class="n">bin</span> <span class="o">--</span><span class="n">thread_num</span> <span class="mi">1</span> <span class="o">--</span><span class="n">core_id</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+<section id="hrt-bin-dump">
+<h1><span class="section-number">6.5.3.3. </span>hrt_bin_dump 工具使用说明<a class="headerlink" href="#hrt-bin-dump" title="永久链接至标题"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">hrt_bin_dump</span></code> 是 PTQ debug模型的layer dump工具，工具的输出文件为二进制文件。</p>
+<section id="id8">
+<h2>输入参数描述<a class="headerlink" href="#id8" title="永久链接至标题"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 13%" />
+<col style="width: 5%" />
+<col style="width: 13%" />
+<col style="width: 66%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>编号</p></td>
+<td><p>参数</p></td>
+<td><p>类型</p></td>
+<td><p>描述</p></td>
+<td><p>说明</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">model_file</span></code></p></td>
+<td><p>string</p></td>
+<td><p>模型文件路径。</p></td>
+<td><p>必须为debug model。即模型的编译参数 <code class="docutils literal notranslate"><span class="pre">layer_out_dump</span></code> 需要设置为 <code class="docutils literal notranslate"><span class="pre">True</span></code>，指定模型转换过程中输出各层的中间结果。</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input_file</span></code></p></td>
+<td><p>string</p></td>
+<td><p>输入文件路径。</p></td>
+<td><p>模型的输入文件，支持 <code class="docutils literal notranslate"><span class="pre">hbDNNDataType</span></code> 所有类型的输入；</p>
+<p>IMG类型文件需为二进制文件（后缀必须为.bin），二进制文件的大小应与模型的输入信息相匹配，
+如：YUV444文件大小为 <span class="math notranslate nohighlight">\(height * width * 3\)</span>；</p>
+<p>TENSOR类型文件需为二进制文件或文本文件（后缀必须为.bin/.txt），二进制文件的大小应与模型的输入信息相匹配，
+文本文件的读入数据个数必须大于等于模型要求的输入数据个数，多余的数据会被丢弃；</p>
+<p>每个输入之间通过逗号分隔，如：模型有两个输入，则： <code class="docutils literal notranslate"><span class="pre">--input_file=kite.bin,input.txt</span></code>。</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conv_mapping_file</span></code></p></td>
+<td><p>string</p></td>
+<td><p>模型卷积层配置文件。</p></td>
+<td><p>模型layer配置文件，配置文件中标明了模型各层信息，在模型编译过程中生成。</p>
+<p>文件名称一般为： <code class="docutils literal notranslate"><span class="pre">model_name_quantized_model_conv_output_map.json</span></code>。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conv_dump_path</span></code></p></td>
+<td><p>string</p></td>
+<td><p>工具输出路径。</p></td>
+<td><p>工具的输出路径，该路径应为合法路径。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id9">
+<h2>使用说明<a class="headerlink" href="#id9" title="永久链接至标题"></a></h2>
+<p>工具提供dump卷积层输出功能，输出文件为二进制文件。
+直接运行 <code class="docutils literal notranslate"><span class="pre">hrt_bin_dump</span></code> 获取工具使用详情。
+参见下图：</p>
+<img alt="../../../_images/hrt_bin_dump_help.png" src="../../../_images/hrt_bin_dump_help.png" />
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>工具也可以通过 <code class="docutils literal notranslate"><span class="pre">-v</span></code> 或者 <code class="docutils literal notranslate"><span class="pre">--version</span></code> 命令，查看工具的 <code class="docutils literal notranslate"><span class="pre">dnn</span></code> 预测库版本号。</p>
+<p>例如： hrt_bin_dump -v 或 hrt_bin_dump –version</p>
+</div>
+<section id="id10">
+<h3>示例说明<a class="headerlink" href="#id10" title="永久链接至标题"></a></h3>
+<p>以mobilenetv1的debug模型为例，创建outputs文件夹，执行以下命令：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">hrt_bin_dump</span> <span class="o">--</span><span class="n">model_file</span><span class="o">=./</span><span class="n">mobilenetv1_hybrid_horizonrt</span><span class="o">.</span><span class="n">bin</span> <span class="o">--</span><span class="n">conv_mapping_file</span><span class="o">=./</span><span class="n">mobilenetv1_quantized_model_conv_output_map</span><span class="o">.</span><span class="n">json</span> <span class="o">--</span><span class="n">conv_dump_path</span><span class="o">=./</span><span class="n">outputs</span> <span class="o">--</span><span class="n">input_file</span><span class="o">=./</span><span class="n">zebra_cls</span><span class="o">.</span><span class="n">bin</span>
+</pre></div>
+</div>
+<p>运行日志参见以下截图：</p>
+<img alt="../../../_images/run_log.png" src="../../../_images/run_log.png" />
+<p>在路径 <strong>outputs/</strong> 文件夹下可以查看输出，参见以下截图：</p>
+<img alt="../../../_images/output.png" src="../../../_images/output.png" />
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="6.5.3. 模型上板分析工具说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../ai_benchmark/index.html" class="btn btn-neutral float-right" title="6.5.4. 公版模型精度评测说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

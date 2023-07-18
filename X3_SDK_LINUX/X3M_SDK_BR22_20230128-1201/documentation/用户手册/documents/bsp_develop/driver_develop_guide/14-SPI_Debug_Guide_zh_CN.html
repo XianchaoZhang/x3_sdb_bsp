@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.8. SPI调试指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.3.9. PWM 驱动调试指南" href="29-PWM_Driver_Debug_Guide.html" />
+    <link rel="prev" title="4.3.7. IO-DOMAIN调试指南" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.3.8. SPI调试指南</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.3.8.1. 驱动代码</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id2">代码路径</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id3">内核配置</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#dts">DTS设备节点配置</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">4.3.8.2. SPI驱动</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#spi-master-slave">SPI master/slave配置</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id5">SPI注册</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id6">硬件初始化</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id7">调试参数</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">4.3.8.3. SPI测试</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id9">硬件回环测试</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id10">测试代码</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">4.3.8.4. 附录</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#a-spidev-tc-c">A spidev_tc.c测试代码</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#b-spi">B SPI时序</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.8. </span>SPI调试指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="12-IO-DOMAIN_Debug_Guide_zh_CN.html" class="btn btn-neutral float-left" title="4.3.7. IO-DOMAIN调试指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="29-PWM_Driver_Debug_Guide.html" class="btn btn-neutral float-right" title="4.3.9. PWM 驱动调试指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="spi">
+<h1><span class="section-number">4.3.8. </span>SPI调试指南<a class="headerlink" href="#spi" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">4.3.8.1. </span>驱动代码<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<section id="id2">
+<h3>代码路径<a class="headerlink" href="#id2" title="永久链接至标题"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>drivers/spi/spidev.c <span class="c1"># 生成字符设备节点，可供用户空间操作</span>
+drivers/spi/spi.c <span class="c1"># spi框架层代码</span>
+drivers/spi/spi-hobot.c <span class="c1"># spi驱动层代码</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>内核配置<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>CONFIG_SPI_SPIDEV=y # spidev.c配置选项</p>
+<p><img alt="image-20220322212001661" src="../../_images/image-20220322212001661.png" /></p>
+<p>CONFIG_SPI_SLAVE=y # CONFIG_SPI_SPIDEV依赖的配置选项</p>
+<p><img alt="image-20220322212021521" src="../../_images/image-20220322212021521.png" /></p>
+<p>CONFIG_SPI_HOBOT=y # spi-hobot.c驱动层配置选项</p>
+<p><img alt="image-20220322212038265" src="../../_images/image-20220322212038265.png" /></p>
+</section>
+<section id="dts">
+<h3>DTS设备节点配置<a class="headerlink" href="#dts" title="永久链接至标题"></a></h3>
+<p>在下述文件中添加相应的设备节点，并对内核进行编译。
+文件路径为：arch/arm64/boot/dts/hobot/hobot-xj3.dtsi</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>spi0: spi@0xA5004000 {
+    compatible = &quot;hobot,hobot-spi&quot;;
+    reg = &lt;0 0xA5004000 0 0x1000&gt;;
+    clocks = &lt;&amp;spi0_mclk&gt;;
+    clock-names = &quot;spi_mclk&quot;;
+    interrupt-parent = &lt;&amp;gic&gt;;
+    interrupts = &lt;0 33 4&gt;;
+    resets = &lt;&amp;rst 0x50 4&gt;;
+    reset-names = &quot;spi0&quot;;
+    pinctrl-names = &quot;default&quot;;
+    pinctrl-0 = &lt;&amp;spi0_func&gt;;
+    status = &quot;disabled&quot;;
+    #address-cells = &lt;1&gt;;
+    #size-cells = &lt;0&gt;;
+};
+</pre></div>
+</div>
+<p>文件路径：arch/arm64/boot/dts/hobot/hobot-x3-sdb.dts</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>/* 配置为master */
+&amp;spi0 {
+    status = &quot;okay&quot;;
+    spidev@0x00 {
+        compatible = &quot;rohm,dh2228fv&quot;;
+        spi-max-frequency = &lt;20000000&gt;;
+        reg = &lt;0&gt;;
+    };
+};
+/* 配置为slave */
+&amp;spi2 {
+    status = &quot;okay&quot;;
+    slave = &lt;1&gt;;
+    slave@0x00 {
+        compatible = &quot;rohm,dh2228fv&quot;;
+        spi-max-frequency = &lt;20000000&gt;;
+        reg = &lt;0&gt;;
+    };
+};
+</pre></div>
+</div>
+<p>以spi0和spi2配置为例</p>
+<ul class="simple">
+<li><p>hobot-xj3.dtsi中的节点为公用的节点基本不用修改，针对不同的硬件，会在对应的dts中进行修改</p></li>
+<li><p>spi0配置为spi master，spi2配置为spi slave，其中spi2中 isslave = &lt;1&gt;
+属性表示该spi配置为slave</p></li>
+<li><p>两个节点中的spidev&#64;0x00、slave&#64;0x00节点会在spidev.c中被识别成为/dev/spidev0.0和/dev/spidev2.0设备节点，供用户空间操作</p></li>
+</ul>
+</section>
+</section>
+<section id="id4">
+<h2><span class="section-number">4.3.8.2. </span>SPI驱动<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>驱动位于：drivers/spi/spi-hobot.c</p>
+<section id="spi-master-slave">
+<h3>SPI master/slave配置<a class="headerlink" href="#spi-master-slave" title="永久链接至标题"></a></h3>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">hb_spi_probe</span><span class="p">(</span><span class="k">struct</span> <span class="nc">platform_device</span><span class="w"> </span><span class="o">*</span><span class="n">pdev</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* master or slave mode select */</span><span class="w"></span>
+<span class="w">    </span><span class="n">isslave</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">of_property_read_bool</span><span class="p">(</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">of_node</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;slave&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isslave</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">MASTER_MODE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spi_alloc_master</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">hbspi</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">ctlr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">dev_err</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;failed to alloc spi master</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isslave</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SLAVE_MODE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spi_alloc_slave</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">hbspi</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">ctlr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">dev_err</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;failed to alloc spi slave, try master</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>SPI注册<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>向内核注册SPI控制器</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">hb_spi_probe</span><span class="p">(</span><span class="k">struct</span> <span class="nc">platform_device</span><span class="w"> </span><span class="o">*</span><span class="n">pdev</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isslave</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">MASTER_MODE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">hbspi</span><span class="o">-&gt;</span><span class="n">isslave</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MASTER_MODE</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">snprintf</span><span class="p">(</span><span class="n">ctrl_mode</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">ctrl_mode</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;master&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="o">-&gt;</span><span class="n">bus_num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// ctlr-&gt;num_chipselect = HB_SPI_MAX_CS;</span>
+<span class="w">        </span><span class="n">ctlr</span><span class="o">-&gt;</span><span class="n">mode_bits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SPI_CPOL</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SPI_CPHA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SPI_LSB_FIRST</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SPI_CS_HIGH</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="w">            </span><span class="n">SPI_NO_CS</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="o">-&gt;</span><span class="n">setup</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hb_spi_setup</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="o">-&gt;</span><span class="n">prepare_transfer_hardware</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hb_spi_prepare_xfer_hardware</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="o">-&gt;</span><span class="n">transfer_one</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hb_spi_transfer_one</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="o">-&gt;</span><span class="n">unprepare_transfer_hardware</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hb_spi_unprepare_xfer_hardware</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="o">-&gt;</span><span class="n">set_cs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hb_spi_chipselect</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">of_node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">of_node</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isslave</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SLAVE_MODE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">hbspi</span><span class="o">-&gt;</span><span class="n">isslave</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SLAVE_MODE</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">snprintf</span><span class="p">(</span><span class="n">ctrl_mode</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">ctrl_mode</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;slave&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="o">-&gt;</span><span class="n">mode_bits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SPI_CPOL</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SPI_CPHA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SPI_LSB_FIRST</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="o">-&gt;</span><span class="n">setup</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hb_spi_slave_setup</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="o">-&gt;</span><span class="n">prepare_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hb_spi_slave_prepare_message</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="o">-&gt;</span><span class="n">transfer_one</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hb_spi_slave_transfer_one</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">ctlr</span><span class="o">-&gt;</span><span class="n">slave_abort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hb_spi_slave_abort</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* register spi controller */</span><span class="w"></span>
+<span class="w">        </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">devm_spi_register_controller</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="n">ctlr</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">dev_err</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;failed to register %s controller(%d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="n">ctrl_mode</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">clk_dis_mclk</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>硬件初始化<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<p>硬件初始化函数如下，寄存器含义可通过与地平线相关确认</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* spi hw init */</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">hb_spi_init_hw</span><span class="p">(</span><span class="k">struct</span> <span class="nc">hb_spi</span><span class="w"> </span><span class="o">*</span><span class="n">hbspi</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">u32</span><span class="w"> </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* First, should reset the whole controller */</span><span class="w"></span>
+<span class="w">    </span><span class="n">hb_spi_reset</span><span class="p">(</span><span class="n">hbspi</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">hb_spi_en_ctrl</span><span class="p">(</span><span class="n">hbspi</span><span class="p">,</span><span class="w"> </span><span class="n">HB_SPI_OP_CORE_DIS</span><span class="p">,</span><span class="w"> </span><span class="n">HB_SPI_OP_NONE</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="n">HB_SPI_OP_NONE</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">hb_spi_wr</span><span class="p">(</span><span class="n">hbspi</span><span class="p">,</span><span class="w"> </span><span class="n">HB_SPI_INTSETMASK_REG</span><span class="p">,</span><span class="w"> </span><span class="n">HB_SPI_INT_ALL</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* clear all interrupt pending */</span><span class="w"></span>
+<span class="w">    </span><span class="n">hb_spi_wr</span><span class="p">(</span><span class="n">hbspi</span><span class="p">,</span><span class="w"> </span><span class="n">HB_SPI_SRCPND_REG</span><span class="p">,</span><span class="w"> </span><span class="n">HB_SPI_INT_ALL</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* init rfto */</span><span class="w"></span>
+<span class="w">    </span><span class="n">hb_spi_wr</span><span class="p">(</span><span class="n">hbspi</span><span class="p">,</span><span class="w"> </span><span class="n">HB_SPI_RFTO_REG</span><span class="p">,</span><span class="w"> </span><span class="mh">0x27F</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* no instruction */</span><span class="w"></span>
+<span class="w">    </span><span class="n">hb_spi_wr</span><span class="p">(</span><span class="n">hbspi</span><span class="p">,</span><span class="w"> </span><span class="n">HB_SPI_INST_REG</span><span class="p">,</span><span class="w"> </span><span class="mh">0x0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">hb_spi_wr</span><span class="p">(</span><span class="n">hbspi</span><span class="p">,</span><span class="w"> </span><span class="n">HB_SPI_INST_MASK_REG</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFFFFFFFF</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* spi master mode */</span><span class="w"></span>
+<span class="w">    </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hb_spi_rd</span><span class="p">(</span><span class="n">hbspi</span><span class="p">,</span><span class="w"> </span><span class="n">HB_SPI_CTRL_REG</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">hbspi</span><span class="o">-&gt;</span><span class="n">isslave</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SLAVE_MODE</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">val</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">HB_SPI_SLAVE_MODE</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span><span class="w"></span>
+<span class="w">        </span><span class="n">val</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="p">(</span><span class="o">~</span><span class="n">HB_SPI_SLAVE_MODE</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">hbspi</span><span class="o">-&gt;</span><span class="n">isslave</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">MASTER_MODE</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">val</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="p">(</span><span class="o">~</span><span class="n">HB_SPI_SAMP_SEL</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">hb_spi_wr</span><span class="p">(</span><span class="n">hbspi</span><span class="p">,</span><span class="w"> </span><span class="n">HB_SPI_CTRL_REG</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">debug</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">dev_err</span><span class="p">(</span><span class="n">hbspi</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%s CTRL=%08X</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="n">__func__</span><span class="p">,</span><span class="w"> </span><span class="n">hb_spi_rd</span><span class="p">(</span><span class="n">hbspi</span><span class="p">,</span><span class="w"> </span><span class="n">HB_SPI_CTRL_REG</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">hb_spi_config</span><span class="p">(</span><span class="n">hbspi</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">hb_spi_en_ctrl</span><span class="p">(</span><span class="n">hbspi</span><span class="p">,</span><span class="w"> </span><span class="n">HB_SPI_OP_CORE_EN</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h3>调试参数<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<p>下列为spi驱动中输出的调试参数：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">debug</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">slave_tout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2000</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">master_tout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span><span class="w"></span>
+<span class="n">module_param</span><span class="p">(</span><span class="n">debug</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mo">0644</span><span class="p">);</span><span class="w"></span>
+<span class="n">MODULE_PARM_DESC</span><span class="p">(</span><span class="n">debug</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;spi: 0 close debug, other open debug&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="n">module_param</span><span class="p">(</span><span class="n">slave_tout</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mo">0644</span><span class="p">);</span><span class="w"></span>
+<span class="n">MODULE_PARM_DESC</span><span class="p">(</span><span class="n">slave_tout</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;spi: slave timeout(sec), default 10 s&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="n">module_param</span><span class="p">(</span><span class="n">master_tout</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mo">0644</span><span class="p">);</span><span class="w"></span>
+<span class="n">MODULE_PARM_DESC</span><span class="p">(</span><span class="n">master_tout</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;spi: master timeout(sec), default 2 s&quot;</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>debug等级可以设置为0，1，2，默认值为0</p></li>
+<li><p>slave超时时间默认是2s，有效最大值是100s</p></li>
+<li><p>master超时时间默认是1s，有效最大值是10s</p></li>
+</ul>
+<p>在内核命令行内使用sysfs的修改方法如下，sysfs内单位均为毫秒。
+找到可用参数：如下，包含3个参数</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls /sys/module/spi_hobot/parameters/
+</pre></div>
+</div>
+<p>以下打印应出现</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3dvbj3-hynix2G-2666:~# ls /sys/module/spi_hobot/parameters/
+debug master_tout slave_tout
+</pre></div>
+</div>
+<p>获取当前debug参数的值：默认值为0，即不开启debug</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /sys/module/spi_hobot/parameters/debug
+</pre></div>
+</div>
+<p>以下打印应出现</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3dvbj3-hynix2G-2666:~# cat /sys/module/spi_hobot/parameters/debug
+<span class="m">0</span>
+</pre></div>
+</div>
+<p>设置debug参数值为1，并再次确认设置成功：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">1</span> &gt; /sys/module/spi_hobot/parameters/debug
+cat /sys/module/spi_hobot/parameters/debug
+</pre></div>
+</div>
+<p>以下打印应出现：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3dvbj3-hynix2G-2666:~# <span class="nb">echo</span> <span class="m">1</span> &gt; /sys/module/spi_hobot/parameters/debug
+root@x3dvbj3-hynix2G-2666:~# cat /sys/module/spi_hobot/parameters/debug
+<span class="m">1</span>
+</pre></div>
+</div>
+<p>获取当前master_tout参数，即作为master超时时间的值：默认值为2s</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /sys/module/spi_hobot/parameters/master_tout
+</pre></div>
+</div>
+<p>以下打印应出现：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3dvbj3-hynix2G-2666:~# cat /sys/module/spi_hobot/parameters/master_tout
+<span class="m">1000</span>
+</pre></div>
+</div>
+<p>获取当前slave_tout参数，即作为slave超时时间的值：默认值为1s</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /sys/module/spi_hobot/parameters/slave_tout
+</pre></div>
+</div>
+<p>以下打印应出现：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3dvbj3-hynix2G-2666:~# cat /sys/module/spi_hobot/parameters/slave_tout
+<span class="m">2000</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id8">
+<h2><span class="section-number">4.3.8.3. </span>SPI测试<a class="headerlink" href="#id8" title="永久链接至标题"></a></h2>
+<section id="id9">
+<h3>硬件回环测试<a class="headerlink" href="#id9" title="永久链接至标题"></a></h3>
+<p>内核dts使能spi0为master模式：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">配置为master</span> <span class="o">*/</span>
+<span class="o">&amp;</span><span class="n">spi0</span> <span class="p">{</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;okay&quot;</span><span class="p">;</span>
+    <span class="n">spidev</span><span class="o">@</span><span class="mh">0x00</span> <span class="p">{</span>
+        <span class="n">compatible</span> <span class="o">=</span> <span class="s2">&quot;rohm,dh2228fv&quot;</span><span class="p">;</span>
+        <span class="n">spi</span><span class="o">-</span><span class="nb">max</span><span class="o">-</span><span class="n">frequency</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">20000000</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">reg</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="p">};</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>可以观察到spidev0.0设备节点</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ls /dev/spidev0.0 </span>
+<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">spidev0</span><span class="mf">.0</span>
+</pre></div>
+</div>
+<p>使用连接器把spi的MOSI 和 MISO 两个管脚连接起来</p>
+<p><img alt="image-20220322222747547" src="../../_images/image-20220322222747547.png" /></p>
+</section>
+<section id="id10">
+<h3>测试代码<a class="headerlink" href="#id10" title="永久链接至标题"></a></h3>
+<p>编译spidev_tc.c 代码，具体代码如附录A</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">gcc</span><span class="o">-</span><span class="n">ubuntu</span><span class="o">-</span><span class="mf">9.3.0</span><span class="o">-</span><span class="mf">2020.03</span><span class="o">-</span><span class="n">x86_64</span><span class="o">-</span><span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">-</span><span class="n">gcc</span> <span class="o">-</span><span class="n">o</span> <span class="n">spidev_tc</span> <span class="n">spidev_tc</span><span class="o">.</span><span class="n">c</span> <span class="o">-</span><span class="n">lpthread</span>
+</pre></div>
+</div>
+<p>回环测试命令：打开/dev/spidev0.0，设置12MHz速率，读写同时进行，每次读写1000个字节，测试50轮</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ./spidev_tc -D /dev/spidev0.0 -s 12000000 -m 3 -e 1000 -t 50</span>
+<span class="n">spi</span> <span class="n">mode</span><span class="p">:</span> <span class="mh">0x0</span>
+<span class="n">bits</span> <span class="n">per</span> <span class="n">word</span><span class="p">:</span> <span class="mi">8</span>
+<span class="nb">max</span> <span class="n">speed</span><span class="p">:</span> <span class="mi">12000000</span> <span class="n">Hz</span> <span class="p">(</span><span class="mi">12000</span> <span class="n">KHz</span><span class="p">)</span>
+<span class="n">userspace</span> <span class="n">spi</span> <span class="n">read</span> <span class="ow">and</span> <span class="n">write</span> <span class="n">test</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mi">1000</span> <span class="n">times</span><span class="o">=</span><span class="mi">50</span>
+<span class="n">test</span><span class="p">:</span> <span class="n">OK</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">test</span><span class="p">:</span> <span class="n">OK</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="mi">1</span>
+<span class="o">...</span>
+<span class="n">test</span><span class="p">:</span> <span class="n">OK</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="mi">49</span>
+</pre></div>
+</div>
+<p>spidev_tc 命令是测试spi的工具集命令，可以阅读它的帮助信息获取更多使用方法。</p>
+</section>
+</section>
+<section id="id11">
+<h2><span class="section-number">4.3.8.4. </span>附录<a class="headerlink" href="#id11" title="永久链接至标题"></a></h2>
+<section id="a-spidev-tc-c">
+<h3>A spidev_tc.c测试代码<a class="headerlink" href="#a-spidev-tc-c" title="永久链接至标题"></a></h3>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm"> * SPI testing utility (using spidev driver)</span>
+<span class="cm"> *</span>
+<span class="cm"> * Copyright (c) 2007  MontaVista Software, Inc.</span>
+<span class="cm"> * Copyright (c) 2007  Anton Vorontsov &lt;avorontsov@ru.mvista.com&gt;</span>
+<span class="cm"> *</span>
+<span class="cm"> * This program is free software; you can redistribute it and/or modify</span>
+<span class="cm"> * it under the terms of the GNU General Public License as published by</span>
+<span class="cm"> * the Free Software Foundation; either version 2 of the License.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Cross-compile with cross-gcc -I/path/to/cross-kernel/include</span>
+<span class="cm"> */</span><span class="w"></span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;getopt.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;time.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/ioctl.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/ioctl.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/types.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/spi/spidev.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">pabort</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">perror</span><span class="p">(</span><span class="n">s</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">abort</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">device</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/dev/spidev0.0&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">bits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">input_file</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">output_file</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500000</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">delay</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">verbose</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">transfer_size</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">iterations</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="cm">/* interval in seconds for showing transfer rate */</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">rw_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">//1: read, 2: write, 3: write and read</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">rw_len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">rw_times</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">uint8_t</span><span class="w"> </span><span class="n">default_tx</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="mh">0x40</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x95</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="mh">0xF0</span><span class="p">,</span><span class="w"> </span><span class="mh">0x0D</span><span class="p">,</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="kt">uint8_t</span><span class="w"> </span><span class="n">default_rx</span><span class="p">[</span><span class="n">ARRAY_SIZE</span><span class="p">(</span><span class="n">default_tx</span><span class="p">)]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+<span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">input_tx</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">hex_dump</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">line_size</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">prefix</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">src</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">address</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s | &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">prefix</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">length</span><span class="o">--</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%02X &quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">address</span><span class="o">++</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="o">++</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">line_size</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">(</span><span class="n">length</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">line_size</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">length</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">++</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">line_size</span><span class="p">)</span><span class="w"></span>
+<span class="w">                    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;__ &quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot; | &quot;</span><span class="p">);</span><span class="w">  </span><span class="cm">/* right close */</span><span class="w"></span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">line</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">address</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">line</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">33</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">0x2E</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">c</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s | &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">prefix</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">hex_dump2</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">line_size</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">prefix</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">src</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">address</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s | &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">prefix</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">length</span><span class="o">--</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%02X &quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">address</span><span class="o">++</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="o">++</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">line_size</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">(</span><span class="n">length</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">line_size</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">length</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">++</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">line_size</span><span class="p">)</span><span class="w"></span>
+<span class="w">                    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;__ &quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s | &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">prefix</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="cm">/*</span>
+<span class="cm"> *  Unescape - process hexadecimal escape character</span>
+<span class="cm"> *      converts shell input &quot;\x23&quot; -&gt; 0x23</span>
+<span class="cm"> */</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">unescape</span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">_dst</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">_src</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">match</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_src</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_dst</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ch</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">src</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;\\&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="n">src</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;x&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">match</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sscanf</span><span class="p">(</span><span class="n">src</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%2x&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ch</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">match</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;malformed input string&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">            </span><span class="n">src</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="o">*</span><span class="n">dst</span><span class="o">++</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="p">)</span><span class="n">ch</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="o">*</span><span class="n">dst</span><span class="o">++</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">ret</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">transfer</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">*</span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">*</span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">out_fd</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span> <span class="nc">spi_ioc_transfer</span><span class="w"> </span><span class="n">tr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">tx_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">tx</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">rx_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">rx</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">delay_usecs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">delay</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">speed_hz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">speed</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">bits_per_word</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bits</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">};</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_TX_QUAD</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">tr</span><span class="p">.</span><span class="n">tx_nbits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_TX_DUAL</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">tr</span><span class="p">.</span><span class="n">tx_nbits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_RX_QUAD</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">tr</span><span class="p">.</span><span class="n">rx_nbits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_RX_DUAL</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">tr</span><span class="p">.</span><span class="n">rx_nbits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_LOOP</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">SPI_TX_QUAD</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SPI_TX_DUAL</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="n">tr</span><span class="p">.</span><span class="n">rx_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">SPI_RX_QUAD</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SPI_RX_DUAL</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="n">tr</span><span class="p">.</span><span class="n">tx_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">SPI_IOC_MESSAGE</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">tr</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t send spi message&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">hex_dump</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;TX&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">out_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span><span class="w"> </span><span class="n">O_WRONLY</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_CREAT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_TRUNC</span><span class="p">,</span><span class="w"> </span><span class="mo">0666</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">out_fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;could not open output file&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="n">out_fd</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;not all bytes written to output file&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">close</span><span class="p">(</span><span class="n">out_fd</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">hex_dump</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RX&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">transfer2</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">*</span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">*</span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">out_fd</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span> <span class="nc">spi_ioc_transfer</span><span class="w"> </span><span class="n">tr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">tx_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">tx</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">rx_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">rx</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">delay_usecs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">delay</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">speed_hz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">speed</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">bits_per_word</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bits</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">};</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_TX_QUAD</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">tr</span><span class="p">.</span><span class="n">tx_nbits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_TX_DUAL</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">tr</span><span class="p">.</span><span class="n">tx_nbits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_RX_QUAD</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">tr</span><span class="p">.</span><span class="n">rx_nbits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_RX_DUAL</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">tr</span><span class="p">.</span><span class="n">rx_nbits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_LOOP</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">SPI_TX_QUAD</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SPI_TX_DUAL</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="n">tr</span><span class="p">.</span><span class="n">rx_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">SPI_RX_QUAD</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SPI_RX_DUAL</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="n">tr</span><span class="p">.</span><span class="n">tx_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">verbose</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">rw_mode</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">hex_dump2</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;TX&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">SPI_IOC_MESSAGE</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">tr</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="c1">//pabort(&quot;can&#39;t send spi message&quot;);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;can&#39;t send spi message&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">out_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span><span class="w"> </span><span class="n">O_WRONLY</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_CREAT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_TRUNC</span><span class="p">,</span><span class="w"> </span><span class="mo">0666</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">out_fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;could not open output file&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">            </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="n">out_fd</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;not all bytes written to output file&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">            </span><span class="n">close</span><span class="p">(</span><span class="n">out_fd</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">verbose</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">rw_mode</span><span class="o">&amp;</span><span class="mh">0x01</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">hex_dump2</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RX&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">print_usage</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">prog</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Usage: %s [-DsbdlHOLC3vpNR24SImet]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">prog</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">puts</span><span class="p">(</span><span class="s">&quot;  -D --device   device to use (default /dev/spidev1.1)</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -s --speed    max speed (Hz)</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -d --delay    delay (usec)</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -b --bpw      bits per word</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -i --input    input data from a file (e.g. </span><span class="se">\&quot;</span><span class="s">test.bin</span><span class="se">\&quot;</span><span class="s">)</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -o --output   output data to a file (e.g. </span><span class="se">\&quot;</span><span class="s">results.bin</span><span class="se">\&quot;</span><span class="s">)</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -l --loop     loopback</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -H --cpha     clock phase</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -O --cpol     clock polarity</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -L --lsb      least significant bit first</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -C --cs-high  chip select active high</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -3 --3wire    SI/SO signals shared</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -v --verbose  Verbose (show tx buffer)</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -p            Send data (e.g. </span><span class="se">\&quot;</span><span class="s">1234</span><span class="se">\\</span><span class="s">xde</span><span class="se">\\</span><span class="s">xad</span><span class="se">\&quot;</span><span class="s">)</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -N --no-cs    no chip select</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -R --ready    slave pulls low to pause</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -2 --dual     dual transfer</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -4 --quad     quad transfer</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -S --size     transfer size</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -I --iter     iterations</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -m --rw-mode  1 read, 2 write, 3 write and read</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -e --rw-len   read or write len</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="s">&quot;  -t --rw-times read or write times</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">parse_opts</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span> <span class="nc">option</span><span class="w"> </span><span class="n">lopts</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;device&quot;</span><span class="p">,</span><span class="w">  </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;D&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;speed&quot;</span><span class="p">,</span><span class="w">   </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;s&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;delay&quot;</span><span class="p">,</span><span class="w">   </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;d&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;bpw&quot;</span><span class="p">,</span><span class="w">     </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;b&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;input&quot;</span><span class="p">,</span><span class="w">   </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;i&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;output&quot;</span><span class="p">,</span><span class="w">  </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;o&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;loop&quot;</span><span class="p">,</span><span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;l&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;cpha&quot;</span><span class="p">,</span><span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;H&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;cpol&quot;</span><span class="p">,</span><span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;O&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;lsb&quot;</span><span class="p">,</span><span class="w">     </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;L&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;cs-high&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;C&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;3wire&quot;</span><span class="p">,</span><span class="w">   </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;3&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;no-cs&quot;</span><span class="p">,</span><span class="w">   </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;N&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;ready&quot;</span><span class="p">,</span><span class="w">   </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;R&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;dual&quot;</span><span class="p">,</span><span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;2&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;verbose&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;v&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;quad&quot;</span><span class="p">,</span><span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;4&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;size&quot;</span><span class="p">,</span><span class="w">    </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;S&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;iter&quot;</span><span class="p">,</span><span class="w">    </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;I&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;rw-mode&quot;</span><span class="p">,</span><span class="w">    </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;m&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;rw-len&quot;</span><span class="p">,</span><span class="w">    </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;e&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;rw-times&quot;</span><span class="p">,</span><span class="w">    </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;t&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="p">};</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getopt_long</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;D:s:d:b:i:o:lHOLC3NR24p:vS:I:m:e:t:&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="n">lopts</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="c1">//printf(&quot;optind: %d\n&quot;, optind);</span>
+<span class="w">        </span><span class="c1">//printf(&quot;optarg: %s\n&quot;, optarg);</span>
+<span class="w">        </span><span class="c1">//printf(&quot;option: %c\n&quot;, c);</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;D&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">device</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optarg</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;s&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;d&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">delay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;b&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">bits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;i&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">input_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optarg</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;o&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">output_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optarg</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;l&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">mode</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SPI_LOOP</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;H&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">mode</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SPI_CPHA</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;O&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">mode</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SPI_CPOL</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;L&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">mode</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SPI_LSB_FIRST</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;C&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">mode</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SPI_CS_HIGH</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;3&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">mode</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SPI_3WIRE</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;N&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">mode</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SPI_NO_CS</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;v&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">verbose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;R&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">mode</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SPI_READY</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;p&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">input_tx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optarg</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;2&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">mode</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SPI_TX_DUAL</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;4&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">mode</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SPI_TX_QUAD</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;S&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">transfer_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;I&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">iterations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;m&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">rw_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;e&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">rw_len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;t&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">rw_times</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">default</span><span class="o">:</span><span class="w"></span>
+<span class="w">            </span><span class="n">print_usage</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w"></span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_LOOP</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_TX_DUAL</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">mode</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SPI_RX_DUAL</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_TX_QUAD</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">mode</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">SPI_RX_QUAD</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">transfer_escaped_string</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">str</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">str</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">tx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">rx</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">tx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">size</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">tx</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t allocate tx buffer&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">rx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">size</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rx</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t allocate rx buffer&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">unescape</span><span class="p">((</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;size: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">transfer</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">rx</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">tx</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">transfer_file</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">filename</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">bytes</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span> <span class="nc">stat</span><span class="w"> </span><span class="n">sb</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">tx_fd</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">tx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">rx</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">stat</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sb</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t stat input file&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">tx_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tx_fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t open input file&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">tx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">sb</span><span class="p">.</span><span class="n">st_size</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">tx</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t allocate tx buffer&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">rx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">sb</span><span class="p">.</span><span class="n">st_size</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rx</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t allocate rx buffer&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">tx_fd</span><span class="p">,</span><span class="w"> </span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">sb</span><span class="p">.</span><span class="n">st_size</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bytes</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">sb</span><span class="p">.</span><span class="n">st_size</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;failed to read input file&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">transfer</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="n">sb</span><span class="p">.</span><span class="n">st_size</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">rx</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">tx</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">tx_fd</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">_read_count</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">_write_count</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">show_transfer_rate</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">prev_read_count</span><span class="p">,</span><span class="w"> </span><span class="n">prev_write_count</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">rx_rate</span><span class="p">,</span><span class="w"> </span><span class="n">tx_rate</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">rx_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="n">_read_count</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">prev_read_count</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">interval</span><span class="o">*</span><span class="mf">1000.0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">tx_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="n">_write_count</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">prev_write_count</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">interval</span><span class="o">*</span><span class="mf">1000.0</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;rate: tx %.1fkbps, rx %.1fkbps</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">rx_rate</span><span class="p">,</span><span class="w"> </span><span class="n">tx_rate</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">prev_read_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_read_count</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">prev_write_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_write_count</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">transfer_buf</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">tx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">rx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">tx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">len</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">tx</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t allocate tx buffer&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">tx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">random</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">rx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">len</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rx</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t allocate rx buffer&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">transfer</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">_write_count</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">_read_count</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SPI_LOOP</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">memcmp</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;transfer error !</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">hex_dump</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;TX&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">hex_dump</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RX&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">rx</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">tx</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">transfer_read_write</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">tx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">rx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="n">times</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">str</span><span class="p">[</span><span class="mi">64</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rw_len</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nl">rw_len</span> <span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">times</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rw_times</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nl">rw_times</span> <span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rw_mode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">sprintf</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;write&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rw_mode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">sprintf</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;read and write&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">rw_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">sprintf</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;read&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;userspace spi %s test, len=%d times=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="n">times</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">tx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">len</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">tx</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t allocate tx buffer&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">rx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">len</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rx</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t allocate rx buffer&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">rw_times</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">memset</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">,</span><span class="n">len</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">memset</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rw_mode</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="n">tx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">random</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="n">tx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">transfer2</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;test: %s, times=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">strncmp</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">&quot;OK&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;Failed&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="c1">//sleep(2);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">parse_opts</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="n">device</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDWR</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t open device&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="cm">/*</span>
+<span class="cm">     * spi mode</span>
+<span class="cm">     */</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">SPI_IOC_WR_MODE32</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mode</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t set spi mode&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">SPI_IOC_RD_MODE32</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mode</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t get spi mode&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="cm">/*</span>
+<span class="cm">     * bits per word</span>
+<span class="cm">     */</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">SPI_IOC_WR_BITS_PER_WORD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">bits</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t set bits per word&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">SPI_IOC_RD_BITS_PER_WORD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">bits</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t get bits per word&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="cm">/*</span>
+<span class="cm">     * max speed hz</span>
+<span class="cm">     */</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">SPI_IOC_WR_MAX_SPEED_HZ</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">speed</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t set max speed hz&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">SPI_IOC_RD_MAX_SPEED_HZ</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">speed</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;can&#39;t get max speed hz&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;spi mode: 0x%x</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mode</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;bits per word: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">bits</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;max speed: %d Hz (%d KHz)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="n">speed</span><span class="o">/</span><span class="mi">1000</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">input_tx</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">input_file</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">pabort</span><span class="p">(</span><span class="s">&quot;only one of -p and --input may be selected&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">input_tx</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">transfer_escaped_string</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">input_tx</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">transfer_file</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">input_file</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">transfer_size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">struct</span> <span class="nc">timespec</span><span class="w"> </span><span class="n">last_stat</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">CLOCK_MONOTONIC</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">last_stat</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">iterations</span><span class="o">--</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">struct</span> <span class="nc">timespec</span><span class="w"> </span><span class="n">current</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">            </span><span class="n">transfer_buf</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">transfer_size</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">            </span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">CLOCK_MONOTONIC</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">current</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">current</span><span class="p">.</span><span class="n">tv_sec</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">last_stat</span><span class="p">.</span><span class="n">tv_sec</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">interval</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="n">show_transfer_rate</span><span class="p">();</span><span class="w"></span>
+<span class="w">                </span><span class="n">last_stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">current</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;total: tx %.1fKB, rx %.1fKB</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="n">_write_count</span><span class="o">/</span><span class="mf">1024.0</span><span class="p">,</span><span class="w"> </span><span class="n">_read_count</span><span class="o">/</span><span class="mf">1024.0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rw_mode</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">transfer_read_write</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"></span>
+<span class="w">        </span><span class="n">transfer</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">default_tx</span><span class="p">,</span><span class="w"> </span><span class="n">default_rx</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">default_tx</span><span class="p">));</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="b-spi">
+<h3>B SPI时序<a class="headerlink" href="#b-spi" title="永久链接至标题"></a></h3>
+<p><img alt="../../_images/a91efe6c59515b2b9d38b106a7e066a5.png" src="../../_images/a91efe6c59515b2b9d38b106a7e066a5.png" /></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="12-IO-DOMAIN_Debug_Guide_zh_CN.html" class="btn btn-neutral float-left" title="4.3.7. IO-DOMAIN调试指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="29-PWM_Driver_Debug_Guide.html" class="btn btn-neutral float-right" title="4.3.9. PWM 驱动调试指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

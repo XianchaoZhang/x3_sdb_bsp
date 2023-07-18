@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.4.12. CPU性能测试 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.4.13. 冷热启动测试" href="13-warm_cold_bootup.html" />
+    <link rel="prev" title="4.4.11. 网络性能测试" href="11-network_performance.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../driver_develop_guide/index.html">4.3. 驱动开发指南</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.4. 硬件单元测试</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-overview.html">4.4.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-env_reliability.html">4.4.2. 环境可靠性测试（定频）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-emmc.html">4.4.3. EMMC相关测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-nand_flash.html">4.4.4. NAND-Flash压力测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-camera_stress.html">4.4.5. CAMERA压力测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-uart_stress.html">4.4.6. UART压力测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-wifi_stress.html">4.4.7. SDIO(WIFI)压力测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-spi_stress.html">4.4.8. SPI压力测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-i2s_stress.html">4.4.9. I2S压力测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-usb_performance.html">4.4.10. USB驱动性能测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-network_performance.html">4.4.11. 网络性能测试</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.4.12. CPU性能测试</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.4.12.1. 测试说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">4.4.12.2. 测试方法</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">4.4.12.3. 测试指标</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">4.4.12.4. 附录</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="13-warm_cold_bootup.html">4.4.13. 冷热启动测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-extra_ddr_dfs.html">4.4.14. （附加测试）环境可靠性测试（DDR DFS 2666/1333/333变频）</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.4. </span>硬件单元测试</a> &raquo;</li>
+      <li><span class="section-number">4.4.12. </span>CPU性能测试</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="11-network_performance.html" class="btn btn-neutral float-left" title="4.4.11. 网络性能测试" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="13-warm_cold_bootup.html" class="btn btn-neutral float-right" title="4.4.13. 冷热启动测试" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cpu">
+<h1><span class="section-number">4.4.12. </span>CPU性能测试<a class="headerlink" href="#cpu" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">4.4.12.1. </span>测试说明<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>本测试使用<code class="docutils literal notranslate"><span class="pre">Coremark</span></code>工具进行测试，源码和编译好的软件放在<code class="docutils literal notranslate"><span class="pre">10-cpu_performace</span></code>目录下。
+CoreMark是一项基准测试程序，其主要目标是测试处理器核心性能，CoreMark标准的测试方法就是在某配置参数组合下单位时间内跑了多少次CoreMark程序，
+业界的分数呈现为 <code class="docutils literal notranslate"><span class="pre">Coremark</span></code> / <code class="docutils literal notranslate"><span class="pre">CPU</span> <span class="pre">clock</span> <span class="pre">Mhz</span></code> / <code class="docutils literal notranslate"><span class="pre">Core</span> <span class="pre">num</span></code>，即 <code class="docutils literal notranslate"><span class="pre">coremark每秒跑的次数</span></code> / <code class="docutils literal notranslate"><span class="pre">cpu时钟频率</span></code> / <code class="docutils literal notranslate"><span class="pre">cpu的核数</span></code>，最终得到一个评分。</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">4.4.12.2. </span>测试方法<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<ol class="simple">
+<li><p>解压<code class="docutils literal notranslate"><span class="pre">coremark-main.zip</span></code>，并进入<code class="docutils literal notranslate"><span class="pre">coremark-main</span></code>文件夹</p></li>
+<li><p>执行<code class="docutils literal notranslate"><span class="pre">./coremark_single</span> <span class="pre">0x0</span> <span class="pre">0x0</span> <span class="pre">0x66</span> <span class="pre">0</span> <span class="pre">7</span> <span class="pre">1</span> <span class="pre">2000</span> <span class="pre">&gt;</span> <span class="pre">./run1.log</span></code>，等待程序执行完毕;执行<code class="docutils literal notranslate"><span class="pre">./coremark_multi</span> <span class="pre">0x0</span> <span class="pre">0x0</span> <span class="pre">0x66</span> <span class="pre">0</span> <span class="pre">7</span> <span class="pre">1</span> <span class="pre">2000</span> <span class="pre">&gt;</span> <span class="pre">./run2.log</span></code>，等待程序执行完毕。</p></li>
+<li><p>查看<code class="docutils literal notranslate"><span class="pre">run1.log</span></code>里面的<strong>单核</strong>测试成绩，参考如下：</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">2K performance run parameters for coremark.</span>
+<span class="l l-Scalar l-Scalar-Plain">CoreMark Size</span>    <span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">666</span>
+<span class="nt">Total ticks      </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">20830</span>
+<span class="nt">Total time (secs)</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">20.830000</span>
+<span class="nt">Iterations/Sec   </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5280.844935</span>
+<span class="nt">Iterations       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">110000</span>
+<span class="nt">Compiler version </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">GCC6.5.0</span>
+<span class="nt">Compiler flags   </span><span class="p">:</span>  <span class="l l-Scalar l-Scalar-Plain">-O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1  -lrt</span>
+<span class="nt">Memory location  </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Please put data memory location here</span>
+                        <span class="l l-Scalar l-Scalar-Plain">(e.g. code in flash, data on heap etc)</span>
+<span class="nt">seedcrc          </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0xe9f5</span>
+<span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">]</span><span class="nt">crclist       </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0xe714</span>
+<span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">]</span><span class="nt">crcmatrix     </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0x1fd7</span>
+<span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">]</span><span class="nt">crcstate      </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0x8e3a</span>
+<span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">]</span><span class="nt">crcfinal      </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0x33ff</span>
+<span class="l l-Scalar l-Scalar-Plain">Correct operation validated. See README.md for run and reporting rules.</span>
+<span class="nt">CoreMark 1.0 </span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5280.844935 / GCC6.5.0  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1  -lrt / Heap</span>
+</pre></div>
+</div>
+<p>注意到<code class="docutils literal notranslate"><span class="pre">Iterations/Sec</span></code>这栏，表示每秒钟迭代多少次，也就是我们上面公式的<code class="docutils literal notranslate"><span class="pre">coremark</span></code>分数。<br />根据公式，这颗x3的单核分数为<code class="docutils literal notranslate"><span class="pre">5280.844935</span></code>/<code class="docutils literal notranslate"><span class="pre">1200</span></code>（默认频率）/<code class="docutils literal notranslate"><span class="pre">1</span></code> = <code class="docutils literal notranslate"><span class="pre">4.400</span></code>。属于正常范围。</p>
+<p><code class="docutils literal notranslate"><span class="pre">./run2.log</span></code>里面保存着<strong>多核心</strong>的成绩，计算多核分数和单核分数类似，此处不再赘述。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">4.4.12.3. </span>测试指标<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>单核分数 X &gt; 4.2</p></li>
+<li><p>四核分数 X &gt; 4.2</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2><span class="section-number">4.4.12.4. </span>附录<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>交叉编译<code class="docutils literal notranslate"><span class="pre">coremark</span></code>流程如下：</p>
+<ol class="simple">
+<li><p>进入<code class="docutils literal notranslate"><span class="pre">coremark-main</span></code>目录，将<code class="docutils literal notranslate"><span class="pre">aarch64/core_portme.mak</span></code>中的<code class="docutils literal notranslate"><span class="pre">CC</span></code>编译器路径换成自己的用于交叉编译的<code class="docutils literal notranslate"><span class="pre">gcc</span></code>路径。</p></li>
+<li><p>执行<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">PORT_DIR=aarch64</span> <span class="pre">XCFLAGS=&quot;-O3</span> <span class="pre">-funroll-all-loops</span> <span class="pre">-static</span> <span class="pre">--param</span> <span class="pre">max-inline-insns-auto=550</span> <span class="pre">-DPERFORMANCE_RUN=1&quot;</span> <span class="pre">REBUILD=1</span> <span class="pre">run1.log</span></code>编译<strong>单核</strong>测试程序；执行<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">PORT_DIR=aarch64</span> <span class="pre">XCFLAGS=&quot;-O3</span> <span class="pre">-funroll-all-loops</span> <span class="pre">-static</span> <span class="pre">--param</span> <span class="pre">max-inline-insns-auto=550</span> <span class="pre">-DPERFORMANCE_RUN=1</span> <span class="pre">-DMULTITHREAD=4</span>&#160; <span class="pre">-DUSE_PTHREAD</span> <span class="pre">-pthread&quot;</span> <span class="pre">REBUILD=1</span> <span class="pre">run1.log</span></code>编译生成<strong>4核</strong>测试程序，其中<code class="docutils literal notranslate"><span class="pre">-DMULTITHREAD=</span></code>参数用于控制生成几核心的测试程序。</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="11-network_performance.html" class="btn btn-neutral float-left" title="4.4.11. 网络性能测试" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="13-warm_cold_bootup.html" class="btn btn-neutral float-right" title="4.4.13. 冷热启动测试" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

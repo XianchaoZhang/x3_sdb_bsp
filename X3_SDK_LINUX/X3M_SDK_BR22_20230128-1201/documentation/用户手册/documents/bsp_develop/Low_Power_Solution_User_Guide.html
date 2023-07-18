@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.10. X3降功耗用户指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="5. 多媒体开发指南" href="../mpp_develop/index.html" />
+    <link rel="prev" title="4.9.2. Ubuntu 根文件系统制作" href="Rootfs_develop/ubuntu-20.04_rootfs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2"><a class="reference internal" href="driver_develop_guide/index.html">4.3. 驱动开发指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.10. X3降功耗用户指南</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">4.10.1. 综述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">4.10.2. 电源域及时钟介绍配置</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">4.10.2.1. 电源域</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#power-group">4.10.2.2. 对power group的控制</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">4.10.2.3. 时钟</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">4.10.3. 降低功耗</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cpu">4.10.3.1. CPU降低功耗</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bpu">4.10.3.2. BPU低功耗</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#media">4.10.3.3. media模块降低功耗</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.10. </span>X3降功耗用户指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="Rootfs_develop/ubuntu-20.04_rootfs.html" class="btn btn-neutral float-left" title="4.9.2. Ubuntu 根文件系统制作" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../mpp_develop/index.html" class="btn btn-neutral float-right" title="5. 多媒体开发指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="x3">
+<h1><span class="section-number">4.10. </span>X3降功耗用户指南<a class="headerlink" href="#x3" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">4.10.1. </span>综述<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>芯片的功耗与工作电压，时钟频率以及环境温度密切相关。在负载一定的情况下电压，时钟频率，环境 温度的升高会导致功耗增加。所以这就意味着降低功耗可以从降低电压，降低时钟频率以及散热三个方 面入手。本文中提到的低功耗方法主要是对时钟频率和电压的调节和控制。
+关于负载，负载减轻也可以降低功耗，客户可根据自己的产品优化电路。 另外低功耗会对性能有负面影响，所以根据使用场景来选择是否要进入低功耗。</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">4.10.2. </span>电源域及时钟介绍配置<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<section id="id3">
+<h3><span class="section-number">4.10.2.1. </span>电源域<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p><img alt="image-20221102163210001" src="../_images/image-20221102163210001.png" /></p>
+<p>如上图所示X3共有5个电源域，group1-group5，根据在休眠状态下是否断电又可以分为always-on和shutdown两类：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>group1</th>
+<th>group2</th>
+<th>group3</th>
+<th>group4</th>
+<th>group5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sleep</td>
+<td>always-on</td>
+<td>always-on</td>
+<td>shutdown</td>
+<td>shutdown</td>
+<td>shutdown</td>
+</tr>
+</tbody>
+</table><p>详细介绍请查看：《DT-2500-2-X3M-Datasheet-V1.6.pdf》：4.3节和第11章，硬件文档请参考《X3 Hardware Design Guide 20200115b.pdf》。
+此外X3的各路power group并不是全部由PMIC提供，目前X3 SOM使用PMIC和DCDC共同为X3 SOM供电，具体可查看硬件原理图。</p>
+</section>
+<section id="power-group">
+<h3><span class="section-number">4.10.2.2. </span>对power group的控制<a class="headerlink" href="#power-group" title="永久链接至标题"></a></h3>
+<p>使用PMIC控制的power groups 可以由下面两种方式进行控制，以下方式以PMIC:AXP15060为例。
+注意：不要把电压调的太高，容易损伤芯片。具体的电压范围可查看《X3 Hardware Design Guide 20200115b.pdf》和《DT-2500-2-X3M-Datasheet-V1.6.pdf》。</p>
+<p>方式1：通过linux kernel的regulator：
+采用linux kernel现用的regulator 架构可实现在kernel中对各路电的控制。具体的使用方法请查阅：《AN-2521-1-B-X3J3平台PMIC驱动修改指导》</p>
+<p>方式2：用户空间通过i2c-tool控制：
+这里首先要查阅axp15060数据手册以及硬件原理图找到目标power rail所对应的寄存器进行控制。
+比如，对VDDQ1.1v 电压进行调节。通过查看硬件原理图和axp15060数据手册得知，这路电用的是axp15060的dcdc5，用万用表测量出这路电目前是1.117v，查阅数据手册得知step的跨度是10mv，读寄存器得如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@j3dvbx3</span><span class="o">-</span><span class="n">samsung1G</span><span class="o">-</span><span class="mi">3200</span><span class="p">:</span><span class="o">~</span><span class="c1"># i2cget -f -y 0 0x37 0x17</span>
+<span class="mh">0x9e</span>
+</pre></div>
+</div>
+<p>如果想让DCDC5的电压降10mv，那么就将0x17寄存器的值减1，即0x9d,如下设置后DCDC5的电压将变成1.107mv：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@j3dvbx3</span><span class="o">-</span><span class="n">samsung1G</span><span class="o">-</span><span class="mi">3200</span><span class="p">:</span><span class="o">~</span><span class="c1"># i2cset -f -y 0 0x37 0x17 0x9d</span>
+<span class="n">root</span><span class="nd">@j3dvbx3</span><span class="o">-</span><span class="n">samsung1G</span><span class="o">-</span><span class="mi">3200</span><span class="p">:</span><span class="o">~</span><span class="c1"># i2cget -f -y 0 0x37 0x17</span>
+<span class="mh">0x9d</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3><span class="section-number">4.10.2.3. </span>时钟<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>X3 SOC拥有7组PLL分别是：CPUPLL(ARMPLL),SYSPLL,CNNPLL,DDRPLL,PERIPLL,VIOPLL,VIOPLL2。它们的时钟均来自24M晶振，SOC的各个子模块的时钟又分别是从这7个PLL中细分出来。</p>
+<ul class="simple">
+<li><p>ARMPLL: 为 Cortex-A53 的四个核提供时钟；</p></li>
+<li><p>DDRPLL：为 DDR 子系统提供时钟；</p></li>
+<li><p>VIOPLL：为 VIO 子系统提供时钟；</p></li>
+<li><p>VIOPLL2：为 Camera Sensor，MCLK，IAR Display Pixel 提供时钟；</p></li>
+<li><p>CNNPLL：为 BPU 子系统提供时钟；</p></li>
+<li><p>PERIPHPLL：为外设子系统提供时钟；</p></li>
+<li><p>SYSPLL：为 cpu 子系统提供时钟。</p></li>
+</ul>
+<p>X3的clk驱动采用的是linux kernel的clk现有架构，代码在：kernel/drivers/clk/hobot/，dts为hobot-clkxj3.dtsi。</p>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">4.10.3. </span>降低功耗<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<section id="cpu">
+<h3><span class="section-number">4.10.3.1. </span>CPU降低功耗<a class="headerlink" href="#cpu" title="永久链接至标题"></a></h3>
+<p>通过改变cpu的governor来控制cpu频率，这里主要是对armpll频率的调控。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="n">powersave</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">cpu</span><span class="o">/</span><span class="n">cpufreq</span><span class="o">/</span><span class="n">policy0</span><span class="o">/</span><span class="n">scaling_governor</span>
+<span class="n">echo</span> <span class="n">ondemand</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">cpu</span><span class="o">/</span><span class="n">cpufreq</span><span class="o">/</span><span class="n">policy0</span><span class="o">/</span><span class="n">scaling_governor</span>
+</pre></div>
+</div>
+<p>“powersave”会将cpu的频率降到最低，相应的功耗也会最低，但是cpu的处理速度也将会变成最低。
+“ondemand”会根据cpu的当前负载动态的去设置cpu的频率，这种方式可以实现性能和功耗的相对平衡。</p>
+<p>除此之外将cpu core offline也会降低功耗，但是cpu core的offline，online较为耗时，会影响性能，请注意这点。除了启动核core0之外，其它三个都可以进行offline/online操作：比如将cpu1 offline/online</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">cpu</span>
+<span class="c1"># offline cpu1</span>
+<span class="n">echo</span> <span class="mi">0</span> <span class="o">&gt;</span> <span class="n">cpu1</span><span class="o">/</span><span class="n">online</span>
+<span class="n">root</span><span class="nd">@x3dvbx3</span><span class="o">-</span><span class="n">samsung1G</span><span class="o">-</span><span class="mi">3200</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">cpu</span><span class="c1"># cat offline </span>
+<span class="mi">1</span>
+<span class="c1">#online cpu1</span>
+<span class="n">echo</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">cpu1</span><span class="o">/</span><span class="n">online</span>
+<span class="n">root</span><span class="nd">@x3dvbx3</span><span class="o">-</span><span class="n">samsung1G</span><span class="o">-</span><span class="mi">3200</span><span class="p">:</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">cpu</span><span class="c1"># cat offline</span>
+</pre></div>
+</div>
+<p><strong>注意</strong>：CPU进入powersave模式或offline模式时，CPU性能会大幅降低。</p>
+</section>
+<section id="bpu">
+<h3><span class="section-number">4.10.3.2. </span>BPU低功耗<a class="headerlink" href="#bpu" title="永久链接至标题"></a></h3>
+<p>通过改变bpu的governor来控制bpu的频率，这里主要是对cnnpll频率的调控：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="n">powersave</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">bpu</span><span class="o">/</span><span class="n">bpu0</span><span class="o">/</span><span class="n">devfreq</span><span class="o">/</span><span class="n">devfreq1</span><span class="o">/</span><span class="n">governor</span>
+<span class="n">echo</span> <span class="n">simple_ondemand</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">bpu</span><span class="o">/</span><span class="n">bpu0</span><span class="o">/</span><span class="n">devfreq</span><span class="o">/</span><span class="n">devfreq1</span><span class="o">/</span><span class="n">governor</span>
+</pre></div>
+</div>
+<p>“powersave”会将bpu的频率降到最低，相应的功耗也会最低，但是bpu的处理速度也将会变成最低。
+“simple_ondemand”会根据bpu的当前负载动态的去设置bpu的频率，这种方式可以实现性能和功耗的相对平衡。
+除此之外，bpu的两个core均支持独立的断电和上电，可根据bpu的使用情况来决定是否对bpu断电：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>enable：
+echo 1 &gt; /sys/devices/system/bpu/bpu0/power_enable
+echo 1 &gt; /sys/devices/system/bpu/bpu1/power_enable
+disable：
+echo 0 &gt; /sys/devices/system/bpu/bpu0/power_enable
+echo 0 &gt; /sys/devices/system/bpu/bpu1/power_enable
+</pre></div>
+</div>
+<p><strong>注意</strong>：BPU进入powersave模式或BPU core断电时，算法相关应用不工作。</p>
+</section>
+<section id="media">
+<h3><span class="section-number">4.10.3.3. </span>media模块降低功耗<a class="headerlink" href="#media" title="永久链接至标题"></a></h3>
+<p>media模块的低功耗也可以通过设置工作频率来实现：修改vio的配置文件clk字段。单位：HZ
+<img alt="image-20221102173111001" src="../_images/image-20221102173111001.png" /></p>
+<p>提供的sysfs接口为：/sys/module/hobot_dev_ips/parameters/sif_mclk_freq和/sys/module/hobot_vpu/parameters/vpu_clk_freq。具体使用方法可参考vio的demo代码。
+HAPI 接口int HB_VIN_SetDevMclk(uint32_t devId, uint32_t devMclk, uint32_t vpuMclk)。具体使用方法可参考HAPI的demo程序及HAPI接口说明文档。</p>
+<p><strong>注意</strong>：执行此操作时确保 vio 处于不工作状态。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Rootfs_develop/ubuntu-20.04_rootfs.html" class="btn btn-neutral float-left" title="4.9.2. Ubuntu 根文件系统制作" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../mpp_develop/index.html" class="btn btn-neutral float-right" title="5. 多媒体开发指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

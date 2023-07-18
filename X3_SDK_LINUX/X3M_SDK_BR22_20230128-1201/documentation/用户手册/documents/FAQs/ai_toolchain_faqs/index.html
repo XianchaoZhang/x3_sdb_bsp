@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>8.9. 量化工具链类 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="8.9.1. 模型量化错误及解决方法" href="ai_toolchain_FAQS.html" />
+    <link rel="prev" title="8.8.2. USB WEBCAM常见问题(FAQ)" href="../usb_faqs/USB_WEBCAM_FAQs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">8. FAQ</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html">8.1. 环境类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id3">8.2. 系统类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id8">8.3. 视频处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id12">8.4. 编解码类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id14">8.5. 外设类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id15">8.6. 硬件类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id19">8.7. 工具类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usb_faqs/index.html">8.8. 总线类</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">8.9. 量化工具链类</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html">8.9.1. 模型量化错误及解决方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#bin">8.9.2. .bin模型上板错误及解决方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#id3">8.9.3. 模型量化及上板使用技巧</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">8. </span>FAQ</a> &raquo;</li>
+      <li><span class="section-number">8.9. </span>量化工具链类</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../usb_faqs/USB_WEBCAM_FAQs.html" class="btn btn-neutral float-left" title="8.8.2. USB WEBCAM常见问题(FAQ)" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="ai_toolchain_FAQS.html" class="btn btn-neutral float-right" title="8.9.1. 模型量化错误及解决方法" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">8.9. </span>量化工具链类<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ai_toolchain_FAQS.html">8.9.1. 模型量化错误及解决方法</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ai_toolchain_FAQS.html#hb-mapper-checker-01-check-sh">8.9.1.1. hb_mapper checker (01_check.sh) 错误</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ai_toolchain_FAQS.html#hb-mapper-makertbin-03-build-sh">8.9.1.2. hb_mapper makertbin (03_build.sh) 错误</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ai_toolchain_FAQS.html#id2">8.9.1.3. 其他工具使用错误</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#hb-model-modifier">hb_model_modifier 工具使用错误</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#hb-model-verifier">hb_model_verifier 工具使用错误</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#hb-onnxruntime">hb_onnxruntime 错误</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ai_toolchain_FAQS.html#bin">8.9.2. .bin模型上板错误及解决方法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai_toolchain_FAQS.html#id3">8.9.3. 模型量化及上板使用技巧</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ai_toolchain_FAQS.html#qat">8.9.3.1. 量化感知训练QAT</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#hemat">hemat量化使用说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ai_toolchain_FAQS.html#id4">使用限制</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ai_toolchain_FAQS.html#id5">环境部署</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ai_toolchain_FAQS.html#id6">模型准备</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ai_toolchain_FAQS.html#id7">QAT模型量化</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ai_toolchain_FAQS.html#id8">模型量化</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="ai_toolchain_FAQS.html#prepare-qat-fx">prepare_qat_fx</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ai_toolchain_FAQS.html#qconfig-dict">qconfig_dict</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ai_toolchain_FAQS.html#prepare-custom-config-dict">prepare_custom_config_dict</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ai_toolchain_FAQS.html#id9">其他量化配置</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="ai_toolchain_FAQS.html#id10">输入/输出量化配置</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ai_toolchain_FAQS.html#train-eval">量化状态train/eval配置</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ai_toolchain_FAQS.html#id11">模型结构检查</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ai_toolchain_FAQS.html#id12">量化训练策略</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ai_toolchain_FAQS.html#id13">量化精度验证</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="ai_toolchain_FAQS.html#id14">精度验证</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ai_toolchain_FAQS.html#id15">问题定位</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ai_toolchain_FAQS.html#id16">模型编译</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ai_toolchain_FAQS.html#id17">示例代码</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ai_toolchain_FAQS.html#transformer">8.9.3.2. Transformer使用说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#addtransformer">AddTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#meantransformer">MeanTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#scaletransformer">ScaleTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#normalizetransformer">NormalizeTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#transposetransformer">TransposeTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#hwc2chwtransformer">HWC2CHWTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#chw2hwctransformer">CHW2HWCTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#centercroptransformer">CenterCropTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#pilcentercroptransformer">PILCenterCropTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#longsidecroptransformer">LongSideCropTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#padresizetransformer">PadResizeTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#resizetransformer">ResizeTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#pilresizetransformer">PILResizeTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#shortlongresizetransformer">ShortLongResizeTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#padtransformer">PadTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#shortsideresizetransformer">ShortSideResizeTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#paddedcentercroptransformer">PaddedCenterCropTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#bgr2rgbtransformer">BGR2RGBTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#rgb2bgrtransformer">RGB2BGRTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#rgb2graytransformer">RGB2GRAYTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#bgr2graytransformer">BGR2GRAYTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#rgb2gray-128transformer">RGB2GRAY_128Transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#rgb2yuv444transformer">RGB2YUV444Transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#bgr2yuv444transformer">BGR2YUV444Transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#bgr2yuv444-128transformer">BGR2YUV444_128Transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#rgb2yuv444-128transformer">RGB2YUV444_128Transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#bgr2yuvbt601videotransformer">BGR2YUVBT601VIDEOTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#rgb2yuvbt601videotransformer">RGB2YUVBT601VIDEOTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#yuvtransformer">YUVTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#reducechanneltransformer">ReduceChannelTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#bgr2nv12transformer">BGR2NV12Transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#rgb2nv12transformer">RGB2NV12Transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#nv12toyuv444transformer">NV12ToYUV444Transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#warpaffinetransformer">WarpAffineTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#f32tos8transformer">F32ToS8Transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#f32tou8transformer">F32ToU8Transformer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ai_toolchain_FAQS.html#yolov5x">8.9.3.3. 示例yolov5x模型使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ai_toolchain_FAQS.html#checklist">8.9.3.4. 模型精度调优checklist</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#onnx">1. 验证浮点onnx模型的推理结果</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#yaml">2. 验证yaml配置文件以及前、后处理代码的正确性</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#id18">3. 验证模型的图优化阶段未引入精度误差</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#id19">4. 验证量化精度是否满足预期</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#id20">5. 确保模型编译过程无误且板端推理代码正确</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ai_toolchain_FAQS.html#id21">8.9.3.5. 模型量化yaml配置文件模板</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#caffeyaml">caffe模型量化yaml文件模板</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#onnxyaml">onnx模型量化yaml文件模板</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ai_toolchain_FAQS.html#x3bpu">8.9.3.6. x3多核bpu使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ai_toolchain_FAQS.html#binbatch">8.9.3.7. 定点.bin模型上板多batch使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ai_toolchain_FAQS.html#id22">8.9.3.8. 应用开发技巧说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#id23">多模型控制策略</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ai_toolchain_FAQS.html#id24">模型优先级控制</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ai_toolchain_FAQS.html#id25">应用调优建议</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../usb_faqs/USB_WEBCAM_FAQs.html" class="btn btn-neutral float-left" title="8.8.2. USB WEBCAM常见问题(FAQ)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="ai_toolchain_FAQS.html" class="btn btn-neutral float-right" title="8.9.1. 模型量化错误及解决方法" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

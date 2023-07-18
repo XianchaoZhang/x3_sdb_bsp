@@ -1,0 +1,53 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:             log-daemon
+# Required-Start:
+# Required-Stop:
+# Default-Start:        5
+# Default-Stop:
+# Short-Description:    System logger
+### END INIT INFO
+
+conf_path=/tmp/hb_lob.conf
+log_storage_space="userdata"
+available_size=$(df | grep "${log_storage_space}" | awk '{print $2}')
+log_file_size=2048
+if [ -z "$available_size" ]; then
+	echo "${log_storage_space} not found!"
+	exit 0
+else
+	log_file_num=$(( ${available_size} / 25 / ${log_file_size} ))
+	if [ "${log_file_num}" -gt 50 ];then
+		log_file_num=50
+	elif [ "${log_file_num}" -eq 0 ];then
+		# when userdata space is too small(< 50M)
+		# only record 1 log file
+		log_file_num=1
+	fi
+fi
+
+case "$1" in
+  start)
+	echo -n "Starting hobot daemon log: "
+	mkdir /userdata/log/kernel/tar_log -p
+	mkdir /userdata/log/usr/tar_log -p
+	echo "export ROTATESIZE=${log_file_size}" > ${conf_path}
+	echo "export ROTATEGENS=${log_file_num}" >> ${conf_path}
+	/usr/bin/hobot-log
+	echo "done"
+	;;
+  stop)
+	echo -n "Stopping hobot daemon log: "
+	echo "done"
+	;;
+  restart)
+  	$0 stop
+	$0 start
+	;;
+  *)
+	echo "Usage: hobot-log { start | stop | restart }" >&2
+	exit 1
+	;;
+esac
+
+exit 0

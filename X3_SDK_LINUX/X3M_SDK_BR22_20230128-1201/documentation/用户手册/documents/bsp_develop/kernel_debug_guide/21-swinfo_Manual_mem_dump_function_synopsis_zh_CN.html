@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.5.3. swinfo操作说明(mem-dump功能指导) &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.5.4. crash分析ramdump" href="22-Using_crash_to_Analysis_ramdump_zh_CN.html" />
+    <link rel="prev" title="4.5.2. 内存dump功能使用指南" href="20-Memory_dump_Function_Manual_zh_CN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../driver_develop_guide/index.html">4.3. 驱动开发指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.5. 内核调试指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="19-Using_kgdb_to_debug_kernel_zh_CN.html">4.5.1. 使用kgdb调试内核</a></li>
+<li class="toctree-l3"><a class="reference internal" href="20-Memory_dump_Function_Manual_zh_CN.html">4.5.2. 内存dump功能使用指南</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.5.3. swinfo操作说明(mem-dump功能指导)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mem-dump">4.5.3.1. mem-dump概述</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id1">功能</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id2">实现</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#u-boot">4.5.3.2. U-Boot操作接口</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#swinfo">swinfo命令</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id3">使用示例</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#kernel">4.5.3.3. Kernel操作接口</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#sysfs">sysfs接口</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">使用示例</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#dump">4.5.3.4. dump使用说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#tftp">场景：重启后自动存内存镜像：TFTP</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#pctftp">PC上搭建tftp服务器</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id5">配置dump标志</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id6">故障并自动dump</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#tf-sd">场景：重启后自动存内存镜像：TF/SD卡</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id7">TF/SD卡格式化</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#boot">配置boot标志</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id8">故障并自动dump</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#emmc">场景：重启后自动存内存镜像：EMMC</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id9">配置boot标志</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id10">故障并自动dump</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#u">场景: 重启后自动存内存镜像: U盘</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id11">配置boot标志</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id12">故障并自动dump</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#fastboot">场景：重启后自动存内存镜像：fastboot</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id13">配置boot标志</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id14">故障并自动dump</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#spl">场景：重启后停止在SPL阶段</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id15">场景：重启后停止在u-boot命令行</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id16">4.5.3.5. 功能测试说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#swreg-swmem">SWREG/SWMEM选择功能</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id17">boot类型功能</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id18">dump功能</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#panic">panic预设功能</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="22-Using_crash_to_Analysis_ramdump_zh_CN.html">4.5.4. crash分析ramdump</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.5. </span>内核调试指南</a> &raquo;</li>
+      <li><span class="section-number">4.5.3. </span>swinfo操作说明(mem-dump功能指导)</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="20-Memory_dump_Function_Manual_zh_CN.html" class="btn btn-neutral float-left" title="4.5.2. 内存dump功能使用指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="22-Using_crash_to_Analysis_ramdump_zh_CN.html" class="btn btn-neutral float-right" title="4.5.4. crash分析ramdump" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="swinfo-mem-dump">
+<h1><span class="section-number">4.5.3. </span>swinfo操作说明(mem-dump功能指导)<a class="headerlink" href="#swinfo-mem-dump" title="永久链接至标题"></a></h1>
+<section id="mem-dump">
+<h2><span class="section-number">4.5.3.1. </span>mem-dump概述<a class="headerlink" href="#mem-dump" title="永久链接至标题"></a></h2>
+<section id="id1">
+<h3>功能<a class="headerlink" href="#id1" title="永久链接至标题"></a></h3>
+<p>在进行系统调试或故障复现时，配置好mem-dump环境(包括PC侧及SOM板侧)后，在系统crash或panic后，可让SOM板进入到不同的boot状态，或自动将内存镜像dump出来以便crash现场分析。</p>
+</section>
+<section id="id2">
+<h3>实现<a class="headerlink" href="#id2" title="永久链接至标题"></a></h3>
+<p>本功能实现，是通过约定一块spl/uboot/kernel都可访问的区域，用做标志和通知，实现相应功能并提供操作接口。</p>
+<p>目前使用了PMU的SWREG和sw_reserved内存区域，可选</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>索引(4B)</th>
+<th>SWREG---</th>
+<th>SWMEM---</th>
+<th>功能定义</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>SWREG0</td>
+<td>MEM+00</td>
+<td>NC/MAGIC</td>
+<td>SWREG0在SPL中被休眠功能使用了，此处预留; MEM+00作为MAGIC标志，有效则使用SWMEM，无效则默认使用SWREG</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SWREG1</td>
+<td>MEM+04</td>
+<td>Boot</td>
+<td>[bit3：0] boot类型：0-正常启动，更多见下文</td>
+</tr>
+<tr>
+<td>2</td>
+<td>SWREG2</td>
+<td>MEM+08</td>
+<td>Dump</td>
+<td>tftp的dump主机IP配置：0-不dump，非0-主机IP(如：192.168.1.64 &lt;-&gt; 0xC0A80140)</td>
+</tr>
+</tbody>
+</table><p>上述SWREG和SWMEM都可选用作标志区域，可操作时选择，代码中会根据SWMEM[0]的MAGIC是否有效判断使用哪个。</p>
+<p>其内数据对不同的复位操作有不同的特性，如下：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>操作</th>
+<th>软件reboot/reset</th>
+<th>硬件RESET</th>
+<th>断电重启</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SWREG</td>
+<td>保留</td>
+<td>清除</td>
+<td>清除</td>
+</tr>
+<tr>
+<td>SWMEM</td>
+<td>保留</td>
+<td>保留</td>
+<td>清除</td>
+</tr>
+</tbody>
+</table><p>目前支持9种boot状态类型(包括2种dump操作类型)：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Boot Index</th>
+<th>类型</th>
+<th>说明</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>normal</td>
+<td>正常启动kernel</td>
+<td>默认启动流程</td>
+</tr>
+<tr>
+<td>1</td>
+<td>splonce</td>
+<td>spl内等待，并复位标志</td>
+<td>只等待一次，再硬件reset可正常启动</td>
+</tr>
+<tr>
+<td>2</td>
+<td>ubootonce</td>
+<td>uboot内等待，并复位标志</td>
+<td>只等待一次，再硬件reset可正常启动</td>
+</tr>
+<tr>
+<td>3</td>
+<td>splwait</td>
+<td>spl内等待，不复位标志</td>
+<td>SWMEM方式只能断电后正常启动</td>
+</tr>
+<tr>
+<td>4</td>
+<td>ubootwait</td>
+<td>uboot内等待，不复位标志</td>
+<td>若不手动操作清，SWMEM方式只能断电后正常启动</td>
+</tr>
+<tr>
+<td>5</td>
+<td>udumptf</td>
+<td>uboot内通过tf卡dump内存</td>
+<td>自动dump内存镜像文件到FAT32格式的TF卡内</td>
+</tr>
+<tr>
+<td>6</td>
+<td>udumpemmc</td>
+<td>uboot内通过emmc dump内存</td>
+<td>自动dump内存镜像文件到EXT4格式的emmc的userdata分区内</td>
+</tr>
+<tr>
+<td>7</td>
+<td>udumpusb</td>
+<td>uboot内通过U盘dump内存</td>
+<td>自动dump内存镜像文件到FAT32格式的U盘第一个分区内</td>
+</tr>
+<tr>
+<td>8</td>
+<td>udumpfastboot</td>
+<td>uboot内通过fastboot dump内存</td>
+<td>PC端安装fastboot工具并使用命令：fastboot oem ramdump即可</td>
+</tr>
+</tbody>
+</table></section>
+</section>
+<section id="u-boot">
+<h2><span class="section-number">4.5.3.2. </span>U-Boot操作接口<a class="headerlink" href="#u-boot" title="永久链接至标题"></a></h2>
+<section id="swinfo">
+<h3>swinfo命令<a class="headerlink" href="#swinfo" title="永久链接至标题"></a></h3>
+<p>U-Boot内增加有swinfo命令对上述SWREG及SWMEM区进行读写操作。该命令有帮助说明如下：</p>
+<p>swinfo命令</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo - swinfo sub system
+
+Usage：
+
+swinfo info <span class="o">[</span>reg/mem<span class="o">]</span> - display info of the swinfo <span class="c1">#查看当前使用的SWINFO区(自动判断SWREG/SWMEM)</span>
+
+swinfo sel <span class="o">[</span>reg/mem<span class="o">]</span> - <span class="k">select</span> reg/mem <span class="c1"># 查看/选择SWINFO区使用SWREG或SWMEM</span>
+
+swinfo reg <span class="o">[</span>index <span class="o">[</span>value<span class="o">]]</span> - get/set reg <span class="c1"># 查看/设置SWREG区对应索引的值</span>
+
+swinfo mem <span class="o">[</span>index <span class="o">[</span>value<span class="o">]]</span> - get/set mem <span class="c1"># 查看/设置SWMEM区对应索引的值</span>
+
+swinfo boot <span class="o">[</span>type<span class="o">]</span> - get/set boot info <span class="c1"># 查看/设置当前SWINOF内的boot类型</span>
+
+swinfo dump <span class="o">[</span>iphex<span class="o">]</span> - get/set dump ip <span class="k">in</span> hex <span class="c1"># 查看/设置当前SWINOF内的dump IP</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>使用示例<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>查看SWINFO当前所有配置值：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Hobot&gt;swinfo info
+
+swinfo：reg -- 00000000a6000200
+
+<span class="m">00</span>：00000000 <span class="m">00000000</span> <span class="m">00000000</span> <span class="m">00000000</span>
+
+<span class="m">10</span>：00000000 <span class="m">00000000</span> <span class="m">00000000</span> <span class="m">00000000</span>
+
+<span class="m">20</span>：00000000 <span class="m">00000000</span> <span class="m">00000000</span> <span class="m">00000000</span>
+
+<span class="m">30</span>：00000000 <span class="m">00000000</span> <span class="m">00000000</span> <span class="m">00000000</span>
+
+<span class="m">40</span>：00000000 <span class="m">00000000</span> <span class="m">00000000</span> <span class="m">00000000</span>
+
+<span class="m">50</span>：00000000 <span class="m">00000000</span> <span class="m">00000000</span> <span class="m">00000000</span>
+
+<span class="m">60</span>：00000000 <span class="m">00000000</span> <span class="m">00000000</span> <span class="m">00000000</span>
+
+<span class="m">70</span>：00000000 <span class="m">00000000</span> <span class="m">00000000</span> <span class="m">00000000</span>
+
+swinfo boot：0 normal
+
+swinfo dump：none
+</pre></div>
+</div>
+<p>修改使用SWMEM：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo sel mem
+</pre></div>
+</div>
+<p>以下打印会出现：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo sel：mem
+</pre></div>
+</div>
+<p>修改boot状态类型为4(ubootwait)：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo boot <span class="m">4</span>
+</pre></div>
+</div>
+<p>以下打印会出现：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo boot：4 ubootwait
+</pre></div>
+</div>
+<p>修改使能dump标志，并配置主机IP为192.168.1.64：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo dump 0xc0a80140
+</pre></div>
+</div>
+<p>以下打印会出现：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo dump: <span class="m">192</span>.168.1.64
+</pre></div>
+</div>
+<p>查看dump标志状态：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo dump
+</pre></div>
+</div>
+<p>以下打印会出现：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo dump：192.168.1.64
+</pre></div>
+</div>
+<p>直接操作SWREG2，写为0xAA55AA55 (SWMEM类同)：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo reg <span class="m">2</span> 0xAA55AA55
+</pre></div>
+</div>
+<p>以下打印会出现：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo reg：2<span class="o">[</span><span class="m">08</span><span class="o">]</span>: <span class="m">00000000</span> -&gt; AA55AA55
+</pre></div>
+</div>
+<p>直接读取SWREG2的值 (SWMEM类同)：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Hobot&gt;swinfo reg <span class="m">2</span>
+</pre></div>
+</div>
+<p>以下打印会出现：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo reg：2<span class="o">[</span><span class="m">08</span><span class="o">]</span>: AA55AA55
+</pre></div>
+</div>
+</section>
+</section>
+<section id="kernel">
+<h2><span class="section-number">4.5.3.3. </span>Kernel操作接口<a class="headerlink" href="#kernel" title="永久链接至标题"></a></h2>
+<section id="sysfs">
+<h3>sysfs接口<a class="headerlink" href="#sysfs" title="永久链接至标题"></a></h3>
+<p>Kernel内提供了类似的对SWINFO区的操作功能，在sysfs内实现，位于/sys/kernel/hobot-swinfo下，有：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls /sys/kernel/hobot-swinfo
+
+boot <span class="c1"># boot类型查看及设置</span>
+
+dump <span class="c1"># dump标志查看及设置</span>
+
+panic <span class="c1"># panic时的动作查看及设置</span>
+
+sel <span class="c1"># SWREG/SWMEM选择查看及设置</span>
+
+swinfo <span class="c1"># SWINFO区当前信息查看(自动识别SWREG/SWMEM)</span>
+
+swmem <span class="c1"># SWMEM区查看及设置</span>
+
+swreg <span class="c1"># SWREG区查看及设置</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>使用示例<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>查看SWINFO当前所有配置值：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /sys/kernel/hobot-swinfo/swinfo
+</pre></div>
+</div>
+<p>以下打印应出现：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>~# cat /sys/kernel/hobot-swinfo/swinfo
+
+<span class="m">0</span><span class="o">[</span><span class="m">00</span>-ro<span class="o">]</span>：0x00000000 <span class="o">[</span>MAGIC<span class="o">]</span>
+
+<span class="m">1</span><span class="o">[</span><span class="m">04</span>-rw<span class="o">]</span>：0x00000000
+
+<span class="m">2</span><span class="o">[</span><span class="m">08</span>-rw<span class="o">]</span>：0x00000000
+
+<span class="m">3</span><span class="o">[</span>0C-rw<span class="o">]</span>：0x00000000
+</pre></div>
+</div>
+<p>修改使用SWMEM：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> mem &gt; /sys/kernel/hobot-swinfo/sel
+</pre></div>
+</div>
+<p>修改boot状态类型为4(ubootwait)：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">4</span> &gt; /sys/kernel/hobot-swinfo/boot
+</pre></div>
+</div>
+<p>修改使能dump标志，并配置主机IP为192.168.1.64：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">192</span>.168.1.64 &gt; /sys/kernel/hobot-swinfo/dump
+</pre></div>
+</div>
+<p>查看dump标志状态：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /sys/kernel/hobot-swinfo/dump
+</pre></div>
+</div>
+<p>以下打印应出现：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>~# cat /sys/kernel/hobot-swinfo/dump
+
+dump: 0xC0A80140 <span class="m">192</span>.168.1.64
+</pre></div>
+</div>
+<p>直接操作SWREG2，写为0xAA55AA55 (SWMEM类同)：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">2</span><span class="o">=</span>0xAA55AA55 &gt; /sys/kernel/hobot-swinfo/swreg
+</pre></div>
+</div>
+<p>直接读取SWREG2的值(SWMEM类同)：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /sys/kernel/hobot-swinfo/swreg <span class="p">|</span>grep <span class="s2">&quot; 2\[&quot;</span>
+</pre></div>
+</div>
+<p>以下打印应出现：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">2</span><span class="o">[</span><span class="m">08</span>-rw<span class="o">]</span>：0xAA55AA55
+</pre></div>
+</div>
+<p>上述的echo操作都是完成后直接影响SWMEM/SWREG的，期间重启自动生效，而要想在此状态下正常reboot，需要使用echo 0清除相应标志。</p>
+<p>为此，增加了panic预配置接口，配置在系统panic时(注：直接挂死的情况不适用)，才去真正操作相应标志，实现不影响正常reboot操作的boot/dump调试功能：</p>
+<p>如预设panic时写boot类型为4-ubootwait(各boot类型及功能定义同上)：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">boot</span><span class="o">=</span><span class="m">4</span> &gt;/sys/kernel/hobot-swinfo/panic
+
+~# <span class="nb">echo</span> <span class="nv">boot</span><span class="o">=</span><span class="m">4</span> &gt;/sys/kernel/hobot-swinfo/panic
+</pre></div>
+</div>
+<p>如预设panic时写dump为192.168.1.64：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">dump</span><span class="o">=</span><span class="m">192</span>.168.1.64 &gt;/sys/kernel/hobot-swinfo/panic
+
+~# <span class="nb">echo</span> <span class="nv">dump</span><span class="o">=</span><span class="m">192</span>.168.1.64 &gt;/sys/kernel/hobot-swinfo/panic
+</pre></div>
+</div>
+<p>可查看panic预设操作信息：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /sys/kernel/hobot-swinfo/panic
+
+~# cat /sys/kernel/hobot-swinfo/panic
+
+panic:dump<span class="o">=</span>0xC0A80140 <span class="m">192</span>.168.1.64
+</pre></div>
+</div>
+</section>
+</section>
+<section id="dump">
+<h2><span class="section-number">4.5.3.4. </span>dump使用说明<a class="headerlink" href="#dump" title="永久链接至标题"></a></h2>
+<section id="tftp">
+<h3>场景：重启后自动存内存镜像：TFTP<a class="headerlink" href="#tftp" title="永久链接至标题"></a></h3>
+<p>对于一般故障复现测试场景中，可搭建测试及dump环境，在系统Crash重启后，自动进入uboot，通过tftp命令将内存镜像保存，以便分析。</p>
+<section id="pctftp">
+<h4>PC上搭建tftp服务器<a class="headerlink" href="#pctftp" title="永久链接至标题"></a></h4>
+<p>手动搭建，可参考：<a class="reference external" href="./5-Burn_Image_zh_CN"><strong>准备工作（tftp服务器搭建及nfs挂载）</strong></a></p>
+<p>直接使用升级工具自带的tftp服务：<a class="reference external" href="./5-Burn_Image_zh_CN"><strong>Horizon产品升级工具</strong></a></p>
+<p>配置好PC网口的IP，如：192.168.1.64(配置中要使用)。</p>
+</section>
+<section id="id5">
+<h4>配置dump标志<a class="headerlink" href="#id5" title="永久链接至标题"></a></h4>
+<p>首先根据目标场景在运行前进行配置，方法如下：</p>
+<p>有2种方法可选：</p>
+<p>kernel可正常启动，在linux命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">192</span>.168.1.64 &gt; /sys/kernel/hobot-swinfo/dump
+</pre></div>
+</div>
+<p>上为直接操作立即生效，而若仅需在panic时生效(不影响reboot或reset引发的重启)，可预设：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">dump</span><span class="o">=</span><span class="m">192</span>.168.1.64 &gt; /sys/kernel/hobot-swinfo/panic
+</pre></div>
+</div>
+<p>kernel不可正常启动，在uboot命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo dump 0xc0a80140
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h4>故障并自动dump<a class="headerlink" href="#id6" title="永久链接至标题"></a></h4>
+<p>配置完成后，测试运行，等待故障重启。或测试可通过sysrq产生一个panic：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> c &gt; /proc/sysrq-trigger
+</pre></div>
+</div>
+<p>重启后进入uboot内，自动根据dump配置值，进行serverip及ipaddr配置，使用tftp将全内存镜像写为dump_ddr_${ddr_size}.img文件。</p>
+<p>此处IP规则为：同子网段，serverip非1，则ipaddr为1; serverip为1，则ipaddr为10。如下：</p>
+<p><img alt="../../_images/bbd8ab04eac1a7fd07669b0e26ee1ab4.png" src="../../_images/bbd8ab04eac1a7fd07669b0e26ee1ab4.png" /></p>
+<p>在dump成功后，将自动清dump标志，并停在uboot命令行内。</p>
+<p>注意，此处的dump标志在配置完成后，若想正常软件重启，需先配回0状态(linux内panic预设的不用)：</p>
+<p>linux内reboot前：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">0</span> &gt; /sys/kernel/hobot-swinfo/dump
+</pre></div>
+</div>
+<p>uboot内reset前：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo dump <span class="m">0</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="tf-sd">
+<h3>场景：重启后自动存内存镜像：TF/SD卡<a class="headerlink" href="#tf-sd" title="永久链接至标题"></a></h3>
+<p>对于不方便使用tftp网络方式(或嫌慢)的dump需求，且设备有TF/SD卡的场景，可直接将内存dump到TF/SD卡内，直接从卡内获取dump文件分析。</p>
+<section id="id7">
+<h4>TF/SD卡格式化<a class="headerlink" href="#id7" title="永久链接至标题"></a></h4>
+<p>首先要准备待使用的TF/SD卡，为让uboot正常识别并使用，需要先对TF/SD卡进行分区并格式化。TF/SD卡应处于FAT32格式。</p>
+<p>在Linux下操作，若直接在X3J3上Linux内进行，由于目前暂默认不支持mkfs.fat命令，请交叉编译ARM指令集下的parted及mkfs.fat工具。以下例子假设TF/SD卡被挂在为”mmcblk1”，格式化前请卸载SD卡：</p>
+<p>TF/SD卡格式化：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>~# parted /dev/mmcblk1 mktable gpt
+
+~# parted /dev/mmcblk1 mkpart primary fat32 1Mib <span class="m">100</span>%
+
+~# mkfs.fat /dev/mmcblk1p1
+</pre></div>
+</div>
+<p>也可直接在PC上完成，但请注意上述“/dev/mmcblk1”应使用PC识别出TF/SD卡的对应设备。</p>
+</section>
+<section id="boot">
+<h4>配置boot标志<a class="headerlink" href="#boot" title="永久链接至标题"></a></h4>
+<p>首先根据目标场景在运行前进行配置，方法如下：有2种方法可选：</p>
+<p>kernel可正常启动，在linux命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">5</span> &gt; /sys/kernel/hobot-swinfo/boot
+</pre></div>
+</div>
+<p>上为直接操作立即生效，而若仅需在panic时生效(不影响reboot或reset引发的重启)，可预设：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">boot</span><span class="o">=</span><span class="m">5</span> &gt; /sys/kernel/hobot-swinfo/panic
+</pre></div>
+</div>
+<p>kernel不可正常启动，在uboot命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo boot <span class="m">5</span>
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h4>故障并自动dump<a class="headerlink" href="#id8" title="永久链接至标题"></a></h4>
+<p>配置完成后，测试运行，等待故障重启。或测试可通过sysrq产生一个panic：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> c &gt; /proc/sysrq-trigger
+</pre></div>
+</div>
+<p>重启后进入uboot内，自动根据boot配置值，有如下提示：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dump ddr 0x40000000 -<span class="se">\&gt;</span> tfcard:1
+</pre></div>
+</div>
+<p>使用fatwrite命令将内存dump到TF/SD卡的分区1内，并在dump成功后，将自动清dump标志，并停在uboot命令行内。</p>
+<p>在uboot内可通过命令查看到该dump_ddr_xxxx,img文件，之后可取出TF/SD卡，直接使用该文件进行crash分析：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>fatls mmc <span class="m">1</span>:1
+</pre></div>
+</div>
+</section>
+</section>
+<section id="emmc">
+<h3>场景：重启后自动存内存镜像：EMMC<a class="headerlink" href="#emmc" title="永久链接至标题"></a></h3>
+<p>对于不方便使用tftp网络方式(或嫌慢)的dump需求，设备又无TF/SD卡的场景，可直接将内存dump到emmc的userdata区内，之后再通过其他方式取出该文件分析。</p>
+<section id="id9">
+<h4>配置boot标志<a class="headerlink" href="#id9" title="永久链接至标题"></a></h4>
+<p>首先根据目标场景在运行前进行配置，方法如下：有2种方法可选：</p>
+<p>kernel可正常启动，在linux命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">6</span> &gt; /sys/kernel/hobot-swinfo/boot
+</pre></div>
+</div>
+<p>上为直接操作立即生效，而若仅需在panic时生效(不影响reboot或reset引发的重启)，可预设：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">boot</span><span class="o">=</span><span class="m">6</span> &gt; /sys/kernel/hobot-swinfo/panic
+</pre></div>
+</div>
+<p>kernel不可正常启动，在uboot命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo boot <span class="m">6</span>
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h4>故障并自动dump<a class="headerlink" href="#id10" title="永久链接至标题"></a></h4>
+<p>配置完成后，测试运行，等待故障重启。</p>
+<p>或测试可通过sysrq产生一个panic：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="n">sysrq</span><span class="o">-</span><span class="n">trigger</span>
+</pre></div>
+</div>
+<p>重启后进入uboot内，自动根据boot配置值，有如下提示：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo dump ddr 0x40000000 -&gt; emmc:12
+</pre></div>
+</div>
+<p>使用fatwrite命令将内存dump到EMMC分区12(userdata)内，并在dump成功后，将自动清dump标志，并停在uboot命令行内。</p>
+<p>在uboot内可通过命令查看到该dump_ddr_xxxx,img文件，之后可启动到linux，通过sftp或tftp等方式取出该文件进行crash分析：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ext4ls</span> <span class="n">mmc</span> <span class="mi">0</span><span class="p">:</span><span class="n">c</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="u">
+<h3>场景: 重启后自动存内存镜像: U盘<a class="headerlink" href="#u" title="永久链接至标题"></a></h3>
+<section id="id11">
+<h4>配置boot标志<a class="headerlink" href="#id11" title="永久链接至标题"></a></h4>
+<p>首先根据目标场景在运行前进行配置，方法如下：</p>
+<p>有2种方法可选：</p>
+<p>kernel可正常启动，在linux命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> udumpusb &gt; /sys/kernel/hobot-swinfo/boot
+</pre></div>
+</div>
+<p>上为直接操作立即生效，而若仅需在panic时生效(不影响reboot或reset引发的重启)，可预设：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">boot</span><span class="o">=</span><span class="m">7</span> &gt; /sys/kernel/hobot-swinfo/panic
+</pre></div>
+</div>
+<p>kernel不可正常启动，在uboot命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo boot <span class="m">7</span>
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h4>故障并自动dump<a class="headerlink" href="#id12" title="永久链接至标题"></a></h4>
+<p>配置完成后，测试运行，等待故障重启。</p>
+<p>或测试可通过sysrq产生一个panic：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> c &gt; /proc/sysrq-trigger
+</pre></div>
+</div>
+<p>重启后进入uboot内，自动根据boot配置值，有如下提示：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo dump ddr 0x40000000 -&gt; usb
+</pre></div>
+</div>
+<p>U盘中会产生dump_ddr_xxxx,img 文件即为ramdump文件</p>
+</section>
+</section>
+<section id="fastboot">
+<h3>场景：重启后自动存内存镜像：fastboot<a class="headerlink" href="#fastboot" title="永久链接至标题"></a></h3>
+<section id="id13">
+<h4>配置boot标志<a class="headerlink" href="#id13" title="永久链接至标题"></a></h4>
+<p>首先根据目标场景在运行前进行配置，方法如下：</p>
+<p>有2种方法可选：</p>
+<p>Kernel可正常启动，在linux命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> udumpfastboot &gt; /sys/kernel/hobot-swinfo/boot
+</pre></div>
+</div>
+<p>上为直接操作立即生效，而若仅需在panic时生效(不影响reboot或reset引发的重启)，可预设：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">boot</span><span class="o">=</span><span class="m">8</span> &gt; /sys/kernel/hobot-swinfo/panic
+</pre></div>
+</div>
+<p>Kernel无法正常启动，在UBoot命令行执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo boot <span class="m">8</span>
+</pre></div>
+</div>
+</section>
+<section id="id14">
+<h4>故障并自动dump<a class="headerlink" href="#id14" title="永久链接至标题"></a></h4>
+<p>配置完成后，测试运行，等待故障重启。</p>
+<p>或测试可通过sysrq产生一个panic：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> c &gt; /proc/sysrq-trigger
+</pre></div>
+</div>
+<p>重启后开发板会停留在fastboot ramdump模式下, 如下图：</p>
+<p><img alt="../../_images/55bfce712cba26858718ac39182329d1.png" src="../../_images/55bfce712cba26858718ac39182329d1.png" /></p>
+<p>PC端利用fastboot工具：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>fastboot oem ramdump
+</pre></div>
+</div>
+<p><img alt="../../_images/643ab4e1b67f5c04a281b465e9d015c6.png" src="../../_images/643ab4e1b67f5c04a281b465e9d015c6.png" /></p>
+<p><font color=red>注意：</font></p>
+<p>如未配置sw_info, panic后会自动进入uboot, 可于uboot中使用命令：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>fastboot <span class="m">0</span>
+</pre></div>
+</div>
+<p>以启动fastboot，效果一样。</p>
+</section>
+</section>
+<section id="spl">
+<h3>场景：重启后停止在SPL阶段<a class="headerlink" href="#spl" title="永久链接至标题"></a></h3>
+<p>对于有BIF接口，可通过AP或PC直接访问SOM的内存的，获取dump镜像的场景，可在系统故障后让其停在SPL阶段，以保留内存原始状态。首先根据目标场景在运行前进行配置，方法如下：要求按硬件RESET键后就可正常启动的场景，有2种情况：</p>
+<p>kernel可正常启动，在linux命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">1</span> &gt; /sys/kernel/hobot-swinfo/boot
+</pre></div>
+</div>
+<p>kernel不可正常启动，在uboot命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo boot <span class="m">1</span>
+</pre></div>
+</div>
+<p>配置好后，测试运行，故障发生或重启后，将进入到spl内等待，如下(按RESET可正常重启运行)：</p>
+<p><img alt="../../_images/e013a12221dbe5a2c60d9db216e3e009.png" src="../../_images/e013a12221dbe5a2c60d9db216e3e009.png" /></p>
+<p>若要求只能断电才能正常启动(如十分重要的现场，避免误触破坏)：</p>
+<p>kernel可正常启动，在linux命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> mem &gt; /sys/kernel/hobot-swinfo/sel
+
+<span class="nb">echo</span> <span class="m">3</span> &gt; /sys/kernel/hobot-swinfo/boot
+</pre></div>
+</div>
+<p>kernel不可正常启动，在uboot命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo sel mem
+
+swinfo boot <span class="m">3</span>
+</pre></div>
+</div>
+<p>配置好后，测试运行，故障发生或重启后，将进入到spl内等待，如下(按RESET依然会停在此，需断电重启)：</p>
+<p><img alt="../../_images/e013a12221dbe5a2c60d9db216e3e009.png" src="../../_images/e013a12221dbe5a2c60d9db216e3e009.png" /></p>
+<p>注意：此处的boot标志在配置完成后，若想正常软件重启，需先配回0状态：</p>
+<p>linux内reboot前：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">0</span> &gt; /sys/kernel/hobot-swinfo/boot
+</pre></div>
+</div>
+<p>uboot内reset前：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo boot <span class="m">0</span>
+</pre></div>
+</div>
+<section id="id15">
+<h4>场景：重启后停止在u-boot命令行<a class="headerlink" href="#id15" title="永久链接至标题"></a></h4>
+<p>对于一些需要重启后停留在uboot命令行状态的场景，可按如下操作。首先根据目标场景在运行前进行配置，方法如下：</p>
+<p>要求按硬件RESET键后就可正常启动的场景，有2种情况：</p>
+<p>kernel可正常启动，在linux命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">2</span> &gt; /sys/kernel/hobot-swinfo/boot
+</pre></div>
+</div>
+<p>kernel不可正常启动，在uboot命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo boot <span class="m">2</span>
+</pre></div>
+</div>
+<p>配置好后，测试运行，故障发生或重启后，将进入到uboot命令行内等待(按RESET或reset命令可正常重启运行)：</p>
+<p><img alt="../../_images/8e1d0d4ea9d3e325f3b17df7e08ada95.png" src="../../_images/8e1d0d4ea9d3e325f3b17df7e08ada95.png" /></p>
+<p>若要求只能断电才能正常启动(如十分重要的现场，避免误触破坏)：</p>
+<p>kernel可正常启动，在linux命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> mem &gt; /sys/kernel/hobot-swinfo/sel
+
+<span class="nb">echo</span> <span class="m">4</span> &gt; /sys/kernel/hobot-swinfo/boot
+</pre></div>
+</div>
+<p>kernel不可正常启动，在uboot命令行内执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo sel mem
+
+swinfo boot <span class="m">4</span>
+</pre></div>
+</div>
+<p>配置好后，测试运行，故障发生或重启后，将进入到uboot命令行内等待(按RESET依然会停在此，需断电重启或清标志)：</p>
+<p><img alt="../../_images/9dae0630b0618c73a0f648736f0d4696.png" src="../../_images/9dae0630b0618c73a0f648736f0d4696.png" /></p>
+<p><font color=red>注意：</font></p>
+<p>处于ubootwait状态的单板，若想再次重新启动，可断电重启，或如下操作：</p>
+<p>uboot内reset前：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo boot <span class="m">0</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="id16">
+<h2><span class="section-number">4.5.3.5. </span>功能测试说明<a class="headerlink" href="#id16" title="永久链接至标题"></a></h2>
+<section id="swreg-swmem">
+<h3>SWREG/SWMEM选择功能<a class="headerlink" href="#swreg-swmem" title="永久链接至标题"></a></h3>
+<p>uboot命令行内：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo sel
+</pre></div>
+</div>
+<p>查看当前默认为SWREG(reg)，选为SWMEM：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo sel mem
+</pre></div>
+</div>
+<p>重启：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>reset
+</pre></div>
+</div>
+<p>重启后再进uboot，查看当前有效的swinfo：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo sel
+</pre></div>
+</div>
+<p>此时应已识别为SWMEM类型：mem</p>
+</section>
+<section id="id17">
+<h3>boot类型功能<a class="headerlink" href="#id17" title="永久链接至标题"></a></h3>
+<p>linux命令行内(以下为1，其他类型同理)：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">1</span> &gt; /sys/kernel/hobot-swinfo/boot
+
+reboot
+</pre></div>
+</div>
+<p>或uboot命令行内(以下为1，其他类型同理)：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>swinfo boot <span class="m">1</span>
+
+reset
+</pre></div>
+</div>
+<p>重启后进入不同的状态：</p>
+<ul class="simple">
+<li><p>0 – normal，正常linux启动流程;</p></li>
+<li><p>1 – splonce，停在spl内，可按键复位;</p></li>
+<li><p>2 – ubootonce，停在uboot内，可按键复位;</p></li>
+<li><p>3 – splwait，停在spl内，选reg可按键复位，选mem只能断电重启;</p></li>
+<li><p>4 – ubootwait，停在uboot内，选reg可按键复位，选mem只能断电重启;</p></li>
+<li><p>5 – udumptf，在panic或重启后，自动dump内存到TF/SD卡内;</p></li>
+<li><p>6 – udumpemmc，在panic或重启后，自动dump内存到emmc的userdata分区内;</p></li>
+<li><p>7 – udumpusb，在panic或重启后，自动dump内存到FAT32格式的U盘第一个分区内；</p></li>
+<li><p>8 – udumpfastboot，在panic或重启后，自动通过Fastboot dump内存。</p></li>
+</ul>
+</section>
+<section id="id18">
+<h3>dump功能<a class="headerlink" href="#id18" title="永久链接至标题"></a></h3>
+<p>参考目标前文说明，构建tftp服务器，并配置好IP，如192.168.1.64，执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">192</span>.168.1.64 &gt; /sys/kernel/hobot-swinfo/dump
+</pre></div>
+</div>
+<p>等待系统panic或通过以下命令手动触发系统panic：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> c &gt; /proc/sysrq-trigger
+</pre></div>
+</div>
+<p>报panic后自动重启，自动进入uboot并在tftp服务器根目录下生成1个内存大小的dump_ddr_xxx.img文件。</p>
+</section>
+<section id="panic">
+<h3>panic预设功能<a class="headerlink" href="#panic" title="永久链接至标题"></a></h3>
+<p>参考上述<em>21.3.2</em>示例，预设操作只对panic有效果，直接reboot无效：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">boot</span><span class="o">=</span><span class="m">2</span> &gt; /sys/kernel/hobot-swinfo/panic
+
+<span class="nb">echo</span> c &gt; /proc/sysrq-trigger
+</pre></div>
+</div>
+<p>报panic后自动重启，自动进入uboot并等待，满足预定功能，uboot下boot重进系统后：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">boot</span><span class="o">=</span><span class="m">2</span> &gt; /sys/kernel/hobot-swinfo/panic
+
+reboot
+</pre></div>
+</div>
+<p>对于非panic重启，该预设操作不生效，不影响正常启动流程。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="20-Memory_dump_Function_Manual_zh_CN.html" class="btn btn-neutral float-left" title="4.5.2. 内存dump功能使用指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="22-Using_crash_to_Analysis_ramdump_zh_CN.html" class="btn btn-neutral float-right" title="4.5.4. crash分析ramdump" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

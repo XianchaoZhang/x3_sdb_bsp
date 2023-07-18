@@ -1,0 +1,470 @@
+# 接口使用说明
+
+## 接口总览
+
+开发板外围提供了以太网、USB、MIPI CSI、LCD、HDMI、40PIN等外围接口，配合开发板配件中的摄像头、音频板、LCD板，方便用户进行图像多媒体、AI算法的评测和开发。开发板接口布局如下：
+
+![image-X3SDB-Top](_static/_images/board_spec_for_Nano/image-X3SDB-Top.png)![image-X3SDB-Bottom](_static/_images/board_spec_for_Nano/image-X3SDB-Bottom.png)
+
+
+| **编号** | **功能**                       | **编号** | **功能**              |
+| -------- | --------------------------------- | -------- | --------------------------------- |
+| 1        | DC电源接口                      | 9       | 40PIN扩展口             |
+| 2        | Micro USB 2.0                  | 10       | TP连接器              |
+| 3        | USB 3.0 Type A                 | 11       | MIPI DSI              |
+| 4        | USB 2.0 Type A                 | 12       | MIPI CSI 1            |
+| 5        | RTC电池连接器                   | 13       | MIPI CSI 2            |
+| 6        | 千兆网口                        | 14       | Debug串口(默认921600)  |
+| 7        | HDMI                           | 15       | USB Type-C(只供电)     |
+| 8        | X3SOM DIMM                     | 16       | TF卡槽                 |
+
+## 电源接口
+
+开发板支持DC接口或者USB Type C接口两种供电方式，分别对应接口1、接口15。
+
+DC接口支持12V输入，推荐使用开发板配套的12V 2A电源适配器。
+
+Type C接口兼容PD快充协议，支持5V、9V、12V电压输入。推荐使用支持PD协议的电源适配器，或者至少搭配支持**5V/2A**的电源适配器使用。
+
+## 调试串口
+
+开发板提供一路调试串口，对应接口14，默认波特率为921600。硬件接口采用3.3V电平，定义如下：
+
+| 序号 | 名称    | 属性           |
+| ---- | ------- | --------------|
+| 1    | 3.3V    | 3.3V电源       |
+| 2    | UART RX | 开发板串口接收  |
+| 3    | UART TX | 开发板串口发送  |
+| 4    | GND     | 数字地         | 
+
+开发板调试串口默认作为系统控制台的输入、输出，硬件上对应UART0。如需关闭串口调试、或者修改串口波特率，可以在uboot中修改环境变量**console=ttyS0,921600**字段。
+
+打开控制台输出：
+
+```bash
+setenv bootargs earlycon console=ttyS0,921600 kgdboc=ttyS0  root=/dev/mmcblk0p9 rootfstype=ext4 ro rootwait raid=noautodetect hobotboot.reson=WTD_RESET
+saveenv
+reset
+```
+
+关闭控制台输出：
+
+```bash
+setenv bootargs earlycon kgdboc=ttyS0  root=/dev/mmcblk0p9 rootfstype=ext4 ro rootwait raid=noautodetect hobotboot.reson=WTD_RESET
+saveenv
+reset
+```
+
+## 以太网
+
+开发板提供一路千兆以太网接口，RJ45连接器对应接口6，支持1000BASE-T、100BASE-T和10BASE-T标准，系统默认ip为192.168.1.10。
+如需确认设备当前ip配置，可通过串口登录设备，并用ifconfig命令进行查询。
+
+```bash
+root@x3sdbx3-samsung2G-3200:/# ifconfig 
+eth0      Link encap:Ethernet  HWaddr 00:4c:08:57:ef:39  
+          inet addr:192.168.1.10  Bcast:192.168.1.255  Mask:255.255.255.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Interrupt:39 Base address:0xc000 
+```
+
+用户可通过**hrut_ipfull**命令在线修改开发板IP地址，修改完成**需重启开发板后生效**，断电可保存，命令格式如下：
+
+```shell
+hrut_ipfull s IP MASK GATEWAY 
+# e.g. hrut_ipfull s 192.168.1.10 255.255.255.0 192.168.1.255 
+```
+
+## USB
+
+**USB接口说明**
+
+开发板通过USB Hub、硬件开关电路扩展了多路USB接口，满足用户多路USB设备接入的需求。开发板USB接口描述如下：
+
+| 接口类型 | 接口序号 |  接口数量 |  接口描述  |
+| ------ | ------ | ------- | ------- |
+| USB 3.0 TYPE A | 接口3 | 1路 | USB Host模式，用于接入USB 3.0外设 |
+| USB 2.0 TYPE A | 接口4 | 2路 | USB Host模式，用于接入USB 2.0外设 |
+| Micro USB 2.0  | 接口2 | 1路 | USB Device模式，用于连接主机实现ADB、Fastboot、UVC等功能 |
+
+由于X3芯片只提供一路USB接口，因此开发板通过硬件电路实现USB主从模式自动切换，用户无需关心USB主从模式，只需按照上表的逻辑连接设备即可。需要注意的是，**开发板禁止同时使用USB Host、Device接口，否则可能造成硬件电路异常**。
+
+**USB 3.0 Device使能**                        
+对于需要使用USB 3.0 Device模式的情形，需要用户通过命令禁用硬件主从切换逻辑，并将USB模式强制指定为Device，命令如下：
+
+```shell
+echo device > /sys/devices/platform/soc/b2000000.usb/role
+echo soc:usb-id > /sys/bus/platform/drivers/extcon-usb-gpio/unbind
+```
+
+此时开发板会强制指定USB 3.0 TYPE A为Device模式，同时禁用USB 2.0 TYPE A接口，此外用户还需要准备一条**双公头USB 3.0 Type A数据线**用于开发板和主机的连接。
+
+
+## 摄像头
+
+开发板提供两路MIPI CSI接口，可同时接入两路摄像头。目前开发板配件提供了几种不同规格的摄像头模组，以满足不同用户的功能评测要求。模组规格如下：
+
+| 序号 | Sensor |   分辨率  |  FOV  | I2C ID |  MIPI CSI接口 |
+| --- | ------ | ------- | ------- | ------- | ------- |
+|  1  | IMX415 | 800W | H:80  V:51 D:88   | 0x1a | 接口13 |
+|  2  | GC4663 | 400W | H:104 V:70 D:113 | 0x29 | 接口12 |
+|  3  | JXF37  | 200W | H:62  V:37 D:68   | 0x40 | 接口12 |
+
+安装方式上，摄像头模组通过FPC排线跟开发板MIPI CSI接口相连，如下图：                    
+![image-imx415-f37](_static/_images/board_spec_for_Nano/image-imx415-f37.png)
+
+安装完成后，用户可以通过命令确认模组I2C地址能否正常检测到。如检测不到，用户需要检查FPC排线连接是否正常。
+
+I2C地址查询命令(接口13)
+```bash
+echo 118 > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio118/direction
+echo 0 > /sys/class/gpio/gpio118/value
+sleep 0.2
+echo 1 > /sys/class/gpio/gpio118/value
+echo 1 > /sys/class/vps/mipi_host1/param/snrclk_en
+echo 24000000 > /sys/class/vps/mipi_host1/param/snrclk_freq
+i2cdetect -y -r 2
+```
+
+I2C地址查询命令(接口12)
+```bash
+echo 119 > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio119/direction
+echo 0 > /sys/class/gpio/gpio119/value
+sleep 0.2
+echo 1 > /sys/class/gpio/gpio119/value
+echo 1 > /sys/class/vps/mipi_host0/param/snrclk_en
+echo 24000000 > /sys/class/vps/mipi_host0/param/snrclk_freq
+i2cdetect -y -r 2
+```
+
+成功探测到I2C地址时，log打印如下所示：
+```bash
+root@x3sdbx3-samsung2G-3200:~# i2cdetect -y -r 2
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- 1a -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- 3b -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+```
+## HDMI
+
+开发板提供一路HDMI接口，默认输出格式为1080p@30。由于X3系统不支持图形桌面，开发板上电后HDMI默认输出地平线logo。用户如需替换logo图标，可通过替换原始logo文件并重新编译、替换IAR驱动的方式完成，logo文件路径**kernel/drivers/soc/hobot/iar/bootlogo.bmp**。
+
+除显示开机画面外，开发板HDMI接口还支持实时显示摄像头、网络流画面功能。交付包sample示例中已包含相关示例，具体方法可以参考sample章节。
+
+如开发板上电后HDMI没有显示，处于黑屏状态，可按如下步骤进行排查：
+1. 确认HDMI驱动是否加载，查询命令：
+   ```bash
+    root@x3sdbx3-samsung2G-3200:/# lsmod | grep hobot_hdmi_lt8618
+    hobot_hdmi_lt8618 20480 0 - Live 0xffffff8000ce5000
+    iar 208896 4 hobot_hdmi_lt8618,iar_mmap,iar_cdev,hobot_fb, Live 0xffffff80007ec000
+   ```
+2. 如果驱动加载，需要确认显示器是否不支持1080p@30格式
+3. 如果驱动没有加载，确认kernel命令行参数是否包含HDMI参数，查询命令：
+    ```bash
+    dmesg | grep video=hobot:x3sdb-hdmi 
+    [    0.000000] Kernel command line: earlycon loglevel=8 kgdboc=ttyS0 video=hobot:x3sdb-hdmi  console=ttyS0,921600 raid=noautodetect hobotboot.reson=WTD_RESET rootfstype=ext4 ro rootwait root=/dev/mmcblk0p8
+    ```
+4. 如果命令行未包含HDMI参数，则增加uboot环境变量**video=hobot:x3sdb-hdmi**参数，重启后可开启HDMI显示：
+    ```bash
+    setenv extra_bootargs video=hobot:x3sdb-hdmi
+    saveenv
+    reset
+    ```
+
+## TouchScreen
+
+开发板上预留有触摸屏接口（10号接口）：3.3的供电，I2C2通信接口，Reset和中断管脚，位置如下所示。
+
+![image-20220404202035669](_static/_images/Interface_User_Guide/image-20220404202035669.png)
+
+| 序号 | 名称     | 属性                  | 说明                       |
+| ---- | -------- | --------------------- | -------------------------- |
+| 6    | I2C0_SDA | 3.3V单端信号          | I2C主机数据线              |
+| 5    | I2C0_SCL | 3.3V单端信号          | I2C主机时钟线              |
+| 4    | TP_RESET | 1.8V单端输出          | 主板对模块进行复位，低有效 |
+| 3    | TP_INT   | 1.8V单端输入          | 模块中断输入到主板，低有效 |
+| 2    | VDD33    | 电源输出，3.3V，200mA | 对外供电                   |
+| 1    | GND      | 信号电源参考地        | 地                         |
+
+**注意事项：**
+
+TouchScreen和bt1120转hdmi的lt8618芯片的共用Reset管脚，当前开发板默认使能hdmi功能，所以需要使用TouchScreen时，需要首先卸载hobot_hdmi_lt8618驱动：
+
+```bash
+rmmod hobot_hdmi_lt8618
+```
+
+**驱动加载：**
+
+加载gt9xx.ko驱动，使能触摸屏功能
+
+```bash
+# insmod /lib/modules/4.14.87/gt9xx.ko
+
+[ 8275.800257] <<-GTP-INFO->> GTP driver installing....
+[ 8275.802305] <<-GTP-INFO->> i2c_register_board_info, ret=0
+[ 8275.802305] 
+[ 8275.803619] <<-GTP-INFO->> GTP Driver Version: V2.4.0.1<2016/10/26>
+[ 8275.805284] <<-GTP-INFO->> GTP I2C Address: 0x14
+[ 8275.805888] <<-GTP-INFO->> GTP Get OF
+[ 8275.806442] <<-GTP-INFO->> GTP get gpio 26 64
+[ 8275.806442] 
+[ 8275.837350] <<-GTP-INFO->> Guitar reset
+[ 8276.013869] <<-GTP-INFO->> IC Version: 911_1060
+[ 8276.015174] <<-GTP-INFO->> Sensor_ID: 0
+[ 8276.015703] <<-GTP-ERROR->> Failed to parse config data form device tree.
+[ 8276.016616] <<-GTP-INFO->> Config group0 used,length: 186
+[ 8276.018017] <<-GTP-INFO->> Driver send config.
+[ 8276.024608] <<-GTP-INFO->> X_MAX: 720, Y_MAX: 1280, TRIGGER: 0x01
+[ 8276.045218] <<-GTP-INFO->> Esd started
+[ 8276.045931] input: goodix-ts as /devices/virtual/input/input0
+[ 8276.046933] <<-GTP-INFO->> GTP works in interrupt mode.
+[ 8276.047758] <<-GTP-INFO->> i2c_add_driver, ret=0
+```
+
+**测试使用：**
+
+使用tc_test程序测试触摸屏功能，当用对触摸屏做点击操作时，可以获取事件、类型、状态码和对应的坐标。
+
+```bash
+# ./tc_test
+
+begin handle_event0...
+event(0):type:3; code: 57; value:  0; realx:  0; realy:  0
+event(1):type:3; code: 58; value: 33; realx:  0; realy:  0
+event(2):type:3; code: 53; value:322; realx:322; realy:  0
+event(3):type:3; code: 54; value:420; realx:322; realy:420
+event(4):type:3; code: 48; value: 33; realx:322; realy:420
+event(5):type:3; code: 50; value: 33; realx:322; realy:420
+event(6):type:0; code:  0; value:  0; realx:322; realy:420
+end handle_event0...
+begin handle_event0...
+event(0):type:3; code: 57; value: -1; realx:  0; realy:  0
+event(1):type:0; code:  0; value:  0; realx:  0; realy:  0
+end handle_event0...
+begin handle_event0...
+```
+
+**测试代码：**
+
+```c
+#include <stdio.h>
+#include <linux/input.h>
+
+static int event0_fd = -1;
+struct input_event ev0[64];
+
+static int handle_event0()
+{
+        int button = 0, realx=0, realy=0, i, rd;
+        rd = read(event0_fd, ev0, sizeof(struct input_event)* 64);
+        if(rd < sizeof(struct input_event)) return 0;
+        for(i = 0; i < rd/sizeof(struct input_event); i++)
+        {
+                if(EV_ABS == ev0[i].type)
+                {
+                        if(ev0[i].code == 53) {
+                                realx = ev0[i].value;
+                        } else if(ev0[i].code == 54) {
+                                realy = ev0[i].value;
+                        }
+                }
+                printf("event(%d):type:%d; code:%3d; value:%3d; realx:%3d; realy:%3d\n",i,ev0[i].type,ev0[i].code,ev0[i].value,realx,realy);
+
+        }
+        return 1;
+}
+
+
+int main(void)
+{
+        int done = 1;
+        event0_fd = open("/dev/input/event0",02);
+        if(event0_fd <0) {
+                printf("open input device error\n");
+                return -1;
+        }
+        while (done)
+        {
+                printf("begin handle_event0...\n");
+                done = handle_event0();
+                printf("end handle_event0...\n");
+        }
+        if(event0_fd > 0)
+        {
+                close(event0_fd);
+                event0_fd = -1;
+        }
+        return 0;
+}
+```
+
+## Wi-Fi/Bluetooth
+
+开发板集成了AP6212 2.4G Wi-Fi模组，支持802.11 b/g/n、Bluetooth 4.1功能，Wi-Fi驱动默认自动加载。
+
+```bash
+root@x3sdbx3-samsung2G-3200:/# ifconfig wlan0
+wlan0     Link encap:Ethernet  HWaddr 08:e9:f6:af:08:46  
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+```
+
+用户需要通过修改配置文件的方式，手动配置热点名和获取ip地址，方法如下：
+
+```shell
+# 配置热点名和密码
+mount -o rw,remount /
+rm -rf /etc/wpa_supplicant.conf
+wpa_passphrase "WIFI_SSID" "WIFI_PASSWD"  >> /etc/wpa_supplicant.conf
+# add dns config
+echo "nameserver 114.114.114.114" >> /etc/resolv.conf
+echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+
+sleep 3
+wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf -B
+sleep 1
+chmod +x /usr/share/udhcpc/default.script
+udhcpc -i wlan0 -s /usr/share/udhcpc/default.script
+
+# wifi wlan0的路由优先级是600，非常低，所以要保证通过连接外网正常，可以删掉 eth0 的路由，让系统默认使用wlan0
+ip route show table all
+ip route del default via 192.168.1.1 dev eth0 onlink
+# 当以太网和Wi-Fi同时使用时，需要避免以太网和Wi-Fi处于同一网段，否则会可能出现AP侧显示物理连接成功，但是设备间无法ping通的问题
+```
+
+配置完成后，可使用**ping 8.8.8.8**命令确认网络是否正常，如下图：                    
+![image-wifi-config](_static/_images/board_spec_for_Nano/image-Wi-Fi-Config.png)
+
+## TF卡
+
+开发板有一路TF接口（16号接口），支持HSSDHC模式，最高50MHz时钟。默认支持FAT32（VFAT）、ext2、ext3、ext4文件系统格式的自动挂载。
+
+插上TF卡后，内核有如下日志，说明正确识别：
+
+```
+[ 9809.931894] mmc2: new HSSDHC card at address 1234
+[ 9809.933740] mmcblk2: mmc2:1234 SA16G 14.5 GiB 
+[ 9809.940060]  mmcblk2: p1
+```
+
+执行 mount 命令查看是否自动挂载：
+
+```bash
+# mount
+... ...
+/dev/mmcblk2p1 on /media/sdcard1 type vfat (rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro)
+```
+
+未自动挂载的可能原因：
+
+1、TF卡的文件系统格式不是FAT32（VFAT）、ext2、ext3、ext4
+
+可以在设备上通过以下命令对TF卡进行格式化：
+
+```bash
+# 格式为FAT32(VFAT)格式
+mkfs.vfat /dev/mmcblk2p1
+# 格式为 ext4 格式
+mkfs.ext4 /dev/mmcblk2p1
+# 格式为 ext3 格式
+mkfs.ext3 /dev/mmcblk2p1
+# 格式为 ext2 格式
+mkfs.ext2 /dev/mmcblk2p1
+```
+
+
+
+## 40PIN
+
+开发板提供一路40PIN接口，方便用户扩展外围接口，接口定义如下（更多功能复用情况请查阅 documentation/开发板硬件接口/40pin_functions_list.xlsx）：
+
+![image-20220501225348353](_static/_images/Interface_User_Guide/image-20220501225348353.png)
+
+![image-20220502122654788](_static/_images/Interface_User_Guide/image-20220502122654788.png)
+
+各管脚更多的电压域信息如下：
+
+| 序号 | 名称       | 属性           | 说明                   |
+| ---- | ---------- | -------------- | ---------------------- |
+| 1    | VDD3V3     | 电源3.3V输出   | 3.3V输出               |
+| 2    | VDD5V      | 电源5V输出     | 5V输出                 |
+| 3    | I2C1_SDA   | 3.3V单端信号   | I2C主机数据线          |
+| 4    | VDD5V      | 电源5V输出     | 5V输出                 |
+| 5    | I2C1_SCL   | 3.3V单端信号   | I2C主机时钟线          |
+| 6    | GND        | 信号电源参考地 | 地                     |
+| 7    | I2S0_MCLK  | 3.3V单端信号   | I2S主机主时钟线        |
+| 8    | UART3_TXD  | 3.3V单端信号   | UART主机数据发送线     |
+| 9    | GND        | 信号电源参考地 | 地                     |
+| 10   | UART3_RXD  | 3.3V单端信号   | UART主机数据接收线     |
+| 11   | GPIO0      | 3.3V单端信号   | GPIO信号线             |
+| 12   | I2S0_BCLK  | 3.3V单端信号   | I2S0主机位时钟线       |
+| 13   | GPIO1      | 3.3V单端信号   | GPIO信号线             |
+| 14   | GND        | 信号电源参考地 | 地                     |
+| 15   | GPIO2      | 3.3V单端信号   | GPIO信号线             |
+| 16   | GPIO3      | 3.3V单端信号   | GPIO信号线             |
+| 17   | VDD3V3     | 电源3.3V输出   | 3.3V输出               |
+| 18   | GPIO4      | 3.3V单端信号   | GPIO信号线             |
+| 19   | SPI0_MOSI  | 3.3V单端信号   | 主机SPI0数据主发从收线 |
+| 20   | GND        | 信号电源参考地 | 地                     |
+| 21   | SPI0_MISO  | 3.3V单端信号   | 主机SPI0数据主收从发线 |
+| 22   | GPIO5      | 3.3V单端信号   | GPIO信号线             |
+| 23   | SPI0_SCLK  | 3.3V单端信号   | 主机SPI0时钟线         |
+| 24   | SPI0_CSN   | 3.3V单端信号   | 主机SPI0片选信号       |
+| 25   | GND        | 信号电源参考地 | 地                     |
+| 26   | SPI0_CSN1  | 3.3V单端信号   | 主机SPI0片选信号       |
+| 27   | I2S1_BCLK  | 3.3V单端信号   | I2S1主机位时钟线       |
+| 28   | I2S1_LRCLK | 3.3V单端信号   | I2S1主机帧时钟线       |
+| 29   | GPIO6      | 3.3V单端信号   | GPIO信号线             |
+| 30   | GND        | 信号电源参考地 | 地                     |
+| 31   | GPIO7      | 3.3V单端信号   | GPIO信号线             |
+| 32   | PWM4       | 3.3V单端信号   | PWM4输出               |
+| 33   | PWM0       | 3.3V单端信号   | PWM0输出               |
+| 34   | GND        | 信号电源参考地 | 地                     |
+| 35   | I2S0_LRCLK | 3.3V单端信号   | I2S0主机帧时钟线       |
+| 36   | GPIO8      | 3.3V单端信号   | GPIO信号线             |
+| 37   | GPIO9      | 3.3V单端信号   | GPIO信号线             |
+| 38   | I2S0_SDIO  | 3.3V单端信号   | I2S0主机数据线         |
+| 39   | GND        | 信号电源参考地 | 地                     |
+| 40   | I2S1_SDIO  | 3.3V单端信号   | I2S1主机数据线         |
+
+开发板40PIN接口位置也提供了丝印网表，方便用户对照操作。
+## RTC
+
+开发板通过外部RTC电路及外接电池，可实现断电后系统时间保持功能。其中RTC电池接口(接口5)定义如下：
+
+| 序号 | 名称    | 说明               |
+| ---- | ------ | ------------------ |
+| 2    | GND    | 电池负极，参考地     |
+| 1    | BAT_3V | 电池正极，3V或3.3V   |
+
+RTC默认为关闭状态，如需使能可以按如下方法操作：
+
+```bash
+# 确认是否存在/dev/rtc1设备，如果不存在，需要先加载rtc-pcf8563.ko
+ls /dev/rtc *
+
+# 建立 /dev/rtc1 到 /dev/rtc1 的软连接
+rm /dev/rtc
+ln -s /dev/rtc1 /dev/rtc
+
+# 测试方法：
+date -s 2022.01.21-21:24:00   	# 设置系统时间
+hwclock -w       				# 将系统时间写入RTC
+hwclock -r       				# 读取RTC时间，确认时间是否写入成功
+hwclock -s       				# 如果rtc电池存在，断电后，再上电，将RTC时间更新到系统时间
+date             				# 读取系统时间
+```

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6.5.1.1. 简介 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+    <link rel="next" title="6.5.2. 模型推理接口使用说明" href="../bpu_sdk_api_doc/index.html" />
+    <link rel="prev" title="6.5.1. 模型上板运行示例说明" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">6. 量化工具链开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../preface_toolchain_overview.html">6.1. 简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../env_install.html">6.2. 环境安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html">6.3. 快速体验</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../horizon_ai_toolchain_user_guide/index.html">6.4. 训练后量化(PTQ)使用说明</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">6.5. 上板运行(runtime)应用开发说明</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">6.5.1. 模型上板运行示例说明</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">6.5.1.1. 简介</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id3">示例代码包结构介绍</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">6.5.1.2. 环境构建</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id5">开发板准备</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id7">编译</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">6.5.1.3. 示例使用</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#basic-samples">basic_samples 示例</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#quick-start">quick_start</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#api-tutorial">api_tutorial</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#advanced-samples">advanced_samples</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#misc">misc</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">6.5.1.4. 辅助工具和常用操作</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id12">日志</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id13">示例日志</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#dnn-api">模型推理 DNN API日志</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../bpu_sdk_api_doc/index.html">6.5.2. 模型推理接口使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../horizon_runtime_tools/index.html">6.5.3. 模型上板分析工具说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ai_benchmark/index.html">6.5.4. 公版模型精度评测说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html"><span class="section-number">6. </span>量化工具链开发指南</a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">6.5. </span>上板运行(runtime)应用开发说明</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">6.5.1. </span>模型上板运行示例说明</a> &raquo;</li>
+      <li><span class="section-number">6.5.1.1. </span>简介</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="6.5.1. 模型上板运行示例说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../bpu_sdk_api_doc/index.html" class="btn btn-neutral float-right" title="6.5.2. 模型推理接口使用说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">6.5.1.1. </span>简介<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>本章节介绍模型上板运行 horizon_runtime_sample 示例包的具体用法，开发者可以体验并基于这些示例进行应用开发，降低开发门槛。</p>
+<p>示例包提供三个方面的示例：</p>
+<ul class="simple">
+<li><p>模型推理 dnn API使用示例。</p></li>
+<li><p>自定义算子（custom OP）等特殊功能示例。</p></li>
+<li><p>非NV12输入模型的杂项示例。</p></li>
+</ul>
+<p>详细内容请阅读下文。</p>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>horizon_runtime_sample 示例包获取请参考 <a class="reference external" href="../../env_install.html#id2">《交付物说明》</a>。</p>
+</div>
+<section id="id3">
+<h2>示例代码包结构介绍<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>+---horizon_runtime_sample
+├── code                        <span class="c1"># 示例源码</span>
+│   ├── 00_quick_start          <span class="c1"># 快速入门示例,用mobilenetv1读取单张图片进行推理的示例代码</span>
+│   │   ├── CMakeLists.txt
+│   │   ├── CMakeLists_x86.txt
+│   │   └── src
+│   ├── 01_api_tutorial         <span class="c1"># dnn API使用示例代码</span>
+│   │   ├── CMakeLists.txt
+│   │   ├── mem
+│   │   ├── model
+│   │   ├── resize
+│   │   ├── roi_infer
+│   │   └── tensor
+│   ├── 02_advanced_samples     <span class="c1"># 特殊功能示例</span>
+│   │   ├── CMakeLists.txt
+│   │   ├── custom_identity
+│   │   └── multi_model_batch
+│   ├── 03_misc                 <span class="c1"># 杂项示例</span>
+│   │   ├── CMakeLists.txt
+│   │   ├── lenet_gray
+│   │   └── resnet_feature
+│   ├── build_xj3.sh            <span class="c1"># aarch64编译脚本</span>
+│   ├── build_x86.sh            <span class="c1"># x86编译脚本</span>
+│   ├── CMakeLists.txt
+│   ├── CMakeLists_x86.txt
+│   └── deps/deps_gcc9.3        <span class="c1"># 编译依赖库，gcc6.5环境为deps，gcc9.3为deps_gcc9.3</span>
+│       ├── aarch64             <span class="c1"># aarch64依赖库</span>
+│       └── x86                 <span class="c1"># x86模拟器依赖库</span>
+├── xj3
+│   ├── data                    <span class="c1"># 预置数据文件</span>
+│   │   ├── cls_images
+│   │   ├── det_images
+│   │   ├── misc_data
+│   ├── model
+│   │   ├── README.md
+│   │   └── runtime -&gt; ../../../model_zoo/runtime   <span class="c1"># 软链接指向OE包中的模型，板端运行环境需要自行制定模型路径</span>
+│   └── script                  <span class="c1"># aarch64 示例运行脚本</span>
+│   │    ├── 00_quick_start
+│   │    ├── 01_api_tutorial
+│   │    ├── 02_advanced_samples
+│   │    ├── 03_misc
+│   │    ├── aarch64             <span class="c1"># 编译产生aarch64可执行程序及依赖库</span>
+│   │    └── README.md
+│   └── script_x86               <span class="c1"># x86 示例运行脚本</span>
+│   │    ├── 00_quick_start
+│   │    ├── x86                 <span class="c1"># 编译产生x86可执行程序及依赖库</span>
+│   │    └── README.md
+└── README.md
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>00_quick_start</strong>：快速入门示例，基于 <code class="docutils literal notranslate"><span class="pre">dnn</span></code> API，用mobilenetv1进行单张图片模型推理和结果解析。</p></li>
+<li><p><strong>01_api_tutorial</strong>： <code class="docutils literal notranslate"><span class="pre">dnn</span></code> API使用教学代码， 包括 <strong>mem</strong>， <strong>model</strong>， <strong>resize</strong>， <strong>roi_infer</strong> 和 <strong>tensor</strong> 五部分。</p></li>
+<li><p><strong>02_advanced_samples</strong>：特殊功能示例，包括自定义算子（ <strong>CustomIdentity</strong> ）功能。</p></li>
+<li><p><strong>03_misc</strong>：非NV12输入模型的杂项示例。</p></li>
+<li><p><strong>xj3/</strong>：示例运行脚本，预置了数据和相关模型。</p></li>
+<li><p><strong>build_xj3.sh</strong>：程序一键编译脚本。</p></li>
+<li><p><strong>deps/deps_gcc9.3</strong>：示例代码所需要的三方依赖, 用户在开发自己代码程序的时候可以根据实际情况替换或者裁剪。</p></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>私有模型上板运行，请参考 <code class="docutils literal notranslate"><span class="pre">00_quick_start/src/run_mobileNetV1_224x224.cc</span></code> 示例代码流程进行代码重写，编译成功后可以在开发板上测试验证！</p>
+</div>
+</section>
+</section>
+<section id="id4">
+<h1><span class="section-number">6.5.1.2. </span>环境构建<a class="headerlink" href="#id4" title="永久链接至标题"></a></h1>
+<section id="id5">
+<h2>开发板准备<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<ol class="arabic simple">
+<li><p>拿到开发板后，请按照镜像升级说明升级系统到地平线整包交付物SDK对应的系统版本。开发板升级步骤，请参考章节  <a class="reference external" href="../../../quick_start/Firmware_Update.html">镜像升级方法</a>。</p></li>
+<li><p>确保本地开发机和开发板可以远程连接。</p></li>
+</ol>
+</section>
+<section id="id7">
+<h2>编译<a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<p>​编译需要当前环境安装好交叉编译工具： <code class="docutils literal notranslate"><span class="pre">aarch64-linux-gnu-g++</span></code> ， <code class="docutils literal notranslate"><span class="pre">aarch64-linux-gnu-gcc</span></code>。 若使用地平线提供的开发机模型转换编译环境，请直接进行编译使用。开发机模型转换编译环境的使用方法，请阅读 <a class="reference external" href="../../env_install.html">环境安装</a> 章节内容，
+反之，请检查gcc交叉编译器是否正确安装，请阅读 <a class="reference external" href="../../../bsp_develop/Bsp_Develop.html#id1">安装交叉编译工具链</a> 章节内容。
+请使用horizon_runtime_sample/code目录下的 <code class="docutils literal notranslate"><span class="pre">build_xj3.sh</span></code> 脚本，即可一键编译开发板环境下的可执行程序，可执行程序和对应依赖会自动复制到 <code class="docutils literal notranslate"><span class="pre">xj3/script</span></code> 目录下的 <code class="docutils literal notranslate"><span class="pre">aarch64</span></code> 目录下。</p>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>工程通过获取环境变量 <code class="docutils literal notranslate"><span class="pre">LINARO_GCC_ROOT</span></code> 来指定交叉编译工具的路径，用户使用之前可以检查本地的环境变量是否为目标交叉编译工具。
+如果需要指定交叉编译工具路径，可以设置环境变量 <code class="docutils literal notranslate"><span class="pre">LINARO_GCC_ROOT</span></code> , 或者直接修改脚本 <code class="docutils literal notranslate"><span class="pre">build_ptq_xj3.sh</span></code> ，指定变量 <code class="docutils literal notranslate"><span class="pre">CC</span></code> 和 <code class="docutils literal notranslate"><span class="pre">CXX</span></code>。</p>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">CC</span><span class="o">=</span><span class="si">${</span><span class="nv">GCC_ROOT</span><span class="si">}</span>/bin/aarch64-linux-gnu-gcc
+<span class="nb">export</span> <span class="nv">CXX</span><span class="o">=</span><span class="si">${</span><span class="nv">GCC_ROOT</span><span class="si">}</span>/bin/aarch64-linux-gnu-g++
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id10">
+<h1><span class="section-number">6.5.1.3. </span>示例使用<a class="headerlink" href="#id10" title="永久链接至标题"></a></h1>
+<section id="basic-samples">
+<h2>basic_samples 示例<a class="headerlink" href="#basic-samples" title="永久链接至标题"></a></h2>
+<p>模型推理​示例脚本主要在 xj3/script 和 xj3/script_x86 目录下，编译程序后目录结构如下:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>├─script
+  ├── 00_quick_start
+  │   ├── README.md
+  │   └── run_mobilenetV1.sh
+  ├── 01_api_tutorial
+  │   ├── model.sh
+  │   ├── README.md
+  │   ├── resize_bgr.sh
+  │   ├── resize_y.sh
+  │   ├── roi_infer.sh
+  │   ├── sys_mem.sh
+  │   └── tensor.sh
+  ├── 02_advanced_samples
+  │   ├── custom_arm_op_custom_identity.sh
+  │   ├── README.md
+  │   └── run_multi_model_batch.sh
+  ├── 03_misc
+  │   ├── README.md
+  │   ├── run_lenet.sh
+  │   └── run_resnet50_feature.sh
+  ├── aarch64                        <span class="c1"># 编译产生可执行程序及依赖库</span>
+  │   ├── bin
+  │   │   ├── model_example
+  │   │   ├── resize_bgr_example
+  │   │   ├── resize_y_example
+  │   │   ├── roi_infer
+  │   │   ├── run_custom_op
+  │   │   ├── run_lenet_gray
+  │   │   ├── run_mobileNetV1_224x224
+  │   │   ├── run_multi_model_batch
+  │   │   ├── run_resnet_feature
+  │   │   ├── sys_mem_example
+  │   │   └── tensor_example
+  │   └── lib
+  │       ├── libdnn.so
+  │       ├── libhbrt_bernoulli_aarch64.so
+  │       └── libopencv_world.so.3.4
+  └── README.md
+
+├─script_x86
+  ├── 00_quick_start
+  │   ├── README.md
+  │   └── run_mobilenetV1.sh
+  ├── x86                             <span class="c1"># 编译产生x86可执行程序及依赖库</span>
+  │   ├── bin
+  │   │   ├── run_mobileNetV1_224x224
+  │   └── lib
+  │       ├── libdnn.so
+  │       ├── libhbdk_sim_x86.so
+  │       └── libopencv_world.so.3.4
+  └── README.md
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<ul class="simple">
+<li><p>model文件夹下包含模型的路径，其中 <code class="docutils literal notranslate"><span class="pre">runtime</span></code> 文件夹为软链接，链接路径为 <code class="docutils literal notranslate"><span class="pre">../../../data/runtime</span></code> ，可直接找到交付包中的模型路径</p></li>
+<li><p>板端运行环境需要将模型放至 <code class="docutils literal notranslate"><span class="pre">model</span></code> 文件夹下</p></li>
+</ul>
+</div>
+<section id="quick-start">
+<h3>quick_start<a class="headerlink" href="#quick-start" title="永久链接至标题"></a></h3>
+<p>00_quick_start 目录下的是模型推理的快速开始示例：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>00_quick_start/
+├── README.md
+└── run_mobilenetV1.sh
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">run_mobilenetV1.sh</span></code> ：该脚本实现使用mobilenetv1模型读取单张图片进行推理的示例功能。</p></li>
+</ul>
+</section>
+<section id="api-tutorial">
+<h3>api_tutorial<a class="headerlink" href="#api-tutorial" title="永久链接至标题"></a></h3>
+<p>01_api_tutorial 目录下的示例，用于引导开发者如何使用嵌入式API。其目录包含以下脚本：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>├── model.sh
+├── resize_bgr.sh
+├── resize_y.sh
+├── roi_infer.sh
+├── sys_mem.sh
+└── tensor.sh
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model.sh</span></code> ：该脚本主要实现读取模型信息的功能。
+使用的时候，直接进入 01_api_tutorial 目录，然后直接执行 <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">model.sh</span></code> 即可，如下所示：</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+
+root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/01_api_tutorial# sh model.sh
+../aarch64/bin/model_example --model_file_list<span class="o">=</span>../../model/runtime/mobilenetv1/mobilenetv1_nv12_hybrid_horizonrt.bin
+I0000 <span class="m">00</span>:00:00.000000 <span class="m">24638</span> vlog_is_on.cc:197<span class="o">]</span> RAW: Set VLOG level <span class="k">for</span> <span class="s2">&quot;*&quot;</span> to <span class="m">3</span>
+<span class="o">[</span>HBRT<span class="o">]</span> <span class="nb">set</span> log level as <span class="m">0</span>. <span class="nv">version</span> <span class="o">=</span> <span class="m">3</span>.12.1
+<span class="o">[</span>BPU_PLAT<span class="o">]</span>BPU Platform Version<span class="o">(</span><span class="m">1</span>.2.2<span class="o">)</span>!
+<span class="o">[</span>HorizonRT<span class="o">]</span> The model builder <span class="nv">version</span> <span class="o">=</span> <span class="m">1</span>.3.3
+I0108 <span class="m">04</span>:19:27.245879 <span class="m">24638</span> model_example.cc:104<span class="o">]</span> model count:1, model<span class="o">[</span><span class="m">0</span><span class="o">]</span>: mobilenetv1_nv12
+I0108 <span class="m">04</span>:19:27.246064 <span class="m">24638</span> model_example.cc:112<span class="o">]</span> hbDNNGetModelHandle <span class="o">[</span>mobilenetv1_nv12<span class="o">]</span> success!
+I0108 <span class="m">04</span>:19:27.246139 <span class="m">24638</span> model_example.cc:189<span class="o">]</span> <span class="o">[</span>mobilenetv1_nv12<span class="o">]</span> Model Info:  input num: <span class="m">1</span>, input<span class="o">[</span><span class="m">0</span><span class="o">]</span> validShape: <span class="o">(</span> <span class="m">1</span>, <span class="m">3</span>, <span class="m">224</span>, <span class="m">224</span> <span class="o">)</span>, alignedShape: <span class="o">(</span> <span class="m">1</span>, <span class="m">4</span>, <span class="m">224</span>, <span class="m">224</span> <span class="o">)</span>, tensorLayout: <span class="m">2</span>, tensorType: <span class="m">1</span>, output num: <span class="m">1</span>, output<span class="o">[</span><span class="m">0</span><span class="o">]</span> validShape: <span class="o">(</span> <span class="m">1</span>, <span class="m">1000</span>, <span class="m">1</span>, <span class="m">1</span> <span class="o">)</span>, alignedShape: <span class="o">(</span> <span class="m">1</span>, <span class="m">1000</span>, <span class="m">1</span>, <span class="m">1</span> <span class="o">)</span>, tensorLayout: <span class="m">2</span>, tensorType: <span class="m">13</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">resize_bgr.sh</span></code> ：该脚本主要引导如何使用 <code class="docutils literal notranslate"><span class="pre">hbDNNResize</span></code> 这个API，
+示例实现的代码功能是将一张1352x900大小的图片，截取图片中坐标为[5，19，340，343]的部分，然后resize到402x416并保存下来。
+使用的时候，直接进入 01_api_tutorial 目录，然后直接执行 <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">resize_bgr.sh</span></code> 即可，如下所示：</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+
+root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/01_api_tutorial# sh resize_bgr.sh
+../aarch64/bin/resize_bgr_example --image_file<span class="o">=</span>../../data/det_images/kite.jpg --resize_height<span class="o">=</span><span class="m">416</span> --resize_width<span class="o">=</span><span class="m">402</span> --resized_image<span class="o">=</span>./resize_bgr.jpg --crop_x1<span class="o">=</span><span class="m">5</span> --crop_x2<span class="o">=</span><span class="m">340</span> --crop_y1<span class="o">=</span><span class="m">19</span> --crop_y2<span class="o">=</span><span class="m">343</span>
+I0000 <span class="m">00</span>:00:00.000000 <span class="m">24975</span> vlog_is_on.cc:197<span class="o">]</span> RAW: Set VLOG level <span class="k">for</span> <span class="s2">&quot;*&quot;</span> to <span class="m">3</span>
+I0108 <span class="m">06</span>:58:03.327212 <span class="m">24975</span> resize_bgr_example.cc:116<span class="o">]</span> Original shape: 1352x900 ,dest shape:402x416 ,aligned shape:402x416
+<span class="o">[</span>HBRT<span class="o">]</span> <span class="nb">set</span> log level as <span class="m">0</span>. <span class="nv">version</span> <span class="o">=</span> <span class="m">3</span>.12.1
+<span class="o">[</span>BPU_PLAT<span class="o">]</span>BPU Platform Version<span class="o">(</span><span class="m">1</span>.2.2<span class="o">)</span>!
+I0108 <span class="m">06</span>:58:03.328739 <span class="m">24975</span> resize_bgr_example.cc:139<span class="o">]</span> resize success!
+I0108 <span class="m">06</span>:58:03.335835 <span class="m">24975</span> resize_bgr_example.cc:143<span class="o">]</span> <span class="nb">wait</span> task <span class="k">done</span> finished!
+</pre></div>
+</div>
+<p>执行成功后，当前目录会成功保存名称为resize_bgr.jpg的图片。</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">resize_y.sh</span></code> ：该脚本主要引导如何使用 <code class="docutils literal notranslate"><span class="pre">hbDNNResize</span></code> 这个API，示例代码实现的功能是将一张图片resize到416x402。
+使用的时候，直接进入 01_api_tutorial 目录，然后直接执行 <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">resize_y.sh</span></code> 即可，如下所示：</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+
+root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/01_api_tutorial# sh resize_y.sh
+../aarch64/bin/resize_y_example --image_file<span class="o">=</span>../../data/det_images/kite.jpg --resize_height<span class="o">=</span><span class="m">416</span> --resize_width<span class="o">=</span><span class="m">402</span> --resized_image<span class="o">=</span>./resize_y.jpg
+I0000 <span class="m">00</span>:00:00.000000 <span class="m">24992</span> vlog_is_on.cc:197<span class="o">]</span> RAW: Set VLOG level <span class="k">for</span> <span class="s2">&quot;*&quot;</span> to <span class="m">3</span>
+I0108 <span class="m">06</span>:59:36.887241 <span class="m">24992</span> resize_y_example.cc:101<span class="o">]</span> Original shape: 1352x900 ,dest shape:402x416 ,aligned shape:402x416
+<span class="o">[</span>HBRT<span class="o">]</span> <span class="nb">set</span> log level as <span class="m">0</span>. <span class="nv">version</span> <span class="o">=</span> <span class="m">3</span>.12.1
+<span class="o">[</span>BPU_PLAT<span class="o">]</span>BPU Platform Version<span class="o">(</span><span class="m">1</span>.2.2<span class="o">)</span>!
+I0108 <span class="m">06</span>:59:36.888770 <span class="m">24992</span> resize_y_example.cc:119<span class="o">]</span> resize success
+I0108 <span class="m">06</span>:59:36.891711 <span class="m">24992</span> resize_y_example.cc:123<span class="o">]</span> <span class="nb">wait</span> resize success
+I0108 <span class="m">06</span>:59:36.891798 <span class="m">24992</span> resize_y_example.cc:129<span class="o">]</span> spent time: <span class="m">0</span>.003463
+</pre></div>
+</div>
+<p>​执行成功后，当前目录会成功保存名称为resize_y.jpg的图片。</p>
+</div></blockquote>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">roi_infer.sh</span></code> ： 该脚本主要引导如何使用 <code class="docutils literal notranslate"><span class="pre">hbDNNRoiInfer</span></code> 这个API，示例代码实现的功能是将一张图片resize到模型输入大小，转为nv12数据，并给定roi框进行模型推理（infer）。
+使用的时候，直接进入 01_api_tutorial 目录，然后直接执行 <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">roi_infer.sh</span></code> 即可。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sys_mem.sh</span></code> ：该脚本主要引导如何使用 <code class="docutils literal notranslate"><span class="pre">hbSysAllocMem</span></code>、 <code class="docutils literal notranslate"><span class="pre">hbSysFlushMem</span></code> 和 <code class="docutils literal notranslate"><span class="pre">hbSysFreeMem</span></code> 这几个API。使用的时候，直接进入 01_api_tutorial 目录，执行 <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">sys_mem.sh</span></code> 即可。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tensor.sh</span></code> ：该脚本主要引导如何准备模型输入和输出的tensor。
+使用的时候，直接进入 01_api_tutorial 目录，执行 <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">tensor.sh</span></code> 即可，如下所示：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/01_api_tutorial# sh tensor.sh
+Tensor data type:0, Tensor layout: <span class="m">2</span>, shape:1x1x721x1836, aligned shape:1x1x721x1840
+Tensor data type:1, Tensor layout: <span class="m">2</span>, shape:1x3x773x329, aligned shape:1x3x773x336
+Tensor data type:2, Tensor layout: <span class="m">2</span>, shape:1x3x108x1297, aligned shape:1x3x108x1312
+Tensor data type:5, Tensor layout: <span class="m">2</span>, shape:1x3x858x477, aligned shape:1x3x858x477
+Tensor data type:5, Tensor layout: <span class="m">0</span>, shape:1x920x102x3, aligned shape:1x920x102x3
+Tensor data type:4, Tensor layout: <span class="m">2</span>, shape:1x3x723x1486, aligned shape:1x3x723x1486
+Tensor data type:4, Tensor layout: <span class="m">0</span>, shape:1x372x366x3, aligned shape:1x372x366x3
+Tensor data type:3, Tensor layout: <span class="m">2</span>, shape:1x3x886x291, aligned shape:1x3x886x291
+Tensor data type:3, Tensor layout: <span class="m">0</span>, shape:1x613x507x3, aligned shape:1x613x507x3
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="advanced-samples">
+<h3>advanced_samples<a class="headerlink" href="#advanced-samples" title="永久链接至标题"></a></h3>
+<p>02_advanced_samples 目录下的示例，用于介绍自定义算子特殊功能的使用。其目录包含以下脚本：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>├── custom_arm_op_custom_identity.sh
+└── run_multi_model_batch.sh
+</pre></div>
+</div>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">custom_arm_op_custom_identity.sh</span></code> ：该脚本主要实现自定义算子模型推理功能，
+使用的时候，进入 02_advanced_samples 目录, 然后直接执行 <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">custom_arm_op_custom_identity.sh</span></code> 即可，如下所示：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/02_advanced_samples# sh custom_arm_op_custom_identity.sh
+../aarch64/bin/run_custom_op --model_file<span class="o">=</span>../../model/runtime/googlenet_cop/googlenet_cop_224x224_nv12.bin --image_file<span class="o">=</span>../../data/cls_images/zebra_cls.jpg --image_height<span class="o">=</span><span class="m">224</span> --image_width<span class="o">=</span><span class="m">224</span> --top_k<span class="o">=</span><span class="m">5</span>
+I0000 <span class="m">00</span>:00:00.000000 <span class="m">25036</span> vlog_is_on.cc:197<span class="o">]</span> RAW: Set VLOG level <span class="k">for</span> <span class="s2">&quot;*&quot;</span> to <span class="m">3</span>
+I0108 <span class="m">07</span>:04:16.743277 <span class="m">25036</span> main.cpp:138<span class="o">]</span> hbDNNRegisterLayerCreator success
+<span class="o">[</span>HBRT<span class="o">]</span> <span class="nb">set</span> log level as <span class="m">0</span>. <span class="nv">version</span> <span class="o">=</span> <span class="m">3</span>.12.1
+<span class="o">[</span>BPU_PLAT<span class="o">]</span>BPU Platform Version<span class="o">(</span><span class="m">1</span>.2.2<span class="o">)</span>!
+<span class="o">[</span>HorizonRT<span class="o">]</span> The model builder <span class="nv">version</span> <span class="o">=</span> <span class="m">1</span>.3.4
+I0108 <span class="m">07</span>:04:16.902737 <span class="m">25036</span> main.cpp:153<span class="o">]</span> hbDNNGetModelNameList success
+I0108 <span class="m">07</span>:04:16.902809 <span class="m">25036</span> main.cpp:160<span class="o">]</span> hbDNNGetModelHandle success
+I0108 <span class="m">07</span>:04:16.920487 <span class="m">25036</span> main.cpp:169<span class="o">]</span> <span class="nb">read</span> image to nv12 success
+I0108 <span class="m">07</span>:04:16.920793 <span class="m">25036</span> main.cpp:179<span class="o">]</span> prepare nv12 tensor success
+I0108 <span class="m">07</span>:04:16.920900 <span class="m">25036</span> main.cpp:189<span class="o">]</span> prepare tensor success
+I0108 <span class="m">07</span>:04:16.922179 <span class="m">25036</span> main.cpp:200<span class="o">]</span> hbDNNInfer success
+I0108 <span class="m">07</span>:04:16.996123 <span class="m">25036</span> main.cpp:205<span class="o">]</span> task <span class="k">done</span>
+I0108 <span class="m">07</span>:04:16.996308 <span class="m">25036</span> main.cpp:210<span class="o">]</span> task post process success
+I0108 <span class="m">07</span>:04:16.996355 <span class="m">25036</span> main.cpp:217<span class="o">]</span> TOP <span class="m">0</span> result id: <span class="m">340</span>
+I0108 <span class="m">07</span>:04:16.996380 <span class="m">25036</span> main.cpp:217<span class="o">]</span> TOP <span class="m">1</span> result id: <span class="m">351</span>
+I0108 <span class="m">07</span>:04:16.996403 <span class="m">25036</span> main.cpp:217<span class="o">]</span> TOP <span class="m">2</span> result id: <span class="m">83</span>
+I0108 <span class="m">07</span>:04:16.996426 <span class="m">25036</span> main.cpp:217<span class="o">]</span> TOP <span class="m">3</span> result id: <span class="m">352</span>
+I0108 <span class="m">07</span>:04:16.996448 <span class="m">25036</span> main.cpp:217<span class="o">]</span> TOP <span class="m">4</span> result id: <span class="m">353</span>
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run_multi_model_batch.sh</span></code> ：该脚本主要实现多个小模型批量推理功能，
+使用的时候，进入 02_advanced_samples 目录, 然后直接执行 <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">run_multi_model_batch.sh</span></code> 即可，如下所示：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-hynix2G-3200:/userdata/chaoliang/xj3/script/02_advanced_samples# sh run_multi_model_batch.sh
+../aarch64/bin/run_multi_model_batch --model_file<span class="o">=</span>../../model/runtime/googlenet/googlenet_224x224_nv12.bin,../../model/runtime/mobilenetv2/mobilenetv2_224x224_nv12.bin --input_file<span class="o">=</span>../../data/cls_images/zebra_cls.jpg,../../data/cls_images/zebra_cls.jpg
+I0000 <span class="m">00</span>:00:00.000000 <span class="m">17060</span> vlog_is_on.cc:197<span class="o">]</span> RAW: Set VLOG level <span class="k">for</span> <span class="s2">&quot;*&quot;</span> to <span class="m">3</span>
+<span class="o">[</span>HBRT<span class="o">]</span> <span class="nb">set</span> log level as <span class="m">0</span>. <span class="nv">version</span> <span class="o">=</span> <span class="m">3</span>.13.4
+<span class="o">[</span>BPU_PLAT<span class="o">]</span>BPU Platform Version<span class="o">(</span><span class="m">1</span>.1.1<span class="o">)</span>!
+<span class="o">[</span>HorizonRT<span class="o">]</span> The model builder <span class="nv">version</span> <span class="o">=</span> <span class="m">1</span>.3.18
+<span class="o">[</span>HorizonRT<span class="o">]</span> The model builder <span class="nv">version</span> <span class="o">=</span> <span class="m">1</span>.3.18
+I0317 <span class="m">12</span>:37:18.249785 <span class="m">17060</span> main.cpp:119<span class="o">]</span> hbDNNInitializeFromFiles success
+I0317 <span class="m">12</span>:37:18.250029 <span class="m">17060</span> main.cpp:127<span class="o">]</span> hbDNNGetModelNameList success
+I0317 <span class="m">12</span>:37:18.250071 <span class="m">17060</span> main.cpp:141<span class="o">]</span> hbDNNGetModelHandle success
+I0317 <span class="m">12</span>:37:18.283633 <span class="m">17060</span> main.cpp:155<span class="o">]</span> <span class="nb">read</span> image to nv12 success
+I0317 <span class="m">12</span>:37:18.284270 <span class="m">17060</span> main.cpp:172<span class="o">]</span> prepare input tensor success
+I0317 <span class="m">12</span>:37:18.284456 <span class="m">17060</span> main.cpp:184<span class="o">]</span> prepare output tensor success
+I0317 <span class="m">12</span>:37:18.285344 <span class="m">17060</span> main.cpp:218<span class="o">]</span> infer success
+I0317 <span class="m">12</span>:37:18.296559 <span class="m">17060</span> main.cpp:223<span class="o">]</span> task <span class="k">done</span>
+I0317 <span class="m">12</span>:37:18.296701 <span class="m">17060</span> main.cpp:228<span class="o">]</span> googlenet class result id: <span class="m">340</span>
+I0317 <span class="m">12</span>:37:18.296805 <span class="m">17060</span> main.cpp:232<span class="o">]</span> mobilenetv2 class result id: <span class="m">340</span>
+I0317 <span class="m">12</span>:37:18.296887 <span class="m">17060</span> main.cpp:236<span class="o">]</span> release task success
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="misc">
+<h3>misc<a class="headerlink" href="#misc" title="永久链接至标题"></a></h3>
+<p>03_misc 目录下的示例，用于介绍非nv12输入模型的使用。其目录包含以下脚本：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>├── run_lenet.sh
+└── run_resnet50_feature.sh
+</pre></div>
+</div>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">run_lenet.sh</span></code> ：该脚本主要实现Y数据输入的lenet模型推理功能，
+使用的时候，进入 03_misc 目录, 然后直接执行 <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">run_lenet.sh</span></code> 即可，如下所示：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/03_misc# sh run_lenet.sh
+../aarch64/bin/run_lenet_gray --model_file<span class="o">=</span>../../model/runtime/lenet_gray/lenet_gray_hybrid_horizonrt.bin --data_file<span class="o">=</span>../../data/misc_data/7.bin --image_height<span class="o">=</span><span class="m">28</span> --image_width<span class="o">=</span><span class="m">28</span> --top_k<span class="o">=</span><span class="m">5</span>
+I0000 <span class="m">00</span>:00:00.000000 <span class="m">25139</span> vlog_is_on.cc:197<span class="o">]</span> RAW: Set VLOG level <span class="k">for</span> <span class="s2">&quot;*&quot;</span> to <span class="m">3</span>
+<span class="o">[</span>HBRT<span class="o">]</span> <span class="nb">set</span> log level as <span class="m">0</span>. <span class="nv">version</span> <span class="o">=</span> <span class="m">3</span>.12.1
+<span class="o">[</span>BPU_PLAT<span class="o">]</span>BPU Platform Version<span class="o">(</span><span class="m">1</span>.2.2<span class="o">)</span>!
+<span class="o">[</span>HorizonRT<span class="o">]</span> The model builder <span class="nv">version</span> <span class="o">=</span> <span class="m">1</span>.3.3
+I0108 <span class="m">07</span>:23:35.507514 <span class="m">25139</span> run_lenet_gray.cc:145<span class="o">]</span> hbDNNInitializeFromFiles success
+I0108 <span class="m">07</span>:23:35.507737 <span class="m">25139</span> run_lenet_gray.cc:153<span class="o">]</span> hbDNNGetModelNameList success
+I0108 <span class="m">07</span>:23:35.507771 <span class="m">25139</span> run_lenet_gray.cc:160<span class="o">]</span> hbDNNGetModelHandle success
+I0108 <span class="m">07</span>:23:35.508070 <span class="m">25139</span> run_lenet_gray.cc:176<span class="o">]</span> prepare y tensor success
+I0108 <span class="m">07</span>:23:35.508178 <span class="m">25139</span> run_lenet_gray.cc:189<span class="o">]</span> prepare tensor success
+I0108 <span class="m">07</span>:23:35.509909 <span class="m">25139</span> run_lenet_gray.cc:200<span class="o">]</span> infer success
+I0108 <span class="m">07</span>:23:35.510721 <span class="m">25139</span> run_lenet_gray.cc:205<span class="o">]</span> task <span class="k">done</span>
+I0108 <span class="m">07</span>:23:35.510790 <span class="m">25139</span> run_lenet_gray.cc:210<span class="o">]</span> task post process finished
+I0108 <span class="m">07</span>:23:35.510832 <span class="m">25139</span> run_lenet_gray.cc:217<span class="o">]</span> TOP <span class="m">0</span> result id: <span class="m">7</span>
+I0108 <span class="m">07</span>:23:35.510857 <span class="m">25139</span> run_lenet_gray.cc:217<span class="o">]</span> TOP <span class="m">1</span> result id: <span class="m">9</span>
+I0108 <span class="m">07</span>:23:35.510879 <span class="m">25139</span> run_lenet_gray.cc:217<span class="o">]</span> TOP <span class="m">2</span> result id: <span class="m">3</span>
+I0108 <span class="m">07</span>:23:35.510903 <span class="m">25139</span> run_lenet_gray.cc:217<span class="o">]</span> TOP <span class="m">3</span> result id: <span class="m">4</span>
+I0108 <span class="m">07</span>:23:35.510927 <span class="m">25139</span> run_lenet_gray.cc:217<span class="o">]</span> TOP <span class="m">4</span> result id: <span class="m">2</span>
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run_resnet50_feature.sh</span></code> ：该脚本主要实现feature数据输入的resnet50模型推理功能，
+使用的时候，进入 03_misc 目录, 然后直接执行 <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">run_resnet50_feature.sh</span></code> 即可，如下所示：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/03_misc# sh run_resnet50_feature.sh
+../aarch64/bin/run_resnet_feature --model_file<span class="o">=</span>../../model/runtime/resnet50_feature/resnet50_feature_hybrid_horizonrt.bin --data_file<span class="o">=</span>../../data/misc_data/np_0 --top_k<span class="o">=</span><span class="m">5</span>
+I0000 <span class="m">00</span>:00:00.000000 <span class="m">25155</span> vlog_is_on.cc:197<span class="o">]</span> RAW: Set VLOG level <span class="k">for</span> <span class="s2">&quot;*&quot;</span> to <span class="m">3</span>
+<span class="o">[</span>HBRT<span class="o">]</span> <span class="nb">set</span> log level as <span class="m">0</span>. <span class="nv">version</span> <span class="o">=</span> <span class="m">3</span>.12.1
+<span class="o">[</span>BPU_PLAT<span class="o">]</span>BPU Platform Version<span class="o">(</span><span class="m">1</span>.2.2<span class="o">)</span>!
+<span class="o">[</span>HorizonRT<span class="o">]</span> The model builder <span class="nv">version</span> <span class="o">=</span> <span class="m">1</span>.3.3
+I0108 <span class="m">07</span>:25:41.300466 <span class="m">25155</span> run_resnet_feature.cc:136<span class="o">]</span> hbDNNInitializeFromFiles success
+I0108 <span class="m">07</span>:25:41.300708 <span class="m">25155</span> run_resnet_feature.cc:144<span class="o">]</span> hbDNNGetModelNameList success
+I0108 <span class="m">07</span>:25:41.300741 <span class="m">25155</span> run_resnet_feature.cc:151<span class="o">]</span> hbDNNGetModelHandle success
+I0108 <span class="m">07</span>:25:41.302760 <span class="m">25155</span> run_resnet_feature.cc:166<span class="o">]</span> prepare feature tensor success
+I0108 <span class="m">07</span>:25:41.302919 <span class="m">25155</span> run_resnet_feature.cc:176<span class="o">]</span> prepare tensor success
+I0108 <span class="m">07</span>:25:41.304678 <span class="m">25155</span> run_resnet_feature.cc:187<span class="o">]</span> infer success
+I0108 <span class="m">07</span>:25:41.373052 <span class="m">25155</span> run_resnet_feature.cc:192<span class="o">]</span> task <span class="k">done</span>
+I0108 <span class="m">07</span>:25:41.373328 <span class="m">25155</span> run_resnet_feature.cc:197<span class="o">]</span> task post process finished
+I0108 <span class="m">07</span>:25:41.373374 <span class="m">25155</span> run_resnet_feature.cc:204<span class="o">]</span> TOP <span class="m">0</span> result id: <span class="m">74</span>
+I0108 <span class="m">07</span>:25:41.373399 <span class="m">25155</span> run_resnet_feature.cc:204<span class="o">]</span> TOP <span class="m">1</span> result id: <span class="m">815</span>
+I0108 <span class="m">07</span>:25:41.373422 <span class="m">25155</span> run_resnet_feature.cc:204<span class="o">]</span> TOP <span class="m">2</span> result id: <span class="m">73</span>
+I0108 <span class="m">07</span>:25:41.373445 <span class="m">25155</span> run_resnet_feature.cc:204<span class="o">]</span> TOP <span class="m">3</span> result id: <span class="m">78</span>
+I0108 <span class="m">07</span>:25:41.373468 <span class="m">25155</span> run_resnet_feature.cc:204<span class="o">]</span> TOP <span class="m">4</span> result id: <span class="m">72</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="id11">
+<h1><span class="section-number">6.5.1.4. </span>辅助工具和常用操作<a class="headerlink" href="#id11" title="永久链接至标题"></a></h1>
+<section id="id12">
+<h2>日志<a class="headerlink" href="#id12" title="永久链接至标题"></a></h2>
+<p>​本章节主要包括 <code class="docutils literal notranslate"><span class="pre">示例日志</span></code> 和 <code class="docutils literal notranslate"><span class="pre">模型推理</span> <span class="pre">DNN</span> <span class="pre">API日志</span></code> 两部分。
+其中示例日志是指交付包示例代码中的应用日志；模型推理 dnn API日志是指嵌入式dnn库中的日志。用户根据不同的需求可以获取不同的日志信息。</p>
+<section id="id13">
+<h3>示例日志<a class="headerlink" href="#id13" title="永久链接至标题"></a></h3>
+<p>示例日志主要采用glog中的vlog，basic_samples参考示例中，日志内容会全部输出。</p>
+</section>
+<section id="dnn-api">
+<h3>模型推理 DNN API日志<a class="headerlink" href="#dnn-api" title="永久链接至标题"></a></h3>
+<p>关于模型推理 DNN API日志的配置，请阅读 <a class="reference external" href="../bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id20">《模型推理接口使用说明》</a> 文档中的 <code class="docutils literal notranslate"><span class="pre">配置信息</span></code> 一节内容。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="6.5.1. 模型上板运行示例说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../bpu_sdk_api_doc/index.html" class="btn btn-neutral float-right" title="6.5.2. 模型推理接口使用说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

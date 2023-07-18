@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.18.2. USB3.0 TX 电气特性测试 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+    <link rel="next" title="4.3.18.3. USB眼图测试" href="20-02-USB-Eye_pattern_test.html" />
+    <link rel="prev" title="4.3.18.1. USB开发指南" href="19-USB_Development_Guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">4.3.18. USB开发调试指南</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="19-USB_Development_Guide.html">4.3.18.1. USB开发指南</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">4.3.18.2. USB3.0 TX 电气特性测试</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id1">测试项：USB3.0 TX 电气特性测试</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id2">测试步骤如下：</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id3">附</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="20-02-USB-Eye_pattern_test.html">4.3.18.3. USB眼图测试</a></li>
+<li class="toctree-l4"><a class="reference internal" href="21-USB_Phy_Tunning_Guide.html">4.3.18.4. USB Phy常见参数调试</a></li>
+<li class="toctree-l4"><a class="reference internal" href="22-USB_Gadget_User_Guide.html">4.3.18.5. USB端口调试使用指南</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3.18. </span>USB开发调试指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.18.2. </span>USB3.0 TX 电气特性测试</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="19-USB_Development_Guide.html" class="btn btn-neutral float-left" title="4.3.18.1. USB开发指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="20-02-USB-Eye_pattern_test.html" class="btn btn-neutral float-right" title="4.3.18.3. USB眼图测试" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usb3-0-tx">
+<h1><span class="section-number">4.3.18.2. </span>USB3.0 TX 电气特性测试<a class="headerlink" href="#usb3-0-tx" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2>测试项：USB3.0 TX 电气特性测试<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>测试仪器：Lecroy SDA813Zi-B ，USB3.0 HOST测试夹具</p>
+</section>
+<section id="id2">
+<h2>测试步骤如下：<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<ol>
+<li><p>搭建测试环境如下图所示</p>
+<p><img alt="Generated" src="../../../_images/59fd8d91c8cb5af96bbb868e0efaeeab.png" /></p>
+</li>
+<li><p>将usb_verify文件夹拷贝到电路板Linux系统文件夹userdata下，里面有readme，包括软件的操作指令及步骤</p></li>
+<li><p>打开示波器QualiPHY软件,选择USB3.1/3.2 TX测试项，</p>
+<p><img alt="Generated" src="../../../_images/016c4a9ca9d86f62dda637345c89e635.png" /></p>
+</li>
+<li><p>选择Standard-A HOST GEN1 and GEN2选项</p>
+<p><img alt="Generated" src="../../../_images/837bba0720218a2a0cf2393d45b4d93b.png" /></p>
+</li>
+<li><p>按如图所示勾选GEN1 和User Controlled</p>
+<p><img alt="Generated" src="../../../_images/c4528e4da4703978a73511715dae75c5.png" /></p>
+</li>
+<li><p>测试项勾选LFPS及GEN1 Tests相关测试项</p>
+<p><img alt="Generated" src="../../../_images/565bdc53d72b3de3a1d8059461da734e.png" /></p>
+</li>
+<li><p>点击Start按钮开始测试</p>
+<p><img alt="Generated" src="../../../_images/b11aa8773e32c3c868d627ac9b8aeb18.png" /></p>
+</li>
+<li><p>描述待测设备相关信息及测试环境</p>
+<p><img alt="Generated" src="../../../_images/3f5f973a46a86a4a4a95db6bc1eca5e3.png" /></p>
+</li>
+<li><p>此项是校准通道间的deskew,示波器已校准，点击Skip</p>
+<p><img alt="Generated" src="../../../_images/330ca41ea9d8d169cc95fb67e61cec64.png" /></p>
+</li>
+<li><p>按照图片描述进行连接:</p>
+<p>Connect Host Test Fixture 1 + SMA to oscilloscope C2 and Host Test Fixture 1 - SMA to C3.</p>
+<p><img alt="Generated" src="../../../_images/7ca5709b9e6e5536b214a3b6510b8084.png" /></p>
+</li>
+<li><p>在此操作之前先给板子上电进入系统，此时测试夹具device口未插入DUT Host口，示波器点击ok</p>
+<p><img alt="Generated" src="../../../_images/2fc12daa2bbb010033ff851be8e34b61.png" /></p>
+</li>
+<li><p>先将测试夹具插入DUT
+Host口，此时示波器触发到LFPS信号，点击OK，等待示波器进行分析</p>
+<p><img alt="Generated" src="../../../_images/89029538600aee4d2680c734a94910a9.png" /></p>
+</li>
+<li><p>在软件客户端执行操作</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /userdata/usb_verify/
+
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="se">\$</span>PWD/:<span class="se">\$</span>PATH:
+
+sh usb_enter_CP0.sh
+</pre></div>
+</div>
+<p>执行完后会在示波器看到CP0波形，然后点击OK</p>
+<p><img alt="Generated" src="../../../_images/dc8d3a92ebe3faf2b690d50c40baab2c.png" /></p>
+</li>
+<li><p>在软件客户端执行操作：sh usb_next_CP.sh</p>
+<p>示波器上会看到CP1波形，然后点击OK</p>
+<p><img alt="Generated" src="../../../_images/fb2a3eddd1b5c85fb79fd638e5ccec05.png" /></p>
+</li>
+<li><p>点击Create生成测试报告</p>
+<p><img alt="Generated" src="../../../_images/760cc048e1e90542b0ae6d249ce7e53c.png" /></p>
+</li>
+</ol>
+</section>
+<section id="id3">
+<h2>附<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p>相关工具见附件:
+<a class="reference external" href="../../../_files/USB3.0%E4%BF%A1%E5%8F%B7%E6%B5%8B%E8%AF%95.7z">USB3.0信号测试.7z</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="19-USB_Development_Guide.html" class="btn btn-neutral float-left" title="4.3.18.1. USB开发指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="20-02-USB-Eye_pattern_test.html" class="btn btn-neutral float-right" title="4.3.18.3. USB眼图测试" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

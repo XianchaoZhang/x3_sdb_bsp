@@ -1,0 +1,321 @@
+#!/bin/sh
+
+DBASE=/sys/firmware/devicetree/base
+
+# get 4byte hex value from dtb node
+# $1 - dtb node sub path
+# $2 - val index
+# $? - hex value: XXXXXXXX
+dtb_hex4()
+{
+	if [ -f ${DBASE}$1 ]; then
+		if [ -z "$2" ]; then
+			hexdump ${DBASE}$1 -e '4/1 "%02X"' -n 4
+		else
+			skip=`expr $2 \* 4`
+			hexdump ${DBASE}$1 -e '4/1 "%02X"' -n 4 -s ${skip}
+		fi
+	else
+		echo ""
+	fi
+}
+
+# get 8byte hex value from dtb node
+# $1 - dtb node path
+# $2 - val index
+# $? - hex value: XXXXXXXXXXXXXXXXXX
+dtb_hex8()
+{
+	if [ -f ${DBASE}$1 ]; then
+                if [ -z "$2" ]; then
+                        hexdump ${DBASE}$1 -e '8/1 "%02X"' -n 8
+                else
+			skip=`expr $2 \* 8`
+			hexdump ${DBASE}$1 -e '8/1 "%02X"' -n 8 -s ${skip}
+                fi
+        else
+                echo ""
+        fi
+}
+
+# update cells
+# $1 - dtb node sub path, null as base
+cells_upd()
+{
+	DADDR=$(printf "%d" 0x`dtb_hex4 $1/#address-cells`)
+	DSIZE=$(printf "%d" 0x`dtb_hex4 $1/#size-cells`)
+}
+
+# get addr hex value from dtb node as default cells
+# $1 - dtb node sub path
+# $2 - val index
+# $? - addr hex value: XX...XX
+dtb_ahex()
+{
+	if [ $DADDR -eq 2 ]; then
+		dtb_hex8 $1 $2
+	else
+		dtb_hex4 $1 $2
+	fi
+}
+
+# get size hex value from dtb node as default cells
+# $1 - dtb node sub path
+# $2 - val index
+# $? - size hex value: XX...XX
+dtb_shex()
+{
+        if [ $DSIZE -eq 2 ]; then
+                dtb_hex8 $1 $2
+        else
+                dtb_hex4 $1 $2
+        fi
+}
+
+# get dec value from hex
+# $1 - hex value: XX...XX
+# $? - dec value: dd...dd
+dtb_val()
+{
+	if [ -z "$1" ]; then
+		echo "0"
+	else
+		printf "%lld" 0x$1
+	fi
+}
+
+# format as 0x%08X
+# $1 - XX...XX
+# $? - 0xXXXXXXXX
+dtb_fmt()
+{
+       if [ -z "$1" ]; then
+                echo "0x00000000"
+        else
+                printf 0x"%08X" 0x$1
+        fi
+}
+
+# format as size: xxB/K/M/G
+# $1 - dd...dd
+# $2 - fmt length
+# $3 - base
+# $? - xxB/K/M/G
+dtb_sizeht()
+{
+       if [ -z "$1" ]; then
+                echo "0B"
+        else
+                size=$1
+                s1K=`expr 1 \* 1024`
+                s1M=`expr 1024 \* 1024`
+                s1G=`expr 1024 \* 1024 \* 1024`
+                if [ "$3" = "G" ] ||
+                    ([ -z "$3" ] && [ ${size} -ge ${s1G} ]); then
+                        size_h=$(echo "${size} ${s1G}" |awk '{print $1/$2}')
+						if [ "${size_h/./}" == "${size_h}" ]; then
+							printf "%$2dG" ${size_h}
+						else
+							echo "${size_h}G"
+						fi
+                elif [ "$3" = "M" ] ||
+                    ([ -z "$3" ] && [ ${size} -ge ${s1M} ]); then
+                        size_h=$(echo "${size} ${s1M}" |awk '{print $1/$2}')
+						if [ "${size_h/./}" == "${size_h}" ]; then
+							printf "%$2dM" ${size_h}
+						else
+							echo "${size_h}M"
+						fi
+                elif [ "$3" = "K" ] ||
+                    ([ -z "$3" ] && [ ${size} -ge ${s1K} ]); then
+                        size_h=$(echo "${size} ${s1K}" |awk '{print $1/$2}')
+						if [ "${size_h/./}" == "${size_h}" ]; then
+							printf "%$2dK" ${size_h}
+						else
+							echo "${size_h}K"
+						fi
+                else
+                        printf "%$2dB" ${size}
+                fi
+        fi
+}
+
+# format as size: xxB/K/M/G
+# $1 - XX...XX
+# $2 - fmt length
+# $? - xxB/K/M/G
+dtb_sizehtx()
+{
+       if [ -z "$1" ]; then
+                echo "0B"
+        else
+                size=`printf "%lld" 0x$1`
+		dtb_sizeht ${size} $2
+        fi
+}
+
+# res display
+# $1 - res sub string
+res_disp()
+{
+	size=`echo $1 |awk '{print $1}'`
+	name=`echo $1 |awk '{print $2 $3}'`
+	printf "-          -    %10s %s\n" "${size}" "${name}"
+}
+
+echo "----------------------------------------------------"
+echo "address    size(hex)  size name"
+
+cells_upd
+memblk=0
+memsizes=0
+while [ ${memblk} -lt 10 ]; do
+	membasehex=$(dtb_ahex /memory@0/reg `expr ${memblk} \* 2`)
+	memsizehex=$(dtb_shex /memory@0/reg `expr ${memblk} \* 2 + 1`)
+	if [ -z "${memsizehex}" ]; then
+		break
+	fi
+	memblks="${memblks} ${membasehex}:${memsizehex}"
+	memsizes=$((${memsizes} + 0x${memsizehex}))
+	memblk=`expr ${memblk} + 1`
+done
+if [ ${memblk} -eq 0 ]; then
+	echo "error: no memblk reg here"
+	echo "----------------------------------------------------"
+	exit 1
+fi
+memsizehex=`printf "%x" ${memsizes}`
+
+echo "---------- ---------- ---- <reserved dts>-----------"
+RESMEM_SORT=`ls ${DBASE}/reserved-memory -l |grep ^d |awk -F '@' '{print $2}' |sort`
+cells_upd /reserved-memory
+resmem_total=0
+resmem_map_total=0
+resmem_nomap_total=0
+same_index=1
+old_resdir=""
+for res in ${RESMEM_SORT}; do
+	resdir=`ls ${DBASE}/reserved-memory |grep "${res}$"`
+	if [ "$resdir" = "$old_resdir" ];then
+		same_index=$(($same_index + 1))
+	else
+		same_index=1
+	fi
+	old_resdir=$resdir
+	resdir=`ls ${DBASE}/reserved-memory |grep "${res}$" | sed -n "${same_index}p"`
+	resname=`echo ${resdir} |awk -F '@' '{print $1}'`
+	resbasehex=$(dtb_ahex /reserved-memory/${resdir}/reg 0)
+	ressizehex=$(dtb_shex /reserved-memory/${resdir}/reg 1)
+	resbase=$(dtb_fmt ${resbasehex})
+	ressize=$(dtb_fmt ${ressizehex})
+	ressizeht=$(dtb_sizehtx ${ressizehex} 3)
+        if [ -f ${DBASE}/reserved-memory/${resdir}/status ]; then
+                status=`cat ${DBASE}/reserved-memory/${resdir}/status`
+	        if [ $status == "disabled" ]; then
+	                continue;
+		fi
+        fi
+	if [ -f ${DBASE}/reserved-memory/${resdir}/no-map ]; then
+		echo "${resbase} ${ressize} ${ressizeht} ${resname}(nomap)"
+		resmem_nomap_total=`expr ${resmem_nomap_total} + $(dtb_val ${ressizehex})`
+	else
+		echo "${resbase} ${ressize} ${ressizeht} ${resname}"
+		resmem_map_total=`expr ${resmem_map_total} + $(dtb_val ${ressizehex})`
+	fi
+done
+
+dmesg_mem=`dmesg |grep "Memory:" |awk -F ":" '{print $2}'`
+dmesg_limit=`dmesg |grep "Memory limited" |awk -F "to " '{print $2}' |awk -F "B" '{print $1}'`
+
+# mem info from dmesg
+if [ ! -z "${dmesg_mem}" ]; then
+
+mem_ava=`echo ${dmesg_mem} |awk -F '(' '{print $1}'`
+mem_res=`echo ${dmesg_mem} |awk -F '(' '{print $2}' |sed -e 's/)//g'`
+
+echo "---------- ---------- ---- <kernel res>-------------"
+mem_resk=0
+mem_resv=`echo ${mem_res} |awk -F ',' '{print $1}'`
+mem_resk=`expr ${mem_resk} + $(echo ${mem_resv} |awk -F 'K' '{print $1}')`
+res_disp "${mem_resv}"
+mem_resv=`echo ${mem_res} |awk -F ',' '{print $2}'`
+mem_resk=`expr ${mem_resk} + $(echo ${mem_resv} |awk -F 'K' '{print $1}')`
+res_disp "${mem_resv}"
+mem_resv=`echo ${mem_res} |awk -F ',' '{print $3}'`
+mem_resk=`expr ${mem_resk} + $(echo ${mem_resv} |awk -F 'K' '{print $1}')`
+res_disp "${mem_resv}"
+mem_resv=`echo ${mem_res} |awk -F ',' '{print $4}'`
+mem_resk=`expr ${mem_resk} + $(echo ${mem_resv} |awk -F 'K' '{print $1}')`
+res_disp "${mem_resv}"
+mem_resv=`echo ${mem_res} |awk -F ',' '{print $5}'`
+mem_resk=`expr ${mem_resk} + $(echo ${mem_resv} |awk -F 'K' '{print $1}')`
+res_disp "${mem_resv}"
+
+mem_resv=`echo ${mem_res} |awk -F ',' '{print $6}'`
+mem_resx=`expr $(echo ${mem_resv} |awk -F 'K' '{print $1}') - ${mem_resk} - ${resmem_map_total} / 1024`
+mem_resx="${mem_resx}K linux-sys(reserved:cal)"
+res_disp "${mem_resx}"
+
+echo "---------- ---------- ---- <memory maped>-----------"
+mem_resv=`echo ${mem_res} |awk -F ',' '{print $6}'`
+res_disp "${mem_resv}"
+mem_resv=`echo ${mem_res} |awk -F ',' '{print $7}'`
+res_disp "${mem_resv}"
+
+mem_avau=`echo ${mem_ava} |awk '{print $1}' |awk -F '/' '{print $1}'`
+mem_avan=`echo ${mem_ava} |awk '{print $2}'`
+mem_resv="${mem_avau} ${mem_avan}"
+res_disp "${mem_resv}"
+
+echo "---------- ---------- ---- <memory all>-------------"
+mem_avaa=`echo ${mem_ava} |awk '{print $1}' |awk -F '/' '{print $2}'`
+mem_resv="${mem_avaa} map-memory(reserved+cma+${mem_avan})"
+res_disp "${mem_resv}"
+
+# mem info no dmesg
+else
+
+echo "---------- ---------- ---- <memory cal>-------------"
+if [ -z "${dmesg_limit}" ]; then
+	mem_usize=$(dtb_val ${memsizehex})
+else
+	mem_usize=`echo ${dmesg_limit} |awk -F 'M' '{print $1}'`
+	mem_usize=`expr ${mem_usize} \* 1024 \* 1024`
+fi
+mem_avaa=`expr ${mem_usize} - ${resmem_nomap_total}`
+mem_avaa=`expr ${mem_avaa} / 1024`K
+mem_resv="${mem_avaa} map-memory(reserved+others)"
+res_disp "${mem_resv}"
+
+fi
+
+mem_resv="$(expr ${resmem_nomap_total} / 1024)K nomap-memory(see:dts)"
+res_disp "${mem_resv}"
+
+echo "---------- ---------- ---- -------------------------"
+if [ ! -z "${dmesg_limit}" ]; then
+mem_resv="${dmesg_limit} limited-memory"
+res_disp "${mem_resv}"
+fi
+memblk=0
+for memblkx in ${memblks}; do
+	membasehex=`echo "${memblkx}" |awk -F ':' '{print $1}'`
+	memsizehex=`echo "${memblkx}" |awk -F ':' '{print $2}'`
+	membase=$(dtb_fmt ${membasehex})
+	memsize=$(dtb_fmt ${memsizehex})
+	if [ ${memblk} -eq 0 ]; then
+		memsizeht=$(dtb_sizehtx ${memsizehex} 3)
+		echo "${membase} ${memsize} ${memsizeht} `hostname`"
+	else
+		memsizeht=$(dtb_sizehtx ${memsizehex} 2)
+		echo "${membase} ${memsize} ${memsizeht}"
+	fi
+	memblk=`expr ${memblk} + 1`
+done
+
+echo "----------------------------------------------------"
+if [ -z "${dmesg_mem}" ]; then
+	echo "warnning: memory info of dmesg lost!"
+fi
+
+exit 0

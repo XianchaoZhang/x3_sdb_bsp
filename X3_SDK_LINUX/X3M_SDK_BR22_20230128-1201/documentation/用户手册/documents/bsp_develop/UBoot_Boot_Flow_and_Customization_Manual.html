@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>X3J3平台UBoot启动流程文档 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>X3J3平台UBoot启动流程文档</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="x3j3uboot">
+<h1>X3J3平台UBoot启动流程文档<a class="headerlink" href="#x3j3uboot" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2>启动流程<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>启动流程图</p>
+<p>如下图所示，图中蓝色框图部分为XJ3新增内容，黄色框图部分是uboot基本流程。</p>
+</section>
+<section id="uboot">
+<h2>Uboot新增内容说明<a class="headerlink" href="#uboot" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>本章主要针对新增代码进行介绍，下方“涉及代码路径”为以uboot代码根目录为基准的相对路径；下方“开关和关闭方法”中，“宏”为defconfig中的编译选项宏。
+</pre></div>
+</div>
+<p>hb_unique_id_get</p>
+<p>**功能：**获取XJ3开发板的unique id</p>
+<p>**开启和关闭方法：**直接修改源代码增减这部分内容</p>
+<p><strong>涉及代码路径：</strong></p>
+<p>board/hobot/common/board.c</p>
+<p>disable_cnn</p>
+<p>**功能：**关闭CNN模块的时钟</p>
+<p>**开启或关闭方法：**直接修改源代码增减这部分内容</p>
+<p><strong>涉及代码路径：</strong></p>
+<p>board/hobot/common/board.c</p>
+<p>veeprom_init</p>
+<p>**功能：**veeprom保存IP地址、MAC地址和OTA相关标志位，使用OTA功能必须初始化</p>
+<p>**开启或关闭方法：**直接修改源代码增减这部分内容</p>
+<p><strong>涉及代码路径：</strong></p>
+<p>common/veeprom.c</p>
+<p>board/hobot/common/board.c</p>
+<p>bif_recover_reset_func</p>
+<p>**功能：**将响应pin脚配置为bifspi的reset pin脚</p>
+<p>**开启或关闭方法：**直接修改源代码增减这部分内容</p>
+<p><strong>涉及代码路径：</strong></p>
+<p>board/hobot/common/board.c</p>
+<p>apbooting</p>
+<p>**功能：**支持AP启动模式</p>
+<p>**开启或关闭方法：**直接修改源代码增减这部分内容</p>
+<p><strong>涉及代码路径：</strong></p>
+<p>board/hobot/common/board.c</p>
+<p>hb_ap_communication</p>
+<p>**功能：**支持执行AP侧发送的命令</p>
+<p>**开启或关闭方法：**通过下方宏控制</p>
+<p>CONFIG_AP_CP_COMN_MODE</p>
+<p><strong>涉及代码路径：</strong></p>
+<p>board/hobot/common/board.c</p>
+<p>spacc_init和pka_init</p>
+<p>**功能：**安全芯片IP相关驱动，支持RSA、HASH和AES硬件加速</p>
+<p>**开启或关闭方法：**通过下方宏控制</p>
+<p>CONFIG_HBOT_SECURE_ENGINE</p>
+<p>CONFIG_HBOT_SECURE_COMPONENT</p>
+<p><strong>涉及代码路径：</strong></p>
+<p>board/hobot/common/board.c</p>
+<p>drivers/scomp/scomp.c</p>
+<p>drivers/crypto/secure_engine/hb_pka.c</p>
+<p>drivers/crypto/secure_engine/hb_spacc.c</p>
+<p>备注：本节由系统版本0922开放支持。</p>
+<p>hb_env_and_boardid_init</p>
+<p>**功能：**环境变量处理，OTA升级流程处理</p>
+<p>**开启或关闭方法：**直接修改源代码增减这部分内容</p>
+<p><strong>涉及代码路径：</strong></p>
+<p>common/ota.c</p>
+<p>cmd/ota.c</p>
+<p>board/hobot/common/board.c</p>
+<p>hb_usb_dtb_config和hb_usb_env_init</p>
+<p>**功能：**支持usb启动模式</p>
+<p>**开启或关闭方法：**直接修改源代码增减这部分内容，并通过以下宏控制</p>
+<p>CONFIG_CMD_FASTBOOT</p>
+<p>CONFIG_CMD_USB</p>
+<p>CONFIG_CMD_USB_MASS_STORAGE</p>
+<p>CONFIG_FASTBOOT</p>
+<p>CONFIG_USB_FUNCTION_FASTBOOT</p>
+<p>CONFIG_FASTBOOT_OEM_GPT_EXTEND</p>
+<p>CONFIG_USB</p>
+<p>CONFIG_DM_USB</p>
+<p><strong>涉及代码路径：</strong></p>
+<p>drivers/usb/*</p>
+<p>board/hobot/common/board.c</p>
+<p>hb_swinfo_boot</p>
+<p>**功能：**支持memdump相关功能</p>
+<p>**开启或关闭方法：**直接修改源码增减这部分功能，并通过下方宏控制dump起始位置</p>
+<p>HB_SWINFO_DUMP_OFFSET</p>
+<p><strong>涉及代码路径：</strong></p>
+<p>cmd/swinfo.c</p>
+<p>board/hobot/common/board.c</p>
+<p>setup_boot_action</p>
+<p>**功能：**用于进入特殊的启动模式，目前包括Fastboot以及eMMC UMS功能</p>
+<p>**开启或关闭方法：**直接修改源码增减这部分功能</p>
+<p><strong>涉及代码路径：</strong></p>
+<p>board/hobot/common/board.c</p>
+<p>avb_verify</p>
+<p>**功能：**安全启动，校验boot和system分区完整性</p>
+<p>**开启或关闭方法：**boot command中不使用avb_verify，或/并且修改以下宏</p>
+<p>CONFIG_AVB_VERIFY</p>
+<p>CONFIG_LIBAVB</p>
+<p>CONFIG_ANDROID_BOOT_IMAGE</p>
+<p>CONFIG_UDP_FUNCTION_FASTBOOT</p>
+<p><strong>涉及代码路径：</strong></p>
+<p>common/avb_verify.c</p>
+<p>cmd/avb.c</p>
+<p>lib/libavb/avb_crypto.c</p>
+<p>lib/libavb/avb_vbmeta_image.c</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1 @@
+/etc/fusa/crc_test1,8440,0x7257755f,CRC32-ITU-TV.42

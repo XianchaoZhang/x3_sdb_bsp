@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3. 驱动开发指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.3.1. 概述" href="1-X3J3_Platform_System_Software_Overview.html" />
+    <link rel="prev" title="4.2. 硬件点亮指引" href="../board_bring_up.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.3. 驱动开发指南</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.3. </span>驱动开发指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../board_bring_up.html" class="btn btn-neutral float-left" title="4.2. 硬件点亮指引" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="1-X3J3_Platform_System_Software_Overview.html" class="btn btn-neutral float-right" title="4.3.1. 概述" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">4.3. </span>驱动开发指南<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html#uboot">4.3.2.1. 配置uboot选项参数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html#kernel">4.3.2.2. 配置kernel选项参数</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html#id1">4.3.3.1. 驱动代码</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html#id2">代码路径</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html#id3">内核配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html#dts">DTS设备节点配置</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html#id4">4.3.3.2. UART测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html#id5">4.3.3.3. 附录</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html#a">4.3.3.4. A 测试代码</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html#id1">4.3.4.1. 前言</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html#id2">4.3.4.2. 驱动代码</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html#id3">内核配置位置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html#dts">内核DTS节点配置</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html#id4">4.3.4.3. I2C使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html#kernel-space">Kernel Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html#user-space">User Space</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html#id5">频率设置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html#i2c-tools">I2c-tools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#id1">4.3.5.1. 管脚查询</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#id2">示例</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#id3">GPIO帮助工具</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#id4">4.3.5.2. 驱动代码</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#id5">内核配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#dts">内核DTS配置</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#id6">4.3.5.3. GPIO使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#kernel-space">Kernel Space</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#id7">DTS配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#id8">驱动代码接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#x3j3-gpio-irq">X3J3 GPIO IRQ</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#user-space">User Space</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#id9">控制接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#id10">调用接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#id11">调用示例</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html#id12">调试接口</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html#id1">4.3.6.1. 前言</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html#id2">4.3.6.2. 管脚查询</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html#id3">驱动代码</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html#id4">内核配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html#pinctrldts">Pinctrl的DTS配置</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html#id5">4.3.6.3. Pinctrl使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html#dts">驱动DTS配置</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html#pin-mux">Pin-mux配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html#id6">驱动强度配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html#id7">上下拉配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html#id8">施密特触发配置</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html#id9">驱动调用示例代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html#id10">用户空间调试</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html#id1">4.3.7.1. 前言</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html#id2">4.3.7.2. 管脚查询</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html#id3">4.3.7.3. 驱动代码</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html#id4">代码位置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html#io-domaindts">IO-DOMAIN的DTS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html#dts">驱动调用时DTS配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html#id5">驱动调用示例代码</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html#uboot">4.3.7.4. uboot下修改电压域</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#id1">4.3.8.1. 驱动代码</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#id2">代码路径</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#id3">内核配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#dts">DTS设备节点配置</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#id4">4.3.8.2. SPI驱动</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#spi-master-slave">SPI master/slave配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#id5">SPI注册</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#id6">硬件初始化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#id7">调试参数</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#id8">4.3.8.3. SPI测试</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#id9">硬件回环测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#id10">测试代码</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#id11">4.3.8.4. 附录</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#a-spidev-tc-c">A spidev_tc.c测试代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html#b-spi">B SPI时序</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html#id1">4.3.9.1. 驱动代码</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html#id2">代码路径</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html#id3">内核配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html#dts">DTS节点配置</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html#id4">4.3.9.2. 测试</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html#bpu-sysfs">4.3.10.1. BPU sysfs节点说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html#id1">4.3.10.2. 使用示例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html#bpu-core">关闭BPU Core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html#id2">热拔插BPU Core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html#id3">降低BPU Core功耗</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html#id4">优先级模型使用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html#id1">4.3.11.1. 温度传感器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html#id2">4.3.11.2. Thermal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html#id3">4.3.11.3. thermal参考文档</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="18-Memory_Managment_zh_CN.html#uboot">4.3.12.1. UBoot下设置内存</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18-Memory_Managment_zh_CN.html#bpu">4.3.12.2. 设置BPU保留内存</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html#id1">4.3.13.1. 启动日志DDR信息说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html#id2">4.3.13.2. DDR的故障分析和检测</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html#id3">启动阶段卡死</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html#kernelpanic">Kernel随机panic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html#stressapptest">Stressapptest内存压力测试错误</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html#ecc">ECC错误检测</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="23-01-DDR_stress_test.html#id1">4.3.14.1. 目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23-01-DDR_stress_test.html#id2">4.3.14.2. 名词解释</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23-01-DDR_stress_test.html#id3">4.3.14.3. 测试项</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23-01-DDR_stress_test.html#id4">4.3.14.4. 测试环境</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html#dut">DUT压力程序</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html#id5">压力程序使用方法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#id1">4.3.15.1. 前言</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#ethernet-phy">4.3.15.2. 地平线芯片Ethernet-PHY相关能力与约束</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#ubootphy">4.3.15.3. Uboot下PHY的适配</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#id2">编译配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#dts">DTS配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#pin">PIN驱动能力配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#emac">EMAC驱动源码适配方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#id3">测试方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#id4">常见问题</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#kernelphy">4.3.15.4. Kernel下PHY的适配</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#id5">编译配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#id6">DTS配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#pinctrl-dts">pinctrl-dts适配方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#id7">EMAC驱动适配方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#id8">测试方法</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#id9">4.3.15.5. 常用工具介绍</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#uboot">uboot下工具</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html#kernel">kernel下工具介绍</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html#id1">4.3.16.1. 驱动代码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html#id2">4.3.16.2. 内核配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html#id3">4.3.16.3. 驱动下载</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html#id4">4.3.16.4. RTC使用</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html">4.3.18.1. USB开发指南</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id1">引言</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id2">概述</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id3">特性</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id4">硬件</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id5">供电</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#vbus">vbus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#usb-id">usb id管脚</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id6">内核配置相关</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#usb-class">usb控制器, class驱动等</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#usb-gadget-function">usb gadget, function驱动等</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#otg">otg功能相关</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id7">设备树配置相关</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id8">USB驱动开发</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#linux-usb">Linux USB驱动框架</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id9">USB Class驱动</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#usb-gadget">USB Gadget驱动</a></li>
+<li class="toctree-l5"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#adb">adb设备</a></li>
+<li class="toctree-l5"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#g-mass-storage">虚拟磁盘(g_mass_storage)</a></li>
+<li class="toctree-l5"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#g-ether">虚拟网络(g_ether)</a></li>
+<li class="toctree-l5"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#configfs">configfs配置复合设备</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id10">USB常用调试方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id11">常用的USB调试仪器和软件工具</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id12">常见的内核USB调试接口</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id13">USB信号测量</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/19-USB_Development_Guide.html#id14">USB常见问题</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usb_develop_guide/20-01-USB3-Tx-Eye_pattern_test.html">4.3.18.2. USB3.0 TX 电气特性测试</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/20-01-USB3-Tx-Eye_pattern_test.html#id1">测试项：USB3.0 TX 电气特性测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/20-01-USB3-Tx-Eye_pattern_test.html#id2">测试步骤如下：</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/20-01-USB3-Tx-Eye_pattern_test.html#id3">附</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usb_develop_guide/20-02-USB-Eye_pattern_test.html">4.3.18.3. USB眼图测试</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/20-02-USB-Eye_pattern_test.html#id1">前言</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/20-02-USB-Eye_pattern_test.html#id2">原理</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/20-02-USB-Eye_pattern_test.html#usb2-0">usb2.0眼图测试原理</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/20-02-USB-Eye_pattern_test.html#usb3-0">usb3.0眼图测试原理</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/20-02-USB-Eye_pattern_test.html#id3">usb2.0 主机端</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/20-02-USB-Eye_pattern_test.html#id4">usb2.0 设备端</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/20-02-USB-Eye_pattern_test.html#id5">usb3.0 主机端</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/20-02-USB-Eye_pattern_test.html#id6">usb3.0 设备端</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/20-02-USB-Eye_pattern_test.html#id7">附件</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html">4.3.18.4. USB Phy常见参数调试</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#usb2-0-phy">USB2.0 Phy常见参数调试</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#usb3-phy-reg2">USB3_PHY_REG2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#x3m-usb2-0-host">某客户x3m usb2.0 host眼图</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#id1">参数调节方式</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#id2">更多手册描述信息摘取</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#usb3-0-phy">USB3.0 Phy常见参数调试</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#id3">1. 展频</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#id4">解释: (截取维基百科的)</a></li>
+<li class="toctree-l5"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#x3m-usb">x3m usb展频设置</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#id5">2. 去加重</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#id6">解释:</a></li>
+<li class="toctree-l5"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#id7">x3m usb去加重调参</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#id8">3. 幅度</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#x3m-usb-tx">x3m usb tx幅度调整</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#id9">参考文档</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/21-USB_Phy_Tunning_Guide.html#id10">附件</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html">4.3.18.5. USB端口调试使用指南</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#id1">引言</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#id2">编写目的</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#id3">术语约定</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#id4">读者对象和阅读建议</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#id5">总体概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#adb">Adb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#fastboot">Fastboot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#id6">虚拟串口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#id7">虚拟网口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#id8">虚拟大容量存储</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#uvc-gadget">UVC-Gadget</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#uac">UAC使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#id9">配置及使用</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#id10">配置说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#id11">接线说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#aplay-arecord">aplay/arecord使用方法</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#id12">设备端配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#id13">使用方法</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#usb-gadget-sh">复合设备(usb-gadget.sh)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/22-USB_Gadget_User_Guide.html#otg">主机端及otg相关</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html#mipi-dsi">4.3.19.1. mipi-dsi显示屏调试</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html#id1">4.3.20.1. 驱动配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html#id2">4.3.20.2. Wi-Fi使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html#id3">状态确认</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html#id4">联网使用</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html#id5">切换Wi-Fi的工作模式</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html#wifi">4.3.20.3. 其他方式使用wifi</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html#id6">驱动下载</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html#id7">Wi-Fi使用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html#id2">4.3.21.1. 驱动配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html#id3">4.3.21.2. 蓝牙使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html#id4">状态确认</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html#id5">初始化</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html#id6">配对连接</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html#id7">4.3.21.3. 其他版本的驱动</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html#id8">驱动下载</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html#bluetooth">BlueTooth使用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html#id1">4.3.22.1. 概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html#id2">4.3.22.2. 音频开发说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html#i2s">I2S参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html#codec">新增Codec说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html#codec-driver">添加codec driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html#id3">添加编译选项</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html#dts">修改dts文件</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html#id4">4.3.22.3. 调试说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html#id5">声卡调试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html#id6">常用调试方法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="35-Auto-start.html#init-rc">4.3.23.1. init.rc基本规则</a></li>
+<li class="toctree-l2"><a class="reference internal" href="35-Auto-start.html#id2">4.3.23.2. 添加启动项</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="36-Custom_Partition_Content.html#system">4.3.24.1. 添加文件进system分区</a></li>
+<li class="toctree-l2"><a class="reference internal" href="36-Custom_Partition_Content.html#id2">4.3.24.2. 新增新分区方式</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html#id3">内容准备</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html#id4">生成分区镜像</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html#id5">集成编译脚本</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html#id6">修改分区表</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html#id7">自动挂载新分区</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html#app-start-sh">自启动app_start.sh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html#id8">编译打包</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html#id9">刷机验证</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../board_bring_up.html" class="btn btn-neutral float-left" title="4.2. 硬件点亮指引" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="1-X3J3_Platform_System_Software_Overview.html" class="btn btn-neutral float-right" title="4.3.1. 概述" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

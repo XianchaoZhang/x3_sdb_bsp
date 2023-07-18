@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2.6. X3 SDB v3 开发板接口说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="3. Demo使用指南" href="../samples/index.html" />
+    <link rel="prev" title="2.5. 调试工具说明" href="Toolset_On_Board.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2. 快速入门</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="X3SDB_Setup.html">2.1. X3 SDB开发板说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Login_Method.html">2.2. 开发板登录方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Firmware_Update.html">2.3. 镜像升级方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Interface_User_Guide.html">2.4. 接口使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Toolset_On_Board.html">2.5. 调试工具说明</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.6. X3 SDB v3 开发板接口说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">2.6.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">2.6.2. 硬件外观</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">2.6.3. 功能框图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">2.6.4. 底板接口</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dip">2.6.4.1. DIP开关真值表</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">2.6.4.2. 摄像头</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">2.6.4.3. 串口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usb">2.6.4.4. USB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pin">2.6.4.5. 40PIN</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">2. </span>快速入门</a> &raquo;</li>
+      <li><span class="section-number">2.6. </span>X3 SDB v3 开发板接口说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="Toolset_On_Board.html" class="btn btn-neutral float-left" title="2.5. 调试工具说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../samples/index.html" class="btn btn-neutral float-right" title="3. Demo使用指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="x3-sdb-v3">
+<h1><span class="section-number">2.6. </span>X3 SDB v3 开发板接口说明<a class="headerlink" href="#x3-sdb-v3" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">2.6.1. </span>概述<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>地平线当前在使用的X3 SDB开发板存在多个硬件版本，各版本功能基本通用，仅在接口引出和管脚使用上存在区别。如果在使用的硬件上有 v1、v2、v3 字样的丝印，接口定义请查阅本章节核对。</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">2.6.2. </span>硬件外观<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p><img alt="image-20220405124816291" src="../_images/image-20220405124816291.png" /></p>
+</section>
+<section id="id3">
+<h2><span class="section-number">2.6.3. </span>功能框图<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p><img alt="image-20220407190056157" src="../_images/image-20220407190056157.png" /></p>
+</section>
+<section id="id4">
+<h2><span class="section-number">2.6.4. </span>底板接口<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p><img alt="image-20220405125112411" src="../_images/image-20220405125112411.png" /></p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>序号</strong></th>
+<th><strong>接口名称</strong></th>
+<th><strong>使用说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>以太网口</td>
+<td>开发板默认IP，192.168.1.10</td>
+</tr>
+<tr>
+<td>2</td>
+<td>USB Device口</td>
+<td>usb device接口，使用micro usb 2.0、3.0线缆都可正常工作</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Debug串口</td>
+<td>波特率921600，将附带杜邦线插入连接器中</td>
+</tr>
+<tr>
+<td>4</td>
+<td>USB Host口</td>
+<td>usb host接口，通过底板的usb hub扩展出usb 2.0x4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>MIPI CSI 1</td>
+<td>mipi host1+3  4lane接口，对接imx415、8a10等模组</td>
+</tr>
+<tr>
+<td>6</td>
+<td>TF卡槽(背面)</td>
+<td>接入tf存储卡</td>
+</tr>
+<tr>
+<td>7</td>
+<td>MIPI CSI 2</td>
+<td>mipi host0/2  2+2lane接口，对接f37等模组</td>
+</tr>
+<tr>
+<td>8</td>
+<td>40PIN扩展口</td>
+<td>接口定义参见开发板原理图</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Power LED</td>
+<td>电源指示灯，可通过点亮状态判断板子上电状态</td>
+</tr>
+<tr>
+<td>10</td>
+<td>DIP Switch</td>
+<td>X3 bootsel模式选择，默认全0</td>
+</tr>
+<tr>
+<td>11</td>
+<td>HDMI接口</td>
+<td>HDMI接口，输出格式1080p30</td>
+</tr>
+<tr>
+<td>13</td>
+<td>TP接口</td>
+<td>接入触摸屏</td>
+</tr>
+<tr>
+<td>14</td>
+<td>MIPI DSI接口</td>
+<td>接入LCD显示屏</td>
+</tr>
+<tr>
+<td>15</td>
+<td>电源接口</td>
+<td>配合12V@2A适配器使用</td>
+</tr>
+</tbody>
+</table><section id="dip">
+<h3><span class="section-number">2.6.4.1. </span>DIP开关真值表<a class="headerlink" href="#dip" title="永久链接至标题"></a></h3>
+<p>序号10是X3的启动选择项，支持选择启动方式、设置串口波特率。</p>
+<p><img alt="image-20220405125227562" src="../_images/image-20220405125227562.png" /></p>
+</section>
+<section id="id5">
+<h3><span class="section-number">2.6.4.2. </span>摄像头<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>开发板提供两路MIPI CSI接口，可同时接入两路摄像头。目前开发板配件提供了几种不同规格的摄像头模组，以满足不同用户的功能评测要求。模组规格如下：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>序号</th>
+<th>Sensor</th>
+<th>分辨率</th>
+<th>FOV</th>
+<th>I2C ID</th>
+<th>MIPI CSI接口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>IMX415</td>
+<td>800W</td>
+<td>H:80 V:51 D:88</td>
+<td>0x1a</td>
+<td>接口5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>GC4663</td>
+<td>400W</td>
+<td>H:104 V:70 D:113</td>
+<td>0x29</td>
+<td>接口7</td>
+</tr>
+<tr>
+<td>3</td>
+<td>JXF37</td>
+<td>200W</td>
+<td>H:62 V:37 D:68</td>
+<td>0x40</td>
+<td>接口7</td>
+</tr>
+</tbody>
+</table><p>安装方式上，摄像头模组通过FPC排线跟开发板MIPI CSI接口相连，如下图：</p>
+<p><img alt="image-20220405130510264" src="../_images/image-20220405130510264.png" /></p>
+</section>
+<section id="id6">
+<h3><span class="section-number">2.6.4.3. </span>串口<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<p>电源、地、RX、TX，这些引脚跟开发板串口的连接关系如下：</p>
+<ul class="simple">
+<li><p>GND，串口转接板的地线，接开发板串口的 GND 针</p></li>
+<li><p>TXD，串口转接板的输出线，接开发板串口的 TX 针</p></li>
+<li><p>RXD，串口转接板的输入线，接开发板串口的 RX 针</p></li>
+<li><p>3.3V，电源，<strong>不需要连接</strong></p></li>
+</ul>
+<p><img alt="image-20220405130639793" src="../_images/image-20220405130639793.png" /></p>
+</section>
+<section id="usb">
+<h3><span class="section-number">2.6.4.4. </span>USB<a class="headerlink" href="#usb" title="永久链接至标题"></a></h3>
+<p>本版本开发板提供一路Micro USB3.0和4路USB2.0。其中Micro USB中的USB2.0与4路USB2.0的功能互斥，并通过插线检测自动切换主从模式。具体电路实现如下图所示。</p>
+<ul class="simple">
+<li><p>默认状态下X3为usb host模式，X2A_USB_VBUS自动配置为低，同时需将JTG_TRSTN配置为高，打开4路USB2.0的供电电源。</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 手动配置JTG_TRSTN拉高的命令</span>
+<span class="nb">echo</span> <span class="m">4</span> &gt; /sys/class/gpio/export
+<span class="nb">echo</span> out &gt; /sys/class/gpio/gpio4/direction
+<span class="nb">echo</span> <span class="m">1</span> &gt; /sys/class/gpio/gpio4/value
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>当插入Micro USB线缆时，会自动切换到device模式，并将X2A_USB_VBUS自动配置为高。</p></li>
+</ul>
+<p><img alt="image-20220405131043461" src="../_images/image-20220405131043461.png" /></p>
+</section>
+<section id="pin">
+<h3><span class="section-number">2.6.4.5. </span>40PIN<a class="headerlink" href="#pin" title="永久链接至标题"></a></h3>
+<p>开发板提供一路40PIN接口，方便用户扩展外围接口，接口定义如下（更多功能复用情况请查阅 documentation/开发板硬件接口/x3sdbv3_40pin_functions_list.xlsx）：</p>
+<p><img alt="image-20220524215352819" src="../_images/image-20220524215352819.png" /></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Toolset_On_Board.html" class="btn btn-neutral float-left" title="2.5. 调试工具说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../samples/index.html" class="btn btn-neutral float-right" title="3. Demo使用指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.18.5. USB端口调试使用指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+    <link rel="next" title="4.3.19. X3 mipi 屏适配说明" href="../31-Mipi_Screen_Driver_Debug_Guide.html" />
+    <link rel="prev" title="4.3.18.4. USB Phy常见参数调试" href="21-USB_Phy_Tunning_Guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">4.3.18. USB开发调试指南</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="19-USB_Development_Guide.html">4.3.18.1. USB开发指南</a></li>
+<li class="toctree-l4"><a class="reference internal" href="20-01-USB3-Tx-Eye_pattern_test.html">4.3.18.2. USB3.0 TX 电气特性测试</a></li>
+<li class="toctree-l4"><a class="reference internal" href="20-02-USB-Eye_pattern_test.html">4.3.18.3. USB眼图测试</a></li>
+<li class="toctree-l4"><a class="reference internal" href="21-USB_Phy_Tunning_Guide.html">4.3.18.4. USB Phy常见参数调试</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">4.3.18.5. USB端口调试使用指南</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id1">引言</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id2">编写目的</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id3">术语约定</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id4">读者对象和阅读建议</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#id5">总体概述</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#adb">Adb</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#fastboot">Fastboot</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id6">虚拟串口</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id7">虚拟网口</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id8">虚拟大容量存储</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#uvc-gadget">UVC-Gadget</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#uac">UAC使用方法</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id9">配置及使用</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id10">配置说明</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id11">接线说明</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#aplay-arecord">aplay/arecord使用方法</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id12">设备端配置</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id13">使用方法</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#usb-gadget-sh">复合设备(usb-gadget.sh)</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#otg">主机端及otg相关</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3.18. </span>USB开发调试指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.18.5. </span>USB端口调试使用指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="21-USB_Phy_Tunning_Guide.html" class="btn btn-neutral float-left" title="4.3.18.4. USB Phy常见参数调试" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../31-Mipi_Screen_Driver_Debug_Guide.html" class="btn btn-neutral float-right" title="4.3.19. X3 mipi 屏适配说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usb">
+<h1><span class="section-number">4.3.18.5. </span>USB端口调试使用指南<a class="headerlink" href="#usb" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2>引言<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<section id="id2">
+<h3>编写目的<a class="headerlink" href="#id2" title="永久链接至标题"></a></h3>
+<p>描述xj3 usb使用场景及方式。</p>
+</section>
+<section id="id3">
+<h3>术语约定<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>缩写</th>
+<th>全称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>USB</td>
+<td>Universal Serial Bus</td>
+</tr>
+<tr>
+<td>UVC</td>
+<td>USB Video Class</td>
+</tr>
+<tr>
+<td>UAC</td>
+<td>USB Audio Class</td>
+</tr>
+<tr>
+<td>HID</td>
+<td>Human Interface Device</td>
+</tr>
+<tr>
+<td>RNDIS</td>
+<td>Remote Network Driver Interface Specification</td>
+</tr>
+<tr>
+<td>CDC</td>
+<td>Communication Device Class</td>
+</tr>
+<tr>
+<td>OTG</td>
+<td>On The Go</td>
+</tr>
+<tr>
+<td>Fastboot</td>
+<td>Android线刷工具, uboot已支持</td>
+</tr>
+</tbody>
+</table></section>
+<section id="id4">
+<h3>读者对象和阅读建议<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>该文档针对需要使用到USB相关的应用工程师，测试工程师以及相关工程人员等，文档提供了该部分软件使用上的各层面的信息以及大致的概念，如果涉及实际接口开发，请参考对应的软件开发手册。</p>
+</section>
+</section>
+<section id="id5">
+<h2>总体概述<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<p>X3J3芯片有一个DWC3 USB 控制器, 为一个静态DRD(双角色)控制器. 即同一时间作为主机或者从机模式。其中OTG功能通过一根GPIO连接芯片和USB_ID pin, 通过该pin来通知驱动进行usb主从驱动切换。
+常见主机端驱动有USB Mass Storage, HID(鼠标, 键盘), UVC(USB摄像头), USB网卡, USB Wi-Fi等。
+常见设备端驱动有虚拟串口(g_serial), 虚拟网卡(g_ether), 虚拟存储(g_mass_storage), uvc-gadget, uaadb, fastboot, ums等。其中fastboot, ums 为uboot支持的功能。</p>
+<p>本文主要介绍设备端驱动如何使用。</p>
+</section>
+<section id="adb">
+<h2>Adb<a class="headerlink" href="#adb" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>目前开发板启动默认处于adb调试模式;</p></li>
+<li><p>故直接接micro-usb线到电脑即可;</p></li>
+<li><p>设备管理器会出现一个xj3的设备;</p></li>
+<li><p>PC端安装adb工具，参考<a class="reference external" href="https://wiki.lineageos.org/adb_fastboot_guide.html">https://wiki.lineageos.org/adb_fastboot_guide.html</a>，即可使用adb shell, adb push, adb pull等功能，故开发者视情况可只用usb调试，而无需接串口线；</p></li>
+<li><p>adbd目前为init进程默认启动项, 开发者可使用service adbd start/stop/restart/status等命令进行控制；</p></li>
+</ul>
+</section>
+<section id="fastboot">
+<h2>Fastboot<a class="headerlink" href="#fastboot" title="永久链接至标题"></a></h2>
+<ol class="simple">
+<li><p>目前fastboot有如下三种方式进入</p></li>
+</ol>
+<ul class="simple">
+<li><p>linux shell, 敲reboot fastboot</p></li>
+<li><p>进uboot shell, 敲fastboot 0</p></li>
+<li><p>拨码开关, boot_sel[15]: On   (X底板: U710 Dip[7], J底板: U38 Dip[7])(如果不是DVB开发板, 一般无此拨码开关, 故此项不适用)
+<img alt="DVB_fastboot" src="../../../_images/dvb_fastboot.png" /></p></li>
+</ul>
+<ol class="simple">
+<li><p>使用micro usb线(即常见android手机线)链接microAB口</p></li>
+<li><p>主机端会产生一个Android Phone的设备
+有些电脑无法自动更新驱动, 则使用附件驱动android_hobot_winusb.zip (使用方法参考内部readme.md)</p></li>
+<li><p>PC端安装fastboot工具,可参考<a class="reference external" href="https://wiki.lineageos.org/adb_fastboot_guide.html">https://wiki.lineageos.org/adb_fastboot_guide.html</a>，如需要使用oem ramdump, flash 0x0 disk.img等功能, 请使用附件(fastboot.tar.gz)</p></li>
+<li><p>拷贝out\target\deploy目录下你需要烧录的image</p></li>
+<li><p>可使用fastboot线刷镜像，烧录命令fastboot flash 0x0 disk.img</p></li>
+</ol>
+</section>
+<section id="id6">
+<h2>虚拟串口<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>开发板</p>
+<ul class="simple">
+<li><p>service adbd stop</p></li>
+<li><p>modprobe g_serail</p></li>
+<li><p>echo hello &gt; /dev/ttyGS0  # ttyGS0为开发板虚拟串口节点</p></li>
+<li><p>dmesg &gt; /dev/ttyGS0</p></li>
+</ul>
+<p>PC端</p>
+<ul class="simple">
+<li><p>Linux端，picocom –b 115200 /dev/ttyACM0  	# ttyACM0 为Linux PC端产生的虚拟串口节点，或者minicom /dev/ttyACM0</p></li>
+<li><p>Windows端，利用SecureCRT, putty等终端工具查看</p></li>
+</ul>
+</section>
+<section id="id7">
+<h2>虚拟网口<a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<p>开发板</p>
+<ul class="simple">
+<li><p>service adbd stop</p></li>
+<li><p>modprobe g_ether</p></li>
+<li><p>ifconfig usb0 192.168.100.100</p></li>
+</ul>
+<p>PC端</p>
+<ul class="simple">
+<li><p>Linux端，ifconfig -a，ifconfig enp0s20f0u6 192.168.100.101，enp0s20f0u6为PC端重命名usb0产生的网卡</p></li>
+<li><p>Windows端，安装附件rndis驱动 rndis_hobot_windriver.zip(请参考内部readme)</p></li>
+</ul>
+<p>rndis win10 driver</p>
+<ul class="simple">
+<li><p>Download &amp; Unzip attachment rndis_hobot_windriver.zip</p></li>
+<li><p>R-click “5-runasadmin_register-CA-cer.cmd” and “Run as administrator”*</p></li>
+<li><p>In Device Manager, expand “Ports (COM &amp; LPT)”, R-click “Serial USB device (COM3)” &gt; Update Driver Software…</p></li>
+<li><p>Browse for my computer for driver software &gt; Select extract folder</p></li>
+<li><p>配置新增以太网设备ip
+网络与internet设置 → 新增以太网设备 → 右键点击属性 → ineternet 协议版本4
+<img alt="windows_rndis" src="../../../_images/windows_rndis.png" /></p></li>
+<li><p>开发板 PC互相ping通或iperf测试</p></li>
+</ul>
+</section>
+<section id="id8">
+<h2>虚拟大容量存储<a class="headerlink" href="#id8" title="永久链接至标题"></a></h2>
+<p>开发板</p>
+<ul class="simple">
+<li><p>service adbd stop</p></li>
+<li><p>unmount /userdata 			# 目前userdata分区无数据, 可暂时拿来使用</p></li>
+<li><p>modprobe g_mass_storage file=/dev/mmcblk0p12 removable=1</p></li>
+</ul>
+<p>PC端</p>
+<ul class="simple">
+<li><p>Win10 会出现新磁盘设备, 格式化为FAT32，即可进行文件拷贝等磁盘读写操作，(开发板重新 mount /dev/mmcblk0p12 /userdata)</p></li>
+</ul>
+</section>
+<section id="uvc-gadget">
+<h2>UVC-Gadget<a class="headerlink" href="#uvc-gadget" title="永久链接至标题"></a></h2>
+<p>uvc-gadget即xj3开发板作为usb摄像头功能</p>
+<p>环境:</p>
+<p>连接xj3开发板串口及usb口.</p>
+<p>测试工具:</p>
+<p>windows主机端: win10 相机, PotPlayer, amcap, Zoom, 腾讯会议等支持UVC协议的程序
+PotPlayer可支持yuv, mjpeg, h264等多种格式: Pot-Player64_1.7.21283_Dev_20200831.7z</p>
+<p>使用方法请参考USB Webcam使用说明。</p>
+</section>
+<section id="uac">
+<h2>UAC使用方法<a class="headerlink" href="#uac" title="永久链接至标题"></a></h2>
+<section id="id9">
+<h3>配置及使用<a class="headerlink" href="#id9" title="永久链接至标题"></a></h3>
+<p>本章节主要介绍使用UAC需要准备的配置</p>
+</section>
+<section id="id10">
+<h3>配置说明<a class="headerlink" href="#id10" title="永久链接至标题"></a></h3>
+<p>windows系统：PC端需安装xmos工具，支持PC端可枚举到UAC设备。在加载驱动后，PC端可以查看到虚拟声卡设备
+ubuntu系统：加载驱动后，终端在/dev/snd下可查看到新生成的设备节点</p>
+</section>
+<section id="id11">
+<h3>接线说明<a class="headerlink" href="#id11" title="永久链接至标题"></a></h3>
+<p>连接开发板的串口和usb口，并连接电脑<img alt="uac_connect" src="../../../_images/uac_connect.png" /></p>
+</section>
+<section id="aplay-arecord">
+<h3>aplay/arecord使用方法<a class="headerlink" href="#aplay-arecord" title="永久链接至标题"></a></h3>
+<p>本章节主要介绍使用aplay/arecord调试UAC的方法</p>
+</section>
+<section id="id12">
+<h3>设备端配置<a class="headerlink" href="#id12" title="永久链接至标题"></a></h3>
+<p>系统加载虚拟声卡驱动命令：</p>
+<p>service adbd stop</p>
+<p>modprobe g_audio p_chmask=0x3</p>
+<p>使用Micro-USB口连接开发板与PC。PC端通过设备管理器-&gt;声音、视频和游戏控制器产看是否新增UAC设备
+系统加载实际声卡驱动命令：</p>
+<p>modprobe ac101</p>
+<p>modprobe ac108_driver</p>
+<p>modprobe hobot-dma</p>
+<p>modprobe hobot-cpudai</p>
+<p>modprobe hobot-snd-96 snd_card=0</p>
+<p>开发板通过上述方法加载驱动，创建虚拟声卡，检查虚拟声卡是否创建成功的命令如下</p>
+<p>cat /proc/asound/cards</p>
+<p>0 [UAC2Gadget     ]: UAC2_Gadget - UAC2_Gadget
+UAC2_Gadget 0</p>
+<p>1 [hobotsnd0      ]: hobotsnd0 - hobotsnd0
+hobotsnd0</p>
+<p>执行如下命令，查看创建的设备节点信息</p>
+<p>ls /dev/snd</p>
+<p>by-path    controlC0  controlC1  pcmC0D0c   pcmC0D0p   pcmC1D0c   pcmC1D1p   timer</p>
+<p>其中，pcmC0D0c/pcmC0D0p是虚拟声卡的设备节点信息
+pcmC1D0c/pcmC1D1p是真实声卡的设备节点信息</p>
+</section>
+<section id="id13">
+<h3>使用方法<a class="headerlink" href="#id13" title="永久链接至标题"></a></h3>
+<p>通过上述方法加载驱动成功后，就可以通过arecord/aplay进行采集/播放的操作</p>
+<p>windows系统</p>
+<p>PC端选择外置USB audio为默认声卡设备</p>
+<p>PC端播放音频，通过播放器打开指定音频文件播放。开发板执行如下命令</p>
+<p>arecord -Dhw:0,0 -c 2 -r 48000 -f S16_LE -t wav -d 6 test.wav //保存文件</p>
+<p>aplay -Dhw:1,1 test.wav //实际设备节点播放</p>
+<p>arecord -Dhw:0,0 -c 2 -r 48000 -f S16_LE -t wav -d 6 | aplay -Dhw:1,1 //实时播放</p>
+<p>PC端录制音频，搜索“录音机”即可，开始录音操作。开发板执行如下命令</p>
+<p>arecord -Dhw:1,0 -c 2 -r 48000 -f S16_LE -t wav -d 5 | aplay -Dhw:0,0</p>
+<p>用PC端的录音机播放文件，检查录音文件是否正常</p>
+<p>Linux系统</p>
+<p>ubuntu系统下，打开Terminal。开发板和PC侧通过如下方式验证UAC虚拟声卡是否正常，开发板录制，PC端播放指定音频文件(准备音频文件)。执行如下命令</p>
+<p>开发板录音</p>
+<p>arecord -Dhw:0,0 -c 2 -r 48000 -f S16_LE -t wav –d 5 test.wav</p>
+<p>PC Terminal播放</p>
+<p>aplay –Dhw:1,0 –c 2 –r 48000 –f S16_LE –t wav –d 5 48k.wav</p>
+<p>开发板侧播放test.wav文件，检查录音文件是否正常</p>
+<p>PC端录音，开发板播放指定音频文件(准备音频文件)。执行如下命令</p>
+<p>开发板播放</p>
+<p>aplay -Dhw:0,0 -c 2 -r 48000 -f S16_LE -t wav 48k.wav</p>
+<p>PC Terminal录音</p>
+<p>arecord –Dhw:1,0 –c 2 –r 48000 –f S16_LE –t wav test.wav</p>
+<p>PC侧播放test.wav文件，检查录音文件是否正常</p>
+</section>
+</section>
+<section id="usb-gadget-sh">
+<h2>复合设备(usb-gadget.sh)<a class="headerlink" href="#usb-gadget-sh" title="永久链接至标题"></a></h2>
+<p>usb-gadget 支持多功能复合设备, 可参考legacy目录下的g_mult等ko, 或者利用configfs配置自定义的多功能复合设备。 这里以usb-gadget.sh脚本为例, 描述常见复合设备。（开发者亦可参考usb-gadget.sh脚本配置自己的复合设备）</p>
+<p>/etc/init.d/usb-gadget.sh –h</p>
+<p>例1: 单个rndis设备
+x3开发板 &gt;&gt;</p>
+<p>service adbd stop</p>
+<p>/etc/init.d/usb-gadget.sh start rndis</p>
+<p>ifconfig usb0 192.168.100.100</p>
+<p>windows PC rndis 配置ip 192.168.100.199</p>
+<p>windows PC和开发板互相ping 通</p>
+<p>例2: uvc + rndis 复合设备</p>
+<p>service adbd stop</p>
+<p>/etc/init.d/usb-gadget.sh start uvc-rndis</p>
+<p>ifconfig usb0 192.168.100.100</p>
+<p>usb_webcam –b –e 2 –t 9</p>
+<p>windows 配置rndis ip 192.168.100.199</p>
+<p>互相可以ping通，相机/potplayer等程序可以打开usb摄像头</p>
+<p>例3: uvc + uac复合设备</p>
+<p>uvc-uac-driver.sh                        # 加载uvc, uac, micphone, speaker驱动</p>
+<p>uac-gadget &amp; 					    # 跑uac的程序</p>
+<p>usb_webcam –b –e 2 –t 9                 # uvc的程序</p>
+<p>然后主机端使用企业微信, 飞书, zoom, skype, 腾讯视频等即可进行语音, 视频聊天。</p>
+</section>
+<section id="otg">
+<h2>主机端及otg相关<a class="headerlink" href="#otg" title="永久链接至标题"></a></h2>
+<p>xj3 usb控制器是一个static drd控制器, 即静态可配置双角色控制器。 可运行时切换为主机模式或从机模式, 作为主机可以通过hub接最多127个设备, 作为设备只能作为一个gadget。</p>
+<p>关于主机端及otg相关信息如下:</p>
+<p>Q. 如何切换主从模式?</p>
+<p>A. dvb开发板开机默认在从机模式, 当且仅当插入otg线后, 切换到主机模式。sdb开发板默认工作在主机模式, 当且仅当micro usb线连接后, vbus供电后, sdb开发板切换到设备端。</p>
+<p>Q. 命令行能否切换主从模式?</p>
+<p>A. echo host &gt; /sys/devices/platform/soc/b2000000.usb/b2000000.dwc3/role                 # 切换到主模式</p>
+<p>echo device &gt; /sys/devices/platform/soc/b2000000.usb/b2000000.dwc3/role               # 切换到从模式</p>
+<p>Q. otg实现的相关驱动?</p>
+<p>A. 复用的内核驱动extcon-usb-gpio驱动。(代码路径: kernel/drivers/extcon/extcon-usb-gpio.c)</p>
+<p>sysfs路径 &gt;&gt; /sys/bus/platform/drivers/extcon-usb-gpio</p>
+<p>Q. 主机端驱动?</p>
+<p>A. 默认开启了常见如U盘, HID(鼠标键盘), uvc等。如开发者需要更多的功能, 可自行内核menu config配置予以开启。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="21-USB_Phy_Tunning_Guide.html" class="btn btn-neutral float-left" title="4.3.18.4. USB Phy常见参数调试" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../31-Mipi_Screen_Driver_Debug_Guide.html" class="btn btn-neutral float-right" title="4.3.19. X3 mipi 屏适配说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.3. UART驱动调试指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.3.4. I2C调试指南" href="9-I2C_Debug_Guide_zh_CN.html" />
+    <link rel="prev" title="4.3.2. 配置uboot和kernel选项参数" href="0-Configure_Kernel_And_Uboot.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.3.3. UART驱动调试指南</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.3.3.1. 驱动代码</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id2">代码路径</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id3">内核配置</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#dts">DTS设备节点配置</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">4.3.3.2. UART测试</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">4.3.3.3. 附录</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#a">4.3.3.4. A 测试代码</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.3. </span>UART驱动调试指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="0-Configure_Kernel_And_Uboot.html" class="btn btn-neutral float-left" title="4.3.2. 配置uboot和kernel选项参数" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="9-I2C_Debug_Guide_zh_CN.html" class="btn btn-neutral float-right" title="4.3.4. I2C调试指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="uart">
+<h1><span class="section-number">4.3.3. </span>UART驱动调试指南<a class="headerlink" href="#uart" title="永久链接至标题"></a></h1>
+<p>X3 芯片共有4路串口：UART0、UART1，UART2，UART3</p>
+<ul class="simple">
+<li><p>UART0 用作调试串口，只有 UART1 支持硬件自动流控</p></li>
+<li><p>支持比特率 115.2Kbps，230.4Kbps，460.8Kbps，921.6Kbps，1.5Mbps，2Mbps，4Mbps。2M以上速录需要使能TOI</p></li>
+<li><p>支持基于中断或基于 DMA 的模式</p></li>
+</ul>
+<section id="id1">
+<h2><span class="section-number">4.3.3.1. </span>驱动代码<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<section id="id2">
+<h3>代码路径<a class="headerlink" href="#id2" title="永久链接至标题"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">drivers</span><span class="o">/</span><span class="n">tty</span><span class="o">/</span><span class="n">serial</span><span class="o">/</span><span class="n">hobot_serial</span><span class="o">.</span><span class="n">c</span>
+<span class="n">drivers</span><span class="o">/</span><span class="n">tty</span><span class="o">/</span><span class="n">serial</span><span class="o">/</span><span class="n">hobot_serial</span><span class="o">.</span><span class="n">h</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>内核配置<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>CONFIG_SERIAL_HOBOT_UART</p>
+<p>SERIAL_HOBOT_UART_CONSOLE</p>
+<p><img alt="image-20220324112539182" src="../../_images/image-20220324112539182.png" /></p>
+</section>
+<section id="dts">
+<h3>DTS设备节点配置<a class="headerlink" href="#dts" title="永久链接至标题"></a></h3>
+<p>在 hobot-xj3.dtsi 文件中有uart0-3的通用配置，此文件内配置一般不做修改，当需要使能对应的串口时，可以到具体的板子配置设备树中修改、添加自定义配置，例如在 hobot-x3-sdb.dts 文件内使能 uart0、1、3</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>/* arch/arm64/boot/dts/hobot/hobot-xj3.dtsi */
+uart0: serial@0xA5000000 {
+    compatible = &quot;hobot,hobot-uart&quot;;
+    reg = &lt;0 0xA5000000 0 0x1000&gt;;
+    interrupt-parent = &lt;&amp;gic&gt;;
+    interrupts = &lt;0 29 4&gt;;
+    clocks = &lt;&amp;uart0_mclk&gt;;
+    pinctrl-names = &quot;default&quot;;
+    pinctrl-0 = &lt;&amp;uart0_func&gt;;
+    status = &quot;disabled&quot;;
+};
+</pre></div>
+</div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* arch/arm64/boot/dts/hobot/hobot-x3-sdb.dts */</span><span class="w"></span>
+<span class="o">&amp;</span><span class="n">uart0</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;okay&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="o">&amp;</span><span class="n">uart1</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;okay&quot;</span><span class="p">;</span><span class="w"> </span><span class="cm">/* 4 wire uart for bt */</span><span class="w"></span>
+<span class="w">	</span><span class="n">pinctrl</span><span class="mi">-0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;&amp;</span><span class="n">uart1_func_rtscts</span><span class="o">&gt;</span><span class="p">;</span><span class="w"> </span><span class="cm">/* &lt;&amp;uart1_func&gt;;  uart 1 connect to bt with rtscts*/</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="o">&amp;</span><span class="n">uart3</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;okay&quot;</span><span class="p">;</span><span class="w"> </span><span class="cm">/* 4 wire uart for bt */</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id4">
+<h2><span class="section-number">4.3.3.2. </span>UART测试<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>硬件上把uart3的TX和RX进行连接。</p>
+<p><img alt="image-20220324122032808" src="../../_images/image-20220324122032808.png" /></p>
+<p>编译uart_duplex.c 代码，具体代码如附录A</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">gcc</span><span class="o">-</span><span class="n">ubuntu</span><span class="o">-</span><span class="mf">9.3.0</span><span class="o">-</span><span class="mf">2020.03</span><span class="o">-</span><span class="n">x86_64</span><span class="o">-</span><span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">aarch64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">-</span><span class="n">gcc</span> <span class="o">-</span><span class="n">o</span> <span class="n">uart_duplex</span> <span class="n">uart_duplex</span><span class="o">.</span><span class="n">c</span>  <span class="o">-</span><span class="n">lpthread</span>
+</pre></div>
+</div>
+<p>回环测试命令：打开/dev/ttyS3，默认波特率4Mbps，默认每轮测试1MB数据，测试100轮，读写同时进行，每发、收512字节做一轮数据校验，完整一轮测试结束后，如果没有出错则打印校验正确。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ./uart_duplex -c 100 -d /dev/ttyS3</span>
+<span class="n">test</span> <span class="n">size</span><span class="p">:</span><span class="mi">1024</span> <span class="n">Kbytes</span><span class="p">,</span> <span class="n">baud</span><span class="p">:</span><span class="mi">4000000</span>
+<span class="n">Start</span> <span class="n">receive</span> <span class="n">thread</span>
+<span class="n">Start</span> <span class="n">send</span> <span class="n">thread</span>
+<span class="n">Start</span> <span class="n">recv_check</span> <span class="n">thread</span>
+<span class="n">This</span> <span class="ow">is</span> <span class="n">receive</span> <span class="n">test</span> <span class="mi">1</span> <span class="n">times</span>
+<span class="n">This</span> <span class="ow">is</span> <span class="n">uart</span> <span class="n">send</span> <span class="mi">1</span> <span class="n">times</span>
+<span class="n">receive</span> <span class="nb">sum</span><span class="p">:</span><span class="mi">102416</span> <span class="nb">bytes</span>
+<span class="n">receive</span> <span class="nb">sum</span><span class="p">:</span><span class="mi">205312</span> <span class="nb">bytes</span>
+<span class="o">...</span>
+<span class="n">receive</span> <span class="nb">sum</span><span class="p">:</span><span class="mi">924164</span> <span class="nb">bytes</span>
+<span class="n">receive</span> <span class="nb">sum</span><span class="p">:</span><span class="mi">1027076</span> <span class="nb">bytes</span>
+<span class="n">send</span> <span class="mi">1024</span><span class="n">Kbytes</span><span class="p">,</span><span class="n">time</span><span class="p">:</span><span class="mf">2700.000000</span><span class="n">ms</span><span class="p">,</span> <span class="n">BPS</span><span class="p">:</span><span class="mf">379259.250000</span>
+<span class="n">This</span> <span class="ow">is</span> <span class="n">receive</span> <span class="n">test</span> <span class="mi">2</span> <span class="n">times</span>
+<span class="c1">### Check the received data is correct ###</span>
+</pre></div>
+</div>
+<p>uart_duplex命令是测试uart的，可以阅读它的帮助信息获取更多使用方法。</p>
+</section>
+<section id="id5">
+<h2><span class="section-number">4.3.3.3. </span>附录<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+</section>
+<section id="a">
+<h2><span class="section-number">4.3.3.4. </span>A 测试代码<a class="headerlink" href="#a" title="永久链接至标题"></a></h2>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;termios.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;errno.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;getopt.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/time.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pthread.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;semaphore.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#define BUFF_SIZE (20 * 1024 * 1024)</span>
+<span class="n">pthread_t</span><span class="w"> </span><span class="n">recv_thread_id</span><span class="p">;</span><span class="w"></span>
+<span class="n">pthread_t</span><span class="w"> </span><span class="n">recv_check_thread_id</span><span class="p">;</span><span class="w"></span>
+<span class="n">pthread_t</span><span class="w"> </span><span class="n">send_thread_id</span><span class="p">;</span><span class="w"></span>
+<span class="kt">char</span><span class="w"> </span><span class="n">send_buffer</span><span class="p">[</span><span class="n">BUFF_SIZE</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="w"></span>
+<span class="kt">char</span><span class="w"> </span><span class="n">recv_buffer</span><span class="p">[</span><span class="n">BUFF_SIZE</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">test_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1024</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">baud</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4000000</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">test_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">g_fd</span><span class="p">;</span><span class="w"></span>
+<span class="kt">uint64_t</span><span class="w"> </span><span class="n">recv_total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="n">sem_t</span><span class="w"> </span><span class="n">sem_check</span><span class="p">;</span><span class="w"></span>
+
+<span class="cp">#define FRAME_LEN 512</span>
+<span class="cp">#if 1</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">dump_recv_data</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;dump receive data:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">ii</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;0x%x: 0x%x, 0x%x, 0x%x, 0x%x</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ii</span><span class="p">,</span><span class="w"></span>
+<span class="w">				</span><span class="n">recv_buffer</span><span class="p">[</span><span class="n">sum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ii</span><span class="p">],</span><span class="w"></span>
+<span class="w">				</span><span class="n">recv_buffer</span><span class="p">[</span><span class="n">sum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"></span>
+<span class="w">				</span><span class="n">recv_buffer</span><span class="p">[</span><span class="n">sum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"></span>
+<span class="w">				</span><span class="n">recv_buffer</span><span class="p">[</span><span class="n">sum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">]);</span><span class="w"></span>
+
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">dump_send_data</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">sum</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;dump send data:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">ii</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;0x%x: 0x%x, 0x%x, 0x%x, 0x%x</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ii</span><span class="p">,</span><span class="w"></span>
+<span class="w">				</span><span class="n">send_buffer</span><span class="p">[</span><span class="n">sum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ii</span><span class="p">],</span><span class="w"></span>
+<span class="w">				</span><span class="n">send_buffer</span><span class="p">[</span><span class="n">sum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"></span>
+<span class="w">				</span><span class="n">send_buffer</span><span class="p">[</span><span class="n">sum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"></span>
+<span class="w">				</span><span class="n">send_buffer</span><span class="p">[</span><span class="n">sum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">]);</span><span class="w"></span>
+
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+<span class="cp">#endif</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">set_baudrate</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">nSpeed</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">struct</span> <span class="nc">termios</span><span class="w"> </span><span class="n">newtio</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">	</span><span class="n">tcgetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">nSpeed</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">2400</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B2400</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B2400</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">4800</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B4800</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B4800</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">9600</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B9600</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B9600</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">19200</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B19200</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B19200</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">38400</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B38400</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B38400</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">57600</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B57600</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B57600</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">115200</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B115200</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B115200</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">230400</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B230400</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B230400</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">921600</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B921600</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B921600</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">1000000</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B1000000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B1000000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">1152000</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B1152000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B1152000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">1500000</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B1500000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B1500000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">2000000</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B2000000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B2000000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">2500000</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B2500000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B2500000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">3000000</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B3000000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B3000000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">3500000</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B3500000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B3500000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="mi">4000000</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetispeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B4000000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">cfsetospeed</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">,</span><span class="w"> </span><span class="n">B4000000</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">default</span><span class="o">:</span><span class="w"></span>
+<span class="w">		</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\t</span><span class="s">Sorry, Unsupported baud rate, use previous baudrate!</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="n">tcsetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="n">TCSANOW</span><span class="p">,</span><span class="o">&amp;</span><span class="n">newtio</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">set_termios</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">struct</span> <span class="nc">termios</span><span class="w"> </span><span class="n">term</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">	</span><span class="n">tcgetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">term</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="n">term</span><span class="p">.</span><span class="n">c_cflag</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="n">CSIZE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">CSTOPB</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PARENB</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">INPCK</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="n">term</span><span class="p">.</span><span class="n">c_cflag</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="p">(</span><span class="n">CS8</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">CLOCAL</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">CREAD</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="n">term</span><span class="p">.</span><span class="n">c_lflag</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="n">ICANON</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ECHO</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ECHOE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ISIG</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="n">term</span><span class="p">.</span><span class="n">c_oflag</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="n">OPOST</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ONLCR</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">OCRNL</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="n">term</span><span class="p">.</span><span class="n">c_iflag</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="n">ICRNL</span><span class="w"> </span><span class="o">|</span><span class="n">INLCR</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">IXON</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">IXOFF</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">IXANY</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="n">term</span><span class="p">.</span><span class="n">c_cc</span><span class="p">[</span><span class="n">VTIME</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">term</span><span class="p">.</span><span class="n">c_cc</span><span class="p">[</span><span class="n">VMIN</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">tcsetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">TCSAFLUSH</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">term</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="nf">send_test</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">times</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="cm">/*send thread*/</span><span class="w"></span>
+<span class="w">	</span><span class="k">struct</span> <span class="nc">timeval</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">tmp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">exe_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int32_t</span><span class="w"> </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">float</span><span class="w"> </span><span class="n">ts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">	</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Start send thread</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">	</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">test_count</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="n">tmp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"></span>
+<span class="w">		</span><span class="n">tmp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">test_count</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">tmp</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">test_count</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">			</span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;This is uart send %d times</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">++</span><span class="n">exe_count</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">gettimeofday</span><span class="p">(</span><span class="o">&amp;</span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w">  </span><span class="n">test_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="n">g_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">send_buffer</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;write ttyS2 error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">				</span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="cp">#if 1</span>
+<span class="w">		</span><span class="n">gettimeofday</span><span class="p">(</span><span class="o">&amp;</span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="c1">//		printf(&quot;start %ld sec, %ld usec, end %ld sec, %ld usec\n&quot;, start.tv_sec, start.tv_usec, end.tv_sec, end.tv_usec);</span>
+<span class="w">		</span><span class="n">ts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="n">end</span><span class="p">.</span><span class="n">tv_sec</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000000</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">end</span><span class="p">.</span><span class="n">tv_usec</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">start</span><span class="p">.</span><span class="n">tv_sec</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000000</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">start</span><span class="p">.</span><span class="n">tv_usec</span><span class="p">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;send %dKbytes,time:%fms, BPS:%f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">test_size</span><span class="p">,</span><span class="w"> </span><span class="n">ts</span><span class="p">,</span><span class="w"> </span><span class="n">test_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">ts</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span><span class="w"></span>
+<span class="cp">#endif</span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="n">close</span><span class="p">(</span><span class="n">g_fd</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="nf">recv_test</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">times</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int32_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">exe_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">tmp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">last_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">len_frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="cm">/*use to get correct frame len*/</span><span class="w"></span>
+
+<span class="w">	</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Start receive thread</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">	</span><span class="n">memset</span><span class="p">(</span><span class="n">recv_buffer</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">recv_buffer</span><span class="p">));</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">test_count</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="n">tmp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"></span>
+<span class="w">		</span><span class="n">tmp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">test_count</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">tmp</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="n">last_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">test_count</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">			</span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;This is receive test %d times</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">++</span><span class="n">exe_count</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="c1">//gettimeofday(&amp;start, NULL);</span>
+<span class="w">		</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">test_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">g_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">recv_buffer</span><span class="p">[</span><span class="n">sum</span><span class="p">],</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">len</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;read error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">				</span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"></span>
+<span class="w">			</span><span class="n">recv_total</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"></span>
+<span class="w">			</span><span class="n">len_frame</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"></span>
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">len_frame</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="n">len_frame</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">;</span><span class="w"></span>
+<span class="w">				</span><span class="n">sem_post</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sem_check</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"></span>
+
+<span class="cp">#if 0</span><span class="c"></span>
+<span class="c">			ret = memcmp(&amp;recv_buffer[sum], &amp;send_buffer[sum], len);</span>
+<span class="c">			if (ret != 0) {</span>
+<span class="c">				printf(&quot;data compare error\n&quot;);</span>
+<span class="c">				return NULL;</span>
+<span class="c">			}</span>
+<span class="cp">#endif</span>
+<span class="w">			</span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="n">len</span><span class="p">;</span><span class="w"></span>
+<span class="w">			</span><span class="n">size</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"></span>
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">sum</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">last_count</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;receive sum:%d bytes</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">);</span><span class="w"></span>
+<span class="w">				</span><span class="n">last_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">;</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="cp">#if 0</span><span class="c"></span>
+<span class="c">		gettimeofday(&amp;end, NULL);</span>
+<span class="c">		printf(&quot;start %ld sec, %ld usec, end %ld sec, %ld usec\n&quot;, start.tv_sec, start.tv_usec, end.tv_sec, end.tv_usec);</span>
+<span class="c">		ts = ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec)) / 1000;</span>
+
+<span class="c">		printf(&quot;receive %dKbytes,time:%fms, BPS:%f\n&quot;, test_size, ts, test_size * 1000 / (ts / 1000));</span>
+<span class="cp">#endif</span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="n">close</span><span class="p">(</span><span class="n">g_fd</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">error_bit</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">data1</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">data2</span><span class="p">,</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">c</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int32_t</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">data2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+<span class="w">		</span><span class="k">while</span><span class="p">(</span><span class="n">c</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="n">c</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="n">sum</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="n">sum</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="nf">recv_check_test</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">times</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int32_t</span><span class="w"> </span><span class="n">check_pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">cur_frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int32_t</span><span class="w"> </span><span class="n">error_bit_cnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Start recv_check thread</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="n">sem_wait</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sem_check</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="cm">/*check data*/</span><span class="w"></span>
+<span class="w">		</span><span class="n">cur_frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">recv_buffer</span><span class="p">[</span><span class="n">check_pos</span><span class="p">];</span><span class="w"></span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">cur_frame</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">check_pos</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;error: may lost frame, curruent frame is %d, expected frame is %d position: 0x%x</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">					</span><span class="o">*</span><span class="n">cur_frame</span><span class="p">,</span><span class="w"> </span><span class="n">check_pos</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">,</span><span class="w"> </span><span class="n">check_pos</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="c1">//dump_recv_data(check_pos, FRAME_LEN);</span>
+<span class="w">			</span><span class="c1">//dump_send_data(check_pos, FRAME_LEN);</span>
+<span class="w">			</span><span class="n">error_bit_cnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">			</span><span class="n">error_bit_cnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">error_bit</span><span class="p">((</span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">recv_buffer</span><span class="p">[</span><span class="n">check_pos</span><span class="p">],</span><span class="w"></span>
+<span class="w">					</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">send_buffer</span><span class="p">[</span><span class="n">check_pos</span><span class="p">],</span><span class="w"></span>
+<span class="w">					</span><span class="n">FRAME_LEN</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">8</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="n">check_pos</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">;</span><span class="w"></span>
+<span class="w">			</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;test total data: 0x%lx, error bit count:%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">recv_total</span><span class="p">,</span><span class="w"> </span><span class="n">error_bit_cnt</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">check_pos</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">test_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="c1">//exit(1);</span>
+<span class="w">				</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;uart: frame head error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">			</span><span class="p">}</span><span class="w"></span>
+<span class="w">			</span><span class="k">continue</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="w">		</span><span class="n">error_bit_cnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="n">error_bit_cnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">error_bit</span><span class="p">((</span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">recv_buffer</span><span class="p">[</span><span class="n">check_pos</span><span class="p">],</span><span class="w"></span>
+<span class="w">				</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">send_buffer</span><span class="p">[</span><span class="n">check_pos</span><span class="p">],</span><span class="w"></span>
+<span class="w">				</span><span class="n">FRAME_LEN</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">8</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error_bit_cnt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;test total data: 0x%lx!!!!!!!, error bit count:%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">recv_total</span><span class="p">,</span><span class="w"> </span><span class="n">error_bit_cnt</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="c1">//dump_recv_data(check_pos, FRAME_LEN);</span>
+<span class="w">			</span><span class="c1">//dump_send_data(check_pos, FRAME_LEN);</span>
+<span class="w">			</span><span class="n">check_pos</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">;</span><span class="w"></span>
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">check_pos</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">test_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">				</span><span class="c1">//exit(1);</span>
+<span class="w">				</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;uart: frame data error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="p">}</span><span class="w"></span>
+<span class="w">			</span><span class="k">continue</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="w">		</span><span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">recv_buffer</span><span class="p">[</span><span class="n">check_pos</span><span class="p">],</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="n">check_pos</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">check_pos</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">test_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="n">check_pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">			</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;### Check the received data is correct ###</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">short_options</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;s:u:c:b:d:h&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span> <span class="nc">option</span><span class="w"> </span><span class="n">long_options</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="p">{</span><span class="s">&quot;size&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">required_argument</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;s&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">	</span><span class="p">{</span><span class="s">&quot;baudrate&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">required_argument</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;b&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">	</span><span class="p">{</span><span class="s">&quot;count&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">required_argument</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;c&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">	</span><span class="p">{</span><span class="s">&quot;device&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">required_argument</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;d&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">	</span><span class="p">{</span><span class="s">&quot;help&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">no_argument</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;h&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">	</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">}};</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">pDevice</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int32_t</span><span class="w"> </span><span class="n">cmd_parser_ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">frame_num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="n">frame_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">	</span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">cmd_parser_ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getopt_long</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">,</span><span class="w"> </span><span class="n">short_options</span><span class="p">,</span><span class="w"> </span><span class="n">long_options</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">))</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">cmd_parser_ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;s&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">			</span><span class="n">test_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;b&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">			</span><span class="n">baud</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;c&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">			</span><span class="n">test_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;d&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">			</span><span class="n">pDevice</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optarg</span><span class="p">;</span><span class="w"></span>
+<span class="w">			</span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;h&#39;</span><span class="o">:</span><span class="w"></span>
+<span class="w">			</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;**********UART STRESS TEST HELP INFORMATION*********</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt; -s/--size     [test size,unit--Kbytes,default is 1M, MAX is 20M]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt; -b/--baudrate  [baud,default is 4M]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt; -c/--count  [test count,default is forever]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt; -d/--uart  [uart device, user must set this]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">			</span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">baud</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">4000000</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;baud is larger than max baud</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="n">g_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="n">pDevice</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDWR</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_NOCTTY</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">g_fd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;open fail</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="n">set_baudrate</span><span class="p">(</span><span class="n">g_fd</span><span class="p">,</span><span class="w"> </span><span class="n">baud</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="n">set_termios</span><span class="p">(</span><span class="n">g_fd</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;test size:%d Kbytes, baud:%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">test_size</span><span class="p">,</span><span class="w"> </span><span class="n">baud</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">test_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">+=</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">			</span><span class="n">frame_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">send_buffer</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+<span class="w">			</span><span class="o">*</span><span class="n">frame_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">();</span><span class="w"></span>
+<span class="w">		</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">test_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="n">frame_num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">send_buffer</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">FRAME_LEN</span><span class="p">];</span><span class="w"></span>
+<span class="w">		</span><span class="o">*</span><span class="n">frame_num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+<span class="w">		</span><span class="c1">//        printf(&quot;pos:0x%x, value:0x%x\n&quot;, i * FRAME_LEN, *frame_num);</span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+
+<span class="w">	</span><span class="n">sem_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sem_check</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">recv_thread_id</span><span class="p">,</span><span class="w"></span>
+<span class="w">			</span><span class="nb">NULL</span><span class="p">,</span><span class="w"></span>
+<span class="w">			</span><span class="n">recv_test</span><span class="p">,</span><span class="w"></span>
+<span class="w">			</span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;create uart1 test thread failed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">send_thread_id</span><span class="p">,</span><span class="w"></span>
+<span class="w">			</span><span class="nb">NULL</span><span class="p">,</span><span class="w"></span>
+<span class="w">			</span><span class="n">send_test</span><span class="p">,</span><span class="w"></span>
+<span class="w">			</span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;create uart2 test thread failed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">recv_check_thread_id</span><span class="p">,</span><span class="w"></span>
+<span class="w">			</span><span class="nb">NULL</span><span class="p">,</span><span class="w"></span>
+<span class="w">			</span><span class="n">recv_check_test</span><span class="p">,</span><span class="w"></span>
+<span class="w">			</span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">		</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;create receive check thread failed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="p">}</span><span class="w"></span>
+<span class="w">	</span><span class="n">pthread_join</span><span class="p">(</span><span class="n">recv_thread_id</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="n">pthread_join</span><span class="p">(</span><span class="n">recv_check_thread_id</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="n">pthread_join</span><span class="p">(</span><span class="n">send_thread_id</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="0-Configure_Kernel_And_Uboot.html" class="btn btn-neutral float-left" title="4.3.2. 配置uboot和kernel选项参数" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="9-I2C_Debug_Guide_zh_CN.html" class="btn btn-neutral float-right" title="4.3.4. I2C调试指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

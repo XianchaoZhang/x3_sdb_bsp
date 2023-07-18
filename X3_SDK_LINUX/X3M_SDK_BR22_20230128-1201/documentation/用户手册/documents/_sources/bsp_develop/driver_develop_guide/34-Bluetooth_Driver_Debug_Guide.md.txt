@@ -1,0 +1,247 @@
+# 蓝牙驱动调试指南
+
+## 驱动配置
+
+CONFIG_BT
+
+![image-20220322202612962](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220322202612962.png)
+
+CONFIG_CRYPTO_ECDH
+
+![image-20220322202826278](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220322202826278.png)
+
+CONFIG_BT_HCIUART
+
+![image-20220322203236745](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220322203236745.png)
+
+BT_HCIUART_BCM
+
+![image-20220322204044925](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220322204044925.png)
+
+CONFIG_RFKILL
+
+![image-20220322153943168](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220322153943168.png)
+
+## 蓝牙使用
+
+### 状态确认
+
+在运行前，先查看一下当前设备上以下文件是否都存在。
+
+**初始化程序：**
+
+```
+/usr/bin/startbt6212.sh
+```
+
+**驱动和配置：**
+
+```bash
+/lib/firmware/bcm/BCM4343A1.hcd
+/lib/modules/4.14.87/hci_uart.ko
+/lib/modules/4.14.87/btbcm.ko
+/lib/modules/4.14.87/bluetooth.ko
+/lib/modules/4.14.87/ecdh_generic.ko
+/lib/modules/4.14.87/rfkill.ko
+```
+
+**BlueZ程序：**
+
+```
+/usr/bin/dbus-daemon
+/sbin/bluetoothd
+/usr/bin/bluetoothctl
+/usr/bin/hciattach
+/usr/bin/hciconfig
+/usr/bin/hcidump
+/usr/bin/hcitool
+```
+
+**dbus和蓝牙配置文件：**
+
+```
+/etc/bluetooth/main.conf
+/etc/dbus-1/system.d/bluetooth.conf
+/etc/dbus-1/system.d/obexd.conf
+```
+
+### 初始化
+
+执行以下脚本程序完成初始化：
+
+```bash
+startbt6212.sh
+```
+
+这个脚本完成以下工作：
+
+- 复位蓝牙
+- 创建 `messagebus` 用户和用户组，`dbus-daemon` 程序运行时需要使用该用户
+- 运行 `brcm_patchram_plus` 完成蓝牙的驱动加载和固件加载
+- 循环检查 `/sys/class/bluetooth/hci0` 目录是否存在，确认蓝牙驱动已经正常运行
+- 出现 **Done setting line discpline**  表示蓝牙启用成功
+- 执行 `hciconfig hci0 up`  完成蓝牙的Link Up
+- 执行 `hciconfig hci0 piscan` 进行蓝牙扫描，本步骤可以根据情况去掉
+- 运行 `dbus-daemon` 服务
+- 运行 `bluetoothd` ，将蓝牙相关的守护进程启用并放在后台
+
+![image-20220601152259664](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220601152259664.png)
+
+执行成功后，确认以下进程是否正常运行：
+
+![image-20220601130731418](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220601130731418.png)
+
+### 配对连接
+
+执行`bluetoothctl`进入交互模式下的蓝牙配置界面，出现了类似下图的设备信息表示蓝牙被识别到了，然后用`show`来查看蓝牙信息，留意蓝牙的`powered`和`discoverable`状态。
+
+![image-20220601152324243](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220601152324243.png)
+
+执行 `power on` 使能蓝牙，如下图所示：
+
+![image-20220601172501882](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220601172501882.png)
+
+为了能够使蓝牙被附近的设备发现，需要执行`discoverable on`打开蓝牙可发现属性，如下图所示：
+
+![image-20220601152535778](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220601152535778.png)
+
+此时使用手机或者电脑扫描蓝牙就可以发现 `Sunrise` 这个名称的蓝牙设备：
+
+![image-20220601153936520](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220601153936520.png)
+
+接下来测试蓝牙的主动扫描功能，在`bluetoothctl`的交互界面输入`scan on`即可打开主动扫描，它会周期性地打印附近的设备，可以看到已经发现了我的手机设备，`scan off`关闭扫描功能并汇总打印扫描到的蓝牙设备：
+
+![image-20220601154131158](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220601154131158.png)
+
+![image-20220601154253947](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220601154253947.png)
+
+然后就是和其他蓝牙的配对：
+
+- 配对命令：`pair [targetMAC] `，输入该命令后，根据提示输入`yes`，对端蓝牙设备选择`配对`选项完成配对。
+
+- 配对成功后可以使用`trust [targetMAC]`来让下次自动连接
+
+![image-20220601154414717](_static/_images/34-Bluetooth_Driver_Debug_Guide/image-20220601154414717.png)
+
+经过以上操作后，蓝牙的扫描、配对的基本功能就完成了，如需使用更多功能，可查阅 `BlueZ`的官方帮助说明。
+
+## 其他版本的驱动
+
+针对地平线发布的`V0508` 和`V0807`等版本的SDK，使用蓝牙的方式有一点区别，请按照以下方式操作。
+
+### 驱动下载
+
+<font color=red>备注：</font>仅V0508和V0807版本需要额外下载驱动
+
+从  [X3M附加工具包](https://pan.horizon.ai/index.php/s/JTitK4g8SLzSGa6)  的 AP6212 目录下，下载BlueTooth的驱动（bluetooth_drivers）和AP6212固件文件（brcm.zip）
+
+安装固件：
+
+```
+mount -o rw,remount /
+tar -xvf brcm.tar.gz
+cp brcm /lib/firmware/ -rf
+```
+
+首先复位BlueTooth:
+
+```
+echo 23 > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio23/direction
+echo 0 > /sys/class/gpio/gpio23/value
+sleep 0.5
+echo 1 > /sys/class/gpio/gpio23/value
+```
+
+加载BlueTooth驱动（注意使用正确的版本）：
+
+```
+cd bluetooth_drivers/V0508
+insmod ecdh_generic.ko
+insmod rfkill.ko
+insmod bluetooth.ko
+insmod btbcm.ko
+insmod hci_uart.ko
+```
+
+查看驱动：
+
+```bash
+[  384.314361] Bluetooth: Core ver 2.22
+[  384.314424] NET: Registered protocol family 31
+[  384.314428] Bluetooth: HCI device and connection manager initialized
+[  384.314442] Bluetooth: HCI socket layer initialized
+[  384.314450] Bluetooth: L2CAP socket layer initialized
+[  384.314493] Bluetooth: SCO socket layer initialized
+[  385.570248] Bluetooth: HCI UART driver ver 2.3
+[  385.570255] Bluetooth: HCI UART protocol H4 registered
+[  385.570423] Bluetooth: HCI UART protocol Broadcom registered
+```
+
+### BlueTooth使用
+
+从  [X3M附加工具包](https://pan.horizon.ai/index.php/s/JTitK4g8SLzSGa6)  的 AP6212 目录下，下载BlueTooth工具包 bt_tools.tar.gz
+
+上传工具包到开发板上并解压安装：
+
+```
+mount -o rw,remount /
+tar -xvf bt_tools.tar.gz -C /usr
+```
+
+初始化蓝牙：
+
+```
+brcm_patchram_plus --enable_hci --no2bytes --tosleep 200000 --baudrate 460800 --patchram /lib/firmware/brcm/bcm43438a1.hcd /dev/ttyS1 &
+
+# 持续检查 /sys/class/bluetooth/hci0 文件是否生成,大概需要10秒左右
+ls /sys/class/bluetooth/hci0
+hciconfig a
+
+hci0:   Type: Primary  Bus: UART
+        BD Address: B0:02:47:A6:03:00  ACL MTU: 1021:8  SCO MTU: 64:1
+        DOWN 
+        RX bytes:612 acl:0 sco:0 events:30 errors:0
+        TX bytes:398 acl:0 sco:0 commands:30 errors:0
+        Features: 0xbf 0xfe 0xcf 0xfe 0xdb 0xff 0x7b 0x87
+        Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3 
+        Link policy: RSWITCH SNIFF 
+        Link mode: SLAVE ACCEPT 
+```
+
+配置蓝牙：
+
+```
+hciconfig hci0 up
+hciconfig hci0 name hobot-BT
+hciconfig hci0 reset
+hciconfig hci0 piscan
+hciconfig a
+
+hci0:   Type: Primary  Bus: UART
+        BD Address: B0:02:47:A6:03:00  ACL MTU: 1021:8  SCO MTU: 64:1
+        UP RUNNING PSCAN ISCAN 
+        RX bytes:1857 acl:0 sco:0 events:93 errors:0
+        TX bytes:1455 acl:0 sco:0 commands:93 errors:0
+        Features: 0xbf 0xfe 0xcf 0xfe 0xdb 0xff 0x7b 0x87
+        Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3 
+        Link policy: RSWITCH SNIFF 
+        Link mode: SLAVE ACCEPT 
+        Name: 'hobot-BT'
+        Class: 0x000000
+        Service Classes: Unspecified
+        Device Class: Miscellaneous, 
+        HCI Version: 4.0 (0x6)  Revision: 0x108
+        LMP Version: 4.0 (0x6)  Subversion: 0x2209
+        Manufacturer: Broadcom Corporation (15)
+```
+
+扫描：
+
+```
+hcitool scan
+
+Scanning ...
+        48:51:C5:72:70:80       LIYAQIANG
+```
+

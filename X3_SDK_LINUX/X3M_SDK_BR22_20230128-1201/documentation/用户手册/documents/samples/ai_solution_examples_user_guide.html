@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Solution Sample &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>AI Solution Sample</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ai-solution-sample">
+<h1>AI Solution Sample<a class="headerlink" href="#ai-solution-sample" title="永久链接至标题"></a></h1>
+<p>AI Solution Sample基于摄像头采集数据，实现了人体全结构化、手势识别相关算法，登录Web端可以预览算法的可视化效果，方便用户体验地平线自研算法在人机交互场景下的效果和性能。sample功能框图如下所示：</p>
+<p><img alt="image-20220216144611990" src="samples/_static/_images/ai_solution_examples_user_guide/image-20220216144611990.png" /></p>
+<p>算法能力支持清单如下：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>类别1</th>
+<th>类别2</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>人脸</td>
+<td>人脸检测</td>
+<td>人脸检测框</td>
+</tr>
+<tr>
+<td></td>
+<td>人头检测</td>
+<td>人头检测框</td>
+</tr>
+<tr>
+<td></td>
+<td>人脸属性</td>
+<td>年龄、性别</td>
+</tr>
+<tr>
+<td></td>
+<td>人脸关键点</td>
+<td>68点人脸关键点</td>
+</tr>
+<tr>
+<td>人体</td>
+<td>人体检测</td>
+<td>人体检测框</td>
+</tr>
+<tr>
+<td></td>
+<td>肢体关键点</td>
+<td>17点骨骼关键点</td>
+</tr>
+<tr>
+<td>人手</td>
+<td>人手检测</td>
+<td>人手检测框</td>
+</tr>
+<tr>
+<td></td>
+<td>手部关键点</td>
+<td>21点手部关键点</td>
+</tr>
+<tr>
+<td></td>
+<td>手势识别</td>
+<td>支持左右手的多种手势识别，例如比耶、比OK、拇指向上、拇指向左、拇指向右等</td>
+</tr>
+</tbody>
+</table><p>sample部署、运行步骤如下：</p>
+<ol class="simple">
+<li><p>上传并解压部署包deploy_xxx.tar到开发板/userdata目录</p></li>
+<li><p>telnet登录设备，并进入deploy_xxx目录</p></li>
+<li><p>运行启动脚本run_tv_uvc.sh，然后依次选择1. guesture、1. single camera、sensor类型</p></li>
+<li><p>打开chrome浏览器输入设备ip，登录预览界面，如下图</p></li>
+</ol>
+<p><img alt="image-20220216150410627" src="samples/_static/_images/ai_solution_examples_user_guide/image-20220216150410627.png" /></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

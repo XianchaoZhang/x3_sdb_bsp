@@ -1,0 +1,22 @@
+#! /bin/sh
+
+print_usage()
+{
+        echo "Usage:"
+        echo "hrut_camt_sensortemp camindex [loop]"
+        echo "camindex 1/2/3/4: for compatibility this is must but no use"
+        echo "-----------------------------------"
+}
+
+CAMTYPE=`hrut_390camtype`
+case $CAMTYPE in
+    0)
+        hrut_camt_sensortemp_type0 $@
+    ;;
+    1)
+        hrut_camt_sensortemp_type1 $@
+    ;;
+    *)
+        hrut_camt_sensortemp_type0 $@
+    ;;
+esac

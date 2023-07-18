@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5.11. 查询多媒体模块调试信息 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="5.12. 多媒体性能调试" href="../12-Media_Processing_Performance_Debug_Guide.html" />
+    <link rel="prev" title="5.10.8. ISP 调试视频教程" href="../10-ISP_Tuning_Guide/Expand_Content.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">5. 多媒体开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../1-Overview_zh_CN.html">5.1. 系统概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2-System_Control_zh_CN.html">5.2. 系统控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3-Video_Input_zh_CN.html">5.3. 视频输入</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4-Graphic_System_API_Reference_Manual.html">5.4. ISP图像系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5-Video_Processing_zh_CN.html">5.5. 视频处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6-Region_Processing_zh_CN.html">5.6. 区域处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../7-Video_Output_zh_CN.html">5.7. 视频输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../8-Video_Encode_zh_CN.html">5.8. 视频编码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9-Video_Decode_zh_CN.html">5.9. 视频解码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../10-ISP_Tuning_Guide/index.html">5.10. 图像调试指南</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.11. 查询多媒体模块调试信息</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">5.11.1. 驱动与多媒体系统交互</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vio">5.11.2. VIO调试信息</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sif">5.11.2.1. SIF调试信息</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#isp">5.11.2.2. ISP调试信息</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ipu">5.11.2.3. IPU调试信息</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pym">5.11.2.4. PYM调试信息</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#iar">5.11.2.5. IAR调试信息</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#vpu">5.11.3. VPU调试信息</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#venc">5.11.3.1. VENC调试信息</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vdec">5.11.3.2. VDEC调试信息</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#jpu">5.11.4. JPU调试信息</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#jenc">5.11.4.1. JENC调试信息</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jdec">5.11.4.2. JDEC调试信息</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">5.11.5. 媒体模块日志查看</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">5.11.5.1. 日志级别</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">5.11.5.2. 日志标签</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">5.11.5.3. 日志过滤</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">5.11.5.4. 日志存储</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../12-Media_Processing_Performance_Debug_Guide.html">5.12. 多媒体性能调试</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">5. </span>多媒体开发指南</a> &raquo;</li>
+      <li><span class="section-number">5.11. </span>查询多媒体模块调试信息</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../10-ISP_Tuning_Guide/Expand_Content.html" class="btn btn-neutral float-left" title="5.10.8. ISP 调试视频教程" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../12-Media_Processing_Performance_Debug_Guide.html" class="btn btn-neutral float-right" title="5.12. 多媒体性能调试" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">5.11. </span>查询多媒体模块调试信息<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="id2">
+<h2><span class="section-number">5.11.1. </span>驱动与多媒体系统交互<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>在VIN中，camera相关的控制全部在用户态完成，而mipi/ISP的控制则在驱动中完成，通过将用户态相关的配置传递给驱动，由驱动使用，对硬件进行设置，各个相关的设备节点如下：</p>
+<p><img alt="image-20220327233823654" src="../../_images/image-20220327233823654.png" /></p>
+<ul class="simple">
+<li><p><strong>mipi_host0~4:</strong> mipi host配置节点，主要完成mipi_host的初始化。</p></li>
+<li><p><strong>mipi_dphy:</strong> dphy相关节点。</p></li>
+<li><p><strong>mipi_dev0:</strong> 该设备节点会在配置中使能，配置mipi_dev输出。</p></li>
+<li><p><strong>SIF共有两个节点：</strong></p>
+<ul>
+<li><p><strong>sif_capture:</strong> 设置sif相关属性信息，对sif模块初始化，可以dump sif模块出来的图像。</p></li>
+<li><p><strong>sif_ddrin:</strong> 设置ddrin节点的属性信息/尺寸/格式等，sif-offline-isp场景才使用，负责读内存数据给isp。</p></li>
+</ul>
+</li>
+<li><p><strong>ISP相关节点：</strong></p>
+<ul>
+<li><p><strong>ac_calib:</strong> calibration效果库设置。</p></li>
+<li><p><strong>ac_isp:</strong> isp效果调节接口使用。</p></li>
+<li><p><strong>ac_isp4uf0~7:</strong> isp驱动算法库发command使用。</p></li>
+<li><p><strong>ac_sbuf0~7:</strong> 算法库通过该设备节点与isp驱动同步一些算法数据。</p></li>
+<li><p><strong>video0~7:</strong> isp v4l2设备节点，设置尺寸/格式/大小，内存映射通过该节点与设备交互。</p></li>
+</ul>
+</li>
+</ul>
+<p>VIN中，MIPI/SIF的功能相对简单，对于MIPI实际上就是硬件上抽象出来的几个节点，用于用户配置参数，从而设置MIPI
+HOST到对应的状态，能够接受sensor的MIPI数据输入；</p>
+<p>而SIF则是将MIPI HOST收到的数据再进行一定的处理，比如将不同sensor的数据保存到不同的ddr地址等；</p>
+<p>ISP的功能相对来说是最复杂的，它需要和sensor交互/需要加载对应的算法库/需要加载对应的效果库，在配置代码中：</p>
+<p><img alt="../../_images/7c497fc6373c2c0a35f2248f7fc16280.png" src="../../_images/7c497fc6373c2c0a35f2248f7fc16280.png" /></p>
+<ul class="simple">
+<li><p><strong>ispAlgoState:</strong>  这个标签表示使用3A算法，将会使用lib_algo.so库的算法；</p></li>
+<li><p><strong>calib：</strong> 这个则是不同sensor配置出来的效果库，用于调整sensor效果；</p></li>
+</ul>
+</section>
+<section id="vio">
+<h2><span class="section-number">5.11.2. </span>VIO调试信息<a class="headerlink" href="#vio" title="永久链接至标题"></a></h2>
+<section id="sif">
+<h3><span class="section-number">5.11.2.1. </span>SIF调试信息<a class="headerlink" href="#sif" title="永久链接至标题"></a></h3>
+<p>查看SIF调试信息：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">soc</span><span class="o">/</span><span class="n">a4001000</span><span class="o">.</span><span class="n">sif</span><span class="o">/</span><span class="n">cfg_info</span>
+</pre></div>
+</div>
+<p><img alt="../../_images/354af0a4710e0c5a631ab6a96bf932c6.png" src="../../_images/354af0a4710e0c5a631ab6a96bf932c6.png" /></p>
+</section>
+<section id="isp">
+<h3><span class="section-number">5.11.2.2. </span>ISP调试信息<a class="headerlink" href="#isp" title="永久链接至标题"></a></h3>
+<p>查看ISP调试信息：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">soc</span><span class="o">/</span><span class="n">b3000000</span><span class="o">.</span><span class="n">isp</span><span class="o">/</span><span class="n">isp_status</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><img alt="../../_images/a6cabe90c204d0510e417106b32b3622.png" src="../../_images/a6cabe90c204d0510e417106b32b3622.png" /></p>
+</div></blockquote>
+</section>
+<section id="ipu">
+<h3><span class="section-number">5.11.2.3. </span>IPU调试信息<a class="headerlink" href="#ipu" title="永久链接至标题"></a></h3>
+<p>查看当前哪些pipe使能：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /sys/devices/platform/soc/a4040000.ipu/info/enabled_pipeline
+</pre></div>
+</div>
+<p>查看各pipe配置情况：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /sys/devices/platform/soc/a4040000.ipu/info/pipelinex_info <span class="c1"># x 取值0-7</span>
+<span class="c1"># 示例</span>
+cat /sys/devices/platform/soc/a4040000.ipu/info/pipeline0_info
+</pre></div>
+</div>
+<p><img alt="../../_images/5c314a3ac1028e4de8293548efb65704.png" src="../../_images/5c314a3ac1028e4de8293548efb65704.png" /></p>
+<p>说明：</p>
+<p>subdev0对应ipu src，sbudev1~6对应ipu
+us/ds0~ds4。subdev后面括号里的信息表示这个通道的buffer在各个状态的数量。</p>
+</section>
+<section id="pym">
+<h3><span class="section-number">5.11.2.4. </span>PYM调试信息<a class="headerlink" href="#pym" title="永久链接至标题"></a></h3>
+<p>查看当前哪些pipe使能：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">soc</span><span class="o">/</span><span class="n">a4042000</span><span class="o">.</span><span class="n">pym</span><span class="o">/</span><span class="n">info</span><span class="o">/</span><span class="n">enabled_pipeline</span>
+</pre></div>
+</div>
+<p>查看各pipe配置情况：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /sys/devices/platform/soc/a4042000.pym/info/pipelinex_info <span class="c1"># x取值0-7</span>
+<span class="c1"># 示例</span>
+cat /sys/devices/platform/soc/a4042000.pym/info/pipeline0_info
+</pre></div>
+</div>
+<p><img alt="../../_images/81aec6c1b63287146ec1a11be9780b71.png" src="../../_images/81aec6c1b63287146ec1a11be9780b71.png" /></p>
+</section>
+<section id="iar">
+<h3><span class="section-number">5.11.2.5. </span>IAR调试信息<a class="headerlink" href="#iar" title="永久链接至标题"></a></h3>
+<p>查看IAR调试信息：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">iar</span>
+</pre></div>
+</div>
+<p><img alt="../../_images/c437b118301b57610a49246d39de9213.png" src="../../_images/c437b118301b57610a49246d39de9213.png" /></p>
+</section>
+</section>
+<section id="vpu">
+<h2><span class="section-number">5.11.3. </span>VPU调试信息<a class="headerlink" href="#vpu" title="永久链接至标题"></a></h2>
+<section id="venc">
+<h3><span class="section-number">5.11.3.1. </span>VENC调试信息<a class="headerlink" href="#venc" title="永久链接至标题"></a></h3>
+<p>查看编码信息：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">vpu</span><span class="o">/</span><span class="n">venc</span>
+</pre></div>
+</div>
+<p><img alt="../../_images/01ef41acb92787b58fe84a0a5241b7dc.png" src="../../_images/01ef41acb92787b58fe84a0a5241b7dc.png" /></p>
+<p><img alt="../../_images/c5df92bf5f46a0575c1f049867871ffe.png" src="../../_images/c5df92bf5f46a0575c1f049867871ffe.png" /></p>
+</section>
+<section id="vdec">
+<h3><span class="section-number">5.11.3.2. </span>VDEC调试信息<a class="headerlink" href="#vdec" title="永久链接至标题"></a></h3>
+<p>查看解码信息：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">vpu</span><span class="o">/</span><span class="n">vdec</span>
+</pre></div>
+</div>
+<p><img alt="../../_images/7f297a9c2dfd3b25a308f898b97f89c2.png" src="../../_images/7f297a9c2dfd3b25a308f898b97f89c2.png" /></p>
+</section>
+</section>
+<section id="jpu">
+<h2><span class="section-number">5.11.4. </span>JPU调试信息<a class="headerlink" href="#jpu" title="永久链接至标题"></a></h2>
+<section id="jenc">
+<h3><span class="section-number">5.11.4.1. </span>JENC调试信息<a class="headerlink" href="#jenc" title="永久链接至标题"></a></h3>
+<p>查看编码信息：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">jpu</span><span class="o">/</span><span class="n">jenc</span>
+</pre></div>
+</div>
+<p><img alt="../../_images/1944f201c81a20991a2623a464ac749c.png" src="../../_images/1944f201c81a20991a2623a464ac749c.png" /></p>
+</section>
+<section id="jdec">
+<h3><span class="section-number">5.11.4.2. </span>JDEC调试信息<a class="headerlink" href="#jdec" title="永久链接至标题"></a></h3>
+<p>查看解码信息：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">jpu</span><span class="o">/</span><span class="n">jdec</span>
+</pre></div>
+</div>
+<p><img alt="../../_images/64fdce46047c2462decae977fd2d2288.png" src="../../_images/64fdce46047c2462decae977fd2d2288.png" /></p>
+</section>
+</section>
+<section id="id3">
+<h2><span class="section-number">5.11.5. </span>媒体模块日志查看<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<section id="id4">
+<h3><span class="section-number">5.11.5.1. </span>日志级别<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>控制台输出日志和logcat查看日志是二选一的关系，通过环境变量LOGLEVEL来控制。</p>
+<p>如export LOGLEVEL=14，即把比Debug级别高的日志（&lt;=14）全部输出到Console。</p>
+<p>如果想通过logcat查看Debug及更高级别的日志，需要export LOGLEVEL=4。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>控制台输出日志</th>
+<th></th>
+<th>通过logcat查看日志</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CONSOLE_DEBUG_LEVEL</td>
+<td>14</td>
+<td>ALOG_DEBUG_LEVEL</td>
+<td>4</td>
+</tr>
+<tr>
+<td>CONSOLE_INFO_LEVEL</td>
+<td>13</td>
+<td>ALOG_INFO_LEVEL</td>
+<td>3</td>
+</tr>
+<tr>
+<td>CONSOLE_WARNING_LEVEL</td>
+<td>12</td>
+<td>ALOG_WARNING_LEVEL</td>
+<td>2</td>
+</tr>
+<tr>
+<td>CONSOLE_ERROR_LEVEL</td>
+<td>11</td>
+<td>ALOG_ERROR_LEVEL</td>
+<td>1</td>
+</tr>
+</tbody>
+</table></section>
+<section id="id5">
+<h3><span class="section-number">5.11.5.2. </span>日志标签<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>媒体模块内部定义了一些LOG_TAG，所有TAG如下：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>vio-core vio-devop ipu sif dwe gdc pym vin isp rgn mipi vp vps venc vdec audio vot vio-bufmgr ffmedia multimedia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table><p>注意：</p>
+<p>没有标签的日志不能过滤，在满足LOG
+LEVEL级别的情况下会被打印出来（一般见于应用程序或没加TAG的模块）。</p>
+<p>如果想给应用程序加上TAG：</p>
+<ol class="simple">
+<li><p>可以在文件最开头定义#define LOG_TAG “APP”</p></li>
+<li><p>包含相关头文件 #include “logging.h”</p></li>
+<li><p>应用程序中的日志打印用logging.h头文件中的pr_xxx开关的宏定义</p></li>
+</ol>
+</section>
+<section id="id6">
+<h3><span class="section-number">5.11.5.3. </span>日志过滤<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<p>各模块日志均可通过logcat来过滤查看，这里介绍下模块相关如何过滤。logcat是开源的命令，其他参数可自行探索。</p>
+<p>例如只想打印vps部分且日志级别高于Debug的日志，并输出到文件可以这样操作：</p>
+<p>logcat vps:D -f log.txt</p>
+<p>想查看多个模块的日志可以在后面追加过滤如查看vps/vin模块且级别高于Debug的日志：</p>
+<p>logcat vps:D vin:D -f log.txt</p>
+</section>
+<section id="id7">
+<h3><span class="section-number">5.11.5.4. </span>日志存储<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<p>内核日志会保存在/userdata/log/kernel/目录；</p>
+<p>LOGLEVEL设置为4，上层日志会保存在/userdata/log/usr/目录；</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../10-ISP_Tuning_Guide/Expand_Content.html" class="btn btn-neutral float-left" title="5.10.8. ISP 调试视频教程" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../12-Media_Processing_Performance_Debug_Guide.html" class="btn btn-neutral float-right" title="5.12. 多媒体性能调试" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

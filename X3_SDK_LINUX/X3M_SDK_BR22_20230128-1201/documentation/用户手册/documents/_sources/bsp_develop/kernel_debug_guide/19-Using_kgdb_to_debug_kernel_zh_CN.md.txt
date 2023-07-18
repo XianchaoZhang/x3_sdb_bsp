@@ -1,0 +1,31 @@
+# 使用kgdb调试内核
+
+## 启动过程调试
+
+对于要调试内核启动过程(kgdb及串口驱动加载完成后)的，需要通过修改内核选项将KGDB模块编译到内核内，并在UBoot内通过修改并储存bootargs修改内核的command
+line选项，加入(如使用ttyS0)后启动。波特率请按照前文所述拨码开关设置，默认为921600bps：
+```bash
+kgdboc=ttyS0,921600 kgdbwait
+```
+内核加载启动后，将打印提示：
+```bash
+kgdb：Registered I/O driver kgdboc.
+kgdb：Waiting for connection from remote gdb...
+```
+之后将进入kdb操作界面，可切入kgdb等待连接：
+```bash
+kdb> kgdb
+Entering please attach debugger or use $D#44+ or $3#33
+```
+之后等待主机gdb连接。
+
+## 主机gdb连接
+
+在提示等待连接时，关闭串口终端(避免占用串口)。之后在主机上使用对应的gdb工具(此处为aarch64-linux-gnu-gdb)加载内核vmlinux，并通过主机串口(/dev/ttyUSB0)连接目标机(若设备有权限要求，加sudo)：
+```bash
+aarch64-linux-gnu-gdb ./vmlinux
+(gdb) set serial baud 921600
+(gdb) target remote /dev/ttyUSB0
+```
+连接上后，使用gdb命令调试。
+

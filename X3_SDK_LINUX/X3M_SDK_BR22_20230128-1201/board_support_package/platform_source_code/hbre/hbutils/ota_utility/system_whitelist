@@ -1,0 +1,6 @@
+# The directory/file will be save, when upgrade system partition
+
+# user name and passward
+/etc/passwd
+/etc/shadow
+

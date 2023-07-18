@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.1.3. 智能盒子 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="3.2. VIO使用指引" href="../Mpp_Usage_Guidelines/index.html" />
+    <link rel="prev" title="3.1.2. USB Camera" href="USB_Camera_Demo.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">3. Demo使用指南</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">3.1. 典型应用场景</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Ipc_Demo.html">3.1.1. 智能IPC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="USB_Camera_Demo.html">3.1.2. USB Camera</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">3.1.3. 智能盒子</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">3.1.3.1. 硬件环境准备</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">3.1.3.2. 软件部署</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#sunrise-camera">启动sunrise_camera</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#p">配置单路1080P智能盒子</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">配置4路1080P智能盒子</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">3.1.3.3. 附录</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#vlc">VLC播放器拉流</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Mpp_Usage_Guidelines/index.html">3.2. VIO使用指引</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">3. </span>Demo使用指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">3.1. </span>典型应用场景</a> &raquo;</li>
+      <li><span class="section-number">3.1.3. </span>智能盒子</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="USB_Camera_Demo.html" class="btn btn-neutral float-left" title="3.1.2. USB Camera" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../Mpp_Usage_Guidelines/index.html" class="btn btn-neutral float-right" title="3.2. VIO使用指引" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">3.1.3. </span>智能盒子<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>基于地平线旭日<code class="docutils literal notranslate"><span class="pre">X3M</span></code>边缘AI芯片，搭配完善的系统软件，结合领先的深度学习算法以及工具链，可以快速搭建不同输入路数的智能盒子解决方案。这里以单路和四路1080p输入为例，通过调用<code class="docutils literal notranslate"><span class="pre">X3M</span></code>芯片图像处理模块(<code class="docutils literal notranslate"><span class="pre">VIN</span></code>、<code class="docutils literal notranslate"><span class="pre">ISP</span></code>、<code class="docutils literal notranslate"><span class="pre">VPS</span></code>、<code class="docutils literal notranslate"><span class="pre">VO</span></code>)、多媒体模块(<code class="docutils literal notranslate"><span class="pre">VENC</span></code>、<code class="docutils literal notranslate"><span class="pre">VDEC</span></code>)、<code class="docutils literal notranslate"><span class="pre">BPU</span></code>模块的<code class="docutils literal notranslate"><span class="pre">HAPI</span></code>接口，实现视频解码、拼接、编码、rtsp推流及智能计算等功能，用户可通过Web端、HDMI或者拉流方式预览效果。</p>
+<section id="id2">
+<h2><span class="section-number">3.1.3.1. </span>硬件环境准备<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>智能盒子Demo所需硬件清单如下：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">X3M</span> <span class="pre">SDB</span></code>开发板及电源适配器；</p></li>
+<li><p>串口线及转接板；</p></li>
+<li><p>网线；</p></li>
+<li><p>HDMI连接线（可选）</p></li>
+</ul>
+<p>硬件连接如下图所示：</p>
+<p><img alt="ai_box_hardware" src="../../_images/ai_box_hardware.jpg" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">X3M</span> <span class="pre">SDB</span></code>开发板与PC之间通过网线连接，在PC上通过VLC获取智能盒子处理后的码流，或者通过web端方式进行预览。</p>
+<p>使用HMDI连接<code class="docutils literal notranslate"><span class="pre">X3M</span> <span class="pre">SDB</span></code>开发板与显示器，可以在显示器端查看智能盒子处理结果。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">3.1.3.2. </span>软件部署<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p>智能盒子数据流向如下图所示：</p>
+<p><img alt="ai_box_software" src="../../_images/ai_box_software.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">VDEC</span></code>模块对获取到的码流进行解码得到<code class="docutils literal notranslate"><span class="pre">NV12格式</span></code>图片</p>
+<p>根据不同输入路数对图片完成拼接</p>
+<p>对拼接后的图片分别：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>· 使用VPS模块缩放至1920*1080分辨率后传输至VOT模块进行HDMI显示输出；
+· 使用VENC模块进行H264编码后通过RTSP server发布码流
+· 使用BPU模块进行AI推理，将得到的智能结果发布至web端进行展示
+</pre></div>
+</div>
+<section id="sunrise-camera">
+<h3>启动sunrise_camera<a class="headerlink" href="#sunrise-camera" title="永久链接至标题"></a></h3>
+<p>在/app目录下解压sunrise_camera.tar.gz后，执行 <code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">./start_app.sh</span></code>启动，正常启动后，通过chrome浏览器在地址栏输入IP地址（开发板默认IP为192.168.1.10）可以登录用户控制主界面， 例如：http://192.168.1.10</p>
+<p><img alt="sunrise_start" src="../../_images/image-20220513114932.png" /></p>
+<p>点击 <code class="docutils literal notranslate"><span class="pre">场景配置</span></code> 进行设置</p>
+<p><img alt="ai_box_software" src="../../_images/config.png" /></p>
+<p>对于Web端的方案参数配置，支持选择单、四路解码路数选择、编码码率配置及算法模型选择等功能，配置区域如下图所示：</p>
+<p><img alt="ai_box_software" src="../../_images/config2.png" /></p>
+</section>
+<section id="p">
+<h3>配置单路1080P智能盒子<a class="headerlink" href="#p" title="永久链接至标题"></a></h3>
+<ol class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">选择路数</span></code> 下拉菜单，选择1路本地文件解码；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">设置码率</span></code>下拉菜单，支持选择H264编码码率；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">选择算法</span></code> 下拉菜单，支持选择每路视频流运行的算法模型。</p></li>
+<li><p>配置完成后点击 <code class="docutils literal notranslate"><span class="pre">提交</span></code> 按钮立即切换场景应用。</p></li>
+</ol>
+</section>
+<section id="id4">
+<h3>配置4路1080P智能盒子<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<ol class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">选择路数</span></code> 下拉菜单，选择4路本地文件解码；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">设置码率</span></code> 下拉菜单，支持选择H264编码码率；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">选择算法</span></code> 下拉菜单，支持选择每路视频流运行的算法模型。</p></li>
+<li><p>配置完成后点击 <code class="docutils literal notranslate"><span class="pre">提交</span></code> 按钮立即切换场景应用。</p></li>
+</ol>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">3.1.3.3. </span>附录<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<section id="vlc">
+<h3>VLC播放器拉流<a class="headerlink" href="#vlc" title="永久链接至标题"></a></h3>
+<p>sunrise_camera程序运行时会推送rtsp流，用户可以通过vlc播放器拉流，实现画面预览和保存功能。</p>
+<p>打开vlc播放器，选择 <code class="docutils literal notranslate"><span class="pre">媒体</span></code> 菜单，然后选择 <code class="docutils literal notranslate"><span class="pre">打开网络串流</span></code> 选项。</p>
+<p>在 <code class="docutils literal notranslate"><span class="pre">打开媒体</span></code> 对话框中填入url地址，点击 <code class="docutils literal notranslate"><span class="pre">播放</span></code> 按钮即可开始拉流，如下图：</p>
+<p><img alt="ai_box_software" src="../../_images/vlc_rtsp.png" /></p>
+<p>url地址可以在web页面的设备信息中查看。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="USB_Camera_Demo.html" class="btn btn-neutral float-left" title="3.1.2. USB Camera" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../Mpp_Usage_Guidelines/index.html" class="btn btn-neutral float-right" title="3.2. VIO使用指引" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

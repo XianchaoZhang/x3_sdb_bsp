@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>范围 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>范围</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p>DDR分区与定制修改介绍</p>
+<section id="id1">
+<h1>范围<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>本文描述了X3J3系列芯片DDR分区基本情况，以及如何添加一套DDR参数，包括DDR分区的布局，DDR各参数的作用，DDR参数对应的文件，以及如何添加一套DDR参数</p>
+<p>本文以海力士lpddr4为主介绍了添加DDR参数的步骤，其他厂商的情况与此类似。</p>
+</section>
+<section id="id2">
+<h1>术语、定义和缩略语<a class="headerlink" href="#id2" title="永久链接至标题"></a></h1>
+<section id="id3">
+<h2>术语和定义<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p>本DDR编程指南提供了系统启动和DDR代码体系结构的概述以及添加DDR参数详细编程过程。
+允许客户修改和添加多组DDR参数，以支持各种DDR颗粒。
+有关DDR参数的详细定义，请参考文档“ X3J3 DDR Tuning Guide”。</p>
+</section>
+<section id="id4">
+<h2>缩略语<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>缩略语</strong></th>
+<th><strong>英文全称</strong></th>
+<th><strong>中文解释</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SoC</td>
+<td>System on Chip</td>
+<td>片上系统</td>
+</tr>
+<tr>
+<td>SPL</td>
+<td>Secondary Program Loader</td>
+<td>二级程序加载器</td>
+</tr>
+<tr>
+<td>DDR</td>
+<td>Double Data Rate SDRAM</td>
+<td>双倍速率同步动态随机存储器</td>
+</tr>
+<tr>
+<td>LPDDR</td>
+<td>Low Power Double Data Rate SDRAM</td>
+<td>低功耗双倍数据速率内存</td>
+</tr>
+</tbody>
+</table></section>
+</section>
+<section id="ddr">
+<h1>系统启动流程及DDR 分区的介绍<a class="headerlink" href="#ddr" title="永久链接至标题"></a></h1>
+<section id="id5">
+<h2>系统启动流程<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<p>系统启动有两种情况：冷启动和热启动；冷启动过程从上电复位开始，系统将从BOOTROM代码开始执行，BOOTROM代码是存储在片上ROM中的代码，执行BOOTROM代码后，x3J3依次开始执行SPL，BL31和UBOOT。
+DDR镜像、BL31 和UBOOT镜像都由SPL加载。DDR镜像用于设置DDR参数。</p>
+<p>热启动也就是休眠唤醒，除此以外的启动都是冷启动。在休眠之前，BL31将DDR参数从DDR寄存器中读出保存到SRAM中，在唤醒的时候，SPL负责将SRAM中的DDR参数再写回到DDR寄存器中。本文讨论的DDR参数是在冷启动所用。</p>
+</section>
+<section id="id6">
+<h2>DDR分区架构<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>图3是镜像的分区示意图。DDR镜像的位置记录在MBR中。 SPL读取MBR获得DDR镜像的位置。</p>
+<p>图3 镜像分区示意图</p>
+<p>DDR分区中存放多套DDR参数，SPL通过外部GPIO或board-id的方式，从DDR分区获取到正确参数。</p>
+<p>DDR的参数主要包含：</p>
+<ul class="simple">
+<li><p>指令参数: ddr training用到的指令，ddr
+training分为两步，对应也就有第一次training用到的指令参数imem1，和第二次training用到的指令imem2.</p></li>
+<li><p>数据参数：ddr training用到的数据参数，同样也有两份，dmem1和dmem2.</p></li>
+<li><p>ddr控制器参数：配置ddr控制器的参数</p></li>
+<li><p>ddr phy参数：配置ddr phy用到的参数</p></li>
+<li><p>ddr phy init engine参数：配置ddr phy init engine用到的参数</p></li>
+<li><p>地址映射参数：配置soc与ddr颗粒之间走线的参数</p></li>
+</ul>
+<p>DDR分区的布局如图4所示，开头的DDR分区的header，随后便是多套ddr参数。</p>
+<p><img alt="bsp_develop/driver_develop_guide/DDR_Programing_Guide/media/814ab228a0d10e4b4d1f9c1644a0290f.png" src="bsp_develop/driver_develop_guide/DDR_Programing_Guide/media/814ab228a0d10e4b4d1f9c1644a0290f.png" /></p>
+<p>图4 DDR分区布局</p>
+<p>DDR header的格式如下</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>struct hb_ddt_mem <strong>{</strong>  unsigned int addr<strong>;</strong>  unsigned int size<strong>;</strong> <strong>};</strong>  /*ddr data*/ struct hb_ddr_data <strong>{</strong>  unsigned int ddr_type<strong>;</strong>  unsigned int ddr_vendor<strong>;</strong>  unsigned int ddr_freq<strong>;</strong>  unsigned int part_number<strong>;</strong>   struct hb_ddt_mem imem1<strong>;</strong> /* ddr imem */  struct hb_ddt_mem imem2<strong>;</strong>  struct hb_ddt_mem dmem1<strong>;</strong> /* ddr dmem */  struct hb_ddt_mem dmem2<strong>;</strong>   struct hb_ddt_mem ddr_ddrc<strong>;</strong>  struct hb_ddt_mem ddr_ddrp<strong>;</strong>  struct hb_ddt_mem ddr_pie<strong>;</strong>   struct hb_ddt_mem ddr_ddrc_freqs<strong>;</strong>  struct hb_ddt_mem ddr_ddrp_freqs<strong>;</strong>  struct hb_ddt_mem ddr_pie_freqs<strong>;</strong>  struct hb_ddt_mem addr_map<strong>;</strong> <strong>};</strong>  /*ddr header*/ struct hb_ddr_hdr <strong>{</strong>  unsigned int magic<strong>;</strong> /* HBOT */  unsigned int count<strong>;</strong>  unsigned short ecc_gran<strong>[</strong>4<strong>];</strong>  unsigned short ecc_map<strong>[</strong>4<strong>];</strong>  unsigned int ddr_para_addr<strong>;</strong>  unsigned int ddr_para_size<strong>;</strong>    struct hb_ddr_data ddr<strong>[</strong>20<strong>];</strong>  char ddr_pin[3]; unsigned int sscg_parm[3]; unsigned int eye_tool_pin;  ... <strong>};</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table><p>对上述参数进行介绍：</p>
+<p>hb_ddr_hdr是ddr header的结构</p>
+<ul class="simple">
+<li><p>magic: 魔数，初始化时将设置为“HBOT”</p></li>
+<li><p>count: ddr分区中总的参数数目</p></li>
+<li><p>ecc_gran和ecc_map是ecc相关的</p></li>
+<li><p>ddr_para_addr: ddr参数的起始地址</p></li>
+<li><p>ddr_para_size: ddr参数总的大小</p></li>
+<li><p>ddr[20]: 具体每套参数的信息，目前最大支持20套参数</p></li>
+<li><p>ddr_pin[3]: 搜寻ddr所用的pin，详细解释见4.6章节</p></li>
+<li><p><strong>sscg_parm[3]:</strong> 配置DDR展频功能,详细解释见4.8章节</p></li>
+<li><p>eye_tool_pin: 设置眼图工具的GPIO pin，详细解释见4.7章节</p></li>
+</ul>
+<p>hb_ddr_data是对应每一套参数的结构</p>
+<ul class="simple">
+<li><p>ddr_type: ddr类型，如ddr4/lpddr4/lpddr4x等</p></li>
+<li><p>ddr_vendor: 厂商，如海力士，镁光，三星</p></li>
+<li><p>ddr_freq: ddr频率</p></li>
+<li><p>part_num:对应具体的ddr颗粒</p></li>
+<li><p>imem1:imem1参数的地址和大小</p></li>
+<li><p>dmem1:dmem1参数的地址和大小</p></li>
+<li><p>imem2:imem2参数的地址和大小</p></li>
+<li><p>dmem2:dmem2参数的地址和大小</p></li>
+<li><p>ddr_ddrc: ddr controller参数的地址和大小</p></li>
+<li><p>ddr_ddrp: ddr phy参数的地址和大小</p></li>
+<li><p>ddr_pie: ddr phy init engine参数的地址和大小</p></li>
+<li><p>ddr_ddrc_freqs: 变频情况下其他频率ddr controller的地址和大小</p></li>
+<li><p>ddr_ddrp_freqs: 变频情况下其他频率ddr phy的地址和大小</p></li>
+<li><p>ddr_pie_freqs: 变频情况下其他频率ddr pie的地址和大小</p></li>
+<li><p>addr_map: SoC与DDR颗粒之间的地址映射情况</p></li>
+</ul>
+<p>hb_ddt_mem是每一套参数中具体参数的结构</p>
+<ul>
+<li><p>addr：地址信息</p></li>
+<li><p>size: 大小</p>
+<p>每一套参数布局如图5下，其中变频相关的参数为可选项，其他为必选项。</p>
+<p><img alt="bsp_develop/driver_develop_guide/DDR_Programing_Guide/media/da21cbeefaa38f1e1eb27b649329686d.emf" src="bsp_develop/driver_develop_guide/DDR_Programing_Guide/media/da21cbeefaa38f1e1eb27b649329686d.emf" /></p>
+</li>
+</ul>
+<p>图5 DDR参数布局</p>
+</section>
+</section>
+<section id="id7">
+<h1>添加DDR参数<a class="headerlink" href="#id7" title="永久链接至标题"></a></h1>
+<p>DDR参数的源码位于build/ddr下，其中：</p>
+<ul class="simple">
+<li><p>hb_imem_parameter.c是imem参数文件，包括imem1和imem2参数</p></li>
+<li><p>hb_dmem_parameter.c是dmem参数文件，包括dmem1和dmem2参数</p></li>
+<li><p>hb_ddrc_parameter.c是DDR controller的参数文件，包括DDRc参数和ddrc_freqs参数</p></li>
+<li><p>hb_ddrp_parameter.c是DDR phy的参数文件，包括ddrp参数和ddrp_freqs参数</p></li>
+<li><p>hb_pie_parameter.c是DDR pie的参数文件，包括pie参数和pie_freqs参数</p></li>
+<li><p>hb_addrmap_parameter.c是address map的参数文件</p></li>
+</ul>
+<p>其中指令参数是通用的，只需要区分DDR的类型是DDR4或是LPDDR4。所以为节省空间，指令参数只用包含两份即可，不需要每份DDR参数都包含。按这种方式，DDR分区和DDR参数的布局如图6所示：</p>
+<p><img alt="bsp_develop/driver_develop_guide/DDR_Programing_Guide/media/dbab9c68994331e2b066a9fa363e0a82.emf" src="bsp_develop/driver_develop_guide/DDR_Programing_Guide/media/dbab9c68994331e2b066a9fa363e0a82.emf" /></p>
+<p>图6 DDR分区和DDR参数的布局</p>
+<p>添加参数的流程如下图：</p>
+<p><img alt="bsp_develop/driver_develop_guide/DDR_Programing_Guide/media/4ae429397d86d66c5fc8c06e7dda1705.emf" src="bsp_develop/driver_develop_guide/DDR_Programing_Guide/media/4ae429397d86d66c5fc8c06e7dda1705.emf" /></p>
+<p>由于指令参数是一致的，所以对于DDR4/LPDDR4的参数添加一次即可，而其他参数则要根据具体情况对参数做出修改。都在/ddr4_write_para_data/lpddr4_write_para_data中体现，我们以海力士为例：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>static void lpddr4_write_para_data<strong>(</strong>char <strong>*</strong>file<strong>,</strong> unsigned int freq<strong>,</strong>  unsigned int index<strong>,</strong> unsigned int part_number<strong>,</strong> unsigned int alter_para<strong>)</strong> <strong>{</strong>  /* ①init head */  hdr_ddr<strong>.</strong>count <strong>=</strong> hdr_ddr<strong>.</strong>count <strong>+</strong> 1<strong>;</strong>  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_type <strong>=</strong> DDR_TYPE_LPDDR4<strong>;</strong>  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_freq <strong>=</strong> freq<strong>;</strong>  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>part_number <strong>=</strong> part_number<strong>;</strong>  <strong>...</strong>   <strong>if</strong> <strong>((</strong>part_number <strong>==</strong> MT53D1024M32D4DT<strong>)</strong> <strong>||</strong> <strong>(</strong>part_number <strong>==</strong> PART_DEFAULT<strong>))</strong> <strong>{</strong>  /* lpddr4 micron dmem */  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>part_number <strong>==</strong> H9HCNNN8KUMLHR<strong>)</strong> <strong>{</strong>  /* lpddr4 x3 hynix dmem */  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_vendor <strong>=</strong> DDR_MANU_HYNIX<strong>; /*①*/</strong>  lpddr4_hynix_dmem_reconfig_init<strong>(</strong>freq<strong>,</strong> part_number<strong>,</strong> alter_para<strong>);/*②*/</strong>  lpddr4_dmem_write_to_bin<strong>(</strong>file<strong>,</strong> index<strong>);</strong>   /* ddrc, ddrp, pie, mstr */  lpddr4_ddrc_hynix_write_to_bin<strong>(</strong>file<strong>,</strong> freq<strong>,</strong> index<strong>,</strong> part_number<strong>,</strong> alter_para<strong>);/*③*/</strong>  lpddr4_ddrp_hynix_write_to_bin<strong>(</strong>file<strong>,</strong> freq<strong>,</strong> index<strong>,</strong> part_number<strong>,</strong> alter_para<strong>);/*④*/</strong>  lpddr4_pie_write_to_bin<strong>(</strong>file<strong>,</strong> freq<strong>,</strong> index<strong>,</strong> part_number<strong>);/*⑤*/</strong>  x3_hynix_write_to_bin<strong>(</strong>file<strong>,</strong> index<strong>);/*⑥*/</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>part_number <strong>==</strong> H9HCNNNBKUMLHE<strong>)</strong> <strong>{</strong>  /* lpddr4 j3 hynix dmem */  <strong>...</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>part_number <strong>==</strong> K4F8E304HBMGCJ <strong>||</strong> part_number <strong>==</strong> K4F6E3S4HMMGCJ<strong>)</strong> <strong>{</strong>  /* lpddr4 xg samsung dmem */  <strong>...</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>part_number <strong>==</strong> 0<strong>)</strong> <strong>{</strong>  /* lpddr4 x3j3 default hynix paramter */  <strong>...</strong>  <strong>}</strong> <strong>}</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table><ol>
+<li><p>初始化DDR header中对应index的DDR data</p></li>
+<li><p>对dmem参数做出相应调整后写入镜像</p></li>
+<li><p>对DDRc参数做出相应调整后写入镜像</p></li>
+<li><p>对DDRphy参数做出相应调整后写入镜像</p></li>
+<li><p>对DDR pie参数做出相应调整后写入镜像</p></li>
+<li><p>对addrmap参数做出相应调整后写入镜像</p>
+<p>下面的章节我们分别对以上参数的添加。</p>
+<p>注：part-number是用来区分具体颗粒的参数，高8bit表示厂商，低8bit代表DDR大小。您可以使用自己的方法对DDR颗粒作区分，如果您不使用part-number，将它设置为0即可。</p>
+</li>
+</ol>
+<section id="dmem">
+<h2>添加dmem参数<a class="headerlink" href="#dmem" title="永久链接至标题"></a></h2>
+<p>数据参数根据DDR类型（DDR4/LPDDR4）先建立了四个通用的数组，数组位于<em>hb_dmem_parameter.c</em>文件中。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>unsigned short int phyinit_dmem_lpddr4<strong>[]</strong> <strong>=</strong> <strong>{</strong>  0x0600<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x10aa<strong>,</strong> 0x0002<strong>,</strong> 0x0000<strong>,</strong> 0x0014<strong>,</strong> 0x0000<strong>,</strong>  0x131f<strong>,</strong> 0x00c8<strong>,</strong> 0x0000<strong>,</strong> 0x0002<strong>,</strong> 0x0001<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0100<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0310<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x3f74<strong>,</strong> 0x0033<strong>,</strong> 0x4d64<strong>,</strong> 0x4f08<strong>,</strong> 0x0000<strong>,</strong> 0x0004<strong>,</strong> 0x3f74<strong>,</strong>  0x0033<strong>,</strong> 0x4d64<strong>,</strong> 0x4f08<strong>,</strong> 0x0000<strong>,</strong> 0x0004<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x1000<strong>,</strong> 0x0003<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x7400<strong>,</strong> 0x333f<strong>,</strong> 0x6400<strong>,</strong> 0x084d<strong>,</strong> 0x004f<strong>,</strong> 0x0400<strong>,</strong>  <strong>...</strong> <strong>}</strong>  unsigned short int phyinit_dmem_lpddr4_2D<strong>[]</strong> <strong>=</strong> <strong>{</strong>  0x0600<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x10aa<strong>,</strong> 0x0002<strong>,</strong> 0x0000<strong>,</strong> 0x0014<strong>,</strong> 0x0000<strong>,</strong>  0x0061<strong>,</strong> 0x00c8<strong>,</strong> 0x0000<strong>,</strong> 0x0002<strong>,</strong> 0x0001<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0100<strong>,</strong>  0x8020<strong>,</strong> 0x0000<strong>,</strong> 0x0310<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x3f74<strong>,</strong> 0x0033<strong>,</strong> 0x4d64<strong>,</strong> 0x4f08<strong>,</strong> 0x0000<strong>,</strong> 0x0004<strong>,</strong> 0x3f74<strong>,</strong>  0x0033<strong>,</strong> 0x4d64<strong>,</strong> 0x4f08<strong>,</strong> 0x0000<strong>,</strong> 0x0004<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x1000<strong>,</strong> 0x0003<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x7400<strong>,</strong> 0x333f<strong>,</strong> 0x6400<strong>,</strong> 0x084d<strong>,</strong> 0x004f<strong>,</strong> 0x0400<strong>,</strong>  0x7400<strong>,</strong> 0x333f<strong>,</strong> 0x6400<strong>,</strong> 0x084d<strong>,</strong> 0x004f<strong>,</strong> 0x0400<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  <strong>...</strong> <strong>}</strong>  unsigned short int phyinit_dmem_ddr4<strong>[]</strong> <strong>=</strong> <strong>{</strong>  0x0060<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0a6a<strong>,</strong> 0x0002<strong>,</strong> 0x0000<strong>,</strong> 0x0260<strong>,</strong> 0x2000<strong>,</strong>  0x0101<strong>,</strong> 0x0a00<strong>,</strong> 0x0100<strong>,</strong> 0x031f<strong>,</strong> 0x00c8<strong>,</strong> 0x0100<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0001<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0a44<strong>,</strong>  0x0603<strong>,</strong> 0x0830<strong>,</strong> 0x0200<strong>,</strong> 0x1800<strong>,</strong> 0x0440<strong>,</strong> 0x0c18<strong>,</strong> 0x0101<strong>,</strong> 0x0000<strong>,</strong>  <strong>...</strong> <strong>}</strong>  unsigned short int phyinit_dmem_ddr4_2D<strong>[]</strong> <strong>=</strong> <strong>{</strong>  0x0060<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0a6a<strong>,</strong> 0x0002<strong>,</strong> 0x0000<strong>,</strong> 0x0256<strong>,</strong> 0x2000<strong>,</strong>  0x0101<strong>,</strong> 0x0a00<strong>,</strong> 0x0100<strong>,</strong> 0x0061<strong>,</strong> 0x00c8<strong>,</strong> 0x0100<strong>,</strong> 0x8020<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0001<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0a44<strong>,</strong>  0x0603<strong>,</strong> 0x0830<strong>,</strong> 0x0200<strong>,</strong> 0x1800<strong>,</strong> 0x0440<strong>,</strong> 0x0c18<strong>,</strong> 0x0101<strong>,</strong> 0x0000<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x1221<strong>,</strong>  0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> 0x0000<strong>,</strong> <strong>...</strong> <strong>}</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table><p>根据厂商、频率、颗粒等因素对通用数组做出调整，然后再写入DDR
+image中。我们以海力士为例。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>void lpddr4_hynix_dmem_reconfig_init<strong>(</strong>unsigned int freq<strong>,</strong>  unsigned int part_number<strong>,</strong> unsigned int alter_para<strong>)</strong> <strong>{</strong>  <strong>/*①*/</strong>  lpddr4_hynix_dmem_reconfig_silicon<strong>(</strong>part_number<strong>,</strong> alter_para<strong>,</strong> freq<strong>);</strong>  /*②*/  /* 3733 3200 2666 667 */  <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_3733<strong>)</strong> <strong>{</strong>  lpddr4_dmem_reconfig_3733<strong>();</strong>  lpddr4_dmem_2d_reconfig_3733<strong>();</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_3200<strong>)</strong> <strong>{</strong>  <strong>if</strong> <strong>(</strong>part_number <strong>==</strong> H9HCNNN8KUMLHR<strong>)</strong> <strong>{</strong>  lpddr4_dmem_reconfig_3200_xh<strong>();</strong>  lpddr4_dmem_2d_reconfig_3200_xh<strong>();</strong>  <strong>}</strong> <strong>else</strong> <strong>{</strong>  lpddr4_dmem_reconfig_3200<strong>();</strong>  lpddr4_dmem_2d_reconfig_3200<strong>();</strong>  <strong>}</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_2666<strong>)</strong> <strong>{</strong>  <strong>if</strong> <strong>(</strong>part_number <strong>==</strong> H9HCNNN8KUMLHR<strong>)</strong> <strong>{</strong>  lpddr4_dmem_reconfig_2666_xh<strong>();</strong>  lpddr4_dmem_2d_reconfig_2666_xh<strong>();</strong>  <strong>}</strong> <strong>else</strong> <strong>{</strong>  lpddr4_dmem_reconfig_2666<strong>();</strong>  lpddr4_dmem_2d_reconfig_2666<strong>();</strong>  <strong>}</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_667<strong>)</strong> <strong>{</strong>  lpddr4_dmem_reconfig_667<strong>();</strong>  lpddr4_dmem_2d_reconfig_667<strong>();</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_100<strong>)</strong> <strong>{</strong>  lpddr4_dmem_reconfig_667<strong>();</strong>  lpddr4_dmem_2d_reconfig_667<strong>();</strong>  <strong>}</strong> <strong>}</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table><ol>
+<li><p>厂商有关的更改</p></li>
+<li><p>频率相关的更改</p>
+<p>在写入DDR image之前，调用该函数更改通用数组中相应的值，然后就写入DDR
+image中去</p>
+</li>
+</ol>
+</section>
+<section id="ddr-controller">
+<h2>添加DDR controller参数<a class="headerlink" href="#ddr-controller" title="永久链接至标题"></a></h2>
+<p>根据DDR类型（DDR4/LPDDR4）建立通用的参数数组，再根据厂商、频率、颗粒等添加不同的参数，代码位于<em>hb_ddrc_parameter.c</em></p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>struct DRAM_CFG_PARAM ddr4_ddrc_cfg<strong>[]</strong> <strong>=</strong> <strong>{</strong>  /* Start to config, default 3200mbps */  <strong>{</strong>uMCTL2_MSTR<strong>,</strong> 0x83040010<strong>},</strong>  <strong>{</strong>uMCTL2_MRCTRL0<strong>,</strong> 0x40004030<strong>},</strong>  <strong>{</strong>uMCTL2_MRCTRL1<strong>,</strong> 0x2d11d<strong>},</strong>  <strong>{</strong>uMCTL2_MRCTRL2<strong>,</strong> 0xc21162f7<strong>},</strong>  <strong>{</strong>uMCTL2_DERATEEN<strong>,</strong> 0x1404<strong>},</strong>  <strong>{</strong>uMCTL2_DERATEINT<strong>,</strong> 0x109a928d<strong>},</strong>  <strong>{</strong>uMCTL2_MSTR2<strong>,</strong> 0x1<strong>},</strong>  <strong>{</strong>uMCTL2_DERATECTL<strong>,</strong> 0x1<strong>},</strong>  <strong>{</strong>uMCTL2_PWRCTL<strong>,</strong> 0x0<strong>},</strong>  <strong>{</strong>uMCTL2_PWRTMG<strong>,</strong> 0x40fa04<strong>},</strong>  <strong>{</strong>uMCTL2_HWLPCTL<strong>,</strong> 0x730002<strong>},</strong>  <strong>{</strong>uMCTL2_RFSHCTL0<strong>,</strong> 0x210000<strong>},</strong>  <strong>{</strong>uMCTL2_RFSHCTL1<strong>,</strong> 0x920016<strong>},</strong>  <strong>...</strong> <strong>}</strong> struct DRAM_CFG_PARAM lpddr4_ddrc_cfg<strong>[]</strong> <strong>=</strong> <strong>{</strong> #if (CVB_M_ENABLE == 1)  <strong>{</strong>uMCTL2_MSTR<strong>,</strong> 0x83080020<strong>},</strong>  <strong>{</strong>uMCTL2_RFSHTMG<strong>,</strong> 0x82080096<strong>},</strong>  <strong>{</strong>uMCTL2_DRAMTMG0<strong>,</strong> 0x2121242D<strong>},</strong>  <strong>{</strong>uMCTL2_DRAMTMG1<strong>,</strong> 0x00090941<strong>},</strong>  <strong>{</strong>uMCTL2_DRAMTMG2<strong>,</strong> 0x09121519<strong>},</strong>  <strong>{</strong>uMCTL2_DRAMTMG3<strong>,</strong> 0x00F0F000<strong>},</strong>  <strong>{</strong>uMCTL2_DRAMTMG4<strong>,</strong> 0x14040914<strong>},</strong>  <strong>{</strong>uMCTL2_DRAMTMG5<strong>,</strong> 0x02061111<strong>},</strong>  <strong>{</strong>uMCTL2_DRAMTMG6<strong>,</strong> 0x0000000A<strong>},</strong>  <strong>{</strong>uMCTL2_DRAMTMG7<strong>,</strong> 0x00000602<strong>},</strong>  <strong>{</strong>uMCTL2_DRAMTMG8<strong>,</strong> 0x00000000<strong>},</strong>  <strong>{</strong>uMCTL2_DRAMTMG9<strong>,</strong> 0x00000000<strong>},</strong>  <strong>{</strong>uMCTL2_DRAMTMG10<strong>,</strong> 0x00000000<strong>},</strong>  <strong>...</strong> <strong>}</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table><p>上述数组是通用配置数组，然后根据厂商、频率、颗粒的不同再添加相应的参数</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>void lpddr4_ddrc_hynix_write_to_bin<strong>(</strong>char <strong>*</strong>file<strong>,</strong> unsigned int freq<strong>,</strong>  unsigned int index<strong>,</strong> unsigned int part_number<strong>,</strong> unsigned int alter_para<strong>)</strong> <strong>{</strong>  FILE <strong>*</strong>fp <strong>=</strong> <strong>NULL;</strong>  int ddrc_size <strong>=</strong> 0<strong>,</strong> ddrc_hynix_size <strong>=</strong> 0<strong>,</strong> ddrc_freq_size <strong>=</strong> 0<strong>,</strong> ddrc_dfs_size <strong>=</strong> 0<strong>;</strong>  int padding_size <strong>=</strong> 0<strong>,</strong> i<strong>;</strong>  char padding_value <strong>=</strong> 0<strong>;</strong>   fp <strong>=</strong> fopen<strong>(</strong>file<strong>,</strong> "ab+"<strong>);</strong>   /* ①ddrc_cfg */  ddrc_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_ddrc_cfg<strong>);</strong>  fwrite<strong>(</strong>lpddr4_ddrc_cfg<strong>,</strong> 2<strong>,</strong> ddrc_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>   /* ②ddrc_hynix_cfg */  ddrc_hynix_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_ddrc_cfg_hynix<strong>);</strong>  fwrite<strong>(</strong>lpddr4_ddrc_cfg_hynix<strong>,</strong> 2<strong>,</strong> ddrc_hynix_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>   /* ③ddrc_freq */  <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_3733<strong>)</strong> <strong>{</strong>  <strong>...</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_3200<strong>)</strong> <strong>{</strong>  ddrc_freq_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_3200_ddrc_cfg_hynix<strong>);</strong>  fwrite<strong>(</strong>lpddr4_3200_ddrc_cfg_hynix<strong>,</strong> 2<strong>,</strong>  <strong>sizeof(</strong>lpddr4_3200_ddrc_cfg_hynix<strong>)</strong> <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>   /*④ */ <strong>if</strong> <strong>(</strong>part_number <strong>==</strong> H9HCNNNBKUMLHE<strong>)</strong> <strong>{</strong>  /* JH32_A1 */  ddrc_freq_size <strong>+=</strong> <strong>sizeof(</strong>lpddr4_3200_ddrc_cfg_jh32_a1<strong>);</strong>  fwrite<strong>(</strong>lpddr4_3200_ddrc_cfg_jh32_a1<strong>,</strong> 2<strong>,</strong>  <strong>sizeof(</strong>lpddr4_3200_ddrc_cfg_jh32_a1<strong>)</strong> <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>  <strong>}</strong> <strong>else</strong> <strong>{</strong>  ddrc_freq_size <strong>+=</strong> <strong>sizeof(</strong>lpddr4_3200_ddrc_cfg<strong>);</strong>  fwrite<strong>(</strong>lpddr4_3200_ddrc_cfg<strong>,</strong> 2<strong>,</strong>  <strong>sizeof(</strong>lpddr4_3200_ddrc_cfg<strong>)</strong> <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>  <strong>}</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_2666<strong>)</strong> <strong>{</strong>  <strong>...</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_667<strong>)</strong> <strong>{</strong>  <strong>...</strong>  <strong>}</strong>   /*⑤*/  ddrc_size <strong>=</strong> ddrc_size <strong>+</strong> ddrc_hynix_size <strong>+</strong> ddrc_freq_size<strong>;</strong>  <strong>if</strong> <strong>(</strong>ddrc_size <strong>%</strong> 512<strong>)</strong>  padding_size <strong>=</strong> 512 <strong>-</strong> <strong>((</strong>ddrc_size <strong>%</strong> 512<strong>));</strong>   <strong>for</strong> <strong>(</strong>i <strong>=</strong> 0<strong>;</strong> i <strong>\&lt;</strong> padding_size<strong>;</strong> i<strong>++)</strong> <strong>{</strong>  fwrite<strong>(&amp;</strong>padding_value<strong>,</strong> 1<strong>,</strong> 1<strong>,</strong> fp<strong>);</strong>  }  /*⑥*/  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrc<strong>.</strong>addr <strong>=</strong> hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>dmem2<strong>.</strong>addr <strong>+</strong>  ALIGN_512<strong>(</strong>hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>dmem2<strong>.</strong>size<strong>);</strong>  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrc<strong>.</strong>size <strong>=</strong> ddrc_size<strong>;</strong>  /*dfs ddr_ddrc_freqs*/  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrc_freqs<strong>.</strong>addr <strong>=</strong> hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrc<strong>.</strong>addr <strong>+</strong>  ALIGN_512<strong>(</strong>hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrc<strong>.</strong>size<strong>);</strong>  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrc_freqs<strong>.</strong>size <strong>=</strong> ddrc_dfs_size<strong>;</strong>    pclose<strong>(</strong>fp<strong>);</strong>  <strong>return;</strong> <strong>}</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table><ol class="simple">
+<li><p>将通用参数写入文件中</p></li>
+<li><p>根据厂商不同，写入厂商相关的参数</p></li>
+<li><p>根据频率不同，添加频率相关的参数</p></li>
+<li><p>相同频率下，不同的颗粒，参数也有不同</p></li>
+<li><p>每种参数都512字节对齐，向文件中填充padding</p></li>
+<li><p>更新DDR header。</p></li>
+</ol>
+</section>
+<section id="ddr-phy">
+<h2>添加DDR phy参数<a class="headerlink" href="#ddr-phy" title="永久链接至标题"></a></h2>
+<p>根据DDR类型（DDR4/LPDDR4）建立通用的参数数组，再根据厂商、频率、颗粒等添加不同的参数，代码位于<em>hb_ddrp_parameter.c</em></p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>struct DRAM_CFG_PARAM lpddr4_ddrphy_cfg<strong>[]</strong> <strong>=</strong> <strong>{</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE0__TxSlewRate_b0_p0<strong>,</strong> TxSlewRate_LPDDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE0__TxSlewRate_b1_p0<strong>,</strong> TxSlewRate_LPDDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE1__TxSlewRate_b0_p0<strong>,</strong> TxSlewRate_LPDDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE1__TxSlewRate_b1_p0<strong>,</strong> TxSlewRate_LPDDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE2__TxSlewRate_b0_p0<strong>,</strong> TxSlewRate_LPDDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE2__TxSlewRate_b1_p0<strong>,</strong> TxSlewRate_LPDDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE3__TxSlewRate_b0_p0<strong>,</strong> TxSlewRate_LPDDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE3__TxSlewRate_b1_p0<strong>,</strong> TxSlewRate_LPDDR4_MICRON<strong>},</strong>  <strong>...</strong> <strong>}</strong> struct DRAM_CFG_PARAM ddr4_ddrphy_cfg<strong>[]</strong> <strong>=</strong> <strong>{</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE0__TxSlewRate_b0_p0<strong>,</strong> TxSlewRate_DDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE0__TxSlewRate_b1_p0<strong>,</strong> TxSlewRate_DDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE1__TxSlewRate_b0_p0<strong>,</strong> TxSlewRate_DDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE1__TxSlewRate_b1_p0<strong>,</strong> TxSlewRate_DDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE2__TxSlewRate_b0_p0<strong>,</strong> TxSlewRate_DDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE2__TxSlewRate_b1_p0<strong>,</strong> TxSlewRate_DDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE3__TxSlewRate_b0_p0<strong>,</strong> TxSlewRate_DDR4_MICRON<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_DBYTE3__TxSlewRate_b1_p0<strong>,</strong> TxSlewRate_DDR4_MICRON<strong>},</strong>  <strong>...</strong> <strong>}</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table><p>上述数组是通用配置数组，然后根据厂商、频率、颗粒的不同再添加相应的参数数据</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>void lpddr4_ddrp_hynix_write_to_bin<strong>(</strong>char <strong>*</strong>file<strong>,</strong> unsigned int freq<strong>,</strong>  unsigned int index<strong>,</strong> unsigned int part_number<strong>,</strong> unsigned int alter_para<strong>)</strong> <strong>{</strong>  FILE <strong>*</strong>fp <strong>=</strong> <strong>NULL;</strong>  int ddrp_size <strong>=</strong> 0<strong>,</strong> ddrp_hynix_size <strong>=</strong> 0<strong>,</strong> ddrp_freq_size <strong>=</strong> 0<strong>,</strong> ddrp_dfs_size <strong>=</strong> 0<strong>;</strong>  int padding_size <strong>=</strong> 0<strong>,</strong> i<strong>;</strong>  char padding_value <strong>=</strong> 0<strong>;</strong>   fp <strong>=</strong> fopen<strong>(</strong>file<strong>,</strong> "ab+"<strong>);</strong>   /*① ddrp_cfg */  ddrp_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_ddrphy_cfg<strong>);</strong>  fwrite<strong>(</strong>lpddr4_ddrphy_cfg<strong>,</strong> 2<strong>,</strong> ddrp_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>   /* ②ddrp_hynix_cfg */  <strong>if</strong> <strong>(</strong>part_number <strong>==</strong> H9HCNNN8KUMLHR<strong>)</strong> <strong>{</strong>  /*③*/  ddrp_hynix_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_ddrphy_hynix_cfg_xh<strong>);</strong>  fwrite<strong>(</strong>lpddr4_ddrphy_hynix_cfg_xh<strong>,</strong> 2<strong>,</strong> ddrp_hynix_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>part_number <strong>==</strong> H9HCNNNBKUMLHE<strong>)</strong> <strong>{</strong>  <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_3200<strong>)</strong> <strong>{</strong>  ddrp_hynix_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_ddrphy_hynix_cfg_jh32_a1<strong>);</strong>  fwrite<strong>(</strong>lpddr4_ddrphy_hynix_cfg_jh32_a1<strong>,</strong> 2<strong>,</strong> ddrp_hynix_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>  <strong>}</strong> <strong>else</strong> <strong>{</strong>  ddrp_hynix_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_ddrphy_hynix_cfg_jh<strong>);</strong>  fwrite<strong>(</strong>lpddr4_ddrphy_hynix_cfg_jh<strong>,</strong> 2<strong>,</strong> ddrp_hynix_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>  <strong>}</strong>  <strong>}</strong> <strong>else</strong> <strong>{</strong>  ddrp_hynix_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_ddrphy_hynix_cfg<strong>);</strong>  fwrite<strong>(</strong>lpddr4_ddrphy_hynix_cfg<strong>,</strong> 2<strong>,</strong> ddrp_hynix_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>  <strong>}</strong>   /* ④ddrc_freq */  <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_3733<strong>)</strong> <strong>{</strong>  <strong>...</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_3200<strong>)</strong> <strong>{</strong>  ddrp_freq_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_3200_ddrphy_cfg<strong>);</strong>  fwrite<strong>(</strong>lpddr4_3200_ddrphy_cfg<strong>,</strong> 2<strong>,</strong> ddrp_freq_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_2666<strong>)</strong> <strong>{</strong>  <strong>...</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_667<strong>)</strong> <strong>{</strong>  <strong>...</strong>  <strong>}</strong>   /* ⑤align 512 */  ddrp_size <strong>=</strong> ddrp_size <strong>+</strong> ddrp_hynix_size <strong>+</strong> ddrp_freq_size<strong>;</strong>  <strong>if</strong> <strong>(</strong>ddrp_size <strong>%</strong> 512<strong>)</strong>  padding_size <strong>=</strong> 512 <strong>-</strong> <strong>((</strong>ddrp_size <strong>%</strong> 512<strong>));</strong>   <strong>for</strong> <strong>(</strong>i <strong>=</strong> 0<strong>;</strong> i <strong>\&lt;</strong> padding_size<strong>;</strong> i<strong>++)</strong> <strong>{</strong>  fwrite<strong>(&amp;</strong>padding_value<strong>,</strong> 1<strong>,</strong> 1<strong>,</strong> fp<strong>);</strong>  <strong>}</strong>  /*⑥*/  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrp<strong>.</strong>addr <strong>=</strong> hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrc_freqs<strong>.</strong>addr <strong>+</strong>  ALIGN_512<strong>(</strong>hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrc_freqs<strong>.</strong>size<strong>);</strong>  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrp<strong>.</strong>size <strong>=</strong> ddrp_size<strong>;</strong>  /*dfs ddr_ddrc_freqs*/  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrp_freqs<strong>.</strong>addr <strong>=</strong> hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrp<strong>.</strong>addr <strong>+</strong>  ALIGN_512<strong>(</strong>hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrp<strong>.</strong>size<strong>);</strong>  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrp_freqs<strong>.</strong>size <strong>=</strong> ddrp_dfs_size<strong>;</strong>   pclose<strong>(</strong>fp<strong>);</strong>  <strong>return;</strong> <strong>}</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table><blockquote>
+<div><p>① 将通用参数写入文件中</p>
+</div></blockquote>
+<blockquote>
+<div><p>② 根据厂商不同，写入厂商相关的参数</p>
+</div></blockquote>
+<blockquote>
+<div><p>③ 相同的厂商，不同的颗粒，DDRphy的参数也有不同</p>
+</div></blockquote>
+<blockquote>
+<div><p>④ 根据频率不同，添加频率相关的参数</p>
+</div></blockquote>
+<blockquote>
+<div><p>⑤ 每种参数都512字节对齐，向文件中填充padding</p>
+</div></blockquote>
+<blockquote>
+<div><p>⑥ 更新DDR header。</p>
+</div></blockquote>
+</section>
+<section id="ddr-pie">
+<h2>添加DDR pie参数<a class="headerlink" href="#ddr-pie" title="永久链接至标题"></a></h2>
+<p>根据DDR类型（DDR4/LPDDR4）建立通用的参数数组，再根据频率添加不同的参数，代码位于<em>hb_pie_parameter.c</em></p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>/* DRAM PHY init engine image */ struct DRAM_CFG_PARAM lpddr4_phy_pie<strong>[]</strong> <strong>=</strong> <strong>{</strong>  <strong>{</strong>DWC_DDRPHYA_APBONLY0__MicroContMuxSel<strong>,</strong> 0x0<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_INITENG0__PreSequenceReg0b0s0<strong>,</strong> 0x10<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_INITENG0__PreSequenceReg0b0s1<strong>,</strong> 0x400<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_INITENG0__PreSequenceReg0b0s2<strong>,</strong> 0x10e<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_INITENG0__PreSequenceReg0b1s0<strong>,</strong> 0x0<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_INITENG0__PreSequenceReg0b1s1<strong>,</strong> 0x0<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_INITENG0__PreSequenceReg0b1s2<strong>,</strong> 0x8<strong>},</strong>  <strong>...</strong> <strong>}</strong>  /* DRAM PHY init engine image */ struct DRAM_CFG_PARAM ddr4_phy_pie<strong>[]</strong> <strong>=</strong> <strong>{</strong>  <strong>{</strong>DWC_DDRPHYA_APBONLY0__MicroContMuxSel<strong>,</strong> 0x0<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_INITENG0__PreSequenceReg0b0s0<strong>,</strong> 0x10<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_INITENG0__PreSequenceReg0b0s1<strong>,</strong> 0x400<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_INITENG0__PreSequenceReg0b0s2<strong>,</strong> 0x10e<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_INITENG0__PreSequenceReg0b1s0<strong>,</strong> 0x0<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_INITENG0__PreSequenceReg0b1s1<strong>,</strong> 0x0<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_INITENG0__PreSequenceReg0b1s2<strong>,</strong> 0x8<strong>},</strong>  <strong>{</strong>DWC_DDRPHYA_INITENG0__SequenceReg0b0s0<strong>,</strong> 0xb<strong>},</strong>  <strong>...</strong> <strong>}</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table><p>上述数组是通用配置数组，pie的数据只和频率相关，所以只用针对频率做出相应的修改即可。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>void lpddr4_pie_write_to_bin<strong>(</strong>char <strong>*</strong>file<strong>,</strong> unsigned int freq<strong>,</strong>  unsigned int index<strong>,</strong> unsigned int part_number<strong>)</strong> <strong>{</strong>  FILE <strong>*</strong>fp <strong>=</strong> <strong>NULL;</strong>  int pie_size <strong>=</strong> 0<strong>,</strong> pie_freq_size <strong>=</strong> 0<strong>,</strong> ddr_pie_dfs_size <strong>=</strong> 0<strong>;</strong>  int padding_size <strong>=</strong> 0<strong>,</strong> i<strong>;</strong>  char padding_value <strong>=</strong> 0<strong>;</strong>   fp <strong>=</strong> fopen<strong>(</strong>file<strong>,</strong> "ab+"<strong>);</strong>   /* ①ddr pie_cfg */  pie_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_phy_pie<strong>);</strong>  fwrite<strong>(</strong>lpddr4_phy_pie<strong>,</strong> 2<strong>,</strong> pie_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>   /* ②ddrpie_freq */  <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_3733<strong>)</strong> <strong>{</strong>  pie_freq_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_3733_phy_pie<strong>);</strong>  fwrite<strong>(</strong>lpddr4_3733_phy_pie<strong>,</strong> 2<strong>,</strong> pie_freq_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_3600<strong>)</strong> <strong>{</strong>  pie_freq_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_3600_phy_pie<strong>);</strong>  fwrite<strong>(</strong>lpddr4_3600_phy_pie<strong>,</strong> 2<strong>,</strong> pie_freq_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_3200<strong>)</strong> <strong>{</strong>  pie_freq_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_3200_phy_pie<strong>);</strong>  fwrite<strong>(</strong>lpddr4_3200_phy_pie<strong>,</strong> 2<strong>,</strong> pie_freq_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_2666<strong>)</strong> <strong>{</strong>  pie_freq_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_2666_phy_pie<strong>);</strong>  fwrite<strong>(</strong>lpddr4_2666_phy_pie<strong>,</strong> 2<strong>,</strong> pie_freq_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_667<strong>)</strong> <strong>{</strong>  pie_freq_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_667_phy_pie<strong>);</strong>  fwrite<strong>(</strong>lpddr4_667_phy_pie<strong>,</strong> 2<strong>,</strong> pie_freq_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>  <strong>}</strong> <strong>else</strong> <strong>if</strong> <strong>(</strong>freq <strong>==</strong> DDR_FREQC_100<strong>)</strong> <strong>{</strong>  pie_freq_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_100_phy_pie<strong>);</strong>  fwrite<strong>(</strong>lpddr4_100_phy_pie<strong>,</strong> 2<strong>,</strong> pie_freq_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>  <strong>}</strong>   /*③ align 512 */  pie_size <strong>=</strong> pie_size <strong>+</strong> pie_freq_size<strong>;</strong>  <strong>if</strong> <strong>(</strong>pie_size <strong>%</strong> 512<strong>)</strong>  padding_size <strong>=</strong> 512 <strong>-</strong> <strong>((</strong>pie_size <strong>%</strong> 512<strong>));</strong>   <strong>for</strong> <strong>(</strong>i <strong>=</strong> 0<strong>;</strong> i <strong>\&lt;</strong> padding_size<strong>;</strong> i<strong>++)</strong> <strong>{</strong>  fwrite<strong>(&amp;</strong>padding_value<strong>,</strong> 1<strong>,</strong> 1<strong>,</strong> fp<strong>);</strong>  <strong>}</strong>  /*④*/  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_pie<strong>.</strong>addr <strong>=</strong> hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrp_freqs<strong>.</strong>addr <strong>+</strong>  ALIGN_512<strong>(</strong>hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_ddrp_freqs<strong>.</strong>size<strong>);</strong>  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_pie<strong>.</strong>size <strong>=</strong> pie_size<strong>;</strong>  /*dfs ddr_ddrc_freqs*/  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_pie_freqs<strong>.</strong>addr <strong>=</strong> hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_pie<strong>.</strong>addr <strong>+</strong>  ALIGN_512<strong>(</strong>hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_pie<strong>.</strong>size<strong>);</strong>  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_pie_freqs<strong>.</strong>size <strong>=</strong> ddr_pie_dfs_size<strong>;</strong>   pclose<strong>(</strong>fp<strong>);</strong>  <strong>return;</strong> <strong>}</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table><ol class="simple">
+<li><p>将通用参数写入文件中</p></li>
+<li><p>根据频率的不同添加不同的参数</p></li>
+<li><p>每种参数都512字节对齐，向文件中填充padding</p></li>
+<li><p>更新ddr header</p></li>
+</ol>
+</section>
+<section id="address-map">
+<h2>添加address map参数<a class="headerlink" href="#address-map" title="永久链接至标题"></a></h2>
+<p>address
+map参数是配置SoC与DDR颗粒之间走线的参数，只有LPDDR4需要对该参数进行设置。代码中提供了三套参数，分别对应CVB板，X3SOM板和J3SOM板。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>/* #define H9HCNNN8KUMLHR 0x0608 */ struct DRAM_CFG_PARAM lpddr4_mstr_x3_hynix<strong>[</strong>12<strong>]</strong> <strong>=</strong> <strong>{</strong>  <strong>{</strong>uMCTL2_ADDRMAP0<strong>,</strong> 0x001F1F1F<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP1<strong>,</strong> 0x00080808<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP2<strong>,</strong> 0x00000000<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP3<strong>,</strong> 0x00000000<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP4<strong>,</strong> 0x00001F1F<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP5<strong>,</strong> 0x070F0707<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP6<strong>,</strong> 0x0F070707<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP7<strong>,</strong> 0x00000F0F<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP8<strong>,</strong> 0x00003F3F<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP9<strong>,</strong> 0x07070707<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP10<strong>,</strong> 0x07070707<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP11<strong>,</strong> 0x001F1F07<strong>}</strong> <strong>};</strong>  /* #define H9HCNNNBKUMLHE 0x0610 */ struct DRAM_CFG_PARAM lpddr4_mstr_j3_hynix<strong>[</strong>12<strong>]</strong> <strong>=</strong> <strong>{</strong>  <strong>{</strong>uMCTL2_ADDRMAP0<strong>,</strong> 0x001F1F1F<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP1<strong>,</strong> 0x00080808<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP2<strong>,</strong> 0x00000000<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP3<strong>,</strong> 0x00000000<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP4<strong>,</strong> 0x00001F1F<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP5<strong>,</strong> 0x070F0707<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP6<strong>,</strong> 0x07070707<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP7<strong>,</strong> 0x00000F0F<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP8<strong>,</strong> 0x00003F3F<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP9<strong>,</strong> 0x07070707<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP10<strong>,</strong> 0x07070707<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP11<strong>,</strong> 0x001F1F07<strong>}</strong> <strong>};</strong>  /* #define MT53D1024M32D4DT 0xff10 */ struct DRAM_CFG_PARAM lpddr4_mstr_micron<strong>[</strong>12<strong>]</strong> <strong>=</strong> <strong>{</strong>  <strong>{</strong>uMCTL2_ADDRMAP0<strong>,</strong> 0x001F1F17<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP1<strong>,</strong> 0x00080808<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP2<strong>,</strong> 0x00000000<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP3<strong>,</strong> 0x00000000<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP4<strong>,</strong> 0x00001F1F<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP5<strong>,</strong> 0x070F0707<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP6<strong>,</strong> 0x07070707<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP7<strong>,</strong> 0x00000F0F<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP8<strong>,</strong> 0x00003F3F<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP9<strong>,</strong> 0x07070707<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP10<strong>,</strong> 0x07070707<strong>},</strong>  <strong>{</strong>uMCTL2_ADDRMAP11<strong>,</strong> 0x001F1F07<strong>}</strong> <strong>};</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table><p>若客户的板子参考自上述三种，直接用定义好的参数即可。如果客户自己设计SoC与DDR颗粒的走线，需按照客户走线方式配置改参数。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>void j3_hynix_write_to_bin<strong>(</strong>char <strong>*</strong>file<strong>,</strong> unsigned int index<strong>)</strong> <strong>{</strong>  FILE <strong>*</strong>fp <strong>=</strong> <strong>NULL;</strong>  int mstr_size <strong>=</strong> 0<strong>;</strong>  int padding_size <strong>=</strong> 0<strong>,</strong> i<strong>;</strong>  char padding_value <strong>=</strong> 0<strong>;</strong>   fp <strong>=</strong> fopen<strong>(</strong>file<strong>,</strong> "ab+"<strong>);</strong>   /* ①mstr */  mstr_size <strong>=</strong> <strong>sizeof(</strong>lpddr4_mstr_j3_hynix<strong>);</strong>  printf<strong>(</strong>"ddr4 pie size: %d\n"<strong>,</strong> mstr_size<strong>);</strong>  fwrite<strong>(</strong>lpddr4_mstr_j3_hynix<strong>,</strong> 2<strong>,</strong> mstr_size <strong>/</strong> 2<strong>,</strong> fp<strong>);</strong>   /*② align 512 */  <strong>if</strong> <strong>(</strong>mstr_size <strong>%</strong> 512<strong>)</strong>  padding_size <strong>=</strong> 512 <strong>-</strong> <strong>(</strong>mstr_size <strong>%</strong> 512<strong>);</strong>   <strong>for</strong> <strong>(</strong>i <strong>=</strong> 0<strong>;</strong> i <strong>\&lt;</strong> padding_size<strong>;</strong> i<strong>++)</strong> <strong>{</strong>  fwrite<strong>(&amp;</strong>padding_value<strong>,</strong> 1<strong>,</strong> 1<strong>,</strong> fp<strong>);</strong>  <strong>}</strong>  /*③*/  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>addr_map<strong>.</strong>addr <strong>=</strong> hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_pie_freqs<strong>.</strong>addr <strong>+</strong>  ALIGN_512<strong>(</strong>hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>ddr_pie_freqs<strong>.</strong>size<strong>);</strong>  hdr_ddr<strong>.</strong>ddr<strong>[</strong>index<strong>].</strong>addr_map<strong>.</strong>size <strong>=</strong> mstr_size<strong>;</strong>   pclose<strong>(</strong>fp<strong>);</strong>  <strong>return;</strong> <strong>}</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table><ol class="simple">
+<li><p>将address map参数写入文件中</p></li>
+<li><p>每种参数都512字节对齐，向文件中填充padding</p></li>
+<li><p>更新DDR header</p></li>
+</ol>
+</section>
+<section id="id8">
+<h2>获取DDR参数<a class="headerlink" href="#id8" title="永久链接至标题"></a></h2>
+<p>经过上述步骤，添加DDR参数完毕。本章节将介绍如何使SPL获取到添加的DDR参数。</p>
+<section id="board-id">
+<h3>BOARD-ID指定<a class="headerlink" href="#board-id" title="永久链接至标题"></a></h3>
+<p>SPL通过厂商+DDR类型+频率+index的方式查找到正确的DDR参数，这些作为BOARD-ID存储在MBR中，BOARD-ID占32bit，厂商、频率、DDR类型和index各占4个bit。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>bit map</th>
+<th>[28:32]</th>
+<th>[24:27]</th>
+<th>[20:23]</th>
+<th>[4:7]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>description</td>
+<td>manufacture</td>
+<td>DDR type</td>
+<td>frequency</td>
+<td>index</td>
+</tr>
+</tbody>
+</table><p>BOARD-ID是编译时被指定的，目前支持的厂商/DDR类型/频率如下</p>
+<p>厂商：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>value</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>manufacture</td>
+<td>hynix</td>
+<td>micron</td>
+<td>samsung</td>
+</tr>
+</tbody>
+</table><p>频率：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>value</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>frequency</td>
+<td>667</td>
+<td>1600</td>
+<td>2133</td>
+<td>2666</td>
+<td>3200</td>
+<td>3733</td>
+</tr>
+<tr>
+<td>value</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+<td>10</td>
+<td>11</td>
+<td></td>
+</tr>
+<tr>
+<td>frequency</td>
+<td>4266</td>
+<td>1866</td>
+<td>2400</td>
+<td>100</td>
+<td>3600</td>
+<td></td>
+</tr>
+</tbody>
+</table><p>DDR类型</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>value</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DDR mode</td>
+<td>LPDDR4</td>
+<td>LPDDR4X</td>
+<td>DDR4</td>
+<td>DDR3L</td>
+</tr>
+</tbody>
+</table><p>编译时DDR相关配置参数</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>parameter</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-m</td>
+<td>厂商: “hynix” “micron” “samsung”</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>DDR 类型: “LDDR4” “LPDDR4X” “DDR4” “DDR3L”</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>频率：根据上面频率表中设定即可</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>index，<em>-i</em>与<em>index value</em>中间无空格</td>
+</tr>
+</tbody>
+</table><p>假如有两套参数，厂商、DDR类型、频率都是海力士、LPDDR4、3200。这两套参数的不同可能是DDR大小不同，或是rank值不同，这种情况就用index区分。假设您要用第二套海力士LPDDR4,频率为3200的参数，编译方法如下</p>
+<blockquote>
+<div><p>build.sh -m hynix -t LPDDR4 -f 3200 -i2</p>
+</div></blockquote>
+<p>如果厂商/DDR类型/频率不在上述表格中，您需要手动添加。需要修改<em>build/build.sh</em>脚本，以添加一个厂商为例，假设你使用的DDR厂商的名称为“<em>customer</em>”</p>
+<ul>
+<li><p>在厂商列表中添加新的厂商名</p>
+<p>ddr_mfg_name_arr=(”hynix” “micron” “samsung” “ddrphy_phyinit” “customer”)</p>
+<p>添加厂商对应的value值，注意要与DDR header中的厂商对应匹配。</p>
+<p><strong>case</strong> $ddr_manufacture in</p>
+<p>hynix)</p>
+<p>index=1</p>
+<p>;;</p>
+<p>micron)</p>
+<p>index=2</p>
+<p>;;</p>
+<p>samsung)</p>
+<p>index=3</p>
+<p>;;</p>
+<p>customer)</p>
+<p>index=4</p>
+<p>;;</p>
+<p>*)</p>
+<p>index=0</p>
+</li>
+</ul>
+</section>
+<section id="pin">
+<h3>外部PIN指定<a class="headerlink" href="#pin" title="永久链接至标题"></a></h3>
+<p>如果您想在一套产品上使用不同的DDR颗粒，并且使用同一套软件镜像。可以通过外部GPIO的方式指定DDR参数。在DDR
+header中，数组*ddr_pin[3]*用于指定使用哪几个GPIO
+来决定DDR参数的index。*ddr_pin[0]，ddr_pin[1]，ddr_pin[2]<em>分别对应bit0，bit1，bit2，最大支持8套参数。您可以使用</em>ddr_pin[0]，ddr_pin[0]+ddr_pin[1]<em>或者三个pin都使用，取决于您需要区分几套DDR参数。将</em>ddr_pin[x]*置0表示不使用这个pin。</p>
+<p>编译阶段，不需要设置DDR相关的参数，SPL根据外部PIN得到<em>index</em>选择DDR参数。</p>
+<p>外部PIN方式的优先级更高，只有当所有*ddr_pin[x]*被设置为0的时候，SPL才会通过BOARD-ID的方式搜寻DDR参数。</p>
+</section>
+</section>
+<section id="id9">
+<h2>眼图工具<a class="headerlink" href="#id9" title="永久链接至标题"></a></h2>
+<p>眼图是用于从经过训练的DDR中获取诊断信息的软件工具。提供了两种方法来启用眼图工具。</p>
+<ul class="simple">
+<li><p>外部PIN: 在DDR
+header中e<em>ye_tool_pin</em>元素用于设置将哪个外部PIN作为眼图工具的调试PIN。这个PIN为高电平，SPL中将会使能眼图工具。</p></li>
+<li><p>重启命令: 在kernel中执行”reboot
+eye”命令，重启后SPL将使能眼图工具，这是一个一次性的命令，再次重启后将从正常流程启动。</p></li>
+</ul>
+</section>
+<section id="id10">
+<h2>展频<a class="headerlink" href="#id10" title="永久链接至标题"></a></h2>
+<p>在DDR header中的*sscg_parm[]*数组用于配置展频功能</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th></th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sscg_parm[0]</td>
+<td>展频级别: SSCG_DISABLE: 不开启展频 SSCG_LVL1: 1% SSCG_LVL2: 2% SSCG_DBG: 使用 <em>sscg_parm[1]</em> 和 <em>sscg_param[2]</em> 配置展频</td>
+</tr>
+<tr>
+<td>sscg_parm[1]</td>
+<td>配置展频范围 展频区间在当前频率与（当前频率- X%）之间 只有当 <em>sscg_param[0]</em> 设置为 SSCG_DBG, <em>sscg_parm[1]</em> 才有效</td>
+</tr>
+<tr>
+<td>sscg_parm[2]</td>
+<td>配置产品值 展频区间在当前频率与（当前频率- Y）之间 只有<em>sscg_param[0]</em> 设置为SSCG_DBG, <em>sscg_parm[2]</em> 才有效</td>
+</tr>
+</tbody>
+</table></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

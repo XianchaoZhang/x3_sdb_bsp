@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>USB Camera 算法解决方案 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>USB Camera 算法解决方案</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usb-camera">
+<h1>USB Camera 算法解决方案<a class="headerlink" href="#usb-camera" title="永久链接至标题"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usb_cam_solution_user_guide.html">手势交互解决方案说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usb_cam_solution_user_guide.html#id2">编译和部署</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usb_cam_solution_user_guide.html#id3">解决方案的板端部署和功能说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#id4">功能列表</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#id5">启动脚本说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#id6">详细功能说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usb_cam_solution_user_guide.html#id7">方案设计</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#id8">系统框图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#x3">X3侧模块功能说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#ap">AP侧模块功能说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usb_cam_solution_user_guide.html#id9">X3侧主要功能代码逻辑</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#id10">代码入口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#smartplugin">smartplugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#iotvioplugin">iotvioplugin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#id11">图像处理的流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usb_cam_solution_user_guide.html#id12">常见问题分析</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#id13">5.1 X3启动失败</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#app">5.2 安卓启动失败（app退出）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#id14">5.3 X3和安卓启动成功，安卓获取图像失败</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_solution_user_guide.html#id15">5.4 安卓重复启停失败</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usb_cam_app_user_guide.html">APP用户使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usb_cam_app_user_guide.html#x3">x3端操作说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usb_cam_app_user_guide.html#android-app">android app使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id1">打开APP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id2">配置界面</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id3">视频源配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#zoom">ZOOM配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id4">渲染配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#debug">Debug配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id5">版本信息显示</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#start-cancel">START按钮，CANCEL按钮</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usb_cam_app_user_guide.html#id6">手势控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usb_cam_app_user_guide.html#id7">手鼠控制</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id8">打开手鼠（比耶✌手势即胜利手势，会进入九宫格界面）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id9">切换控制人（打开手鼠以后，比耶✌手势）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id10">移动手鼠（打开手鼠以后或切换控制人以后，移动控制手）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#ok">确定手势（手势为OK即为点击确定）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id11">后退手势（大拇指向右）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id12">退出手鼠（比六六六手势）</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usb_cam_app_user_guide.html#id13">常见的问题</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#su">su权限</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id14">视频帧收不到</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id15">智能帧收不到</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#recognize-json">recognize.json未配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id16">智能数据闪屏</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id17">视频花屏</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#codec-dequeueoutputbuffer-1">Codec.dequeueOutputBuffer 返回-1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id18">视频延时问题</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#getconfig-timeout">getConfig timeout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_cam_app_user_guide.html#id19">骨骼点</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

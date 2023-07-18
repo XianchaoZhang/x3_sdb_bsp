@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.4. I2C调试指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.3.5. GPIO调试指南" href="10-GPIO_Debug_Guide_zh_CN.html" />
+    <link rel="prev" title="4.3.3. UART驱动调试指南" href="27-Uart_Driver_Debug_Guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.3.4. I2C调试指南</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.3.4.1. 前言</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">4.3.4.2. 驱动代码</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id3">内核配置位置</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#dts">内核DTS节点配置</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">4.3.4.3. I2C使用</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#kernel-space">Kernel Space</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#user-space">User Space</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id5">频率设置</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#i2c-tools">I2c-tools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.4. </span>I2C调试指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="27-Uart_Driver_Debug_Guide.html" class="btn btn-neutral float-left" title="4.3.3. UART驱动调试指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="10-GPIO_Debug_Guide_zh_CN.html" class="btn btn-neutral float-right" title="4.3.5. GPIO调试指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="i2c">
+<h1><span class="section-number">4.3.4. </span>I2C调试指南<a class="headerlink" href="#i2c" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">4.3.4.1. </span>前言<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>Horizon Robotics X3芯片提供了标准的I2C总线，I2C总线控制器通过串行数据线（SDA）和串行时钟（SCL）线在连接到总线的器件间传递信息。
+每个器件都有一个唯一的地址（无论是微控制器——MCU、LCD控制器、存储器或键盘接口），而且都可以作为一个发送器和一个接收器（由器件的功能决定），而且都可以作为一个发送器或接收器（由器件的功能决定）。I2C控制器支持以下功能：</p>
+<ul class="simple">
+<li><p>兼容I2C与SMBUS总线</p></li>
+<li><p>频率支持到400kHz</p></li>
+<li><p>支持7位和10位寻址模式</p></li>
+</ul>
+</section>
+<section id="id2">
+<h2><span class="section-number">4.3.4.2. </span>驱动代码<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>drivers/i2c/busses/i2c-hobot.c <span class="c1"># I2C驱动代码源文件</span>
+inlcude/linux/i2c-hobot.h <span class="c1"># I2C驱动代码头文件</span>
+</pre></div>
+</div>
+<section id="id3">
+<h3>内核配置位置<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>CONFIG_I2C_HOBOT</p>
+<p><img alt="image-20220321230754098" src="../../_images/image-20220321230754098.png" /></p>
+</section>
+<section id="dts">
+<h3>内核DTS节点配置<a class="headerlink" href="#dts" title="永久链接至标题"></a></h3>
+<p>X3芯片最大支持6路i2c总线，dts配置如下所示。</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>/* arch/arm64/boot/dts/hobot/hobot-xj3.dtsi */
+i2c0: i2c@0xA5009000 {
+    compatible = &quot;hobot,hobot-i2c&quot;;
+    reg = &lt;0 0xA5009000 0 0x100&gt;;
+    interrupt-parent = &lt;&amp;gic&gt;;
+    interrupts = &lt;0 38 4&gt;;
+    clocks = &lt;&amp;i2c0_mclk&gt;;
+    clock-names = &quot;i2c_mclk&quot;;
+    bus-speed = &lt;400000&gt;;
+    resets = &lt;&amp;rst 0x50 10&gt;;
+    reset-names = &quot;i2c0&quot;;
+    status = &quot;disabled&quot;;
+    pinctrl-names = &quot;default&quot;;
+    pinctrl-0 = &lt;&amp;i2c0_func&gt;;
+};
+</pre></div>
+</div>
+<p><font color=red>备注：</font>
+hobot-xj3.dtsi中的节点主要声明一些寄存器、中断的resource，均为soc共有特性，和具体电路板无关，一般情况下不用修改。</p>
+</section>
+</section>
+<section id="id4">
+<h2><span class="section-number">4.3.4.3. </span>I2C使用<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>对于I2C的使用说明在Linux Kernel的Documentation/i2c下有详细的说明，本文主要列出X3J3 I2C驱动接口特殊的部分。</p>
+<section id="kernel-space">
+<h3>Kernel Space<a class="headerlink" href="#kernel-space" title="永久链接至标题"></a></h3>
+<p>X3J3 I2C驱动在Kernel Space下提供了可以设置I2C传输频率的接口，使用方法如下：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/i2c-hobot.h&gt;</span><span class="cp"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span> <span class="nc">client_request</span><span class="w"> </span><span class="o">*</span><span class="n">client_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span> <span class="nc">client_request</span><span class="w"> </span><span class="o">*</span><span class="p">)(</span><span class="n">client</span><span class="o">-&gt;</span><span class="n">adapter</span><span class="o">-&gt;</span><span class="n">algo_data</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">client_data</span><span class="o">-&gt;</span><span class="n">client_req_freq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100000</span><span class="p">;</span><span class="w"> </span><span class="c1">//设置I2C传输频率为100k</span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i2c_transfer</span><span class="p">(</span><span class="n">client</span><span class="o">-&gt;</span><span class="n">adapter</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">ARRAY_SIZE</span><span class="p">(</span><span class="n">request</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>需要注意的是，如果目标传输频率和默认频率不一致，那么在每次I2C传输前，都需要设置目标频率，即频率更改只对单次传输生效，这样设计也是为了保证某个驱动调用I2C驱动更改频率并传输不会对其它驱动造成影响，有关代码在i2c-hobot.c中的实现如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/* 检查是否需要更改频率，如果是，按照目标频率进行设置 */
+static void recal_clk_div<span class="o">(</span>struct hobot_i2c_dev *dev<span class="o">)</span>
+<span class="o">{</span>
+        u32 <span class="nv">clk_freq</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span>
+        int <span class="nv">temp_div</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span>
+        struct client_request *client_req<span class="p">;</span>
+
+        <span class="nv">client_req</span> <span class="o">=</span> <span class="o">(</span>struct client_request *<span class="o">)</span>dev-&gt;adapter.algo_data<span class="p">;</span>
+        <span class="nv">clk_freq</span> <span class="o">=</span> clk_get_rate<span class="o">(</span>dev-&gt;clk<span class="o">)</span><span class="p">;</span>
+        <span class="k">if</span> <span class="o">(</span>client_req-&gt;client_req_freq !<span class="o">=</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nv">temp_div</span> <span class="o">=</span> DIV_ROUND_UP<span class="o">(</span>clk_freq, client_req-&gt;client_req_freq<span class="o">)</span> - <span class="m">1</span><span class="p">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="nv">temp_div</span> <span class="o">=</span> DIV_ROUND_UP<span class="o">(</span>clk_freq, dev-&gt;default_trans_freq<span class="o">)</span> - <span class="m">1</span><span class="p">;</span>
+        <span class="o">}</span>
+        dev-&gt;clkdiv <span class="o">=</span> DIV_ROUND_UP<span class="o">(</span>temp_div, <span class="m">8</span><span class="o">)</span> - <span class="m">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="o">(</span>dev-&gt;clkdiv &gt; I2C_MAX_DIV<span class="o">)</span> <span class="o">{</span>
+                dev_warn<span class="o">(</span>dev-&gt;dev, <span class="s2">&quot;clkdiv too large, set to 255&quot;</span><span class="o">)</span><span class="p">;</span>
+                dev-&gt;clkdiv <span class="o">=</span> I2C_MAX_DIV<span class="p">;</span>
+        <span class="o">}</span>
+<span class="o">}</span>
+
+/* reset I2C 频率为默认频率 */
+static void reset_client_freq<span class="o">(</span>struct hobot_i2c_dev *dev<span class="o">)</span>
+<span class="o">{</span>
+        struct client_request *client_req<span class="p">;</span>
+
+        <span class="nv">client_req</span> <span class="o">=</span> <span class="o">(</span>struct client_request *<span class="o">)</span>dev-&gt;adapter.algo_data<span class="p">;</span>
+        client_req-&gt;client_req_freq <span class="o">=</span> <span class="m">0</span><span class="p">;</span>
+<span class="o">}</span>
+
+/* I2C master_xfer 函数 */
+static int hobot_i2c_xfer<span class="o">(</span>struct i2c_adapter *adap, struct i2c_msg msgs<span class="o">[]</span>, int num<span class="o">)</span>
+<span class="o">{</span>
+    ...
+    recal_clk_div<span class="o">(</span>dev<span class="o">)</span><span class="p">;</span>
+    ... /* I2C transfer */
+    reset_client_freq<span class="o">(</span>dev<span class="o">)</span><span class="p">;</span>
+    ...
+<span class="o">}</span>
+</pre></div>
+</div>
+</section>
+<section id="user-space">
+<h3>User Space<a class="headerlink" href="#user-space" title="永久链接至标题"></a></h3>
+<p>通常，I2C设备由内核驱动程序控制，但也可以从用户态访问总线上的所有设备，通过/dev/i2c-%d接口来访问，Kernel下面的Documentation/i2c/dev-interface文档里有详细的介绍。</p>
+<section id="id5">
+<h4>频率设置<a class="headerlink" href="#id5" title="永久链接至标题"></a></h4>
+<p>查看i2C-N的频率,以i2c-0为例</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3dvbx3-hynix1G-2666:~# cat /sys/bus/i2c/devices/i2c-0/speed
+<span class="m">400000</span>
+</pre></div>
+</div>
+<p>设置i2c-N的频率，以i2c-0为例</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3dvbx3-hynix1G-2666:~# <span class="nb">echo</span> <span class="m">100000</span> &gt; /sys/bus/i2c/devices/i2c-0/speed
+root@x3dvbx3-hynix1G-2666:~# cat /sys/bus/i2c/devices/i2c-0/speed
+<span class="m">100000</span>
+</pre></div>
+</div>
+<p>和Kernel Space下设置I2C频率只针对单次传输有效不同，User Space下设置I2C频率是持久有效的，谨慎使用！</p>
+</section>
+<section id="i2c-tools">
+<h4>I2c-tools<a class="headerlink" href="#i2c-tools" title="永久链接至标题"></a></h4>
+<p>i2c-tools是一套开源工具，该工具已经被交叉编译并包含在在X3J3 系统软件的rootfs中，客户可以直接使用：</p>
+<ul class="simple">
+<li><p>i2cdetect — 用来列举I2C bus及该bus上的所有设备</p></li>
+<li><p>i2cdump — 显示i2c设备的所有register值</p></li>
+<li><p>i2cget — 读取i2c设备某个register的值</p></li>
+<li><p>i2cset — 写入i2c设备某个register的值</p></li>
+<li><p>i2ctransfer — 可以读、写i2c设备某个或者多个register的值</p></li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="27-Uart_Driver_Debug_Guide.html" class="btn btn-neutral float-left" title="4.3.3. UART驱动调试指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="10-GPIO_Debug_Guide_zh_CN.html" class="btn btn-neutral float-right" title="4.3.5. GPIO调试指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

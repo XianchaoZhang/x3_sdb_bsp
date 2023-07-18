@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.7. IO-DOMAIN调试指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.3.8. SPI调试指南" href="14-SPI_Debug_Guide_zh_CN.html" />
+    <link rel="prev" title="4.3.6. Pinctrl调试指南" href="11-Pinctrl_Debug_Guide_zh_CN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.3.7. IO-DOMAIN调试指南</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.3.7.1. 前言</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">4.3.7.2. 管脚查询</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">4.3.7.3. 驱动代码</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id4">代码位置</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#io-domaindts">IO-DOMAIN的DTS</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#dts">驱动调用时DTS配置</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id5">驱动调用示例代码</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#uboot">4.3.7.4. uboot下修改电压域</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.7. </span>IO-DOMAIN调试指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="11-Pinctrl_Debug_Guide_zh_CN.html" class="btn btn-neutral float-left" title="4.3.6. Pinctrl调试指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="14-SPI_Debug_Guide_zh_CN.html" class="btn btn-neutral float-right" title="4.3.8. SPI调试指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="io-domain">
+<h1><span class="section-number">4.3.7. </span>IO-DOMAIN调试指南<a class="headerlink" href="#io-domain" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">4.3.7.1. </span>前言<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>IO-Domain用来配置X3J3部分模块的电压域，以RGMII接口为例，如果电路设计时外接电压域为3.3V，则需要配置RGMII模块的IO-DOMAIN为3.3V，如果电路设计时外接电压域为1.8V，则需要配置为1.8v，需要注意的是：</p>
+<ul class="simple">
+<li><p>外接电压域为3.3V而对应的IO-DOMAIN配置为1.8V时，可能会对芯片有损伤；</p></li>
+<li><p>外接电压域为1.8V而对应的IO-DOMAIN配置为3.3V时，相应的模块可能无法正常工作；</p></li>
+</ul>
+</section>
+<section id="id2">
+<h2><span class="section-number">4.3.7.2. </span>管脚查询<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>IO管脚的复用和配置可以查阅《PL-2500-3-X3 PIN SW Reg-V1.2.xls》 和《RM-2500-5-X3M Register Reference Manual-GPIO&amp;PIN-V1.1.pdf》。</p>
+<p>在 《PL-2500-3-X3 PIN SW Reg-V1.2.xls》可以比较直观的查询到管脚的上电默认状态、复用、驱动能力、上下拉、施密特触发配置。</p>
+<p>在 《RM-2500-5-X3M Register Reference Manual-GPIO&amp;PIN-V1.1.pdf》文档中查阅 SD_MODE_CTRL 和 IO_MODE_CTRL 两个寄存器来确定电压域配置。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">4.3.7.3. </span>驱动代码<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<section id="id4">
+<h3>代码位置<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>drivers/pinctrl/pinctrl-single.c <span class="c1"># pinctrl 驱动代码源文件</span>
+include/linux/platform_data/pinctrl-single.h <span class="c1"># pinctrl 驱动代码头文件</span>
+</pre></div>
+</div>
+</section>
+<section id="io-domaindts">
+<h3>IO-DOMAIN的DTS<a class="headerlink" href="#io-domaindts" title="永久链接至标题"></a></h3>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>/* arch/arm64/boot/dts/hobot/hobot-pinctrl-xj3.dtsi */
+/* pinctrl_voltage used to config X/J3 pin mode, for example,
+* when SD2 external power supply is 3.3v, we need config pin-mode to
+* 3.3v, otherwise X/J3 chip will be damaged.
+* when SD2 external power supply is 1.8v, we need config pin-mode to
+* 1.8v, otherwise SD2 will not work.
+*/
+pinctrl_voltage: pinctrl_voltag@0xA6003000 {
+    compatible = &quot;pinctrl-single&quot;;
+    reg = &lt;0x0 0xA6003170 0x0 0x8&gt;;
+    #pinctrl-cells = &lt;2&gt;;
+    #gpio-range-cells = &lt;0x3&gt;;
+    pinctrl-single,bit-per-mux;
+    pinctrl-single,register-width = &lt;32&gt;;
+    pinctrl-single,function-mask = &lt;0x1&gt;;
+    status = &quot;okay&quot;;
+    /* rgmii 1.8v func */
+        rgmii_1_8v_func: rgmii_1_8v_func {
+            pinctrl-single,bits = &lt;
+                0x4 MODE_1_8V RGMII_MODE_P1
+                0x4 MODE_1_8V RGMII_MODE_P0
+                &gt;;
+        };
+    /*rgmii 3.3v func */
+        rgmii_3_3v_func: rgmii_3_3v_func {
+            pinctrl-single,bits = &lt;
+                0x4 MODE_3_3V RGMII_MODE_P1
+                0x4 MODE_3_3V RGMII_MODE_P0
+                &gt;;
+        };
+    ...
+};
+</pre></div>
+</div>
+<p>由于IO-DOMAIN在Pinctrl-single的框架下实现，因此其DTS和Pinctrl的类似，在IO-DOMAIN的DTS里已经列出了所有模块1.8V和3.3V的配置组，客户一般不需要修改，在具体开发时根据实际情况选择使用即可。</p>
+</section>
+<section id="dts">
+<h3>驱动调用时DTS配置<a class="headerlink" href="#dts" title="永久链接至标题"></a></h3>
+<p>和Pinctrl的使用方法类似，驱动在自己的DTS中引用需要配置的IO-DOMAIN，以bt1120驱动为例，配置如下：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>xxx: xxx@0xA6000000 {
+    ...
+    pinctrl-names = &quot;default&quot;, &quot;xxx_voltage_func&quot;, ;
+    pinctrl-0 = &lt;&amp;xxx_func&gt;;
+    pinctrl-1 = &lt;&amp;xxx_1_8v_func&gt;; // pinctrl-3为1.8v的IO-DOMAIN配置
+    ...
+};
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>驱动调用示例代码<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>和Pinctrl调用方法一致，驱动先通过Pinctrl-names查找对应的pinctrl state，然后再切换到对应的state。</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">hobot_xxx_probe</span><span class="p">(</span><span class="k">struct</span> <span class="nc">platform_device</span><span class="w"> </span><span class="o">*</span><span class="n">pdev</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pinctrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">devm_pinctrl_get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IS_ERR</span><span class="p">(</span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pinctrl</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">dev_warn</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;pinctrl get none</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_voltage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">        </span><span class="cm">/* 按照pinctrl-names lookup state */</span><span class="w"></span>
+<span class="w">        </span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_voltage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pinctrl_lookup_state</span><span class="p">(</span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pinctrl</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="s">&quot;xxx_voltage_func&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IS_ERR</span><span class="p">(</span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_voltage</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">dev_info</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xxx_voltage_func get error %ld</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="n">PTR_ERR</span><span class="p">(</span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_voltage</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_voltage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">        </span><span class="cm">/* select state */</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_voltage</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pinctrl_select_state</span><span class="p">(</span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pinctrl</span><span class="p">,</span><span class="w"> </span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_voltage</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="n">dev_info</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xxx_voltage_func set error %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="uboot">
+<h2><span class="section-number">4.3.7.4. </span>uboot下修改电压域<a class="headerlink" href="#uboot" title="永久链接至标题"></a></h2>
+<p>在uboot源码 board/hobot/xj3/xj3.c 文件中，根据硬件实际电压情况，调用init_io_vol接口配置电压域，如果硬件上面管脚的电源域是1.8v那么改管脚对应的位是1，如果是3.3v则该管脚对应的bit是0，最后面把拼成的16进制值value写入base+0x170和base+0x174中（base： 0xA6003000），寄存器详细说明可以查阅《RM-2500-5-X3 Register Reference Manual-GPIO&amp;PIN-V1.1.pdf》</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">init_io_vol</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">base_board_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span> <span class="nc">hb_info_hdr</span><span class="w"> </span><span class="o">*</span><span class="n">bootinfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span> <span class="nc">hb_info_hdr</span><span class="o">*</span><span class="p">)</span><span class="n">HB_BOOTINFO_ADDR</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">hb_board_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bootinfo</span><span class="o">-&gt;</span><span class="n">board_id</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* work around solution for xj3 bring up ethernet,</span>
+<span class="cm">     * all io to v1.8 except bt1120</span>
+<span class="cm">     * BIFSPI and I2C2 is 3.3v in J3DVB, the other is 1.8v</span>
+<span class="cm">     */</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/*</span>
+<span class="cm">     * 1&#39;b0=3.3v mode;  1&#39;b1=1.8v mode</span>
+<span class="cm">     * 0x170 bit[3]       sd2</span>
+<span class="cm">     *       bit[2]       sd1</span>
+<span class="cm">     *       bit[1:0]     sd0</span>
+<span class="cm">     *</span>
+<span class="cm">     * 0x174 bit[11:10]   rgmii</span>
+<span class="cm">     *       bit[9]       i2c2</span>
+<span class="cm">     *       bit[8]       i2c0</span>
+<span class="cm">     *       bit[7]       reserved</span>
+<span class="cm">     *       bit[6:4]     bt1120</span>
+<span class="cm">     *       bit[3:2]     bifsd</span>
+<span class="cm">     *       bit[1]       bifspi</span>
+<span class="cm">     *       bit[0]       jtag</span>
+<span class="cm">     */</span><span class="w"></span>
+<span class="w">    </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xF0F</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">base_board_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hb_base_board_type_get</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">base_board_id</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">BASE_BOARD_J3_DVB</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xD0D</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">writel</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">GPIO_BASE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">0x174</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">writel</span><span class="p">(</span><span class="mh">0xF</span><span class="p">,</span><span class="w"> </span><span class="n">GPIO_BASE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">0x170</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="11-Pinctrl_Debug_Guide_zh_CN.html" class="btn btn-neutral float-left" title="4.3.6. Pinctrl调试指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="14-SPI_Debug_Guide_zh_CN.html" class="btn btn-neutral float-right" title="4.3.8. SPI调试指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+{
+	"DIRECTORY": ["cache","log","pad_demo"],
+	"FILE": ["userdata/all_in_one.zip"]
+}

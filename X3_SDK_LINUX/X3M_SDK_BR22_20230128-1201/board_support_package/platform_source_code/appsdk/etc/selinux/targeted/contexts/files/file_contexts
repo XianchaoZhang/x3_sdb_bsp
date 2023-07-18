@@ -1,0 +1,120 @@
+#line 1 "file_contexts"
+#line 1 "file_contexts"
+###########################################
+# Root
+/			u:object_r:rootfs:s0
+
+# Data files
+/init.rc		u:object_r:rootfs:s0
+/home(/.*)?   		u:object_r:rootfs:s0
+
+# Executables
+/verity_key		u:object_r:rootfs:s0
+/init			u:object_r:rootfs:s0
+
+
+# Empty directories
+/lost\+found		u:object_r:rootfs:s0
+/proc			u:object_r:rootfs:s0
+/sys            u:object_r:sysfs:s0
+/tftpboot       u:object_r:rootfs:s0
+/tmp            u:object_r:tmpfs:s0
+
+##########################
+# Devices
+#
+/dev         		u:object_r:device:s0
+
+##########################
+/etc(/.*)?     		u:object_r:rootfs:s0
+/etc/init.d/log-daemon  u:object_r:log-daemon_t_exec:s0
+/etc/init.d/syslog    u:object_r:syslog_exec:s0
+/etc/init.d/start_logcat u:object_r:start_logcat_exec:s0
+#/etc/init.d/chip_log.sh  u:object_r:chip_log_sh_exec:s0
+/etc/rcS.d/S9updatecheck.sh  u:object_r:S9updatecheck_exec:s0
+/etc/init.d/dropbear         u:object_r:dropbear_sh_exec:s0
+/etc/init.d/tftpd-hpa    u:object_r:tftpd_sh_exec:s0
+/etc/init.d/haveged      u:object_r:haveged_sh_exec:s0
+/etc/init.d/appinit.sh   u:object_r:appinit_exec:s0
+/etc/ld.so.conf          u:object_r:ld_config:s0
+/etc/ld.so.cache         u:object_r:ld_config:s0
+/etc/selinux(/.*)?       u:object_r:security_file:s0
+
+#############################
+# /usr files
+#
+/usr(/.*)?		u:object_r:system_file:s0
+/usr/lib(/.*)?		u:object_r:system_lib_file:s0
+/usr/libexec(/.*)?		u:object_r:system_lib_file:s0
+/usr/include		  u:object_r:system_lib_file:s0
+/usr/include/.*		  u:object_r:system_lib_file:s0
+/usr/share(/.*)?		u:object_r:system_lib_file:s0
+/usr/bin(/.*)?		u:object_r:system_file:s0
+/usr/sbin(/.*)?		u:object_r:system_file:s0
+/usr/sbin/chronyd   u:object_r:chronyd_exec:s0
+/usr/sbin/dropbear u:object_r:dropbear_exec:s0
+/usr/sbin/dropbearmulti u:object_r:dropbear_exec:s0
+/usr/sbin/in.tftpd-hpa  u:object_r:tftpd_exec:s0
+#/usr/sbin/telnetd  u:object_r:telnetd_exec:s0
+/usr/sbin/haveged  u:object_r:haveged_exec:s0
+/usr/bin/logcat    u:object_r:logcat_exec:s0
+/usr/bin/chip_log  u:object_r:chip_log_exec:s0
+#/usr/bin/rhode_upgrade u:object_r:rhode_upgrade_exec:s0
+/usr/bin/adbd       u:object_r:adbd_exec:s0
+/usr/bin/hobot-log   u:object_r:hobot-log_exec:s0
+/usr/bin/hbota_utility   u:object_r:hbota_utility_exec:s0
+
+#############################
+# /bin files#
+/bin(/.*)?          u:object_r:rootfs:s0
+/bin/sh	            u:object_r:shell_exec:s0
+/bin/busybox	    u:object_r:shell_exec:s0
+/bin/start_getty    u:object_r:start_getty_exec:s0
+
+#############################
+# /sbin files
+#
+/sbin(/.*)?		    u:object_r:rootfs:s0
+#/sbin/udevd	        u:object_r:udevd_exec:s0
+/sbin/getty         u:object_r:getty_exec:s0
+/sbin/klogd         u:object_r:klogd_exec:s0
+/sbin/syslogd       u:object_r:syslog_exec:s0
+/sbin/init-ad       u:object_r:init_exec:s0
+
+#############################
+# /userdata files
+#
+/userdata(/.*)?    		u:object_r:system_data_file:s0
+
+#############################
+#app mnt
+/app(/.*)?               u:object_r:app_file:s0
+/mnt(/.*)?               u:object_r:mnt_file:s0
+
+#############################
+#app_param
+#/app_param(/.*)?           u:object_r:app_param_data:s0
+
+#############################
+# /lib
+/lib(/.*)?             u:object_r:lib_file:s0
+/lib/modules/.*/(/.*)?             u:object_r:lib_file:s0
+/include               u:object_r:lib_file:s0
+/include/.*            u:object_r:lib_file:s0
+
+#############################
+# /run /var file
+/run(/.*)?               u:object_r:tmpfs:s0
+/var(/.*)?               u:object_r:var_file:s0
+
+#############################
+# /log file
+#/log(/.*)?                u:object_r:log_file:s0
+
+#############################
+# /map file
+#/map(/.*)?                 u:object_r:map_file:s0
+
+#############################
+# /media file
+/media            u:object_r:tmpfs:s0

@@ -1,0 +1,160 @@
+# ADC调试指南
+
+## 前言
+
+X3J3 芯片PVT模块（Process Voltage Temperature）包含3种功能：
+
+-   Process Detector：工艺制程探测，无需软件驱动；
+
+-   Voltage Monitor：16通道的电压检测，用于监测芯片某些模块的电压；
+
+-   Temperature Sensor：4个点的温度传感器，用于监测芯片某些模块的温度；
+
+其中，Voltage Monitor模块有一路通道被接到了外部芯片引脚上，因此可以利用该通道作为一路轻量级ADC，该通道可以测量0-1V的电压，采样精度为14bit。
+
+## 内核软件
+```bash
+drivers/hwmon/hobot-pvt-vm.c # pvt-vm 驱动代码源文件, ADC模块的驱动
+
+drivers/hwmon/hobot-pvt.h # pvt-vm ADC驱动代码头文件
+```
+### 内核配置
+```bash
+arch/arm64/configs/xj3_debug_defconfig # kernel配置文件路径(debug)
+
+arch/arm64/configs/xj3_perf_defconfig # kernel配置文件路径(release)
+
+CONFIG_IIO=y # kernel iio设备的支持
+
+CONFIG_SENSORS_HOBOT_PVT=y # X3J3 I2C驱动配置
+```
+### 内核DTS配置
+```c
+/* arch/arm64/boot/dts/hobot/hobot-xj3.dtsi */
+
+pvt: pvt@0xA1009000 {
+
+    compatible = "hobot,hobot-pvt";
+
+    reg = <0 0xA1009000 0 0x1000>,
+
+        <0 0xA6008000 0 0x100>;
+
+    interrupt-parent = <&gic>;
+
+    interrupts = <0 64 4>;
+
+    clocks = <&sys_div_pclk>;
+
+    clock-names = "sys_pclk";
+
+    #thermal-sensor-cells = <0>;
+
+    voltage_monitor: voltage_monitor {
+
+        #io-channel-cells = <1>;
+
+    };
+
+};
+```
+<font color=red>备注：</font>
+
+有关pvt的DTS，其中并无和板级相关的信息，客户一般不需要进行更改，如果客户不需要pvt的vm模块加载，只要删除voltage_monitor节点即可。
+
+## ADC使用
+
+### Kernel Space
+
+#### DTS配置
+
+Kernel Space某个模块或驱动使用ADC通道时，首先需要在驱动或模块的DTS中配置adc的节点和通道，示例如下：
+```c
+/* arch/arm64/boot/dts/hobot/hobot-xj3.dtsi */
+
+adc_key: adc_key {
+
+    compatible = "hobot,hobot-adc-key";
+
+    status = "disabled";
+
+    io-channels = <&voltage_monitor 0>; 
+
+    demo-key{
+        linux,code = <108>; 
+        label = "demo key"; 
+        hobot,adc_value = <130>;
+    };
+
+};
+```
+然后驱动或模块需要在代码中调用iio_channel_get来获取iio的channel：
+```c
+/* drivers/input/misc/hobot-key.c */
+
+static int hobot_keys_parse_dt (...)
+
+{
+
+    struct iio_channel *chan;
+
+    ...
+
+    chan = iio_channel_get(&pdev->dev, NULL);
+
+    if (IS_ERR(chan)) {
+
+        dev_info(&pdev->dev, "no io-channels defined\n");
+
+        chan = NULL;
+
+        return -ENAVAIL;
+
+    }
+
+    ...
+
+}
+```
+在获取channel成功以后，在需要读取adc的值时，调用iio_read_channel_raw就可以读取adc的值，需要注意的是，通过X3J3
+adc驱动读取到的adc值表示单位为uv的电压值。
+```bash
+/* drivers/input/misc/hobot-key.c */
+
+static int hobot_key_adc_iio_read (struct hobot_keys_drvdata *data)
+
+{
+
+    struct iio_channel *channel = data->chan;
+
+    int val, ret;
+
+    if (!channel)
+
+        return INVALID_ADVALUE;
+
+    ret = iio_read_channel_raw(channel, &val);
+
+    if (ret < 0) {
+
+        pr_err("read channel() error: %d\n", ret);
+
+        return ret;
+
+    }
+
+    return val / 1000;
+
+}
+```
+## User Space
+
+adc各个通道的电压可以通过sysfs下的节点来读取，以通道0为例：
+```bash
+# in_voltageN_raw 表示通道N
+
+cat /sys/bus/iio/devices/iio:device0/in_voltage0_raw
+```
+## 附录
+
+drivers/input/misc/hobot-key.c为ADC键盘的驱动，客户可根据自己的需要进行更改和二次开发。

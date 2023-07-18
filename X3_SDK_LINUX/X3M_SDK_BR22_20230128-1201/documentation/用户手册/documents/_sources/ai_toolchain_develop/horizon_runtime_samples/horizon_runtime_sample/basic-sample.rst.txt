@@ -1,0 +1,425 @@
+简介
+=========
+
+本章节介绍模型上板运行 horizon_runtime_sample 示例包的具体用法，开发者可以体验并基于这些示例进行应用开发，降低开发门槛。
+
+示例包提供三个方面的示例：
+
+- 模型推理 dnn API使用示例。
+- 自定义算子（custom OP）等特殊功能示例。
+- 非NV12输入模型的杂项示例。
+
+详细内容请阅读下文。
+
+.. tip::
+
+  horizon_runtime_sample 示例包获取请参考 `《交付物说明》 <../../env_install.html#id2>`_。 
+
+
+示例代码包结构介绍
+--------------------
+
+.. code-block:: bash
+
+  +---horizon_runtime_sample
+  ├── code                        # 示例源码
+  │   ├── 00_quick_start          # 快速入门示例,用mobilenetv1读取单张图片进行推理的示例代码
+  │   │   ├── CMakeLists.txt
+  │   │   ├── CMakeLists_x86.txt
+  │   │   └── src
+  │   ├── 01_api_tutorial         # dnn API使用示例代码
+  │   │   ├── CMakeLists.txt
+  │   │   ├── mem
+  │   │   ├── model
+  │   │   ├── resize
+  │   │   ├── roi_infer
+  │   │   └── tensor
+  │   ├── 02_advanced_samples     # 特殊功能示例
+  │   │   ├── CMakeLists.txt
+  │   │   ├── custom_identity
+  │   │   └── multi_model_batch
+  │   ├── 03_misc                 # 杂项示例
+  │   │   ├── CMakeLists.txt
+  │   │   ├── lenet_gray
+  │   │   └── resnet_feature
+  │   ├── build_xj3.sh            # aarch64编译脚本
+  │   ├── build_x86.sh            # x86编译脚本
+  │   ├── CMakeLists.txt
+  │   ├── CMakeLists_x86.txt
+  │   └── deps/deps_gcc9.3        # 编译依赖库，gcc6.5环境为deps，gcc9.3为deps_gcc9.3
+  │       ├── aarch64             # aarch64依赖库
+  │       └── x86                 # x86模拟器依赖库
+  ├── xj3
+  │   ├── data                    # 预置数据文件
+  │   │   ├── cls_images
+  │   │   ├── det_images
+  │   │   ├── misc_data
+  │   ├── model
+  │   │   ├── README.md
+  │   │   └── runtime -> ../../../model_zoo/runtime   # 软链接指向OE包中的模型，板端运行环境需要自行制定模型路径
+  │   └── script                  # aarch64 示例运行脚本
+  │   │    ├── 00_quick_start
+  │   │    ├── 01_api_tutorial
+  │   │    ├── 02_advanced_samples
+  │   │    ├── 03_misc
+  │   │    ├── aarch64             # 编译产生aarch64可执行程序及依赖库
+  │   │    └── README.md
+  │   └── script_x86               # x86 示例运行脚本
+  │   │    ├── 00_quick_start
+  │   │    ├── x86                 # 编译产生x86可执行程序及依赖库
+  │   │    └── README.md
+  └── README.md
+
+- **00_quick_start**：快速入门示例，基于 ``dnn`` API，用mobilenetv1进行单张图片模型推理和结果解析。
+- **01_api_tutorial**： ``dnn`` API使用教学代码， 包括 **mem**， **model**， **resize**， **roi_infer** 和 **tensor** 五部分。
+- **02_advanced_samples**：特殊功能示例，包括自定义算子（ **CustomIdentity** ）功能。
+- **03_misc**：非NV12输入模型的杂项示例。
+- **xj3/**：示例运行脚本，预置了数据和相关模型。
+- **build_xj3.sh**：程序一键编译脚本。
+- **deps/deps_gcc9.3**：示例代码所需要的三方依赖, 用户在开发自己代码程序的时候可以根据实际情况替换或者裁剪。
+
+
+.. attention::
+
+  私有模型上板运行，请参考 ``00_quick_start/src/run_mobileNetV1_224x224.cc`` 示例代码流程进行代码重写，编译成功后可以在开发板上测试验证！
+
+
+环境构建
+===========
+
+开发板准备
+---------------
+
+1. 拿到开发板后，请按照镜像升级说明升级系统到地平线整包交付物SDK对应的系统版本。开发板升级步骤，请参考章节  `镜像升级方法 <../../../quick_start/Firmware_Update.html>`_。
+
+2. 确保本地开发机和开发板可以远程连接。
+
+编译
+--------
+
+​编译需要当前环境安装好交叉编译工具： ``aarch64-linux-gnu-g++`` ， ``aarch64-linux-gnu-gcc``。 若使用地平线提供的开发机模型转换编译环境，请直接进行编译使用。开发机模型转换编译环境的使用方法，请阅读 `环境安装 <../../env_install.html>`_ 章节内容，
+反之，请检查gcc交叉编译器是否正确安装，请阅读 `安装交叉编译工具链 <../../../bsp_develop/Bsp_Develop.html#id1>`_ 章节内容。
+请使用horizon_runtime_sample/code目录下的 ``build_xj3.sh`` 脚本，即可一键编译开发板环境下的可执行程序，可执行程序和对应依赖会自动复制到 ``xj3/script`` 目录下的 ``aarch64`` 目录下。
+
+.. note::
+
+  工程通过获取环境变量 ``LINARO_GCC_ROOT`` 来指定交叉编译工具的路径，用户使用之前可以检查本地的环境变量是否为目标交叉编译工具。
+  如果需要指定交叉编译工具路径，可以设置环境变量 ``LINARO_GCC_ROOT`` , 或者直接修改脚本 ``build_ptq_xj3.sh`` ，指定变量 ``CC`` 和 ``CXX``。
+
+.. code-block:: shell
+
+  export CC=${GCC_ROOT}/bin/aarch64-linux-gnu-gcc
+  export CXX=${GCC_ROOT}/bin/aarch64-linux-gnu-g++
+
+
+示例使用
+==============
+
+basic_samples 示例
+-----------------------
+
+模型推理​示例脚本主要在 xj3/script 和 xj3/script_x86 目录下，编译程序后目录结构如下:
+
+.. code-block:: shell
+
+    ├─script
+      ├── 00_quick_start
+      │   ├── README.md
+      │   └── run_mobilenetV1.sh
+      ├── 01_api_tutorial
+      │   ├── model.sh
+      │   ├── README.md
+      │   ├── resize_bgr.sh
+      │   ├── resize_y.sh
+      │   ├── roi_infer.sh
+      │   ├── sys_mem.sh
+      │   └── tensor.sh
+      ├── 02_advanced_samples
+      │   ├── custom_arm_op_custom_identity.sh
+      │   ├── README.md
+      │   └── run_multi_model_batch.sh
+      ├── 03_misc
+      │   ├── README.md
+      │   ├── run_lenet.sh
+      │   └── run_resnet50_feature.sh
+      ├── aarch64                        # 编译产生可执行程序及依赖库
+      │   ├── bin
+      │   │   ├── model_example
+      │   │   ├── resize_bgr_example
+      │   │   ├── resize_y_example
+      │   │   ├── roi_infer
+      │   │   ├── run_custom_op
+      │   │   ├── run_lenet_gray
+      │   │   ├── run_mobileNetV1_224x224
+      │   │   ├── run_multi_model_batch
+      │   │   ├── run_resnet_feature
+      │   │   ├── sys_mem_example
+      │   │   └── tensor_example
+      │   └── lib
+      │       ├── libdnn.so
+      │       ├── libhbrt_bernoulli_aarch64.so
+      │       └── libopencv_world.so.3.4
+      └── README.md
+
+    ├─script_x86
+      ├── 00_quick_start
+      │   ├── README.md
+      │   └── run_mobilenetV1.sh
+      ├── x86                             # 编译产生x86可执行程序及依赖库
+      │   ├── bin
+      │   │   ├── run_mobileNetV1_224x224
+      │   └── lib
+      │       ├── libdnn.so
+      │       ├── libhbdk_sim_x86.so
+      │       └── libopencv_world.so.3.4
+      └── README.md
+
+.. note::
+    - model文件夹下包含模型的路径，其中 ``runtime`` 文件夹为软链接，链接路径为 ``../../../data/runtime`` ，可直接找到交付包中的模型路径
+    - 板端运行环境需要将模型放至 ``model`` 文件夹下
+
+quick_start
+~~~~~~~~~~~~~~~~~~~~
+
+00_quick_start 目录下的是模型推理的快速开始示例：
+
+.. code-block:: shell
+
+  00_quick_start/
+  ├── README.md
+  └── run_mobilenetV1.sh
+
+- ``run_mobilenetV1.sh`` ：该脚本实现使用mobilenetv1模型读取单张图片进行推理的示例功能。
+
+
+api_tutorial
+~~~~~~~~~~~~~~~~
+
+01_api_tutorial 目录下的示例，用于引导开发者如何使用嵌入式API。其目录包含以下脚本：
+
+.. code-block:: shell
+
+  ├── model.sh
+  ├── resize_bgr.sh
+  ├── resize_y.sh
+  ├── roi_infer.sh
+  ├── sys_mem.sh
+  └── tensor.sh
+
+
+-  ``model.sh`` ：该脚本主要实现读取模型信息的功能。
+   使用的时候，直接进入 01_api_tutorial 目录，然后直接执行 ``sh model.sh`` 即可，如下所示：
+
+ .. code-block:: shell
+
+    #!/bin/sh
+
+    root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/01_api_tutorial# sh model.sh
+    ../aarch64/bin/model_example --model_file_list=../../model/runtime/mobilenetv1/mobilenetv1_nv12_hybrid_horizonrt.bin
+    I0000 00:00:00.000000 24638 vlog_is_on.cc:197] RAW: Set VLOG level for "*" to 3
+    [HBRT] set log level as 0. version = 3.12.1
+    [BPU_PLAT]BPU Platform Version(1.2.2)!
+    [HorizonRT] The model builder version = 1.3.3
+    I0108 04:19:27.245879 24638 model_example.cc:104] model count:1, model[0]: mobilenetv1_nv12
+    I0108 04:19:27.246064 24638 model_example.cc:112] hbDNNGetModelHandle [mobilenetv1_nv12] success!
+    I0108 04:19:27.246139 24638 model_example.cc:189] [mobilenetv1_nv12] Model Info:  input num: 1, input[0] validShape: ( 1, 3, 224, 224 ), alignedShape: ( 1, 4, 224, 224 ), tensorLayout: 2, tensorType: 1, output num: 1, output[0] validShape: ( 1, 1000, 1, 1 ), alignedShape: ( 1, 1000, 1, 1 ), tensorLayout: 2, tensorType: 13
+
+-  ``resize_bgr.sh`` ：该脚本主要引导如何使用 ``hbDNNResize`` 这个API，
+   示例实现的代码功能是将一张1352x900大小的图片，截取图片中坐标为[5，19，340，343]的部分，然后resize到402x416并保存下来。
+   使用的时候，直接进入 01_api_tutorial 目录，然后直接执行 ``sh resize_bgr.sh`` 即可，如下所示：
+
+  .. code-block:: shell
+
+    #!/bin/sh
+
+    root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/01_api_tutorial# sh resize_bgr.sh
+    ../aarch64/bin/resize_bgr_example --image_file=../../data/det_images/kite.jpg --resize_height=416 --resize_width=402 --resized_image=./resize_bgr.jpg --crop_x1=5 --crop_x2=340 --crop_y1=19 --crop_y2=343
+    I0000 00:00:00.000000 24975 vlog_is_on.cc:197] RAW: Set VLOG level for "*" to 3
+    I0108 06:58:03.327212 24975 resize_bgr_example.cc:116] Original shape: 1352x900 ,dest shape:402x416 ,aligned shape:402x416
+    [HBRT] set log level as 0. version = 3.12.1
+    [BPU_PLAT]BPU Platform Version(1.2.2)!
+    I0108 06:58:03.328739 24975 resize_bgr_example.cc:139] resize success!
+    I0108 06:58:03.335835 24975 resize_bgr_example.cc:143] wait task done finished!
+
+  执行成功后，当前目录会成功保存名称为resize_bgr.jpg的图片。
+
+-  ``resize_y.sh`` ：该脚本主要引导如何使用 ``hbDNNResize`` 这个API，示例代码实现的功能是将一张图片resize到416x402。
+   使用的时候，直接进入 01_api_tutorial 目录，然后直接执行 ``sh resize_y.sh`` 即可，如下所示：
+
+  .. code-block:: shell
+
+    #!/bin/sh
+
+    root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/01_api_tutorial# sh resize_y.sh
+    ../aarch64/bin/resize_y_example --image_file=../../data/det_images/kite.jpg --resize_height=416 --resize_width=402 --resized_image=./resize_y.jpg
+    I0000 00:00:00.000000 24992 vlog_is_on.cc:197] RAW: Set VLOG level for "*" to 3
+    I0108 06:59:36.887241 24992 resize_y_example.cc:101] Original shape: 1352x900 ,dest shape:402x416 ,aligned shape:402x416
+    [HBRT] set log level as 0. version = 3.12.1
+    [BPU_PLAT]BPU Platform Version(1.2.2)!
+    I0108 06:59:36.888770 24992 resize_y_example.cc:119] resize success
+    I0108 06:59:36.891711 24992 resize_y_example.cc:123] wait resize success
+    I0108 06:59:36.891798 24992 resize_y_example.cc:129] spent time: 0.003463
+
+  ​执行成功后，当前目录会成功保存名称为resize_y.jpg的图片。
+
+- ``roi_infer.sh`` ： 该脚本主要引导如何使用 ``hbDNNRoiInfer`` 这个API，示例代码实现的功能是将一张图片resize到模型输入大小，转为nv12数据，并给定roi框进行模型推理（infer）。
+  使用的时候，直接进入 01_api_tutorial 目录，然后直接执行 ``sh roi_infer.sh`` 即可。
+
+- ``sys_mem.sh`` ：该脚本主要引导如何使用 ``hbSysAllocMem``、 ``hbSysFlushMem`` 和 ``hbSysFreeMem`` 这几个API。使用的时候，直接进入 01_api_tutorial 目录，执行 ``sh sys_mem.sh`` 即可。
+
+- ``tensor.sh`` ：该脚本主要引导如何准备模型输入和输出的tensor。
+  使用的时候，直接进入 01_api_tutorial 目录，执行 ``sh tensor.sh`` 即可，如下所示：
+
+  .. code-block:: shell
+
+    root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/01_api_tutorial# sh tensor.sh
+    Tensor data type:0, Tensor layout: 2, shape:1x1x721x1836, aligned shape:1x1x721x1840
+    Tensor data type:1, Tensor layout: 2, shape:1x3x773x329, aligned shape:1x3x773x336
+    Tensor data type:2, Tensor layout: 2, shape:1x3x108x1297, aligned shape:1x3x108x1312
+    Tensor data type:5, Tensor layout: 2, shape:1x3x858x477, aligned shape:1x3x858x477
+    Tensor data type:5, Tensor layout: 0, shape:1x920x102x3, aligned shape:1x920x102x3
+    Tensor data type:4, Tensor layout: 2, shape:1x3x723x1486, aligned shape:1x3x723x1486
+    Tensor data type:4, Tensor layout: 0, shape:1x372x366x3, aligned shape:1x372x366x3
+    Tensor data type:3, Tensor layout: 2, shape:1x3x886x291, aligned shape:1x3x886x291
+    Tensor data type:3, Tensor layout: 0, shape:1x613x507x3, aligned shape:1x613x507x3
+
+
+advanced_samples
+~~~~~~~~~~~~~~~~~~~~~~~
+
+02_advanced_samples 目录下的示例，用于介绍自定义算子特殊功能的使用。其目录包含以下脚本：
+
+.. code-block:: shell
+
+  ├── custom_arm_op_custom_identity.sh
+  └── run_multi_model_batch.sh
+  
+
+- ``custom_arm_op_custom_identity.sh`` ：该脚本主要实现自定义算子模型推理功能，
+  使用的时候，进入 02_advanced_samples 目录, 然后直接执行 ``sh custom_arm_op_custom_identity.sh`` 即可，如下所示：
+
+  .. code-block:: shell
+
+    root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/02_advanced_samples# sh custom_arm_op_custom_identity.sh
+    ../aarch64/bin/run_custom_op --model_file=../../model/runtime/googlenet_cop/googlenet_cop_224x224_nv12.bin --image_file=../../data/cls_images/zebra_cls.jpg --image_height=224 --image_width=224 --top_k=5
+    I0000 00:00:00.000000 25036 vlog_is_on.cc:197] RAW: Set VLOG level for "*" to 3
+    I0108 07:04:16.743277 25036 main.cpp:138] hbDNNRegisterLayerCreator success
+    [HBRT] set log level as 0. version = 3.12.1
+    [BPU_PLAT]BPU Platform Version(1.2.2)!
+    [HorizonRT] The model builder version = 1.3.4
+    I0108 07:04:16.902737 25036 main.cpp:153] hbDNNGetModelNameList success
+    I0108 07:04:16.902809 25036 main.cpp:160] hbDNNGetModelHandle success
+    I0108 07:04:16.920487 25036 main.cpp:169] read image to nv12 success
+    I0108 07:04:16.920793 25036 main.cpp:179] prepare nv12 tensor success
+    I0108 07:04:16.920900 25036 main.cpp:189] prepare tensor success
+    I0108 07:04:16.922179 25036 main.cpp:200] hbDNNInfer success
+    I0108 07:04:16.996123 25036 main.cpp:205] task done
+    I0108 07:04:16.996308 25036 main.cpp:210] task post process success
+    I0108 07:04:16.996355 25036 main.cpp:217] TOP 0 result id: 340
+    I0108 07:04:16.996380 25036 main.cpp:217] TOP 1 result id: 351
+    I0108 07:04:16.996403 25036 main.cpp:217] TOP 2 result id: 83
+    I0108 07:04:16.996426 25036 main.cpp:217] TOP 3 result id: 352
+    I0108 07:04:16.996448 25036 main.cpp:217] TOP 4 result id: 353
+
+- ``run_multi_model_batch.sh`` ：该脚本主要实现多个小模型批量推理功能，
+  使用的时候，进入 02_advanced_samples 目录, 然后直接执行 ``sh run_multi_model_batch.sh`` 即可，如下所示：
+
+  .. code-block:: shell
+  
+    root@x3sdbx3-hynix2G-3200:/userdata/chaoliang/xj3/script/02_advanced_samples# sh run_multi_model_batch.sh
+    ../aarch64/bin/run_multi_model_batch --model_file=../../model/runtime/googlenet/googlenet_224x224_nv12.bin,../../model/runtime/mobilenetv2/mobilenetv2_224x224_nv12.bin --input_file=../../data/cls_images/zebra_cls.jpg,../../data/cls_images/zebra_cls.jpg
+    I0000 00:00:00.000000 17060 vlog_is_on.cc:197] RAW: Set VLOG level for "*" to 3
+    [HBRT] set log level as 0. version = 3.13.4
+    [BPU_PLAT]BPU Platform Version(1.1.1)!
+    [HorizonRT] The model builder version = 1.3.18
+    [HorizonRT] The model builder version = 1.3.18
+    I0317 12:37:18.249785 17060 main.cpp:119] hbDNNInitializeFromFiles success
+    I0317 12:37:18.250029 17060 main.cpp:127] hbDNNGetModelNameList success
+    I0317 12:37:18.250071 17060 main.cpp:141] hbDNNGetModelHandle success
+    I0317 12:37:18.283633 17060 main.cpp:155] read image to nv12 success
+    I0317 12:37:18.284270 17060 main.cpp:172] prepare input tensor success
+    I0317 12:37:18.284456 17060 main.cpp:184] prepare output tensor success
+    I0317 12:37:18.285344 17060 main.cpp:218] infer success
+    I0317 12:37:18.296559 17060 main.cpp:223] task done
+    I0317 12:37:18.296701 17060 main.cpp:228] googlenet class result id: 340
+    I0317 12:37:18.296805 17060 main.cpp:232] mobilenetv2 class result id: 340
+    I0317 12:37:18.296887 17060 main.cpp:236] release task success
+
+misc
+~~~~~~~~~~~~~~~~
+
+03_misc 目录下的示例，用于介绍非nv12输入模型的使用。其目录包含以下脚本：
+
+.. code-block:: shell
+
+  ├── run_lenet.sh
+  └── run_resnet50_feature.sh
+
+- ``run_lenet.sh`` ：该脚本主要实现Y数据输入的lenet模型推理功能，
+  使用的时候，进入 03_misc 目录, 然后直接执行 ``sh run_lenet.sh`` 即可，如下所示：
+
+  .. code-block:: shell
+
+    root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/03_misc# sh run_lenet.sh
+    ../aarch64/bin/run_lenet_gray --model_file=../../model/runtime/lenet_gray/lenet_gray_hybrid_horizonrt.bin --data_file=../../data/misc_data/7.bin --image_height=28 --image_width=28 --top_k=5
+    I0000 00:00:00.000000 25139 vlog_is_on.cc:197] RAW: Set VLOG level for "*" to 3
+    [HBRT] set log level as 0. version = 3.12.1
+    [BPU_PLAT]BPU Platform Version(1.2.2)!
+    [HorizonRT] The model builder version = 1.3.3
+    I0108 07:23:35.507514 25139 run_lenet_gray.cc:145] hbDNNInitializeFromFiles success
+    I0108 07:23:35.507737 25139 run_lenet_gray.cc:153] hbDNNGetModelNameList success
+    I0108 07:23:35.507771 25139 run_lenet_gray.cc:160] hbDNNGetModelHandle success
+    I0108 07:23:35.508070 25139 run_lenet_gray.cc:176] prepare y tensor success
+    I0108 07:23:35.508178 25139 run_lenet_gray.cc:189] prepare tensor success
+    I0108 07:23:35.509909 25139 run_lenet_gray.cc:200] infer success
+    I0108 07:23:35.510721 25139 run_lenet_gray.cc:205] task done
+    I0108 07:23:35.510790 25139 run_lenet_gray.cc:210] task post process finished
+    I0108 07:23:35.510832 25139 run_lenet_gray.cc:217] TOP 0 result id: 7
+    I0108 07:23:35.510857 25139 run_lenet_gray.cc:217] TOP 1 result id: 9
+    I0108 07:23:35.510879 25139 run_lenet_gray.cc:217] TOP 2 result id: 3
+    I0108 07:23:35.510903 25139 run_lenet_gray.cc:217] TOP 3 result id: 4
+    I0108 07:23:35.510927 25139 run_lenet_gray.cc:217] TOP 4 result id: 2
+
+- ``run_resnet50_feature.sh`` ：该脚本主要实现feature数据输入的resnet50模型推理功能，
+  使用的时候，进入 03_misc 目录, 然后直接执行 ``sh run_resnet50_feature.sh`` 即可，如下所示：
+
+  .. code-block:: shell
+
+    root@x3sdbx3-samsung2G-3200:/userdata/ruxin.song/xj3/script/03_misc# sh run_resnet50_feature.sh
+    ../aarch64/bin/run_resnet_feature --model_file=../../model/runtime/resnet50_feature/resnet50_feature_hybrid_horizonrt.bin --data_file=../../data/misc_data/np_0 --top_k=5
+    I0000 00:00:00.000000 25155 vlog_is_on.cc:197] RAW: Set VLOG level for "*" to 3
+    [HBRT] set log level as 0. version = 3.12.1
+    [BPU_PLAT]BPU Platform Version(1.2.2)!
+    [HorizonRT] The model builder version = 1.3.3
+    I0108 07:25:41.300466 25155 run_resnet_feature.cc:136] hbDNNInitializeFromFiles success
+    I0108 07:25:41.300708 25155 run_resnet_feature.cc:144] hbDNNGetModelNameList success
+    I0108 07:25:41.300741 25155 run_resnet_feature.cc:151] hbDNNGetModelHandle success
+    I0108 07:25:41.302760 25155 run_resnet_feature.cc:166] prepare feature tensor success
+    I0108 07:25:41.302919 25155 run_resnet_feature.cc:176] prepare tensor success
+    I0108 07:25:41.304678 25155 run_resnet_feature.cc:187] infer success
+    I0108 07:25:41.373052 25155 run_resnet_feature.cc:192] task done
+    I0108 07:25:41.373328 25155 run_resnet_feature.cc:197] task post process finished
+    I0108 07:25:41.373374 25155 run_resnet_feature.cc:204] TOP 0 result id: 74
+    I0108 07:25:41.373399 25155 run_resnet_feature.cc:204] TOP 1 result id: 815
+    I0108 07:25:41.373422 25155 run_resnet_feature.cc:204] TOP 2 result id: 73
+    I0108 07:25:41.373445 25155 run_resnet_feature.cc:204] TOP 3 result id: 78
+    I0108 07:25:41.373468 25155 run_resnet_feature.cc:204] TOP 4 result id: 72
+
+辅助工具和常用操作
+====================
+
+日志
+---------
+
+​本章节主要包括 ``示例日志`` 和 ``模型推理 DNN API日志`` 两部分。
+其中示例日志是指交付包示例代码中的应用日志；模型推理 dnn API日志是指嵌入式dnn库中的日志。用户根据不同的需求可以获取不同的日志信息。
+
+示例日志
+~~~~~~~~~~~
+
+示例日志主要采用glog中的vlog，basic_samples参考示例中，日志内容会全部输出。
+
+模型推理 DNN API日志
+~~~~~~~~~~~~~~~~~~~~~~~
+
+关于模型推理 DNN API日志的配置，请阅读 `《模型推理接口使用说明》 <../bpu_sdk_api_doc/bpu_sdk_api_doc_cn.html#id20>`_ 文档中的 ``配置信息`` 一节内容。

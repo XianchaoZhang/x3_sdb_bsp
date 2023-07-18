@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.6. Pinctrl调试指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.3.7. IO-DOMAIN调试指南" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html" />
+    <link rel="prev" title="4.3.5. GPIO调试指南" href="10-GPIO_Debug_Guide_zh_CN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.3.6. Pinctrl调试指南</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.3.6.1. 前言</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">4.3.6.2. 管脚查询</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id3">驱动代码</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id4">内核配置</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#pinctrldts">Pinctrl的DTS配置</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">4.3.6.3. Pinctrl使用</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#dts">驱动DTS配置</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#pin-mux">Pin-mux配置</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id6">驱动强度配置</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id7">上下拉配置</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id8">施密特触发配置</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#id9">驱动调用示例代码</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id10">用户空间调试</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.6. </span>Pinctrl调试指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="10-GPIO_Debug_Guide_zh_CN.html" class="btn btn-neutral float-left" title="4.3.5. GPIO调试指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="12-IO-DOMAIN_Debug_Guide_zh_CN.html" class="btn btn-neutral float-right" title="4.3.7. IO-DOMAIN调试指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pinctrl">
+<h1><span class="section-number">4.3.6. </span>Pinctrl调试指南<a class="headerlink" href="#pinctrl" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">4.3.6.1. </span>前言<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>X3 Pinctrl使用Linux Kernel主线代码的pinctl-single作为驱动，主要通过配置DTS来实现pinctrl功能。</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">4.3.6.2. </span>管脚查询<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>IO管脚的复用和配置可以查阅《PL-2500-3-X3 PIN SW Reg-V1.2.xls》。</p>
+<p>在 《PL-2500-3-X3 PIN SW Reg-V1.2.xls》可以比较直观的查询到管脚的上电默认状态、复用、驱动能力、上下拉、施密特触发配置。</p>
+<section id="id3">
+<h3>驱动代码<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>drivers/pinctrl/pinctrl-single.c <span class="c1"># pinctrl 驱动代码源文件</span>
+include/linux/platform_data/pinctrl-single.h <span class="c1"># pinctrl 驱动代码头文件</span>
+</pre></div>
+</div>
+<section id="id4">
+<h4>内核配置<a class="headerlink" href="#id4" title="永久链接至标题"></a></h4>
+<p>CONFIG_PINCTRL_SINGLE</p>
+<p><img alt="image-20220321233840795" src="../../_images/image-20220321233840795.png" /></p>
+</section>
+<section id="pinctrldts">
+<h4>Pinctrl的DTS配置<a class="headerlink" href="#pinctrldts" title="永久链接至标题"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>/* arch/arm64/boot/dts/hobot/hobot-pinctrl-xj3.dtsi */
+pinctrl: pinctrl@0xA6004000 {
+    compatible = &quot;pinctrl-single&quot;;
+    reg = &lt;0x0 0xA6004000 0x0 0x200&gt;;
+    #pinctrl-cells = &lt;1&gt;;
+    #gpio-range-cells = &lt;0x3&gt;;
+    pinctrl-single,register-width = &lt;32&gt;;
+    pinctrl-single,function-mask = &lt;0x3FF&gt;;
+    /* pin base, nr pins &amp; gpio function */
+    pinctrl-single,gpio-range = &lt;&amp;range 0 120 3&gt;;
+
+    i2c0_func: i2c0_func {
+        pinctrl-single,pins = &lt; 
+            0x020   (MUX_F0 | DRIVE2_09MA | SCHMITT2_DIS | PULL2_UP)
+            0x024   (MUX_F0 | DRIVE2_09MA | SCHMITT2_DIS | PULL2_UP)
+            &gt;;
+    };
+    ...
+}
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">4.3.6.3. </span>Pinctrl使用<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<section id="dts">
+<h3>驱动DTS配置<a class="headerlink" href="#dts" title="永久链接至标题"></a></h3>
+<p>驱动在使用Pinctrl的接口前，需要在DTS里配置相应的pinctrl配置组，当驱动probe的时候，会将”default”对应的这组Pinctrl配置到寄存器里面，而其它组的配置需要在代码里面解析出来，再选择切换使用，以iar为例：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>/* arch/arm64/boot/dts/hobot/hobot-xj3.dtsi */
+iar: iar@0xA4001000 {
+    compatible = &quot;hobot,hobot-iar&quot;;
+    reg = &lt;0 0xA4301000 0 0x400&gt;, &lt;0 0xA4355000 0 0x1000&gt;;
+    clocks = &lt;&amp;iar_pix_clk&gt;, &lt;&amp;iar_ipi_clk&gt;, &lt;&amp;sif_mclk&gt;;
+    clock-names = &quot;iar_pix_clk&quot;,&quot;iar_ipi_clk&quot;, &quot;sif_mclk&quot;;
+    interrupt-parent = &lt;&amp;gic&gt;;
+    interrupts = &lt;0 69 4&gt;;
+    resets = &lt;&amp;rst 0x40 12&gt;;
+    pinctrl-names = &quot;bt_func&quot;, &quot;rgb_func&quot;, &quot;rgb_gpio_func&quot;, &quot;bt1120_voltage_func&quot;;
+    pinctrl-0 = &lt;&amp;btout_func&gt;;
+    pinctrl-1 = &lt;&amp;rgb_func&gt;;
+    pinctrl-2 = &lt;&amp;rgb_gpio_func&gt;;
+    pinctrl-3 = &lt;&amp;bt1120_1_8v_func&gt;;
+    disp_panel_reset_pin = &lt;28&gt;;
+    reset-names = &quot;iar&quot;;
+    status = &quot;disabled&quot;;
+};
+</pre></div>
+</div>
+<p>iar pinctrl中引用的配置组在arch/arm64/boot/dts/hobot/hobot-pinctrl-xj3.dtsi中，内容如下：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="nl">btout_func</span><span class="p">:</span><span class="w"> </span><span class="n">btout_func</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">pinctrl</span><span class="o">-</span><span class="n">single</span><span class="p">,</span><span class="n">pins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x138</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_ENA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"> </span><span class="cm">/*BT1120_OUT_CLK*/</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x13c</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"> </span><span class="cm">/*BT1120_OUT_DAT0*/</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x140</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x144</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x148</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x14c</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x150</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x154</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x158</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"> </span><span class="cm">/*BT1120_OUT_DAT7*/</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x15c</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"> </span><span class="cm">/*BT1120_OUT_DAT8*/</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x160</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x164</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x168</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x16c</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x170</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x174</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="mh">0x178</span><span class="w">   </span><span class="p">(</span><span class="n">MUX_F0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DRIVE1_12MA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SCHMITT2_DIS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PULL2_DOWN</span><span class="p">)</span><span class="w"> </span><span class="cm">/*BT1120_OUT_DAT15*/</span><span class="w"></span>
+<span class="w">        </span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<p>pinctrl配置组将多个pin配置组合到一起，每个pin的配置包含2列，第一列表示pin脚配置寄存器的偏移地址，值为pin脚号乘以4，例如BT1120_OUT_CLK的Pin脚号为78，因此偏移地址为 78 * 4 = 312 ，转换为16进制就是0x138；第二列表示Pin的功能复用配置 Pin-mux。</p>
+<section id="pin-mux">
+<h4>Pin-mux配置<a class="headerlink" href="#pin-mux" title="永久链接至标题"></a></h4>
+<p>X3 每个芯片的Pin脚支持最多4种功能，在配置某个功能时，客户可以通过寄存器手册查看对应功能的pinmux值，例如Pin脚78的mux配置为0，也就是MUX_F0时Pin的功能为BT1120_OUT_CLK。</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* include/dt-bindings/pinctrl/hobot-xj3.h */</span><span class="w"></span>
+<span class="cm">/* MUX functions for pins */</span><span class="w"></span>
+<span class="cp">#define MUX_F0          0</span>
+<span class="cp">#define MUX_F1          1</span>
+<span class="cp">#define MUX_F2          2</span>
+<span class="cp">#define MUX_F3          3</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h4>驱动强度配置<a class="headerlink" href="#id6" title="永久链接至标题"></a></h4>
+<p>X3 每个Pin脚支持配置最大的输出电流，驱动电流的配置在Pin脚配置寄存器中占输出电流的配置主要分为两类，同样的寄存器值在不同类的Pin上表示的驱动电流不一致，例如DRIVE1上0表示3mA，而DRIVE2上表示6mA，具体某个Pin脚属于哪一类，客户可以通过arch/arm64/boot/dts/hobot/hobot-pinctrl-xj3.dtsi来查看，hobot-pinctrl-xj3.dtsi中已经列出了X3芯片的所有pin脚。</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* include/dt-bindings/pinctrl/hobot-xj3.h */</span><span class="w"></span>
+<span class="cm">/* drive strength definition */</span><span class="w"></span>
+<span class="cp">#define DRIVE_MASK      (4 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_03MA     (0 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_06MA     (0 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_06MA     (1 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_09MA     (1 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_09MA     (2 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_12MA     (2 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_12MA     (3 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_15MA     (3 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_17MA     (4 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_18MA     (4 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_20MA     (5 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_21MA     (5 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_22MA     (6 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_24MA     (6 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_25MA     (7 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_27MA     (7 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_33MA     (8 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_30MA     (8 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_35MA     (9 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_33MA     (9 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_37MA     (10 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_36MA     (10 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_39MA     (11 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_39MA     (11 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_41MA     (12 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_41MA     (12 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_42_5MA   (13 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_42_5MA   (13 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_44MA     (14 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_44MA     (14 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE1_45MA     (15 &lt;&lt; 2)</span>
+<span class="cp">#define DRIVE2_45MA     (15 &lt;&lt; 2)</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h4>上下拉配置<a class="headerlink" href="#id7" title="永久链接至标题"></a></h4>
+<p>X3J3每个Pin脚也支持上下拉配置，和驱动强度配置类似，上下拉的配置也分为两类，两类需要操作的寄存器bit位置不同，具体Pin脚的上下拉类别，
+hobot-pinctrl-xj3.dtsi中已经列出，在客户可以通过hobot-pinctrl-xj3.dtsi查找即可。</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* include/dt-bindings/pinctrl/hobot-xj3.h */</span><span class="w"></span>
+<span class="cm">/*</span>
+<span class="cm"> * PULL1 -&gt; bit7(0==pulldown, 1==pullup)</span>
+<span class="cm"> * bit6(0==pull disable, 1==pull enable)</span>
+<span class="cm"> *</span>
+<span class="cm"> * PULL2 -&gt; bit8(0==pullup enable, 1==pullup enable)</span>
+<span class="cm"> * bit7(0==pulldown diable, 1==pulldown enable)</span>
+<span class="cm">*/</span><span class="w"></span>
+
+<span class="cm">/* pin states bits */</span><span class="w"></span>
+<span class="cp">#define PULL1_MASK      (3 &lt;&lt; 6)</span>
+<span class="cp">#define PULL2_MASK      (3 &lt;&lt; 7)</span>
+<span class="cp">#define PULL1_EN     (1 &lt;&lt; 6)</span>
+<span class="cp">#define PULL1_DIS       (0)</span>
+<span class="cp">#define PULL2_DIS       (0)</span>
+<span class="cp">#define PULL1_UP        (PULL1_EN | (1 &lt;&lt; 7))</span>
+<span class="cp">#define PULL2_UP        (1 &lt;&lt; 8)</span>
+<span class="cp">#define PULL1_DOWN      (PULL1_EN | (0 &lt;&lt; 7))</span>
+<span class="cp">#define PULL2_DOWN      (1 &lt;&lt; 7)</span>
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h4>施密特触发配置<a class="headerlink" href="#id8" title="永久链接至标题"></a></h4>
+<p>X3J3每个Pin脚也支持上下拉配置，和驱动强度配置类似，施密特触发的配置也分为两类，两类需要操作的寄存器bit位置不同，具体Pin脚的施密特触发配置类别，
+hobot-pinctrl-xj3.dtsi中已经列出，在客户可以通过hobot-pinctrl-xj3.dtsi查找即可。</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* include/dt-bindings/pinctrl/hobot-xj3.h */</span><span class="w"></span>
+
+<span class="cm">/*</span>
+<span class="cm">* SCHMITT1 -&gt; bit8(0==diable, 1==enable)</span>
+<span class="cm">*</span>
+<span class="cm">* SCHMITT2 -&gt; bit9(0==diable, 1==enable)</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="cm">/* pin schmitt */</span><span class="w"></span>
+<span class="cp">#define SCHMITT1_ENA    (1 &lt;&lt; 8)</span>
+<span class="cp">#define SCHMITT1_DIS    (0 &lt;&lt; 8)</span>
+<span class="w"> </span>
+<span class="cp">#define SCHMITT2_ENA    (1 &lt;&lt; 9)</span>
+<span class="cp">#define SCHMITT2_DIS    (0 &lt;&lt; 9)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id9">
+<h3>驱动调用示例代码<a class="headerlink" href="#id9" title="永久链接至标题"></a></h3>
+<p>驱动先通过Pinctrl-names查找对应的pinctrl state，然后再切换到对应的state。</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">hobot_xxx_probe</span><span class="p">(</span><span class="k">struct</span> <span class="nc">platform_device</span><span class="w"> </span><span class="o">*</span><span class="n">pdev</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pinctrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">devm_pinctrl_get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IS_ERR</span><span class="p">(</span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pinctrl</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">dev_warn</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;pinctrl get none</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_xxxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">        </span><span class="cm">/* 按照 pinctrl-names lookup state */</span><span class="w"></span>
+<span class="w">        </span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_xxxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pinctrl_lookup_state</span><span class="p">(</span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pinctrl</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xxx_func&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IS_ERR</span><span class="p">(</span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_xxxx</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">dev_info</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;xxx_func get error %ld</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="n">PTR_ERR</span><span class="p">(</span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_xxxx</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_xxxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">xxxx_pinmux_select</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_xxxx</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">-</span><span class="n">ENODEV</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* 切换到对应的state */</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">pinctrl_select_state</span><span class="p">(</span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pinctrl</span><span class="p">,</span><span class="w"> </span><span class="n">g_xxx_dev</span><span class="o">-&gt;</span><span class="n">pins_xxxx</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h3>用户空间调试<a class="headerlink" href="#id10" title="永久链接至标题"></a></h3>
+<p>如果在内核配置中打开了Linux Kernel的 CONFIG_DEBUG_FS 选项，并且挂载了debugfs文件系统</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mount</span> <span class="o">-</span><span class="n">t</span> <span class="n">debugfs</span> <span class="n">none</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span>
+</pre></div>
+</div>
+<p>那么在用户空间的/sys/kernel/debug/pinctrl/a6004000.pinctrl/目录下有一些节点可以查看pinctrl的信息，例如：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /sys/kernel/debug/pinctrl/a6004000.pinctrl/pinmux-pins
+</pre></div>
+</div>
+<p>可以查看哪些pin脚被配置为配置组。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="10-GPIO_Debug_Guide_zh_CN.html" class="btn btn-neutral float-left" title="4.3.5. GPIO调试指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="12-IO-DOMAIN_Debug_Guide_zh_CN.html" class="btn btn-neutral float-right" title="4.3.7. IO-DOMAIN调试指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

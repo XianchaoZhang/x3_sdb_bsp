@@ -1,0 +1,215 @@
+service banner /etc/init.d/banner.sh
+	class banner
+	oneshot
+
+service sysfs /etc/init.d/sysfs.sh
+	class banner_ready
+	oneshot
+
+service 1mkfs /etc/init.d/1mkfs.sh
+	class sysfs_ready
+	oneshot
+
+service mountall /etc/init.d/mountall.sh
+	class mkfs_ready
+	oneshot
+
+service udev /etc/init.d/udev start
+	class mount_ready
+	oneshot
+
+service modutils /etc/init.d/modutils.sh
+	class udev_ready
+	oneshot
+
+service devpts /etc/init.d/devpts.sh
+	class modutils_ready
+	oneshot
+
+service readonly /etc/init.d/read-only-rootfs-hook.sh start
+	class pstty_ready
+	oneshot
+
+service bootmisc /etc/init.d/bootmisc.sh
+	class readonly_ready
+	oneshot
+service populatevolatile /etc/init.d/populate-volatile.sh
+	class bootmisc_ready
+	oneshot
+
+service dmesg /etc/init.d/dmesg.sh
+	class popvol_ready
+	oneshot
+
+service hostname /etc/init.d/hostname.sh
+	class popvol_ready
+	oneshot
+
+service load_ko /etc/init.d/load_ko.sh
+	class popvol_ready
+	oneshot
+
+service updatecheck /etc/rcS.d/S9updatecheck.sh
+	class defaultip_ready
+	oneshot
+	console
+
+service networking /etc/init.d/networking start
+	class popvol_ready
+	oneshot
+
+service dbus-1 /etc/init.d/dbus-1 start
+	class popvol_ready
+	oneshot
+
+service haveged /etc/init.d/haveged start
+	class popvol_ready
+	oneshot
+
+service dropbear /etc/init.d/dropbear start
+	class popvol_ready
+	oneshot
+
+service telnetd /etc/init.d/telnetd start
+	class popvol_ready
+	oneshot
+
+service mountnfs /etc/init.d/mountnfs.sh
+	class popvol_ready
+	oneshot
+
+service log-deamon /etc/init.d/log-deamon start
+	class popvol_ready
+
+service syslog /etc/init.d/syslog start
+	class syslog_class
+
+service klog /sbin/klogd -n
+	class syslog_class
+
+service logcat /etc/init.d/start_logcat
+	class syslog_class
+
+service tftpd-hpa /etc/init.d/tftpd-hpa start
+	class popvol_ready
+	oneshot
+
+service defaultip /etc/rc5.d/S45defaultip
+	class popvol_ready
+	oneshot
+
+service otaserver /etc/rc5.d/S46_otaserver.sh
+	class popvol_ready
+	oneshot
+
+service usbsel /etc/init.d/usbsel.sh
+	class popvol_ready
+	oneshot
+
+service adbd /etc/init.d/adbd start
+	class adbd_class
+	oneshot
+
+service chronyd /etc/rc5.d/chronyd
+	class popvol_ready
+	oneshot
+
+service dispinit /etc/init.d/x3dispinit.sh
+	#class popvol_ready
+	class loadko_ready
+	oneshot
+
+service dockerd /etc/init.d/dockerd.sh
+	class loadko_ready
+	oneshot
+
+service syscfg_late /etc/init.d/syscfg_late.sh
+	class loadko_ready
+	oneshot
+
+service appinit /etc/init.d/appinit.sh
+	class loadko_ready
+	oneshot
+
+service factory_test /etc/rc5.d/S90factest.sh
+	class loadko_ready
+	oneshot
+
+service ramdumpconfig /etc/init.d/ramdump-config.sh
+	class popvol_ready
+	oneshot
+
+service rmnologin /etc/init.d/rmnologin.sh
+	class popvol_ready
+	oneshot
+
+service start_tty /bin/start_getty 0 ttyS0 vt102
+	class hostname_ready
+	console
+
+service start_app /app/start_app.sh
+	class loadko_ready
+	oneshot
+	console
+
+on property:sys.powerctl=*
+    powerctl ${sys.powerctl}
+
+on property:syslog.start=1
+	class_start syslog_class
+
+on property:adbd.start=1
+	class_start adbd_class
+
+on property:banner.ready=1
+	class_start banner_ready
+
+on property:sysfs.ready=1
+	class_start sysfs_ready
+
+on property:mkfs.ready=1
+	class_start mkfs_ready
+
+on property:resize.ready=1
+	class_start resize_ready
+
+on property:mount.ready=1
+	class_start mount_ready
+
+on property:udev.ready=1
+	class_start udev_ready
+
+on property:modutils.ready=1
+	class_start modutils_ready
+
+on property:pstty.ready=1
+	class_start pstty_ready
+
+on property:pstty.ready=1
+	class_start pstty_ready
+
+on property:readonly.ready=1
+	class_start readonly_ready
+
+on property:bootmisc.ready=1
+	class_start bootmisc_ready
+
+on property:popvol.ready=1
+	class_start popvol_ready
+
+on property:loadko.ready=1
+	class_start loadko_ready
+
+on property:hostname.ready=1
+	class_start hostname_ready
+
+on property:defaultip.ready=1
+	class_start defaultip_ready
+
+on init
+	trigger boot
+
+on boot
+	class_start banner
+on late-init
+	class_start late_class

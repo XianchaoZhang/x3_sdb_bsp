@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# entry script for tool: iperf.
+# by lmg at 20190428.
+
+# $@ - params for tool.
+# $? - 0-OK,!0-ERROR.
+
+# script env.
+SCRP_NAME=`basename $0`
+THIS_PATH=`cd "$(dirname $0)"; pwd`
+. ${THIS_PATH}/_env
+
+# exec env init.
+SexecEnv iperf3 tools/iperf/bin
+
+# do exec.
+SexecRun iperf3 $@
+
+# return.
+Sreturn

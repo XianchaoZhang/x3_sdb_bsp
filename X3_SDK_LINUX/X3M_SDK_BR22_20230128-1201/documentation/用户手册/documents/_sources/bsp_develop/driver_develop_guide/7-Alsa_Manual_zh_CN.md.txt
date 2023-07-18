@@ -1,0 +1,253 @@
+# ALSA使用说明
+
+## 概述
+
+本章主要描述音频的概念，以及添加声卡调试声卡的的说明。
+
+相关概念：
+
+- CPU DAI: CPU侧的数字音频接口，一般是i2s接口，控制总线传输
+- CODEC DAI:即codec。控制codec工作流，提供给core层
+- DAI LINK:绑定CPU DAI和CODEC DAI，指machine driver
+- PLATFORM:指定CPU侧的平台驱动，通常是DMA驱动，用于传输
+- DAPM:动态音频电源管理
+
+## 音频开发说明
+
+一个完整的声卡信息由cpu\_dai，codec_dai，platform，dai_link组成。分别对应cpu\_dai的driver，一般是i2s接口，codec_dai的driver，比如ac108 codec driver。platform的driver，通常是dma驱动，用于完成对音频数据的管理。dai\_link的driver，用来负责连接cpu\_dai和codec\_dai，比如sound/soc/hobot/hobot-snd-96.c。本章节以ac108为例说明如何添加调试声卡。
+
+### I2S参数
+
+针对平台侧I2S的支持能力，对I2S使用限制给出的说明：
+-   通道支持：音频输入支持1/2/4/8/16通道输入；音频输出支持1/2通道输出
+
+-   采样率支持：8k/16k/32k/48k/44.1k/64k
+
+-   采样精度支持：8bit/16bit
+
+-   传输协议支持：i2s/dsp(TDM)A
+
+-   I2S做master模式下的默认时钟：mclk为12.288M bclk为2.048M。mclk不发生变化的情况下，bclk支持6.144M、4.096M、3.072M、2.048M、1.536M,根据应用层传输的参数动态调整，调频策略在sound/soc/hobot/hobot-cpudai.c的hobot_i2s_sample_rate_set函数中.对于44.1k采样率的支持，在不调整PLL的情况下，可以调整出的最接近频率44.11764khz
+    
+-   I2S做slave，在需要读写i2s寄存器操作前，需要有bclk时钟灌入，否则会访问i2s模块寄存器异常，导致系统不能正常工作
+
+### 新增Codec说明
+
+#### 添加codec driver
+
+比如添加ac108\_driver.c，将所添加的codec驱动文件增加到sound/soc/codecs/目录下。
+
+#### 添加编译选项
+
+修改**sound/soc/codecs/**目录下的Kconfig以及Makefile，将codec加入驱动编译。
+
+其中，Kconfig添加
+
+```
+config SND_SOC_AC108
+        tristate "AC108 AudioCodec"
+        depends on I2C
+config SND_SOC_AC108_DRIVER
+        tristate "AC108 Audio Codec"
+        depends on I2C
+```
+
+Makefile添加
+
+```
+obj-$(CONFIG_SND_SOC_AC108)   += ac108.o
+```
+
+内核配置中enable codec
+
+```bash
+Device Drivers --->
+<*> Sound card support --->
+<*> Advanced Linux Sound Architecture --->
+<*> ALSA for SoC audio support --->
+<M> hobot audio use dts
+    CODEC drivers -->
+        [M] AC108 Audio Codec
+```
+### 修改dts文件
+
+在对应的i2c添加codec信息，例如ac108挂在i2c0总线上，则在i2c0中增加信息如下配置：
+
+```c
+&i2c0 {   
+        status = "okay";
+        #address-cells = <1>;
+        #size-cells = <0>;
+           
+        ac108_0: ac108_0@0x3b {
+                compatible = "ac108_ic_0";
+                reg = <0x3b>;
+                #sound-dai-cells = <1>;
+        };  
+}
+```
+
+在dts文件中，配置对应codec所需要的sound card信息。增加信息参考如下配置：
+
+```c
+&snd0 {
+    model = "hobotsnd0"; //声卡名称
+    dai-link@0 { //对应ADC
+        dai-format = "dsp_a"; //对应SND_SOC_DAIFMT_DSP_A
+        bitclock-master; //对应SND_SOC_DAIFMT_CBM_CFM
+        frame-master;
+        frame-inversion; //对应SND_SOC_DAIFMT_NB_IF
+        link-name = "hobotdailink0"; //dailink名称
+        cpu {
+            sound-dai = <&i2s0>; //CPU侧的数字音频接口，控制总线传输
+        };
+        codec {
+            sound-dai = <&ac108_0 0>; //codec芯片接口
+        }
+        platform {
+            sound-dai = <&i2sidma0>; //dma驱动，用于数据传输
+        };
+    };
+    dai-link@1 { //对应DAC
+        dai-format = "i2s"; //对应SND_SOC_DAIFMT_I2S(传输模式)
+        bitclock-master; //对应SND_SOC_DAIFMT_CBM_CFM(主从模式)
+        frame-master;
+        frame-inversion; //对应SND_SOC_DAIFMT_NB_IF(clock极性)
+        link-name = "hobotdailink1"; //dailink名称
+        cpu {
+            sound-dai = <&i2s1>;
+        };
+        codec {
+            sound-dai = <&ac101>;
+        };
+        platform {
+            sound-dai = <&i2sidma1>;
+        };
+    };
+};
+```
+
+## 调试说明
+
+### 声卡调试
+
+1.  确认声卡驱动模块是否挂载，如果没有，请挂载声卡驱动模块，以 ac108 + ac101 验证所需模块为例
+
+```bash
+Modprobe ac108_driver
+Modprobe ac101
+Modprobe hobot-dma
+Modprobe hobot-cpudai
+Modprobe hobot-snd-96 snd_card=1
+```
+
+2.  确认声卡驱动是否注册成功
+
+```bash
+root@x3dvbx3-hynix1G-2666:~# cat /proc/asound/cards
+0 [hobotsnd0 ]: hobotsnd0 - hobotsnd0
+hobotsnd0
+root@x3dvbx3-hynix1G-2666:/userdata# ls -l /dev/snd
+drwxr-xr-x 2 root root 60 Jan 1 08:00 by-path
+crw-rw---- 1 root audio 116, 2 Jan 1 08:00 controlC0
+crw-rw---- 1 root audio 116, 3 Jan 1 08:00 pcmC0D0c
+crw-rw---- 1 root audio 116, 4 Jan 1 08:00 pcmC0D1p
+crw-rw---- 1 root audio 116, 33 Jan 1 08:00 timer120 (range 0->255)
+```
+
+在linux环境下，音频设备节点位于/dev/snd目录下，分为三类：
+
+- 如 pcmC0D0p   以‘p’结尾的表示播放节点，playback
+- 如 pcmC0D0c   以‘c’结尾的表示录音节点，capture
+- 如 controlC0      以“control”开头的表示控制节点，控制音量等
+
+其中pcmC0D0p与pcmC0D0c组成一个pcm设备，其中C0代表0号声卡Card，D0代表0号设备device。一个声卡可以有多个设备，每个设备代表该声卡的一个音频通路。
+
+3.  命令行录制播放调试声卡功能是否正常
+
+录制：tinycap参数示例：
+
+```bash
+root@x3dvbx3-hynix1G-2666:/userdata# tinycap
+Usage: tinycap {file.wav | --} [-D card] [-d device] [-c channels] [-r rate] [-b bits] [-p period_size] [-n n_periods] [-t time_in_seconds]
+
+Use -- for filename to send raw PCM to stdout
+```
+
+命令：
+
+```bash
+tinycap /userdata/test.wav -D 0 -d 0 -t 5
+```
+
+播放：播放1khz的正弦波，看是否可以正常播放，也可以在codec输出端通过示波器测量数据信号是否正常
+
+```bash
+root@x3dvbx3-hynix1G-2666:/userdata# tinyplay
+usage: tinyplay file.wav [options]
+options:
+-D | --card <card number> The device to receive the audio
+-d | --device <device number> The card to receive the audio
+-p | --period-size <size> The size of the PCM's period
+-n | --period-count <count> The number of PCM periods
+-i | --file-type <file-type > The type of file to read (raw or wav)
+-c | --channels <count> The amount of channels per frame
+-r | --rate <rate> The amount of frames per second
+-b | --bits <bit-count> The number of bits in one sample
+-M | --mmap Use memory mapped IO to play audio
+```
+
+命令：
+```bash
+tinyplay /userdata/1khz.wav -D 0 -d 1
+```
+
+4.  tinymix通路调试
+```bash
+root@x3dvbx3-hynix1G-2666:/userdata\# tinymix contents
+Number of controls: 79
+ctl type num name value
+0 INT 1 ADC1 PGA gain 0 (range 0->31)
+1 INT 1 ADC2 PGA gain 0 (range 0->31)
+2 INT 1 ADC3 PGA gain 0 (range 0->31)
+3 INT 1 ADC4 PGA gain 0 (range 0->31)
+4 INT 1 CH1 digital volume 160 (range 0->255)
+5 INT 1 CH2 digital volume 160 (range 0->255)
+6 INT 1 CH3 digital volume 160 (range 0->255)
+7 INT 1 CH4 digital volume 160 (range 0->255)
+8 BOOL 1 CH1 ch1 mixer gain Off
+9 BOOL 1 CH1 ch2 mixer gain Off
+10 BOOL 1 CH1 ch3 mixer gain Off
+11 BOOL 1 CH1 ch4 mixer gain Off
+```
+可通过ctr或者name来控制，设置或显示指定参数，举例如下:
+
+通过ctr：
+```bash
+root@x3dvbx3-hynix1G-2666:/userdata# tinymix set 6 120
+root@x3dvbx3-hynix1G-2666:/userdata# tinymix get 6
+120 (range 0->255)
+```
+
+通过name：
+```bash
+root@x3dvbx3-hynix1G-2666:/userdata# tinymix set "DAC MIXER RECD_DAT switch" 1
+root@x3dvbx3-hynix1G-2666:/userdata#
+root@x3dvbx3-hynix1G-2666:/userdata# tinymix get "DAC MIXER RECD_DAT switch" On
+```
+通过以上的过程完成声卡创建以及简单调试。其中使用的tiny命令代码位置hbre/libalsa/tinyalsa/utils。
+
+### 常用调试方法
+
+- 查看codec寄存器，i2s寄存器。录制播放不能正常工作时，一般需要先查看寄存器的配置是否正确，以便定位问题
+
+查看i2s寄存器配置信息：
+```bash
+cat /sys/devices/platform/soc/a5008000.i2s/reg_dump
+```
+查看codec寄存器配置信息，例如查看ac108
+codec寄存器的值，挂载在i2c0，codec地址为0x3b/0x35，通过如下命令可查看寄存器的配置
+```bash
+cat /sys/devices/platform/soc/a5009000.i2c/i2c-0/0-003b/ac108_debug/ac108
+```
+- 使用示波器量音频的信号，包括mclk/bclk/lrck/data，确认时钟信号频率bclk/lrck是否符合设置的采样率，如果不符合，会导致音频加快或变缓

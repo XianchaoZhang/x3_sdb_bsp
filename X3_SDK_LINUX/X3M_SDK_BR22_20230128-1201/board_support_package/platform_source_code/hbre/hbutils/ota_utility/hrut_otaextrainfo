@@ -1,0 +1,23 @@
+#!/bin/sh
+
+ota_logpath="/tmp/cache"
+if [ ! -d "$ota_logpath" ];then
+    ota_logpath="/userdata/cache"
+fi
+
+file="${ota_logpath}/warning"
+if [ ! -f $file ];then
+     echo "Error: $file not exist!"
+fi
+
+if [ -z "$1" ];then
+    log=$(cat $file)
+elif [ $1 = "l" ];then
+    log=$(cat $file  | sed 's/\[OTA_INFO\]//g' | sed 's/\[OFNI_ATO\]//g' )
+fi
+
+if [ -z "$log" ];then
+    echo "Error: $file not has msg!"
+else
+    echo "$log"
+fi

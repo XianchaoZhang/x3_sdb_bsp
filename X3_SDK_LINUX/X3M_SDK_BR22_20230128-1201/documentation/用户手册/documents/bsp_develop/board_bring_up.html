@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.2. 硬件点亮指引 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="4.3. 驱动开发指南" href="driver_develop_guide/index.html" />
+    <link rel="prev" title="4.1. 环境搭建及编译说明" href="Bsp_Develop.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.2. 硬件点亮指引</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">4.2.1. 系统启动流程图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">4.2.2. 镜像制作</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">4.2.2.1. 新增板级配置</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id5">分区表配置</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#miniboot">miniboot参数配置</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#ddr">DDR参数配置</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#uboot">4.2.2.2. Uboot参数配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kernel">4.2.2.3. Kernel参数配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">4.2.2.4. 电源域配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#uart">4.2.2.5. UART启动镜像生成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">4.2.2.6. 在Uboot配置管脚默认状态</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">4.2.3. 上板调试</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">4.2.3.1. 系统刷机</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">4.2.3.2. miniboot启动异常</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">4.2.3.3. uboot启动异常</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12">4.2.3.4. kernel启动异常</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">4.2.4. 稳定性测试</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="driver_develop_guide/index.html">4.3. 驱动开发指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.2. </span>硬件点亮指引</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="Bsp_Develop.html" class="btn btn-neutral float-left" title="4.1. 环境搭建及编译说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="driver_develop_guide/index.html" class="btn btn-neutral float-right" title="4.3. 驱动开发指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">4.2. </span>硬件点亮指引<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="id2">
+<h2><span class="section-number">4.2.1. </span>系统启动流程图<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p><img alt="image-20220505113454598" src="../_images/image-20220505113454598.png" /></p>
+<p>上电分为冷启动和热启动两种，热启动特指休眠唤醒流程，其他方式如掉电上电，reboot命令等均为冷启动</p>
+<p>流程说明：</p>
+<ol class="simple">
+<li><p>Power On Reset时跳转到BL1执行，运行状态EL3</p></li>
+<li><p>BL1将会跳转到BL2中去执行，运行状态切换到EL1，冷启动时BL2为称SPL,热启动时称为WARM SPL</p></li>
+<li><p>BL2/SPL负责初始化DDR，加载BL31、BL33和BPU加密模型的镜像，并做校验。然后BL2通过SMC调用，跳转到BL31，BL31运行在EL3状态。WARMSPL只负责从sram中重新load ddr参数。</p></li>
+<li><p>BL31初始化PSCI、向量表后，跳转到BL33, BL33运行在EL1状态</p></li>
+<li><p>BL33做device tree初始化，加载和校验OS，然后启动OS，OS运行在EL1状态</p></li>
+<li><p>OS启动完成，开始运行用户层的服务进程，用户层服务运行在EL0状态</p></li>
+</ol>
+<p>在整体的启动流程中，系统的安全启动（Secure Boot）以层级的方式逐级向下校验，总体流程如下图所示</p>
+<p><img alt="image-20220312161656588" src="../_images/image-20220312161656588.png" /></p>
+<p>Secure Boot的验证流程见上图所示，bootrom对SPL镜像进行校验。SPL校验通过之后，SPL再去加载并校验UBoot，BL31，BPU模型；系统进入UBoot之后，再由UBoot来使用AVB校验OS内核镜像（boot image，包含ramdisk，dtb等）。在OS启动之后，通过OS支持的dm-verity来校验对应的系统分区。bootrom校验spl和spl校验bl31是强制性的，其余的如spl校验uboot和bpu，以及uboot通过avb校验kernel，和kernel使用dm-verity校验filesystem都可以通过eFUSE进行配置，详细情况参考第五章“eFUSE的烧写”。</p>
+<p>下面将从最小系统制作、上板调试、功能摸底等方面，详细介绍X3系统的硬件点亮过程。大致流程如下：</p>
+<ul class="simple">
+<li><p>硬件回板前，根据硬件设计完成最小系统的制作，主要包含如下几方面：</p>
+<ul>
+<li><p>BSP代码中新增板级配置文件 board_***_config.mk</p></li>
+<li><p>在uboot、kernel中添加新的配置文件、设备树（管脚复用、功能开关等）</p></li>
+<li><p>根据硬件设计完成网口、USB口的驱动适配</p></li>
+<li><p>修改管脚电压域配置（<font color=red><strong>重要：配置不对会导致无法预知的问题，甚至烧坏硬件</strong></font>）</p></li>
+</ul>
+</li>
+<li><p>硬件回板后，检查硬件状态并尝试烧录最小系统镜像，主要步骤如下：</p>
+<ul>
+<li><p>外观检查，确认硬件没有漏贴、错贴情况</p></li>
+<li><p>设备上电，测量芯片供电是否正常</p></li>
+<li><p>连接串口，确认上电后debug串口是否有log打印，无打印说明芯片启动异常，需要排查硬件</p></li>
+<li><p>烧录镜像，使用地平线升级工具升级最小系统。</p></li>
+</ul>
+</li>
+<li><p>镜像烧录后设备如无法正常启动，需要通过串口log判断问题原因，具体如下：</p>
+<ul>
+<li><p>启动流程卡在miniboot阶段</p>
+<ul>
+<li><p>确认ddr型号、容量识别是否有误</p></li>
+<li><p>确认ddr train是否未通过</p></li>
+<li><p>确认uboot加载是否存在异常</p></li>
+</ul>
+</li>
+<li><p>启动流程卡在uboot阶段</p>
+<ul>
+<li><p>确认kernel加载是否存在异常</p></li>
+<li><p>确认cmdline参数是否存在异常</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>系统启动并进入到kernel后，需要确认如下信息：</p>
+<ul>
+<li><p>确认内核启动日志，确认内核模块、设备驱动初始化正常</p></li>
+<li><p>确认根文件系统和/etc/fstat文件中配置的分区挂载正常</p></li>
+<li><p>确认系统能正常进入到shell终端，并通过串口登录</p></li>
+<li><p>确认网络、USB等端口可以正常使用</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h2><span class="section-number">4.2.2. </span>镜像制作<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<section id="id4">
+<h3><span class="section-number">4.2.2.1. </span>新增板级配置<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>为保证系统兼容性，建议为每款新硬件创建单独的板级配置文件。以device\horizon\x3\board_yocto_emmc_abboot_config.mk文件为例，其配置内容如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1"># 编译后镜像输出路径</span>
+<span class="nb">export</span> <span class="nv">HR_IMAGE_DEPLOY_DIR</span><span class="o">=</span><span class="si">${</span><span class="nv">HR_TOP_DIR</span><span class="si">}</span>/deploy
+
+<span class="c1"># 可以设置整个系统的版本信息，在OTA升级中会有涉及</span>
+<span class="nb">export</span> <span class="nv">HR_BSP_VERSION</span><span class="o">=</span><span class="s2">&quot;x3j3_lnx_db_</span><span class="k">$(</span>date <span class="s1">&#39;+%Y%m%d&#39;</span><span class="k">)</span><span class="s2">&quot;</span>
+
+<span class="c1"># 配置交叉编译工具链</span>
+<span class="nb">export</span> <span class="nv">ARCH</span><span class="o">=</span>arm64
+<span class="nb">export</span> <span class="nv">TOOLCHAIN_PATH</span><span class="o">=</span>/opt/gcc-ubuntu-9.3.0-2020.03-x86_64-aarch64-linux-gnu
+<span class="nb">export</span> <span class="nv">CROSS_COMPILE</span><span class="o">=</span><span class="si">${</span><span class="nv">TOOLCHAIN_PATH</span><span class="si">}</span>/bin/aarch64-linux-gnu-
+<span class="nb">export</span> <span class="nv">TOOLCHAIN_LD_LIBRARY_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">TOOLCHAIN_PATH</span><span class="si">}</span>/lib/x86_64-linux-gnu/
+
+<span class="c1"># avbtools工具脚本存放路径，在对kernel和分区文件系统添加校验信息时需要使用到（mk_system.sh）</span>
+<span class="nb">export</span> <span class="nv">HR_AVB_TOOLS_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HR_TOP_DIR</span><span class="si">}</span>/build/tools/avbtools
+<span class="c1"># key_management_toolkits工具脚本存放路径，在编译miniboot、uboot添加header信息时使用，里面也存放了校验需要使用的key文件</span>
+<span class="nb">export</span> <span class="nv">HR_KEY_MANAGEMENT_TOOLKITS_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HR_TOP_DIR</span><span class="si">}</span>/build/tools/key_management_toolkits
+<span class="c1"># 生成uart启动固件时需要使用到的脚本工具，配合（./xbuild.sh foctory）命令使用</span>
+<span class="nb">export</span> <span class="nv">HR_MK_UART_BOOT_PACKAGE_TOOLS_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">HR_TOP_DIR</span><span class="si">}</span>/build/tools/uart_usb_boot
+
+<span class="c1"># 配置存储介质，支持 &quot;emmc&quot;, &quot;nand&quot;, &quot;nor&quot;</span>
+<span class="nb">export</span> <span class="nv">HR_BOOT_MODE</span><span class="o">=</span><span class="s2">&quot;emmc&quot;</span>
+
+<span class="c1"># 备份还原模式，支持AB备份和golden模式（需要设置 HR_KERNEL_WITH_RECOVERY = true），每种模式对应的分区表有区别，需要同步修改分区表</span>
+<span class="nb">export</span> <span class="nv">HR_OTA_UPDATE_MODE</span><span class="o">=</span><span class="s2">&quot;AB&quot;</span>
+
+<span class="c1"># 分区表配置文件所在目录和文件名</span>
+<span class="nb">export</span> <span class="nv">HR_GPT_CONF_DIR</span><span class="o">=</span><span class="si">${</span><span class="nv">HR_TOP_DIR</span><span class="si">}</span>/<span class="s2">&quot;device/horizon/x3&quot;</span>
+<span class="nb">export</span> <span class="nv">HR_GPT_CONF_FILENAME</span><span class="o">=</span><span class="s2">&quot;emmc_abboot_gpt.conf&quot;</span>
+
+<span class="c1"># Miniboot相关配置</span>
+<span class="c1"># miniboot 在引导uboot启动时，加载uboot的内存地址</span>
+<span class="nb">export</span> <span class="nv">HR_UBOOT_IMAGE_LOAD_ADDR</span><span class="o">=</span><span class="s2">&quot;4000000&quot;</span>
+<span class="c1"># miniboot读取的uboot镜像大小，如果用户编译的uboot.img镜像超过了2MB,此处和分区中uboot的分区大小都需要相应修改</span>
+<span class="nb">export</span> <span class="nv">HR_UBOOT_SIZE</span><span class="o">=</span><span class="m">2097152</span>  <span class="c1">#2M SIZE</span>
+<span class="c1"># 打包几个分区镜像进miniboot分区，1代表miniboot分区的spl镜像前只有mbr和gpt，2代表spl之前还有例如veeprom分区这种分区</span>
+<span class="nb">export</span> <span class="nv">HR_PACK_PART_NUMBER_IN_MINIBOOT</span><span class="o">=</span><span class="m">2</span>
+
+<span class="c1"># 芯片类型： x3</span>
+<span class="nb">export</span> <span class="nv">HR_CHIP_TYPE</span><span class="o">=</span><span class="s2">&quot;x3&quot;</span>
+<span class="c1"># 芯片核心板类型: auto(0) | x3som(1) | j3som(2) | x3sdb(3), 或者 0-15之间的数字，用于指示核心板类型</span>
+<span class="nb">export</span> <span class="nv">HR_SOM_TYPE</span><span class="o">=</span><span class="s2">&quot;x3sdb&quot;</span>
+<span class="c1"># 使用的基础硬件参考设计，主要影响ddr的pcb走线，一定要正确，否则ddr training不过。 可选参数 &quot;x3dvb&quot; &quot;x3sdb&quot;</span>
+<span class="nb">export</span> <span class="nv">HR_BASE_BOARD_TYPE</span><span class="o">=</span><span class="s2">&quot;x3sdb&quot;</span>
+
+<span class="c1"># DDR参数配置</span>
+<span class="c1"># 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2640&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot;</span>
+<span class="nb">export</span> <span class="nv">HR_DDR_FREQ</span><span class="o">=</span><span class="s2">&quot;3200&quot;</span>
+<span class="c1"># 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;</span>
+<span class="nb">export</span> <span class="nv">HR_DDR_MANUFACTURE</span><span class="o">=</span><span class="s2">&quot;samsung&quot;</span>
+<span class="c1"># ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot;</span>
+<span class="nb">export</span> <span class="nv">HR_DDR_TYPR</span><span class="o">=</span><span class="s1">&#39;LPDDR4&#39;</span>
+<span class="c1"># ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;, 可不配置，支持自动识别</span>
+<span class="nb">export</span> <span class="nv">HR_DDR_CAPACITY</span><span class="o">=</span><span class="s2">&quot;2&quot;</span>
+<span class="c1"># 当相同ddr厂家、类型、频率时有多组ddr参数时，需要通过这个配置项来做区分</span>
+<span class="nb">export</span> <span class="nv">HR_DDR_ALTERNATIVE</span><span class="o">=</span><span class="m">2</span>
+
+<span class="c1"># 建议：每次新增核心板时都对应添加一套 HR_SOM_TYPE、uboot_config_file、kernel_config_file、uboot和kernel下的dts</span>
+
+<span class="c1"># uboot 编译配置文件，在这个配置文件中需要指定使用的dts文件</span>
+<span class="nb">export</span> <span class="nv">HR_UBOOT_CONFIG_FILE</span><span class="o">=</span>xj3_soc_defconfig
+
+<span class="c1"># kernel 配置</span>
+<span class="c1"># kernel的设备树通过 HR_SOM_TYPE 和 HR_BASE_BOARD_TYPE 组合后的数字(例如：304)，在tools/dtbmapping/dtb_mapping_xj3.json匹配</span>
+<span class="c1"># kernel 编译配置文件</span>
+<span class="nb">export</span> <span class="nv">HR_KERNEL_CONFIG_FILE</span><span class="o">=</span>xj3_perf_defconfig
+<span class="c1"># golden 模式需要编译 recovery 分区， HR_OTA_UPDATE_MODE=&quot;golden&quot;时需要配置为&quot;true&quot;</span>
+<span class="nb">export</span> <span class="nv">HR_KERNEL_WITH_RECOVERY</span><span class="o">=</span><span class="s2">&quot;false&quot;</span>
+
+<span class="c1"># rootfs 配置</span>
+<span class="c1"># X3M 支持 yocto 和 ubuntu 两种根文件系统，在此处指定根文件系统类型和预编译的文件系统路径</span>
+<span class="nb">export</span> <span class="nv">HR_ROOTFS_TYPE</span><span class="o">=</span>yocto
+<span class="nb">export</span> <span class="nv">HR_ROOTFS_DIR</span><span class="o">=</span><span class="si">${</span><span class="nv">HR_TOP_DIR</span><span class="si">}</span>/system/rootfs_yocto
+<span class="c1"># 根文件系统中是否集成内核的驱动模块ko文件</span>
+<span class="nb">export</span> <span class="nv">HR_ROOTFS_WITH_KO</span><span class="o">=</span><span class="s2">&quot;true&quot;</span>
+<span class="c1"># 根文件系统中是否集成地平线多媒体接口库文件</span>
+<span class="nb">export</span> <span class="nv">HR_ROOTFS_WITH_MEDIA_LIBS</span><span class="o">=</span><span class="s2">&quot;true&quot;</span>
+<span class="c1"># 根文件系统的分区名，需要和分区表配置对应</span>
+<span class="nb">export</span> <span class="nv">HR_ROOTFS_PART_NAME</span><span class="o">=</span><span class="s2">&quot;system&quot;</span>
+<span class="c1"># 是否对根文件系统添加avb校验，支持镜像安全</span>
+<span class="nb">export</span> <span class="nv">HR_ROOTFS_AVB_VERITY</span><span class="o">=</span><span class="s2">&quot;true&quot;</span>
+<span class="c1"># 根文件系统类型，请在分区表中全部设置为none，统一在这里进行设置，因为uboot也依赖这个配置来设置启动项，支持 &quot;ext4&quot;, &quot;squashfs&quot;</span>
+<span class="nb">export</span> <span class="nv">HR_ROOTFS_FS_TYPE</span><span class="o">=</span><span class="s2">&quot;ext4&quot;</span>
+
+<span class="c1"># 环境变量配置标志，用来标识当前env环境已经完成了板级配置项的设置</span>
+<span class="nb">export</span> <span class="nv">HR_IS_BOARD_CONFIG_EXPORT</span><span class="o">=</span><span class="s2">&quot;true&quot;</span>
+</pre></div>
+</div>
+<section id="id5">
+<h4>分区表配置<a class="headerlink" href="#id5" title="永久链接至标题"></a></h4>
+<p>分区表配置主要包含HR_OTA_UPDATE_MODE、HR_GPT_CONF_DIR、HR_GPT_CONF_FILENAME三个配置选项：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 备份还原模式，支持AB备份和golden模式（需要设置 HR_KERNEL_WITH_RECOVERY = true），每种模式对应的分区表有区别，需要同步修改分区表</span>
+<span class="nb">export</span> <span class="nv">HR_OTA_UPDATE_MODE</span><span class="o">=</span><span class="s2">&quot;AB&quot;</span>
+
+<span class="c1"># 分区表配置文件所在目录和文件名</span>
+<span class="nb">export</span> <span class="nv">HR_GPT_CONF_DIR</span><span class="o">=</span><span class="si">${</span><span class="nv">HR_TOP_DIR</span><span class="si">}</span>/<span class="s2">&quot;device/horizon/x3&quot;</span>
+<span class="nb">export</span> <span class="nv">HR_GPT_CONF_FILENAME</span><span class="o">=</span><span class="s2">&quot;emmc_abboot_gpt.conf&quot;</span>
+</pre></div>
+</div>
+<p>HR_OTA_UPDATE_MODE表示升级方式，目前支持AB、golden两种选项。含义如下：<br />   AB：支持AB分区升级功能，对应emmc_abboot_gpt.conf分区表。<br />   golden：支持recovery分区升级功能，对应emmc_golden_boot_gpt.conf分区表。<br />HR_GPT_CONF_DIR和HR_GPT_CONF_FILENAME表示分区表路径和文件名。</p>
+<p><strong>分区表格式说明</strong></p>
+<p>以device/horizon/x3/emmc_golden_boot_gpt.conf文件为例，分区表的书写方法如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">1</span>:veeprom/veeprom.img:none:34s:39s:0
+<span class="m">1</span>:miniboot/<span class="si">${</span><span class="nv">UBOOT_SPL_NAME</span><span class="si">}</span>:none:40s:2047s:1
+<span class="m">0</span>:miniboot/<span class="si">${</span><span class="nv">UBOOT_WARM_SPL_NAME</span><span class="si">}</span>:none:552s:807s:1
+<span class="m">0</span>:miniboot/<span class="si">${</span><span class="nv">DDR_IMAGE_NAME</span><span class="si">}</span>:none:808s:1831s:1
+<span class="m">0</span>:miniboot/<span class="si">${</span><span class="nv">KEY_IMAGE_NAME</span><span class="si">}</span>:none:1832s:1839s:1
+<span class="m">0</span>:miniboot/<span class="si">${</span><span class="nv">EFUSE_IMAGE_NAME</span><span class="si">}</span>:none:1840s:1847s:1
+<span class="m">0</span>:miniboot/<span class="si">${</span><span class="nv">BL31_IMAGE_NAME</span><span class="si">}</span>:none:1848s:2047s:1
+<span class="m">1</span>:uboot/uboot.img:none:2048s:6143s:1
+<span class="m">1</span>:ubootbak/uboot.img:none:6144s:10239s:1
+<span class="m">1</span>:vbmeta/vbmeta.img:none:10240s:10495s:1
+<span class="m">1</span>:boot/boot.img:none:10496s:30975s:1
+<span class="m">1</span>:recovery/recovery.img:none:30976s:61695s:1
+<span class="m">1</span>:system/system.img:ext4:61696s:368895s:1
+<span class="m">1</span>:bpu/<span class="si">${</span><span class="nv">BPU_IMAGE_NAME</span><span class="si">}</span>:none:368896s:573695s:0
+<span class="m">1</span>:app/app.img:ext4:573696s:2670847s:0
+<span class="m">1</span>:userdata/userdata.img:none:2670848s:15269751s:0
+</pre></div>
+</div>
+<p>分区表字段由“:”进行分隔，各字段名称如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>分区使能:分区名及其内容路径:分区文件系统:分区起始位置:分区终结位置:分区是否合入主镜像
+</pre></div>
+</div>
+<p>各字段含义如下：</p>
+<ul class="simple">
+<li><p>分区使能：表示创建以分区名为文件名的单独分区镜像，当分区使能为0时，该行内容会被合入前一个独立分区的镜像中</p></li>
+<li><p>分区名及其内容路径：以“/”为界，第一部分为其分区名，会在以分区名命名的文件夹下存放分区内容</p></li>
+<li><p>分区文件系统：管理分区内容的文件系统，目前可使用ext4、squashfs等文件系统进行创建，若需要使用其它文件系统，请填入none并建立对应文件系统镜像，将镜像路径填入“分区名及其路径”中</p></li>
+<li><p>分区起始位置：从生成镜像0位置开始计算的分区起始位置，如30, 30k, 30m,30s。无单位时表示byte，k为KiB，m为MiB，s为512Byte的Sector，默认使用sector为单位</p></li>
+<li><p>分区终止位置：分区终止位置计算方法：起始位置+分区大小 – 1</p></li>
+<li><p>分区是否合入主镜像：表示该分区镜像是否应该被打包到主镜像，0：不打包、1：打包</p></li>
+</ul>
+</section>
+<section id="miniboot">
+<h4>miniboot参数配置<a class="headerlink" href="#miniboot" title="永久链接至标题"></a></h4>
+<p>miniboot为X3系统保留引导程序，其参数配置默认不需要修改，以下几种情况除外：</p>
+<ul class="simple">
+<li><p>修改uboot镜像的内存加载地址，对应HR_UBOOT_IMAGE_LOAD_ADDR字段</p></li>
+<li><p>修改uboot分区大小，对应HR_UBOOT_SIZE字段</p></li>
+<li><p>修改miniboot分区，对应HR_PACK_PART_NUMBER_IN_MINIBOOT字段</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Miniboot相关配置</span>
+<span class="c1"># miniboot 在引导uboot启动时，加载uboot的内存地址</span>
+<span class="nb">export</span> <span class="nv">HR_UBOOT_IMAGE_LOAD_ADDR</span><span class="o">=</span><span class="s2">&quot;4000000&quot;</span>
+<span class="c1"># miniboot读取的uboot镜像大小，如果用户编译的uboot.img镜像超过了2MB,此处和分区中uboot的分区大小都需要相应修改</span>
+<span class="nb">export</span> <span class="nv">HR_UBOOT_SIZE</span><span class="o">=</span><span class="m">2097152</span>  <span class="c1">#2M SIZE</span>
+<span class="c1"># miniboot分区镜像文件打包种类，1代表miniboot打包mbr、gpt、spl镜像，2代表miniboot打包veeprom、mbr、gpt、spl镜像</span>
+<span class="nb">export</span> <span class="nv">HR_PACK_PART_NUMBER_IN_MINIBOOT</span><span class="o">=</span><span class="m">2</span>
+</pre></div>
+</div>
+</section>
+<section id="ddr">
+<h4>DDR参数配置<a class="headerlink" href="#ddr" title="永久链接至标题"></a></h4>
+<p>板级配置文件board_xxx_config.mk中包括DDR参数配置部分，用户需要根据DDR选型情况对参数配置进行修改，主要包含ddr频率、厂家、类型、容量（可不配置）和参数索引等内容。X3平台支持的DDR和配置请查看 <a class="reference internal" href="Approved_Vendor_List/DDR_Support_List_And_Config.html"><span class="doc">X3 DDR支持列表和板级配置</span></a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># DDR参数配置</span>
+<span class="c1"># 频率可选参数 &quot;667&quot; &quot;1600&quot; &quot;2133&quot; &quot;2640&quot; &quot;2666&quot; &quot;3200&quot; &quot;3600&quot;</span>
+<span class="nb">export</span> <span class="nv">HR_DDR_FREQ</span><span class="o">=</span><span class="s2">&quot;3200&quot;</span>
+<span class="c1"># 厂家可选参数 &quot;hynix&quot; &quot;micron&quot; &quot;samsung&quot;</span>
+<span class="nb">export</span> <span class="nv">HR_DDR_MANUFACTURE</span><span class="o">=</span><span class="s2">&quot;samsung&quot;</span>
+<span class="c1"># ddr类型可选 &quot;LPDDR4&quot; &quot;LPDDR4X&quot; &quot;DDR4&quot;</span>
+<span class="nb">export</span> <span class="nv">HR_DDR_TYPR</span><span class="o">=</span><span class="s1">&#39;LPDDR4&#39;</span>
+<span class="c1"># ddr容量大小 &quot;1&quot; &quot;2&quot; &quot;4&quot;, 可不配置，支持自动识别</span>
+<span class="nb">export</span> <span class="nv">HR_DDR_CAPACITY</span><span class="o">=</span><span class="s2">&quot;2&quot;</span>
+<span class="c1"># 当相同ddr厂家、类型、频率时有多组ddr参数时，需要通过这个配置项来做区分</span>
+<span class="nb">export</span> <span class="nv">HR_DDR_ALTERNATIVE</span><span class="o">=</span><span class="m">2</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="uboot">
+<h3><span class="section-number">4.2.2.2. </span>Uboot参数配置<a class="headerlink" href="#uboot" title="永久链接至标题"></a></h3>
+<p>板级配置文件board_xxx_config.mk中会指定uboot中使用的配置文件。为保证系统兼容性，建议为每款硬件新增uboot配置文件和设备树文件，文件分别位于uboot/configs/和uboot/arch/arm/dts/目录中。uboot相关的板级配置项如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 建议：每次新增核心板时都对应添加一套 HR_SOM_TYPE、uboot_config_file、kernel_config_file、uboot和kernel下的dts</span>
+
+<span class="c1"># uboot 编译配置文件，在这个配置文件中需要指定使用的dts文件</span>
+<span class="nb">export</span> <span class="nv">HR_UBOOT_CONFIG_FILE</span><span class="o">=</span>xj3_soc_defconfig
+</pre></div>
+</div>
+<p>uboot所用设备树在xj3_soc_defconfig配置文件中指定，例如<code class="docutils literal notranslate"><span class="pre">CONFIG_DEFAULT_DEVICE_TREE=&quot;hobot-xj3-soc&quot;</span></code>。</p>
+</section>
+<section id="kernel">
+<h3><span class="section-number">4.2.2.3. </span>Kernel参数配置<a class="headerlink" href="#kernel" title="永久链接至标题"></a></h3>
+<p>板级配置文件board_xxx_config.mk中会指定kernel使用的配置文件、board type和DDR dq map。为保证系统兼容性，建议为每款硬件新增kernel配置文件和设备树文件，文件分别位于kernel/arch/arm64/configs/和kernel/arch/arm64/boot/dts/hobot/目录中。</p>
+<p>配置项HR_KERNEL_CONFIG_FILE用于指定kernel所用的配置文件，例如：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># kernel 配置</span>
+<span class="c1"># kernel的设备树通过 HR_SOM_TYPE 和 HR_BASE_BOARD_TYPE 组合后的数字(例如：304)，在tools/dtbmapping/dtb_mapping_xj3.json匹配</span>
+<span class="c1"># kernel 编译配置文件</span>
+<span class="nb">export</span> <span class="nv">HR_KERNEL_CONFIG_FILE</span><span class="o">=</span>xj3_perf_defconfig
+</pre></div>
+</div>
+<p>配置项HR_SOM_TYPE用于指定硬件board type，其中0-5已被地平线开发板占用，用户需要从6-15中进行选择。
+配置项HR_BASE_BOARD_TYPE用于指定硬件DDR dq map方式，目前参考设计提供了x3dvb、x3sdb两种map，取值分别对应1和4。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 芯片核心板类型: auto(0) | x3som(1) | j3som(2) | x3sdb(3), 或者 0-15之间的数字，用于指示核心板类型</span>
+<span class="nb">export</span> <span class="nv">HR_SOM_TYPE</span><span class="o">=</span><span class="s2">&quot;x3sdb&quot;</span>
+<span class="c1"># 使用的基础硬件参考设计，主要影响ddr的pcb走线，一定要正确，否则ddr training不过。 可选参数 &quot;x3dvb&quot; &quot;x3sdb&quot;</span>
+<span class="nb">export</span> <span class="nv">HR_BASE_BOARD_TYPE</span><span class="o">=</span><span class="s2">&quot;x3sdb&quot;</span>
+</pre></div>
+</div>
+<p>设备树文件位于<code class="docutils literal notranslate"><span class="pre">kernel/arch/arm64/boot/dts/hobot/</span></code>目录中，X3开发板对应<code class="docutils literal notranslate"><span class="pre">hobot-x3-sdb.dts</span></code>，用户参考并新增设备树。新增的设备树文件，需要添加到设备树映射文件<code class="docutils literal notranslate"><span class="pre">kernel/tools/dtbmapping/dtb_mapping_xj3.json</span></code>中，同时在<code class="docutils literal notranslate"><span class="pre">kernel/arch/arm64/boot/dts/hobot/Makefile</span></code>中添加新设备树文件的编译项，例如：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span># kernel/tools/dtbmapping/dtb_mapping_xj3.json
+{
+	...
+    &quot;304&quot;: {
+        &quot;dtb_name&quot;  :   &quot;hobot-x3-sdb.dtb&quot;,
+        &quot;gpio_id&quot;   :   &quot;0&quot;
+    },
+    ...
+}
+</pre></div>
+</div>
+<div class="highlight-makefile notranslate"><div class="highlight"><pre><span></span><span class="c"># kernel/arch/arm64/boot/dts/hobot/Makefile</span>
+<span class="nv">dtb-$(CONFIG_HOBOT_XJ3)</span>  <span class="o">+=</span> hobot-x3-sdb.dtb
+</pre></div>
+</div>
+<p>其中304代表board id，此id通过HR_SOM_TYPE和HR_BASE_BOARD_TYPE配置项组合生成，规则为id = HR_SOM_TYPE | 0 | HR_BASE_BOARD_TYPE。</p>
+<p>以X3 SDB开发板为例，HR_SOM_TYPE = 3，HR_BASE_BOARD_TYPE = 4，因此board id = 304。</p>
+</section>
+<section id="id6">
+<h3><span class="section-number">4.2.2.4. </span>电源域配置<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<p><font color=red><strong>重要：用户需要仔细确认软件电源域配置是否跟硬件设计匹配，如有问题会造成硬件IO损坏甚至芯片损坏。</strong></font></p>
+<p>修改方法请参考 <a class="reference internal" href="driver_develop_guide/12-IO-DOMAIN_Debug_Guide_zh_CN.html"><span class="doc">IO-DOMAIN调试指南</span></a>。</p>
+</section>
+<section id="uart">
+<h3><span class="section-number">4.2.2.5. </span>UART启动镜像生成<a class="headerlink" href="#uart" title="永久链接至标题"></a></h3>
+<p>如2.3.4所述，刷机工具默认只支持地平线开发板，预置的ddr参数和bootloader镜像都是基于开发板配置进行编译。对于客户定制化硬件，可能由于DDR、网络PHY的型号差异需要重新编译镜像，并按照2.3.4中的配置，才可以使用升级工具对硬件进行版本升级。</p>
+<p>生成刷机工具所需镜像的方法如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> build
+./xbuild miniboot
+./xbuild factory
+</pre></div>
+</div>
+<p>编译成功后会在deploy目录生成factory_images目录生成刷机工具镜像，包含：boot_uart_secure.pkg、uart_ddr_img.bin、key_set.bin。其含义如下：</p>
+<ul class="simple">
+<li><p><strong>boot_uart_secure.pkg</strong>    串口刷机方式需要用的uboot固件，替换升级工具中的 data\board_config\xj3-key1\boot_config\boot_file\boot_uart_secure.pkg</p></li>
+<li><p><strong>uart_ddr_img</strong>                    串口刷机方式需要用的ddr参数固件，存放在升级工具中的 data\xj3-ddr下的固件，建议新建一个目录存放，保留原始的固件</p></li>
+<li><p><strong>key_set.bin</strong>                       如果产品烧录了efuse，启动需要efuse信息，则需要使用到这个文件</p></li>
+</ul>
+<p>自定义配置刷机工具的说明请参考 <a class="reference external" href="../quick_start/Firmware_Update.html#update_config">自定义升级</a> 。</p>
+</section>
+<section id="id7">
+<h3><span class="section-number">4.2.2.6. </span>在Uboot配置管脚默认状态<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<p>在uboot的阶段，会把很多管脚的状态设置成gpio模式的输入状态，这样做是为了解除uboot与kernel的管脚状态耦合，避免kernel里面得到的管脚状态不确定。</p>
+<p>对于用户自己设计的硬件，一般管脚使用上都会和开发板有一些差异，比如有些管脚在uboot阶段需要依然保持默认状态，不允许修改模式，这样在调试阶段，就需要在uboot下修改对该管脚的模式设置。</p>
+<p>uboot中配置管脚的代码为: <code class="docutils literal notranslate"><span class="pre">board/hobot/xj3/xj3_pin_info.c</span></code>，在 <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">pin_info</span> <span class="pre">pin_info_array</span></code> 定义了需要配置的管脚，所有管脚都设置为gpio模式，输入方向，支持设置上拉、下拉和没有上下拉。</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">pin_info</span><span class="w"> </span><span class="n">pin_info_array</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">NO_PULL</span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">NO_PULL</span><span class="p">},</span><span class="w"></span>
+<span class="w">    	</span><span class="p">...</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<p>详细配置gpio管脚的说明请查看 <a class="reference external" href="driver_devolep_guide/10-GPIO_Debug_Guide_zh_CN.html">GPIO调试指南</a>。</p>
+</section>
+</section>
+<section id="id8">
+<h2><span class="section-number">4.2.3. </span>上板调试<a class="headerlink" href="#id8" title="永久链接至标题"></a></h2>
+<p>设备上电正常后，用户可以debug串口确认X3芯片是否有log输出，如没有log输出，请排查以下问题：</p>
+<ul class="simple">
+<li><p>芯片供电</p></li>
+<li><p>X3芯片bootsel管脚配置情况</p></li>
+<li><p>debug串口波特率和pc工具的波特率设置</p></li>
+</ul>
+<p>设备为空片时，X3芯片上电后串口的打印如下：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>NOTICE:  fast_boot:0
+
+S
+F
+L
+O
+NOTICE:  efuse <span class="nv">cpu_cfg</span> <span class="o">=</span> <span class="m">0</span>
+W
+NOTICE:  Booting Trusted Firmware
+NOTICE:  BL1: v1.4<span class="o">(</span>release<span class="o">)</span>:HR-ROM-Rel-v1.1-141-ga91d4dd-dirty
+NOTICE:  BL1: Built : <span class="m">11</span>:24:44, Oct <span class="m">23</span> <span class="m">2019</span>
+NOTICE:  Waiting connect ...
+NOTICE:  boot src: <span class="m">0</span>
+NOTICE:  eMMC : 0xd6
+ERROR:   <span class="m">512</span> Info manu<span class="o">(</span>0x0<span class="o">)</span> or chip<span class="o">(</span>0x0<span class="o">)</span> id is incorrect!
+ERROR:   Failed to obtain reference to image <span class="nv">id</span><span class="o">=</span><span class="m">1</span> <span class="o">(</span>-22<span class="o">)</span>
+ERROR:   Failed to load BL2 firmware.
+NOTICE:  Enter Uart Download Mode:
+CCCCCCCCCCCCC
+</pre></div>
+</div>
+<section id="id9">
+<h3><span class="section-number">4.2.3.1. </span>系统刷机<a class="headerlink" href="#id9" title="永久链接至标题"></a></h3>
+<p>在确认X3上电可以正常输出log后，用户可使用预先制作好的最小系统进行版本升级。目前有工具升级和手动升级两种方式，推荐用户优先使用一键式工具，升级方法可参考
+<a class="reference external" href="../quick_start/firmware_update">系统镜像升级</a>说明进行镜像刷机。</p>
+<p>如果刷机完成后系统启动异常，可以根据失败阶段进行针对性调试。</p>
+</section>
+<section id="id10">
+<h3><span class="section-number">4.2.3.2. </span>miniboot启动异常<a class="headerlink" href="#id10" title="永久链接至标题"></a></h3>
+<p>miniboot主要完成ddr的training、顺序加载bl31和uboot，并最终跳转到uboot运行中。如果启动失败，可能是ddr型号识别错误、ddr training未通过、uboot加载异常等原因。详细排查方法可以参考：
+<a class="reference internal" href="driver_develop_guide/23-DDR_Debug_Guide_zh_CN.html"><span class="doc">DDR故障排查指南</span></a>。</p>
+</section>
+<section id="id11">
+<h3><span class="section-number">4.2.3.3. </span>uboot启动异常<a class="headerlink" href="#id11" title="永久链接至标题"></a></h3>
+<p>uboot主要用来引导linux内核，常见的启动失败原因可能是kernel分区加载异常、cmdline参数异常等原因，详细原因可通过uboot log进行判断。除了uboot启动的调试，用户还需根据自身硬件设计确认常用模块的功能是否正常，例如网口、USB口等。确认方法方法如下：</p>
+<p>网口测试，可在uboot中尝试ping主机端进行确认，方法如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Hobot&gt;setenv ipaddr <span class="m">10</span>.103.100.202
+Hobot&gt;setenv gatewayip <span class="m">10</span>.103.100.1
+Hobot&gt;setenv netmask <span class="m">255</span>.255.255.0
+Hobot&gt;setenv serverip <span class="m">10</span>.103.100.3
+Hobot&gt;ping <span class="m">10</span>.103.100.3
+Phy name:RealTek RTL8211F
+Phy uid:1cc916
+ethernet@A5014000 Waiting <span class="k">for</span> PHY auto negotiation to complete....... <span class="k">done</span>
+<span class="nb">set</span> <span class="nv">mac_div_clk</span> <span class="o">=</span> 125000000Using ethernet@A5014000 device
+host <span class="m">10</span>.103.100.3 is alive
+</pre></div>
+</div>
+<p>USB口，可在uboot中切换到fastboot模式，在主机端进行确认，方法如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Hobot&gt;fastboot <span class="m">0</span>
+<span class="k">select</span> emmc as flash <span class="nb">type</span>
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h3><span class="section-number">4.2.3.4. </span>kernel启动异常<a class="headerlink" href="#id12" title="永久链接至标题"></a></h3>
+<p>如果kernel阶段遇到启动异常，可确认如下内容：</p>
+<ul class="simple">
+<li><p>确认内核启动日志，确认内核模块、设备驱动初始化正常</p></li>
+<li><p>确认根文件系统和/etc/fstat文件中配置的分区挂载正常</p></li>
+<li><p>确认系统能正常进入到shell终端，并通过串口登录</p></li>
+<li><p>确认网络、USB等端口可以正常使用</p></li>
+</ul>
+</section>
+</section>
+<section id="id13">
+<h2><span class="section-number">4.2.4. </span>稳定性测试<a class="headerlink" href="#id13" title="永久链接至标题"></a></h2>
+<p>完成硬件bring up后，需要针对硬件进行稳定性压力测试，详细压测方法请参考<a class="reference internal" href="driver_develop_guide/23-01-DDR_stress_test.html"><span class="doc">X3开发板DDR压测</span></a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Bsp_Develop.html" class="btn btn-neutral float-left" title="4.1. 环境搭建及编译说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="driver_develop_guide/index.html" class="btn btn-neutral float-right" title="4.3. 驱动开发指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

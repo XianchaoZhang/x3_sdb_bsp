@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.2.11. Sunrise_camera用户使用说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="3.2.12. Sunrise_camera开发说明" href="Sunrise_camera_dev.html" />
+    <link rel="prev" title="3.2.10. sample_usb_cam_4k60 使用说明" href="sample_usb_cam_4k60.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">3. Demo使用指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Typical_Application_Scenarios/index.html">3.1. 典型应用场景</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">3.2. VIO使用指引</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="get_sif_data.html">3.2.1. get_sif_data 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_isp_data.html">3.2.2. get_isp_data 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_isp.html">3.2.3. sample_isp 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps.html">3.2.4. sample_vps 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps_zoom.html">3.2.5. sample_vps_zoom 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_osd.html">3.2.6. sample_osd 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html">3.2.7. sample video codec 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vot.html">3.2.8. sample_vot 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_lcd.html">3.2.9. sample_lcd 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_usb_cam_4k60.html">3.2.10. sample_usb_cam_4k60 使用说明</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">3.2.11. Sunrise_camera用户使用说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">3.2.11.1. 功能说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">3.2.11.2. 硬件环境准备</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#sensor">Sensor连接</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id3">网络连接要求</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#usb">USB连接要求</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">3.2.11.3. sunrise_camera部署方法</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id5">程序启动方式</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#web">3.2.11.4. Web端使用说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id6">主界面</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id7">参数配置方式</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id8">设备信息</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#ip">IP摄像头配置</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id9">USB摄像头</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id10">智能盒子</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id11">其他配置</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id12">算法渲染配置</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id13">图像实时抓拍</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id14">预览码流切换</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id15">预览画面属性显示</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#vlc">3.2.11.5. vlc播放器拉流</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id16">拉流方法</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#k-30fps">4K&#64;30fps拉流配置说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html">3.2.12. Sunrise_camera开发说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">3. </span>Demo使用指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">3.2. </span>VIO使用指引</a> &raquo;</li>
+      <li><span class="section-number">3.2.11. </span>Sunrise_camera用户使用说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="sample_usb_cam_4k60.html" class="btn btn-neutral float-left" title="3.2.10. sample_usb_cam_4k60 使用说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Sunrise_camera_dev.html" class="btn btn-neutral float-right" title="3.2.12. Sunrise_camera开发说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sunrise-camera">
+<h1><span class="section-number">3.2.11. </span>Sunrise_camera用户使用说明<a class="headerlink" href="#sunrise-camera" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">3.2.11.1. </span>功能说明<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>Sunrise_camera支持演示X3M、X3E芯片图像模块(VIN、ISP、VPS、VO)、多媒体模块(VENC、VDEC)、BPU模块的Hapi接口功能。</p>
+<p>目前支持 IP摄像头（IPC）， USB摄像头（USB Camera），智能盒子（Video Box）等三种示例场景，每种场景支持Web端在线切换，无需重启应用。用户可以通过Web端、VLC拉流、HDMI输出、USB输出等多种方式预览图像效果。此外，通过Web端“场景设置”页面，还可以配置各场景使用的sensor、码率、算法模型等参数。</p>
+<p>算法模型支持：mobilenet_v2、yolov5、personMultitask（地平线自研人体多任务模型，支持人脸、人头、人体、人体骨骼点检测）。</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">3.2.11.2. </span>硬件环境准备<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>sunrise_camera程序需要搭配地平线X3 SDB开发板运行，需要确认设备是否齐全，清单如下：</p>
+<ul class="simple">
+<li><p>X3 SDB开发板</p></li>
+<li><p>镜头模组，800W：imx415，200W：F37</p></li>
+<li><p>12V电源适配器</p></li>
+<li><p>串口线</p></li>
+<li><p>网线</p></li>
+<li><p>micro USB线</p></li>
+</ul>
+<p>整体连接方式见下图：</p>
+<p><img alt="image-20220328223942514" src="../../_images/image-20220328223942514.png" /></p>
+<p>​</p>
+<section id="sensor">
+<h3>Sensor连接<a class="headerlink" href="#sensor" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>对于imx415模组，需要接入mipi host1</p></li>
+<li><p>对于F37模组，需要接入mipi host0</p></li>
+<li><p>摄像头fpc排线安装时，主板和sensor金手指朝下进行连接</p></li>
+<li><p>fpc排线规格：24 pin、0.5mm间距异面fpc，长度&lt;15cm</p></li>
+</ul>
+<p>camera实物连接方式，请参考下图：</p>
+<p><img alt="image-imx415-f37" src="../../_images/image-imx415-f371.png" /></p>
+</section>
+<section id="id3">
+<h3>网络连接要求<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>为保证4K编码推流时的稳定性，建议开发板与PC机的千兆网口进行直连。</p>
+</section>
+<section id="usb">
+<h3>USB连接要求<a class="headerlink" href="#usb" title="永久链接至标题"></a></h3>
+<p>X3 SDB开发板分时支持USB host和device模式，4组USB type A支持host模式，1组Micro USB支持device模式，两种接口硬件互斥，不可同时插入设备。当运行USB摄像头方案时，USB线需要接入Micro USB口，开发板Micro USB接口兼容USB2.0、USB3.0两种线缆，如下图：</p>
+<ul class="simple">
+<li><p>USB2.0 连接线<img alt="image-20220307215728334" src="../../_images/image-20220307215728334.png" /></p></li>
+</ul>
+<p>需要注意的是，如果需要测试YUV 1080p以上格式，需要使用USB3.0线缆，否则会因usb带宽问题出现丢帧。其余图像格式，USB2.0即可满足要求。此外，市面上存在充电线和数据线两种USB线缆，使用前一定要确认USB线缆是数据线。</p>
+</section>
+</section>
+<section id="id4">
+<h2><span class="section-number">3.2.11.3. </span>sunrise_camera部署方法<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>sunrise_camera软件部署包命名为sunrise_camera.tar.gz，预编译好的部署包存放在sample目录下。建议解压到 /app 目录下，解压生成的文件包括：sunrise_camera主程序目录、WebServer 目录（httpd服务程序和网页目录）、start_app.sh 启动脚本，详细目录结构说明如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.
+├── start_app.sh 		<span class="c1"># 启动脚本，按顺序启动web服务、主程序</span>
+├── sunrise_camera
+│   ├── bin				<span class="c1"># 主程序和sensor库</span>
+│   ├── include			<span class="c1"># 通用头文件（备用）</span>
+│   ├── lib				<span class="c1"># 编译生成的静态库和 bpu predict动态库</span>
+│   ├── model_zoom			<span class="c1"># 应用中用到的算法模型</span>
+│   └── test_data			<span class="c1"># 应用默认配置文件和测试文件</span>
+└── WebServer
+    ├── fcgi				<span class="c1"># fcgi程序（备用）</span>
+    ├── lighttpd-x3			<span class="c1"># httpd和web页面</span>
+    ├── pcre				<span class="c1"># lighttpd依赖</span>
+    ├── README.txt			<span class="c1"># fcgi、lighttpd、pcre编译部署说明</span>
+└── start_lighttpd.sh		<span class="c1"># web服务启动脚本</span>
+</pre></div>
+</div>
+<section id="id5">
+<h3>程序启动方式<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p><strong>手动启动：</strong></p>
+<p>ssh登录设备后，进入 /app 目录，执行 sh ./start_app.sh启动</p>
+<p><strong>上电自启动：</strong></p>
+<p>修改文件系统读写属性，命令如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mount</span> <span class="o">-</span><span class="n">o</span> <span class="n">rw</span><span class="p">,</span><span class="n">remount</span> <span class="o">/</span>
+</pre></div>
+</div>
+<p>修改/init.rc文件添加自启动项，如下图：</p>
+<p><img alt="image-20220307220105350" src="../../_images/image-20220307220105350.png" /></p>
+</section>
+</section>
+<section id="web">
+<h2><span class="section-number">3.2.11.4. </span>Web端使用说明<a class="headerlink" href="#web" title="永久链接至标题"></a></h2>
+<section id="id6">
+<h3>主界面<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<p>Sunrise camera正常启动后，通过chrome浏览器在地址栏输入IP地址（开发板默认IP为192.168.1.10）可以登录用户控制主界面，  例如：http://192.168.1.10</p>
+<p><img alt="image-20220307220148037" src="../../_images/image-20220307220148037.png" /></p>
+<p>登录成功后的界面显示如下：</p>
+<p><img alt="image-20220307220153876" src="../../_images/image-20220307220153876.png" /></p>
+<p>界面菜单详细说明如下：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>1</th>
+<th>设备信息，点击后会显示芯片类型、rtsp拉流url和软件版本号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>场景配置，点击后打开场景选择和参数配置页面</td>
+</tr>
+<tr>
+<td>3</td>
+<td>显示当前运行的场景信息</td>
+</tr>
+<tr>
+<td>4</td>
+<td>在运行地平线PersonMulti算法时显示，可以配置预览画面中渲染内容，包括人脸、人头、人体和骨骼</td>
+</tr>
+<tr>
+<td>5</td>
+<td>运行时动态切换编码码率</td>
+</tr>
+<tr>
+<td>6</td>
+<td>浏览器预览画面的实时帧率</td>
+</tr>
+<tr>
+<td>7</td>
+<td>算法运算的实时帧率</td>
+</tr>
+</tbody>
+</table></section>
+<section id="id7">
+<h3>参数配置方式<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<p>sunrise_camera支持通过Web端在线修改参考场景、camera类型、编码效果及算法模型等参数配置，修改界面如下图：</p>
+<p><img alt="image-20220307220126767" src="../../_images/image-20220307220126767.png" /></p>
+<p>具体修改步骤如下：</p>
+<ol class="simple">
+<li><p>启动sunrise_camera程序，打开chrome浏览器输入设备地址，例如：http://192.168.1.10</p></li>
+<li><p>点击场景配置按钮，如上图红色标号“1”</p></li>
+<li><p>选中对应的示例场景，例如上图红色标号“2”</p></li>
+<li><p>选择开发板实际接入的sensor型号、编码参数、算法模型，例如上图红色标号“3”</p></li>
+<li><p>点击提交，修改生效但不断电保存。如需生效且断电保存，请点击保存配置。</p></li>
+</ol>
+<p>注意：程序默认场景为智能盒子方案，如保存配置为其他场景，需保证摄像头模组的正确连接，否则会引起程序异常。</p>
+</section>
+<section id="id8">
+<h3>设备信息<a class="headerlink" href="#id8" title="永久链接至标题"></a></h3>
+<p>点击 “设备信息”按钮，可以显示当前芯片类型（X3M、X3E）、rtsp推流信息（支持vlc拉流）、软件版本信息等。</p>
+<p><img alt="image-20220307220204717" src="../../_images/image-20220307220204717.png" /></p>
+</section>
+<section id="ip">
+<h3>IP摄像头配置<a class="headerlink" href="#ip" title="永久链接至标题"></a></h3>
+<p>IP摄像头方案实现了camera图像的采集、处理、编码、rtsp推流及智能计算等功能，可以帮助用户快速体验地平线方案的图像和算法效果，方案功能框图如下：</p>
+<p><img alt="image-20220328224841610" src="../../_images/image-20220328224841610.png" /></p>
+<p>对于Web端的方案参数配置，支持选择单双目Sensor类型选择、编码码率配置及算法模型选择等功能，配置区域如下图所示：</p>
+<p><img alt="image-20220328224906873" src="../../_images/image-20220328224906873.png" /></p>
+<p>“单目/双目”选项用于确定sensor接入方式。当选择单目时，配置第一行的sensor、码率和算法；当选择双目时，两行选项都必须配置，sensor配置目前只支持8M+2M的组合，例如imx415+F37。</p>
+<p>“选择sensor”下拉菜单，首选项是当前默认配置，其余选项是自动探测到接入设备的sensor类型。由于默认sensor可能并未接入，因此必须选择跟设备实际连接sensor型号，否则程序会报错。</p>
+<p>“设置码率”下拉菜单，支持设置每一路图像的H264编码码率，注意不能设置为0kpbs；双目方案的第二路流为stream_chn1.h264</p>
+<p>“选择算法”下拉菜单，支持设置每一路图像所运行的算法模型。</p>
+<p>配置完成后点击“提交”按钮，程序会立即切换场景应用，并输出图像效果。</p>
+</section>
+<section id="id9">
+<h3>USB摄像头<a class="headerlink" href="#id9" title="永久链接至标题"></a></h3>
+<p>USB摄像头方案，实现了camera图像的采集、处理、编码、UVC传输等功能，可以帮助用户快速体验地平线方案的图像。方案功能框图如下：</p>
+<p><img alt="image-20220328225042456" src="../../_images/image-20220328225042456.png" /></p>
+<p>对于Web端的方案参数配置，只支持单目sensor接入，可通过”选择sensor”下拉菜单，配置需要的sensor类型，并通过主机端相机软件预览效果。由于算法结果的传输、可视化渲染需要采用地平线自定义协议和app，所以第三方播放器只支持图像效果预览。</p>
+<p>图像预览目前支持window、安卓平台的多种应用软件，如windows相机、potplayer、uvc camera、腾讯会议、zoom、钉钉等。用户可在软件中连接uvc camera摄像机进行体验。</p>
+<p>PC版本potplayer下载链接：https://daumpotplayer.com/download/</p>
+<p>Andorid版本uvc camera app下载连接，可在USB摄像头方案状态说明信息下方点击下载链接下载。</p>
+</section>
+<section id="id10">
+<h3>智能盒子<a class="headerlink" href="#id10" title="永久链接至标题"></a></h3>
+<p>智能盒子方案实现了单路、四路1080p视频解码、拼接、编码、rtsp推流及智能计算等功能，用户可通过Web端、HDMI或者拉流方式预览效果。方案功能框图如下：</p>
+<p><img alt="image-20220328225226472" src="../../_images/image-20220328225226472.png" /></p>
+<p>对于Web端的方案参数配置，支持选择单、四路解码路数选择、编码码率配置及算法模型选择等功能，配置区域如下图所示：</p>
+<p><img alt="image-20220307220351371" src="../../_images/image-20220307220351371.png" /></p>
+<p>“选择路数”下拉菜单，支持选择1路或者4路本地文件解码；</p>
+<p>“设置码率”下拉菜单，支持选择H264编码码率；</p>
+<p>“选择算法”下拉菜单，支持选择每路视频流运行的算法模型。</p>
+<p>配置完成后点击“提交”按钮立即切换场景应用。</p>
+</section>
+<section id="id11">
+<h3>其他配置<a class="headerlink" href="#id11" title="永久链接至标题"></a></h3>
+<section id="id12">
+<h4>算法渲染配置<a class="headerlink" href="#id12" title="永久链接至标题"></a></h4>
+<p>当运行地平线多任务模型时，Web端默认会出输出人脸、人头、人体、骨骼点等算法可视化渲染效果，用户可以通过“算法渲染配置”，来决定自己需要的算法结果输出。配置界面如下图：</p>
+<p><img alt="image-20220307220402458" src="../../_images/image-20220307220402458.png" /></p>
+</section>
+<section id="id13">
+<h4>图像实时抓拍<a class="headerlink" href="#id13" title="永久链接至标题"></a></h4>
+<p>Web端支持图像实时抓拍功能，可以完成实时画面中raw、yuv原图的抓取，用于后续的效果对比和分析。目前只有IPC单目场景支持抓拍功能，当运行该场景时，会在Web左下角控制区显示抓拍按钮，用户可以点击相应按钮完成raw、yuv原图的抓取，如下图：</p>
+<p><img alt="image-20220307220413227" src="../../_images/image-20220307220413227.png" /></p>
+<p>点击抓拍按钮后会弹出文件保存对话框，用户选择合适路径后，点击保存按钮即可。</p>
+<p><img alt="image-20220307220422038" src="../../_images/image-20220307220422038.png" /></p>
+</section>
+<section id="id14">
+<h4>预览码流切换<a class="headerlink" href="#id14" title="永久链接至标题"></a></h4>
+<p>选择IPC双目场景时控制区会显示主、子码流切换下拉框，可以通过选择主、子码流在web上预览不同sensor的画面，如下图：</p>
+<p><img alt="image-20220307220428998" src="../../_images/image-20220307220428998.png" /></p>
+</section>
+<section id="id15">
+<h4>预览画面属性显示<a class="headerlink" href="#id15" title="永久链接至标题"></a></h4>
+<p>Web端预览画面支持图像帧率和算法帧率的实时显示，帧率显示位于画面右上角。</p>
+<p>Web端预览画面支持显示当前设备时间。</p>
+</section>
+</section>
+</section>
+<section id="vlc">
+<h2><span class="section-number">3.2.11.5. </span>vlc播放器拉流<a class="headerlink" href="#vlc" title="永久链接至标题"></a></h2>
+<p>sunrise_camera程序运行时会推送rtsp流，用户可以通过vlc播放器拉流，实现画面预览和保存功能。</p>
+<section id="id16">
+<h3>拉流方法<a class="headerlink" href="#id16" title="永久链接至标题"></a></h3>
+<p>打开vlc播放器，选择“媒体”菜单，然后选择“打开网络串流”选项。</p>
+<p>在“打开媒体”对话框中填入url地址，点击 “播放”按钮即可开始拉流，如下图：</p>
+<p><img alt="image-20220328225311750" src="../../_images/image-20220328225311750.png" /></p>
+<p>url地址可以在web页面的设备信息中查看。</p>
+</section>
+<section id="k-30fps">
+<h3>4K&#64;30fps拉流配置说明<a class="headerlink" href="#k-30fps" title="永久链接至标题"></a></h3>
+<p>1、 4K&#64;30fps 8Mbps的情况下网络必须是千兆网络，否则支持不了8Mbps的码率，很容易出现马赛克和花屏情况。</p>
+<p>2、vlc buffer_size设置，vlc 接收buffer修改：默认是250000，建议改到1200000。</p>
+<p><img alt="image-20220328225330413" src="../../_images/image-20220328225330413.png" /></p>
+<p>3、使用http模式，可以有效解决拉流丢帧导致的花屏。</p>
+<p><img alt="image-20220328225347010" src="../../_images/image-20220328225347010.png" /></p>
+<p>4、高级设置里面禁用时钟同步</p>
+<p><img alt="image-20220328225402005" src="../../_images/image-20220328225402005.png" /></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sample_usb_cam_4k60.html" class="btn btn-neutral float-left" title="3.2.10. sample_usb_cam_4k60 使用说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Sunrise_camera_dev.html" class="btn btn-neutral float-right" title="3.2.12. Sunrise_camera开发说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

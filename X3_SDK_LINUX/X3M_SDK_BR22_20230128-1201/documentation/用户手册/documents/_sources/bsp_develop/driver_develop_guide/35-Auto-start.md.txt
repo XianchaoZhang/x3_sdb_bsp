@@ -1,0 +1,59 @@
+### 自定义启动项
+
+X3 Linux系统采用Android init流程，系统init进程启动时对init.rc文件进行解析，从而确定需要启动的服务。下文将介绍init.rc的基本规则，更多详细规则可参考[Android Init Language](https://android.googlesource.com/platform/system/core/+/master/init/README.md)。
+
+#### init.rc基本规则
+
+init.rc包含四种类型的语句：动作(action)、服务(service)、命令(command)和选项(option)，其中动作(action)和服务(service)的含义如下：
+
+**动作(action)**：以关键字"on"开头，表示了一组命令(commands)的组成。动作包括一个触发器，决定了何时运行这个动作。其格式如下：
+
+```bash
+on  <trigger>
+    <command>
+```
+
+其中trigger有early-init(早期触发)、init(正常触发)、late-init(晚期触发)、boot(启动触发)、property(参数触发)等几种模式。
+
+常见的trigger如下：
+
+- on early-init：在初始化早期阶段触发
+- on init：在初始化阶段触发
+- on late-init：在初始化晚期阶段触发
+- on boot/charger：当系统启动/充电时触发
+- on property：当属性值满足条件时触发
+
+**服务(service)**：以关键字“service”开头，表示那些需要在系统初始化时需要启动的程序。格式如下：
+
+```bash
+service <name> <path> [ <argument> ]*
+    <option>
+    <option>
+```
+
+其中name表示服务名称、path表示程序路径、argument表示程序参数、option表示依赖条件。
+
+#### 添加启动项
+
+对于X3平台，用户可通过修改文件系统根目录init.rc文件，完成自定义启动项的添加。目前系统中预置了loadko_ready(驱动加载ready)、popvol_ready(文件系统ready)等class，用户启动项如对驱动、文件系统有依赖关系，可直接依赖该class。下面以x3dispinit.sh启动项为例，说明init.rc的修改过程：
+
+- 添加新服务，服务启动会调用x3dispinit.sh脚本
+```bash
+service dispinit /etc/init.d/x3dispinit.sh
+        class loadko_ready
+        oneshot
+        console
+```
+- 指定服务的依赖关系，例如依赖class loadko_ready启动
+- 指定服务的执行方式，例如oneshot单次执行、console服务启动log输出
+- 添加依赖关系的触发行为
+```bash
+on property:loadko.ready=1
+        class_start loadko_ready
+```
+
+如果用户添加的启动项没有生效，可能有如下几点原因：
+- 依赖项没有启动
+- 启动脚本必须是777权限， 执行 chmod 777 /etc/init.d/x3dispinit.sh 修改权限
+- 启动脚本开头没有"#!/bin/sh"
+- 启动项脚本的目录加上名字总长度不能太长，建议控制在64个字节以内

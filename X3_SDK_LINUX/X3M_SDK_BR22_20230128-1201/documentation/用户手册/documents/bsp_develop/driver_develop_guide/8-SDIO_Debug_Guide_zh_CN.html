@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SDIO使用说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>SDIO使用说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sdio">
+<h1>SDIO使用说明<a class="headerlink" href="#sdio" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2>SDIO概述<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<section id="id2">
+<h3>协议版本说明<a class="headerlink" href="#id2" title="永久链接至标题"></a></h3>
+<p>地平线X3J3平台最高支持SDIO Ver3.0版本协议，包括eSDIO支持。支持SDIO标准命令接口，具体接口定义，请参考SDIO协议文档。</p>
+</section>
+<section id="id3">
+<h3>时钟支持<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>地平线X3J3平台SDIO接口前端时钟为1536Mhz/(8 *[1-16])，即1536除以8的整数倍。</p>
+</section>
+<section id="id4">
+<h3>模式支持<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>地平线X3J3平台SDIO接口支持4线SDR数据传输模式。</p>
+<p>默认支持的SDIO协议传输模式有：</p>
+<ul class="simple">
+<li><p>SD High Speed – 52MHz，实际时钟为48MHz</p></li>
+<li><p>SDR12</p></li>
+<li><p>SDR25</p></li>
+<li><p>SDR50</p></li>
+<li><p>SDR104</p></li>
+</ul>
+<p>具体模式配置，请参考DTS修改。</p>
+<p>目前，地平线X3J3平台不支持DDR传输模式。</p>
+</section>
+</section>
+<section id="id5">
+<h2>驱动代码<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<p>本章节主要介绍基本的移植方法。</p>
+<section id="id6">
+<h3>内核驱动代码<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">drivers</span><span class="o">/</span><span class="n">mmc</span><span class="o">/</span><span class="n">host</span><span class="o">/</span><span class="n">dw_mmc</span><span class="o">-</span><span class="n">hobot</span><span class="o">.</span><span class="n">c</span>
+<span class="n">drivers</span><span class="o">/</span><span class="n">mmc</span><span class="o">/</span><span class="n">host</span><span class="o">/</span><span class="n">dw_mmc</span><span class="o">-</span><span class="n">hobot</span><span class="o">.</span><span class="n">h</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h3>内核配置<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<p>CONFIG_MMC_DW_HOBOT</p>
+<p><img alt="image-20220321231306565" src="../../_images/image-20220321231306565.png" /></p>
+</section>
+<section id="dts">
+<h3>DTS修改<a class="headerlink" href="#dts" title="永久链接至标题"></a></h3>
+<p>当前，X3J3平台默认关闭SDIO接口。如需使用，请在产品dts中加入：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="o">&amp;</span><span class="n">sdio2</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;okay&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>如需要支持特殊模式，请在产品dts中加入对应模式名，具体模式请参考SDIO协议文档。</p>
+<p>如果需要自定义输入时钟，请在“sdio2”中加入“clock-frequency”字段，单位为赫兹。输入时钟受到前端时钟树分频影响，具体请咨询地坪线。例如：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="o">&amp;</span><span class="n">sdio2</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;okay&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">clock</span><span class="o">-</span><span class="n">frequency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="mi">52000000</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>如果需要自定义总线速度，请在“sdio2”中加入“clock-freq-min-max”字段，单位为赫兹。输出时钟由输入时钟经控制器分频输出。例如：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>&amp;sdio2 {
+	status = “okay”;
+	clock-freq-min-max = &lt;100000 52000000&gt;;
+}
+</pre></div>
+</div>
+<p>sdio2其他字段，位于dts文件：“arch/arm64/boot/dts/hobot/hobot-xj3.dtsi”中，具体字段定义，请参考内核MMC框架代码及MMC驱动文件。</p>
+</section>
+</section>
+<section id="id8">
+<h2>验证SDIO示例<a class="headerlink" href="#id8" title="永久链接至标题"></a></h2>
+<p>本章节以Marvell SD8801 Wi-Fi模块为例，示意验证方法。</p>
+<section id="in-tree">
+<h3>In-Tree编译<a class="headerlink" href="#in-tree" title="永久链接至标题"></a></h3>
+<p>In-Tree编译后，模块依赖关系会自动生成。在dts打开SDIO2后，系统自动识别Wi-Fi模块并加载。在启动打印中，以下打印应出现：</p>
+<p><img alt="../../_images/366c17cd5fd3c27dd2bc390c94a70574.png" src="../../_images/366c17cd5fd3c27dd2bc390c94a70574.png" /></p>
+<p>同时，可以通过以下命令确认Wi-Fi模块已启动：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ifconfig mlan0
+</pre></div>
+</div>
+<p>使用以下命令重新以NL80211接口加载驱动：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ifconfig mlan0 down
+rmmod sd8xxx
+insmod /lib/modules/4.14.74/sd8xxx.ko <span class="nv">drv_mode</span><span class="o">=</span><span class="m">1</span> <span class="nv">cfg80211_wext</span><span class="o">=</span>0x0f
+<span class="nv">fw_name</span><span class="o">=</span>mrvl/sd8801_uapsta.bin
+</pre></div>
+</div>
+<p>配置Wi-Fi热点信息：下方“&lt;Wi-Fi Name&gt;”以及“&lt;Wi-Fi Password&gt;”请根据实际情况替换，不需要任何符号包围。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mount -o remount,rw /
+wpa_passphrase &lt;Wi-Fi Name&gt;&lt;Wi-Fi Password&gt; &gt;&gt; /userdata/wpa_supplicant.conf
+</pre></div>
+</div>
+<p>启动Wi-Fi：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wpa_supplicant -D nl80211 -i mlan0 -c /userdata/wpa_supplicant.conf -B
+udhcpc -i mlan0
+</pre></div>
+</div>
+<p>测试链接：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ping www.baidu.com
+</pre></div>
+</div>
+</section>
+<section id="out-of-tree">
+<h3>Out-of-Tree编译<a class="headerlink" href="#out-of-tree" title="永久链接至标题"></a></h3>
+<p>Out-of-Tree编译完成后，手动加载所有依赖库：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>insmod /lib/modules/4.14.74/cfg80211.ko
+insmod /lib/modules/4.14.74/mac80211.ko
+insmod /lib/modules/4.14.74/mlan.ko
+</pre></div>
+</div>
+<p>其余操作与in-tree编译相同。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

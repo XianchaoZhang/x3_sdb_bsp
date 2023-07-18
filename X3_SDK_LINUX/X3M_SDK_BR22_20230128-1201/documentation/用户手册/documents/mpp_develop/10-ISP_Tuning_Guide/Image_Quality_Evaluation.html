@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5.10.7. 图像质量测评 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="5.10.8. ISP 调试视频教程" href="Expand_Content.html" />
+    <link rel="prev" title="5.10.6. GDC 使用说明" href="GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">5. 多媒体开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../1-Overview_zh_CN.html">5.1. 系统概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2-System_Control_zh_CN.html">5.2. 系统控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3-Video_Input_zh_CN.html">5.3. 视频输入</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4-Graphic_System_API_Reference_Manual.html">5.4. ISP图像系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5-Video_Processing_zh_CN.html">5.5. 视频处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6-Region_Processing_zh_CN.html">5.6. 区域处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../7-Video_Output_zh_CN.html">5.7. 视频输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../8-Video_Encode_zh_CN.html">5.8. 视频编码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9-Video_Decode_zh_CN.html">5.9. 视频解码</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">5.10. 图像调试指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ISP_Tuning_User_Guide.html">5.10.1. ISP图像调试指引</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sensor_Bring_Up.html">5.10.2. X3 Camera点亮说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Control_Tool_Guide.html">5.10.3. ISP工具指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Camera_Tuning_Tool.html">5.10.4. Hobot player工具指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Generate_ISP_Lib.html">5.10.5. 生成ISP效果库</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html">5.10.6. GDC 使用说明</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">5.10.7. 图像质量测评</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Expand_Content.html">5.10.8. ISP 调试视频教程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html">5.11. 查询多媒体模块调试信息</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../12-Media_Processing_Performance_Debug_Guide.html">5.12. 多媒体性能调试</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">5. </span>多媒体开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">5.10. </span>图像调试指南</a> &raquo;</li>
+      <li><span class="section-number">5.10.7. </span>图像质量测评</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html" class="btn btn-neutral float-left" title="5.10.6. GDC 使用说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Expand_Content.html" class="btn btn-neutral float-right" title="5.10.8. ISP 调试视频教程" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">5.10.7. </span>图像质量测评<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>ISP图像质量测评明细请从如下地址下载：
+<a class="reference external" href="https://horizonrobotics.feishu.cn/file/boxcnl9IBoF0lDEXGmtaZVrRtsg">图像质量测评</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html" class="btn btn-neutral float-left" title="5.10.6. GDC 使用说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Expand_Content.html" class="btn btn-neutral float-right" title="5.10.8. ISP 调试视频教程" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

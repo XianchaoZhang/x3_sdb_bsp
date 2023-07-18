@@ -1,0 +1,71 @@
+ifeq ($(CROSS_COMPILE),)
+CROSS_COMPILE = /opt/gcc-ubuntu-9.3.0-2020.03-x86_64-aarch64-linux-gnu/bin/aarch64-linux-gnu-
+export LD_LIBRARY_PATH=/opt/gcc-ubuntu-9.3.0-2020.03-x86_64-aarch64-linux-gnu/lib/x86_64-linux-gnu
+endif
+
+CFLAGS  := -O2
+
+CC 		= $(CROSS_COMPILE)gcc
+CPP		= $(CROSS_COMPILE)g++
+AR 		= $(CROSS_COMPILE)ar
+STRIP 		= $(CROSS_COMPILE)strip
+LD 		= $(CROSS_COMPILE)ld
+
+CURDIR = $(shell pwd)
+
+APPSDK_DIR = $(shell pwd)/../../appsdk
+
+dir_test = $(shell if [ -d $(APPSDK_DIR) ]; then echo "exist"; else echo "noexist"; fi)
+ifeq ("$(dir_test)", "noexist")
+	APPSDK_DIR = $(shell pwd)/../../deploy/appsdk
+
+	dir_test = $(shell if [ -d $(APPSDK_DIR) ]; then echo "exist"; else echo "noexist"; fi)
+	ifeq ("$(dir_test)", "noexist")
+		APPSDK_DIR = $(shell pwd)/../../deploy_ubuntu/appsdk
+	endif
+endif
+
+LIBSDIR = -L$(ROOFS_DIR)/usr/lib
+
+LIBSDIR += -L$(APPSDK_DIR)/lib
+LIBSDIR += -L$(APPSDK_DIR)/usr/lib
+LIBSDIR += -L$(APPSDK_DIR)/lib/hbmedia
+LIBSDIR += -L$(APPSDK_DIR)/lib/hbbpu
+LIBSDIR += -L$(APPSDK_DIR)/lib/modules
+LIBSDIR += -L$(APPSDK_DIR)/lib/firmware
+LIBSDIR += -L$(APPSDK_DIR)/lib/pkgconfig
+LIBSDIR += -L$(APPSDK_DIR)/lib/sensorlib
+LIBSDIR += -L$(APPSDK_DIR)/lib/udev
+LIBSDIR += -L$(APPSDK_DIR)/lib/udev
+
+INCDIR = -I$(CURDIR)
+INCDIR += -I$(APPSDK_DIR)/include
+INCDIR += -I$(APPSDK_DIR)/include/vio
+INCDIR += -I$(APPSDK_DIR)/include/hbmedia
+
+LDFLAGS =-lcam          \
+	-lvio           \
+	-lhbmedia       \
+	-lgdcbin        \
+	-lisp           \
+	-liar           \
+	-lisp_algo      \
+	-ltinyalsa      \
+	-lmultimedia    \
+	-lz             \
+	-lavformat      \
+	-lavcodec       \
+	-lavutil        \
+	-lswresample    \
+	-ldl            \
+	-lion           \
+	-lalog          \
+	-lturbojpeg     \
+	-ldiag          \
+	-lcjson         \
+	-lhbmem         \
+	-lrt            \
+	-lstdc++        \
+	-lm             \
+	-lpthread
+

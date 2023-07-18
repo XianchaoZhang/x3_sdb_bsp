@@ -1,0 +1,70 @@
+#! /bin/sh
+
+print_usage()
+{
+	echo "Usage:"
+	echo "hrut_camt_autoexpo_val_set camindex value"
+	echo "1/2/3/4: for compatibility this is must but no use"
+	echo "value: float, 0.0~255.0"
+	echo "-----------------------------------"
+}
+
+log=/tmp/config_log
+echo "----------" >> $log
+
+if [ $# -ne 2 ];then
+	echo "error: Parameter wrong" >> $log
+	echo "CmdRetValue: 6"
+	echo "CmdRetResult: 0"
+	print_usage
+	exit 1;
+fi
+
+if [ -f /usr/bin/api_cmd ];then
+	echo "api_cmd is in system" >> $log
+else
+	echo "no api_cmd found, exit" >> $log
+	echo "CmdRetValue: 8"
+	echo "CmdRetResult: 0"
+	exit 1
+fi
+
+i2c_slave_addr="0x6d"
+flag_file="/tmp/camera_1_flag"
+
+if [ -f $flag_file ];then
+        echo "camera is configurable" >> $log
+else
+	echo "camera is not configurable" >> $log
+	echo "CmdRetValue: 1"
+	echo "CmdRetResult: 0"
+	exit 1
+fi
+
+#set auto exposure mode first
+echo "enable auto exposure mode" >> $log
+api_cmd -a $i2c_slave_addr -I 0x55 max 050007000100010000 >> $log
+
+if [ $? -ne 0 ];then
+    echo "set auto exposure mode failed" >> $log
+    echo "CmdRetValue: 10"
+    echo "CmdRetResult: 0"
+    exit 2
+fi
+
+#set auto exposure value
+value=`number_format -t 2 -d $2`
+
+echo 05000D0001000400$value >> $log
+data=05000D0001000400$value
+
+api_cmd -a $i2c_slave_addr -I 0x55 max $data >> $log
+if [ $? -eq 0 ];then
+	touch $exposure_file >> $log 2>&1
+    echo "CmdRetValue: 0"
+    echo "CmdRetResult: 0"
+else
+    echo "CmdRetValue: 255"
+    echo "CmdRetResult: 0"
+fi
+echo "----------" >> $log

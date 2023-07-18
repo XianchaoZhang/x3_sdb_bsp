@@ -1,0 +1,2805 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6.4.1.1. 简介 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+    <link rel="next" title="6.4.2. 模型算子支持列表" href="../supported_op_list_and_restrictions.html" />
+    <link rel="prev" title="6.4.1. PTQ原理及步骤详解" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">6. 量化工具链开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../preface_toolchain_overview.html">6.1. 简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../env_install.html">6.2. 环境安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html">6.3. 快速体验</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">6.4. 训练后量化(PTQ)使用说明</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">6.4.1. PTQ原理及步骤详解</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">6.4.1.1. 简介</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#op-restrictions">6.4.1.2. 模型算子约束</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fp-model-preparation">6.4.1.3. 模型准备</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#model-check">6.4.1.4. 模型验证</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hb-mapper-checker">使用 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">checker</span></code> 工具验证模型</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id6">检查异常处理</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#check-result">检查结果解读</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id9">检查结果的调优指导</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#model-conversion">6.4.1.5. 模型转换</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#prepare-calibration-data">准备校准数据</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hb-mapper-makertbin">使用 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">makertbin</span></code> 工具转换模型</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#yaml">模型转换yaml配置参数说明</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#hzpreprocess">预处理HzPreprocess算子说明</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#conversion-interpretation">转换内部过程解读</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id14">转换结果解读</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#conversion-output">转换产出物解读</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#performance-evaluation">6.4.1.6. 模型性能分析与调优</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hb-perf">使用 <code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 工具估计性能</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id19">开发板实测性能</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#model-performance-optimization">模型性能优化</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#performance-affecting-parameters">检查影响模型性能的yaml参数</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#cpu">处理CPU算子</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id22">高性能模型设计建议</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#bpu">BPU面向高效率模型优化</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#accuracy-evaluation">6.4.1.7. 模型精度分析与调优</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id24">模型精度分析</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#accuracy-optimization">精度调优</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id26">精度有明显损失（4%以上）</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id28">较小精度损失提升</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#qat">使用QAT量化感知训练方案进一步提升模型精度</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id30">6.4.1.8. 其它工具使用说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id31"><code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 工具</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hb-pack"><code class="docutils literal notranslate"><span class="pre">hb_pack</span></code> 工具</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hb-model-info"><code class="docutils literal notranslate"><span class="pre">hb_model_info</span></code> 工具</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hb-model-modifier"><code class="docutils literal notranslate"><span class="pre">hb_model_modifier</span></code> 工具</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hb-model-verifier"><code class="docutils literal notranslate"><span class="pre">hb_model_verifier</span></code> 工具</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hb-eval-preprocess"><code class="docutils literal notranslate"><span class="pre">hb_eval_preprocess</span></code> 工具</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../supported_op_list_and_restrictions.html">6.4.2. 模型算子支持列表</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../horizon_runtime_samples/index.html">6.5. 上板运行(runtime)应用开发说明</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html"><span class="section-number">6. </span>量化工具链开发指南</a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">6.4. </span>训练后量化(PTQ)使用说明</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">6.4.1. </span>PTQ原理及步骤详解</a> &raquo;</li>
+      <li><span class="section-number">6.4.1.1. </span>简介</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="6.4.1. PTQ原理及步骤详解" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../supported_op_list_and_restrictions.html" class="btn btn-neutral float-right" title="6.4.2. 模型算子支持列表" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">6.4.1.1. </span>简介<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>模型转换是指将原始浮点模型转换为地平线混合异构模型的过程。
+原始浮点模型（文中部分地方也称为浮点模型）是指您通过TensorFlow/PyTorch等DL框架训练得到的可用模型，这个模型的计算精度为float32；混合异构模型是一种适合在地平线芯片上运行的模型格式。
+本章节将反复使用到这两种模型名词，为避免理解歧义，请先理解这个概念再阅读下文。</p>
+<p>配合地平线量化工具链的模型完整开发过程，需要经过 <strong>浮点模型准备</strong>、 <strong>模型验证</strong>、 <strong>模型转换</strong>、 <strong>性能评估</strong> 和 <strong>精度评估</strong> 共五个重要阶段，如下图。</p>
+<img alt="../../../_images/model_conversion_flowchart.png" src="../../../_images/model_conversion_flowchart.png" />
+<p><strong>浮点模型准备</strong> 本阶段用来确保原始浮点模型的格式为地平线模型转换工具支持的格式，原始浮点模型来自于您通过TensorFlow/PyTorch等DL框架训练得到可用模型。具体的浮点模型要求与建议，请阅读 <a class="reference internal" href="#fp-model-preparation"><span class="std std-ref">浮点模型准备</span></a> 章节内容。</p>
+<p><strong>模型验证</strong> 本阶段用来校验原始浮点模型是否满足地平线量化工具链的要求。地平线提供 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">checker</span></code> 检查工具来完成浮点模型的检查。具体使用方法，请阅读 <a class="reference internal" href="#model-check"><span class="std std-ref">验证模型</span></a> 章节内容。</p>
+<p><strong>模型转换</strong> 本阶段用来完成浮点模型到地平线混合异构模型的转换，经过这个阶段，您将得到一个可以在地平线芯片上运行的模型。地平线提供 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">makertbin</span></code> 转换工具来完成模型优化、量化和编译等关键步骤。具体使用方法，请阅读 <a class="reference internal" href="#model-conversion"><span class="std std-ref">转换模型</span></a> 章节内容。</p>
+<p><strong>性能评估</strong> 本阶段主要用于测评地平线混合异构模型的推理性能情况，地平线提供了模型性能评估的工具，您可以使用这些工具验证模型性能是否达到应用要求。具体使用说明，请阅读 <a class="reference internal" href="#performance-evaluation"><span class="std std-ref">模型性能分析与调优</span></a> 章节内容。</p>
+<p><strong>精度评估</strong> 本阶段主要用于测评地平线混合异构模型的推理精度情况，地平线提供了模型精度评估的工具。具体使用说明，请阅读 <a class="reference internal" href="#accuracy-evaluation"><span class="std std-ref">模型精度分析与调优</span></a> 章节内容。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>通常在模型转换阶段完成后就可以得到在地平线芯片上运行的模型，但是为了确保您得到的模型性能和精度都是符合应用要求的，地平线建议每次转换后都完成后续的性能评估与精度评估步骤。</p>
+<p>模型转换过程会生成onnx模型, 该模型均为中间产物, 只是便于用户验证模型精度情况, 因此不保证其在版本间的兼容性。 若使用示例中的评测脚本对onnx模型进行单张图片评测或在测试集上评测时, 请使用当前版本工具生成的onnx模型进行操作。</p>
+</div>
+</section>
+<section id="op-restrictions">
+<span id="id2"></span><h1><span class="section-number">6.4.1.2. </span>模型算子约束<a class="headerlink" href="#op-restrictions" title="永久链接至标题"></a></h1>
+<p>为了确保模型能顺利在地平线平台上高效运行，模型中所使用的算子需要符合地平线量化工具链的算子约束。 具体支持情况请阅读 <a class="reference external" href="../supported_op_list_and_restrictions.html">模型算子支持列表</a> 章节内容进行查询。</p>
+</section>
+<section id="fp-model-preparation">
+<span id="id4"></span><h1><span class="section-number">6.4.1.3. </span>模型准备<a class="headerlink" href="#fp-model-preparation" title="永久链接至标题"></a></h1>
+<p>基于公开DL框架训练得到的浮点模型是地平线模型转换工具的输入，目前转换工具支持的DL框架如下：</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
+<col style="width: 18%" />
+<col style="width: 10%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>框架</strong></p></th>
+<th class="head"><p>Caffe</p></th>
+<th class="head"><p>PyTorch</p></th>
+<th class="head"><p>TensorFlow</p></th>
+<th class="head"><p>MXNet</p></th>
+<th class="head"><p>其他框架</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>地平线工具链</strong></p></td>
+<td><p>支持</p></td>
+<td colspan="3"><p>支持（转ONNX）</p></td>
+<td><p>支持（转ONNX）</p></td>
+</tr>
+</tbody>
+</table>
+<p>以上框架中， Caffe框架导出的caffemodel是直接支持的，PyTorch、TensorFlow和MXNet等DL框架通过转换到ONNX格式间接支持。</p>
+<p>对于不同框架到ONNX的转换，目前都有对应的标准化方案，参考如下：</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Pytorch2Onnx：PytTorch官方API支持直接将模型导出为ONNX模型，参考链接：</dt><dd><p><a class="reference external" href="https://pytorch.org/tutorials/advanced/super_resolution_with_onnxruntime.html">https://pytorch.org/tutorials/advanced/super_resolution_with_onnxruntime.html</a>。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Tensorflow2Onnx：基于ONNX社区的onnx/tensorflow-onnx 进行转换，参考链接：</dt><dd><p><a class="reference external" href="https://github.com/onnx/tensorflow-onnx">https://github.com/onnx/tensorflow-onnx</a>。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>MXNet2Onnx：MXNet官方API支持直接将模型导出为ONNX模型，参考链接：</dt><dd><p><a class="reference external" href="https://github.com/dotnet/machinelearning/blob/master/test/Microsoft.ML.Tests/OnnxConversionTest.cs">https://github.com/dotnet/machinelearning/blob/master/test/Microsoft.ML.Tests/OnnxConversionTest.cs</a>。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>更多框架的ONNX转换支持，参考链接：</dt><dd><p><a class="reference external" href="https://github.com/onnx/tutorials#converting-to-onnx-format">https://github.com/onnx/tutorials#converting-to-onnx-format</a>。</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>目前转换工具仅支持输出个数小于或等于32的模型进行转换。</p></li>
+<li><p>支持 <code class="docutils literal notranslate"><span class="pre">caffe</span> <span class="pre">1.0</span></code> 版本的caffe浮点模型和 <code class="docutils literal notranslate"><span class="pre">ir_version≤7</span></code> , <code class="docutils literal notranslate"><span class="pre">opset=10</span></code> 、 <code class="docutils literal notranslate"><span class="pre">opset=11</span></code> 版本的onnx浮点模型量化转换成地平线支持的定点模型, onnx模型的ir_version与onnx版本的对应关系请参考 <a class="reference external" href="https://github.com/onnx/onnx/blob/main/docs/Versioning.md">onnx官方文档</a> ；</p></li>
+<li><p>其他DL框架训练的浮点模型需要先导出要求符合版本要求的ONNX浮点模型后，才能进行量化转换;</p></li>
+<li><p>模型输入维度只支持 <code class="docutils literal notranslate"><span class="pre">固定4维</span></code> 输入NCHW或NHWC（N维度只能为1），例如：1x3x224x224或1x224x224x3， 不支持动态维度及非4维输入；</p></li>
+<li><p>浮点模型中不要包含有 <code class="docutils literal notranslate"><span class="pre">后处理算子</span></code>，例如：nms算子。</p></li>
+</ul>
+</div>
+</section>
+<section id="model-check">
+<span id="id5"></span><h1><span class="section-number">6.4.1.4. </span>模型验证<a class="headerlink" href="#model-check" title="永久链接至标题"></a></h1>
+<p>模型正式转换前，请先使用 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">checker</span></code> 工具进行模型验证，确保其符合地平线X3芯片的支持约束。</p>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>建议参考使用地平线模型转换 <code class="docutils literal notranslate"><span class="pre">horizon_model_convert_sample</span></code> 示例包中的caffe、onnx等示例模型的脚本方法: <code class="docutils literal notranslate"><span class="pre">01_check.sh</span></code>。</p>
+</div>
+<section id="hb-mapper-checker">
+<h2>使用 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">checker</span></code> 工具验证模型<a class="headerlink" href="#hb-mapper-checker" title="永久链接至标题"></a></h2>
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">hb_mapper</span> <span class="pre">checker</span> <span class="pre">工具的使用方式如下：</span></span></dt>
+<dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_mapper checker --model-type <span class="si">${</span><span class="nv">model_type</span><span class="si">}</span> <span class="se">\</span>
+                  --march <span class="si">${</span><span class="nv">march</span><span class="si">}</span> <span class="se">\</span>
+                  --proto <span class="si">${</span><span class="nv">proto</span><span class="si">}</span> <span class="se">\</span>
+                  --model <span class="si">${</span><span class="nv">caffe_model</span><span class="p">/onnx_model</span><span class="si">}</span> <span class="se">\</span>
+                  --input-shape <span class="si">${</span><span class="nv">input_node</span><span class="si">}</span> <span class="si">${</span><span class="nv">input_shape</span><span class="si">}</span> <span class="se">\</span>
+                  --output <span class="si">${</span><span class="nv">output</span><span class="si">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">hb_mapper</span> <span class="pre">checker</span> <span class="pre">参数解释：</span></span></dt>
+<dd><dl class="option-list">
+<dt><kbd><span class="option">--model-type</span></kbd></dt>
+<dd><p>用于指定检查输入的模型类型，目前只支持设置 <code class="docutils literal notranslate"><span class="pre">caffe</span></code> 或者 <code class="docutils literal notranslate"><span class="pre">onnx</span></code>。</p>
+</dd>
+<dt><kbd><span class="option">--march</span></kbd></dt>
+<dd><p>用于指定需要适配的地平线芯片类型，X/J3芯片应设置为 <code class="docutils literal notranslate"><span class="pre">bernoulli2</span></code>。</p>
+</dd>
+<dt><kbd><span class="option">--proto</span></kbd></dt>
+<dd><p>此参数仅在 <code class="docutils literal notranslate"><span class="pre">model-type</span></code> 指定 <code class="docutils literal notranslate"><span class="pre">caffe</span></code> 时有效，取值为Caffe模型的prototxt文件名称。</p>
+</dd>
+<dt><kbd><span class="option">--model</span></kbd></dt>
+<dd><p>在 <code class="docutils literal notranslate"><span class="pre">model-type</span></code> 被指定为 <code class="docutils literal notranslate"><span class="pre">caffe</span></code> 时，取值为Caffe模型的caffemodel文件名称。
+在 <code class="docutils literal notranslate"><span class="pre">model-type</span></code>  被指定为 <code class="docutils literal notranslate"><span class="pre">onnx</span></code> 时，取值为ONNX模型文件名称。</p>
+</dd>
+<dt><kbd><span class="option">--input-shape</span></kbd></dt>
+<dd><p>可选参数，明确指定模型的输入shape。
+取值为 <code class="docutils literal notranslate"><span class="pre">{input_name}</span> <span class="pre">{NxHxWxC/NxCxHxW}</span></code> ，<code class="docutils literal notranslate"><span class="pre">input_name</span></code> 与shape之间以空格分隔。
+例如模型输入名称为 <code class="docutils literal notranslate"><span class="pre">data1</span></code>，输入shape为 <code class="docutils literal notranslate"><span class="pre">[1,224,224,3]</span></code>，
+则配置应该为 <code class="docutils literal notranslate"><span class="pre">--input_shape</span> <span class="pre">data1</span> <span class="pre">1x224x224x3</span></code>。
+如果此处配置shape与模型内shape信息不一致，以此处配置为准。</p>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>注意一个 <code class="docutils literal notranslate"><span class="pre">--input-shape</span></code> 只接受一个name和shape组合，如果您的模型有多个输入节点，
+在命令中多次配置 <code class="docutils literal notranslate"><span class="pre">--input-shape</span></code> 参数即可。</p>
+</div>
+</dd>
+<dt><kbd><span class="option">--output</span></kbd></dt>
+<dd><p>该参数已经废弃, log信息默认存储于 <code class="docutils literal notranslate"><span class="pre">hb_mapper_checker.log</span></code> 中。</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="id6">
+<h2>检查异常处理<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>如果模型检查步骤异常终止或者出现报错信息，则说明模型验证不通过，请根据终端打印或在当前路径下生成的 <code class="docutils literal notranslate"><span class="pre">hb_mapper_checker.log</span></code> 日志文件确认报错信息和修改建议。</p>
+<p>例如：以下配置中含不可识别算子类型 <code class="docutils literal notranslate"><span class="pre">Accuracy</span></code>：</p>
+<div class="highlight-ProtoBuf notranslate"><div class="highlight"><pre><span></span><span class="n">layer</span> <span class="p">{</span>
+  <span class="n">name</span><span class="o">:</span> <span class="s">&quot;data&quot;</span>
+  <span class="n">type</span><span class="o">:</span> <span class="s">&quot;Input&quot;</span>
+  <span class="n">top</span><span class="o">:</span> <span class="s">&quot;data&quot;</span>
+  <span class="n">input_param</span> <span class="p">{</span> <span class="n">shape</span><span class="o">:</span> <span class="p">{</span> <span class="n">dim</span><span class="o">:</span> <span class="mi">1</span> <span class="n">dim</span><span class="o">:</span> <span class="mi">3</span> <span class="n">dim</span><span class="o">:</span> <span class="mi">224</span> <span class="n">dim</span><span class="o">:</span> <span class="mi">224</span> <span class="p">}</span> <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">layer</span> <span class="p">{</span>
+  <span class="n">name</span><span class="o">:</span> <span class="s">&quot;Convolution1&quot;</span>
+  <span class="n">type</span><span class="o">:</span> <span class="s">&quot;Convolution&quot;</span>
+  <span class="n">bottom</span><span class="o">:</span> <span class="s">&quot;data&quot;</span>
+  <span class="n">top</span><span class="o">:</span> <span class="s">&quot;Convolution1&quot;</span>
+  <span class="n">convolution_param</span> <span class="p">{</span>
+    <span class="n">num_output</span><span class="o">:</span> <span class="mi">128</span>
+    <span class="n">bias_term</span><span class="o">:</span> <span class="kc">false</span>
+    <span class="n">pad</span><span class="o">:</span> <span class="mi">0</span>
+    <span class="n">kernel_size</span><span class="o">:</span> <span class="mi">1</span>
+    <span class="n">group</span><span class="o">:</span> <span class="mi">1</span>
+    <span class="n">stride</span><span class="o">:</span> <span class="mi">1</span>
+    <span class="n">weight_filler</span> <span class="p">{</span>
+      <span class="n">type</span><span class="o">:</span> <span class="s">&quot;msra&quot;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">layer</span> <span class="p">{</span>
+  <span class="n">name</span><span class="o">:</span> <span class="s">&quot;accuracy&quot;</span>
+  <span class="n">type</span><span class="o">:</span> <span class="s">&quot;Accuracy&quot;</span>
+  <span class="n">bottom</span><span class="o">:</span> <span class="s">&quot;Convolution3&quot;</span>
+  <span class="n">top</span><span class="o">:</span> <span class="s">&quot;accuracy&quot;</span>
+  <span class="n">include</span> <span class="p">{</span>
+    <span class="n">phase</span><span class="o">:</span> <span class="n">TEST</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">checker</span></code> 检查这个模型，您会在hb_mapper_checker.log中得到如下信息：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ValueError: Not support layer <span class="nv">name</span><span class="o">=</span>accuracy <span class="nv">type</span><span class="o">=</span>Accuracy
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>如果模型检查步骤异常终止或者出现报错信息，则说明模型验证不通过，请根据终端打印或在当前路径下生成的 <code class="docutils literal notranslate"><span class="pre">hb_mapper_checker.log</span></code> 日志文件确认报错信息和修改建议，错误信息可以在 <a class="reference external" href="../../../FAQs/ai_toolchain_faqs/ai_toolchain_FAQS.html#hb-mapper-checker-01-check-sh">模型量化错误及解决方法</a> 章节来查找错误的解决方法，若以上步骤仍不能排除问题，请联系地平线技术支持团队或在地平线官方技术社区（<a class="reference external" href="https://developer.horizon.ai/">https://developer.horizon.ai/</a>）提出您的问题，我们将在24小时内给您提供支持。</p></li>
+</ul>
+</div>
+</section>
+<section id="check-result">
+<span id="id8"></span><h2>检查结果解读<a class="headerlink" href="#check-result" title="永久链接至标题"></a></h2>
+<p>如果不存在ERROR，则顺利通过校验。 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">checker</span></code> 工具将直接输出如下信息：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">==============================================</span>
+<span class="n">Node</span>         <span class="n">ON</span>   <span class="n">Subgraph</span>  <span class="n">Type</span>
+<span class="o">----------------------------------------------</span>
+<span class="n">conv1</span>        <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="n">HzSQuantizedConv</span>
+<span class="n">conv2_1</span><span class="o">/</span><span class="n">dw</span>   <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="n">HzSQuantizedConv</span>
+<span class="n">conv2_1</span><span class="o">/</span><span class="n">sep</span>  <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="n">HzSQuantizedConv</span>
+<span class="n">conv2_2</span><span class="o">/</span><span class="n">dw</span>   <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="n">HzSQuantizedConv</span>
+<span class="n">conv2_2</span><span class="o">/</span><span class="n">sep</span>  <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="n">HzSQuantizedConv</span>
+<span class="n">conv3_1</span><span class="o">/</span><span class="n">dw</span>   <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="n">HzSQuantizedConv</span>
+<span class="n">conv3_1</span><span class="o">/</span><span class="n">sep</span>  <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="n">HzSQuantizedConv</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>结果中每行都代表一个模型节点的check情况，每行含Node、ON、Subgraph和Type四列，分别为节点名称、执行节点计算的硬件、节点所属子图和节点映射到的地平线内部实现名称。
+如果模型在网络结构中出现了CPU计算的算子，hb_mapper checker工具将把这个算子前后连续在BPU计算的部分拆分为两个Subgraph（子图）。</p>
+</section>
+<section id="id9">
+<h2>检查结果的调优指导<a class="headerlink" href="#id9" title="永久链接至标题"></a></h2>
+<p>在最理想的情况下，模型网络结构中的算子都应该在BPU上运行，也就是只有一个子图。
+如果出现了CPU算子导致拆分多个子图， <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">checker</span></code> 工具会给出导致CPU算子出现的具体原因。
+例如：以下Caffe模型的出现了Reshape + Pow + Reshape 的结构, 从算子约束列表中我们可以看到, Reshape 算子目前为在CPU上运行的算子, 而Pow的shape也是非4维的。</p>
+<img alt="../../../_images/model_reshape.png" src="../../../_images/model_reshape.png" />
+<p>因此模型最终检查结果也会出现分段情况, 如下:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">2022</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">25</span> <span class="mi">15</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mi">14</span><span class="p">,</span><span class="mi">667</span> <span class="n">INFO</span> <span class="n">The</span> <span class="n">converted</span> <span class="n">model</span> <span class="n">node</span> <span class="n">information</span><span class="p">:</span>
+<span class="o">====================================================================================</span>
+<span class="n">Node</span>                                    <span class="n">ON</span>   <span class="n">Subgraph</span>  <span class="n">Type</span>
+<span class="o">-------------------------------------------------------------------------------------</span>
+<span class="n">conv68</span>                                  <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="n">HzSQuantizedConv</span>
+<span class="n">sigmoid16</span>                               <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="n">HzLut</span>
+<span class="n">axpy_prod16</span>                             <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="n">HzSQuantizedMul</span>
+<span class="n">UNIT_CONV_FOR_eltwise_layer16_add_1</span>     <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="n">HzSQuantizedConv</span>
+<span class="n">prelu49</span>                                 <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="n">HzPRelu</span>
+<span class="n">fc1</span>                                     <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="n">HzSQuantizedConv</span>
+<span class="n">fc1_reshape_0</span>                           <span class="n">CPU</span>  <span class="o">--</span>        <span class="n">Reshape</span>
+<span class="n">fc_output</span><span class="o">/</span><span class="n">square</span>                        <span class="n">CPU</span>  <span class="o">--</span>        <span class="n">Pow</span>
+<span class="n">fc_output</span><span class="o">/</span><span class="n">sum_pre_reshape</span>               <span class="n">CPU</span>  <span class="o">--</span>        <span class="n">Reshape</span>
+<span class="n">fc_output</span><span class="o">/</span><span class="nb">sum</span>                           <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>     <span class="n">HzSQuantizedConv</span>
+<span class="n">fc_output</span><span class="o">/</span><span class="n">sum_reshape_0</span>                 <span class="n">CPU</span>  <span class="o">--</span>        <span class="n">Reshape</span>
+<span class="n">fc_output</span><span class="o">/</span><span class="n">sqrt</span>                          <span class="n">CPU</span>  <span class="o">--</span>        <span class="n">Pow</span>
+<span class="n">fc_output</span><span class="o">/</span><span class="n">expand_pre_reshape</span>            <span class="n">CPU</span>  <span class="o">--</span>        <span class="n">Reshape</span>
+<span class="n">fc_output</span><span class="o">/</span><span class="n">expand</span>                        <span class="n">BPU</span>  <span class="nb">id</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>     <span class="n">HzSQuantizedConv</span>
+<span class="n">fc1_reshape_1</span>                           <span class="n">CPU</span>  <span class="o">--</span>        <span class="n">Reshape</span>
+<span class="n">fc_output</span><span class="o">/</span><span class="n">expand_reshape_0</span>              <span class="n">CPU</span>  <span class="o">--</span>        <span class="n">Reshape</span>
+<span class="n">fc_output</span><span class="o">/</span><span class="n">op</span>                            <span class="n">CPU</span>  <span class="o">--</span>        <span class="n">Mul</span>
+</pre></div>
+</div>
+<p>根据 hb_mapper checker 给出的提示，一般来说算子运行在BPU上会有更好的性能表现，这里可以将pow、reshape 这类CPU算子从模型中移除，将对应算子的功能放入后处理中计算，从而减少子图数量。</p>
+<p>当然，多个子图也不会影响整个转换流程，但会较大程度地影响模型性能，建议尽量调整模型算子到BPU上执行，可参考X3算子支持列表中的BPU算子算子支持列表来做同功能的算子替换或者将模型中的CPU算子移到模型推理的前、后处理中去做CPU计算。</p>
+</section>
+</section>
+<section id="model-conversion">
+<span id="id10"></span><h1><span class="section-number">6.4.1.5. </span>模型转换<a class="headerlink" href="#model-conversion" title="永久链接至标题"></a></h1>
+<p>转换模型阶段会完成浮点模型到地平线混合异构模型的转换，经过这个阶段，您将得到一个可以在地平线芯片上运行的模型。
+在进行转换之前，请确保已经顺利通过了上文的验证模型过程。</p>
+<p>模型转换使用 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">makertbin</span></code> 工具完成，转换期间会完成模型优化和校准量化等重要过程，校准需要依照模型预处理要求准备校准数据。
+为了方便您全面了解模型转换，本节将依次介绍校准数据准备、转换工具使用、转换内部过程解读、转换结果解读和转换产出物解读等内容。</p>
+<section id="prepare-calibration-data">
+<span id="id11"></span><h2>准备校准数据<a class="headerlink" href="#prepare-calibration-data" title="永久链接至标题"></a></h2>
+<p>在进行模型转换时，校准阶段会需要 <strong>100份左右</strong> 标定样本输入，每一份样本都是一个独立的数据文件。
+为了确保转换后模型的精度效果，我们希望这些校准样本来自于您训练模型使用的 <strong>训练集或验证集</strong> ，不要使用非常少见的异常样本，例如 <strong>纯色图片、不含任何检测或分类目标的图片等</strong>。</p>
+<p>您需要把取自训练集/验证集的样本做与模型推理（inference）前一样的前处理，
+处理完后的校准样本会与原始模型具备一样的数据类型( <code class="docutils literal notranslate"><span class="pre">input_type_train</span></code> )、尺寸( <code class="docutils literal notranslate"><span class="pre">input_shape</span></code> )和
+layout( <code class="docutils literal notranslate"><span class="pre">input_layout_train</span></code> )，对于featuremap输入的模型，您可以通过 <code class="docutils literal notranslate"><span class="pre">numpy.tofile</span></code> 命令将数据保存为float32格式的二进制文件，
+工具链校准时会基于 <code class="docutils literal notranslate"><span class="pre">numpy.fromfile</span></code> 命令进行读取。
+例如，使用ImageNet训练的用于分类的原始浮点模型，它只有一个输入节点，输入信息描述如下：</p>
+<ul class="simple">
+<li><p>输入类型：<code class="docutils literal notranslate"><span class="pre">BGR</span></code></p></li>
+<li><p>输入layout：<code class="docutils literal notranslate"><span class="pre">NCHW</span></code></p></li>
+<li><p>输入尺寸：<code class="docutils literal notranslate"><span class="pre">1x3x224x224</span></code></p></li>
+</ul>
+<p>使用验证集做模型推理（inference）时的数据预处理如下：</p>
+<ol class="arabic simple">
+<li><p>图像长宽等比scale,短边缩放到256。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">center_crop</span></code> 方法获取224x224大小图像。</p></li>
+<li><p>按通道减mean。</p></li>
+<li><p>数据乘以scale系数。</p></li>
+</ol>
+<p>针对上述举例模型的样本处理代码如下：
+为避免过长代码篇幅，各种简单transformer实现代码未贴出，具体使用请参考 <a class="reference external" href="../../../FAQs/ai_toolchain_faqs/ai_toolchain_FAQS.html#transformer">transformer使用方法</a> 章节内容。</p>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>建议参考使用地平线模型转换 <code class="docutils literal notranslate"><span class="pre">horizon_model_convert_sample</span></code> 示例包中的caffe、onnx等示例模型的预处理步骤方法: <code class="docutils literal notranslate"><span class="pre">02_preprocess.sh</span></code> 和 <code class="docutils literal notranslate"><span class="pre">preprocess.py</span></code> 。</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># 本示例使用skimage，如果是opencv会有所区别
+# 需要您特别注意的是，transformers中并没有体现减mean和乘scale的处理
+# mean和scale操作已经融合到了模型中，请参考下文norm_type/mean_value/scale_value配置
+def data_transformer():
+  transformers = [
+  # 长宽等比scale，短边缩放至256
+  ShortSideResizeTransformer(short_size=256),
+  # CenterCrop获取224x224图像
+  CenterCropTransformer(crop_size=224),
+  # skimage读取结果为NHWC排布，转换为模型需要的NCHW
+  HWC2CHWTransformer(),
+  # skimage读取结果通道顺序为RGB，转换为模型需要的BGR
+  RGB2BGRTransformer(),
+  # skimage读取数值范围为[0.0,1.0]，调整为模型需要的数值范围
+  ScaleTransformer(scale_value=255)
+  ]
+
+  return transformers
+
+# src_image 标定集中的原图片
+# dst_file 存放最终标定样本数据的文件名称
+def convert_image(src_image, dst_file, transformers)：
+  image = skimage.img_as_float(skimage.io.imread(src_file))
+  for trans in transformers:
+  image = trans(image)
+  # 模型指定的input_type_train BGR数值类型是UINT8
+  image = image.astype(np.uint8)
+  # 二进制存储标定样本到数据文件
+  image.tofile(dst_file)
+
+if __name__ == &#39;__main__&#39;:
+  # 此处表示原始标定图片集合，伪代码
+  src_images = [&#39;ILSVRC2012_val_00000001.JPEG&#39;，...]
+  # 此处表示最终标定文件名称（后缀名不限制），伪代码
+  # calibration_data_bgr_f32是您在配置文件中指定的cal_data_dir
+  dst_files = [&#39;./calibration_data_bgr_f32/ILSVRC2012_val_00000001.bgr&#39;，...]
+
+  transformers = data_transformer()
+  for src_image, dst_file in zip(src_images, dst_files):
+  convert_image(src_image, dst_file, transformers)
+</pre></div>
+</div>
+</section>
+<section id="hb-mapper-makertbin">
+<span id="makertbin"></span><h2>使用 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">makertbin</span></code> 工具转换模型<a class="headerlink" href="#hb-mapper-makertbin" title="永久链接至标题"></a></h2>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>建议参考使用地平线模型转换 <code class="docutils literal notranslate"><span class="pre">horizon_model_convert_sample</span></code> 示例包中的caffe、onnx等示例模型的脚本方法: <code class="docutils literal notranslate"><span class="pre">03_build.sh</span></code>。</p>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">hb_mapper</span> <span class="pre">makertbin命令使用方式如下：</span></span></dt>
+<dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_mapper makertbin --config <span class="si">${</span><span class="nv">config_file</span><span class="si">}</span>  <span class="se">\</span>
+                    --model-type  <span class="si">${</span><span class="nv">model_type</span><span class="si">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">hb_mapper</span> <span class="pre">makertbin参数解释：</span></span></dt>
+<dd><dl class="option-list">
+<dt><kbd><span class="option">--model-type</span></kbd></dt>
+<dd><p>用于指定转换输入的模型类型，目前支持设置 <code class="docutils literal notranslate"><span class="pre">caffe</span></code> 或者 <code class="docutils literal notranslate"><span class="pre">onnx</span></code>。</p>
+</dd>
+<dt><kbd><span class="option">--config</span></kbd></dt>
+<dd><p>模型编译的配置文件，内容采用yaml格式，文件名使用.yaml后缀。完整的配置文件模板参考如下章节内容。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">yaml配置文件</span></code>，可直接使用 <a class="reference external" href="../../../FAQs/ai_toolchain_faqs/ai_toolchain_FAQS.html#caffeyaml">caffe模型量化yaml文件模板</a>  和  <a class="reference external" href="../../../FAQs/ai_toolchain_faqs/ai_toolchain_FAQS.html#onnxyaml">onnx模型量化yaml文件模板</a> 模板文件进行填写。</p></li>
+<li><p>若 hb_mapper makertbin 步骤异常终止或者出现报错信息，则说明模型转换失败，请根据终端打印或在当前路径下生成的 <code class="docutils literal notranslate"><span class="pre">hb_mapper_makertbin.log</span></code> 日志文件确认报错信息和修改建议，错误信息可以在 <a class="reference external" href="../../../FAQs/ai_toolchain_faqs/ai_toolchain_FAQS.html#hb-mapper-makertbin-03-build-sh">模型量化错误及解决方法</a> 章节来查找错误的解决方法，若以上步骤仍不能排除问题，请联系地平线技术支持团队或在地平线官方技术社区（<a class="reference external" href="https://developer.horizon.ai/">https://developer.horizon.ai/</a>）提出您的问题，我们将在24小时内给您提供支持。</p></li>
+</ul>
+</div>
+</section>
+<section id="yaml">
+<h2>模型转换yaml配置参数说明<a class="headerlink" href="#yaml" title="永久链接至标题"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>此处配置文件仅作展示，在实际模型配置文件中 <code class="docutils literal notranslate"><span class="pre">caffe_model</span></code> 与 <code class="docutils literal notranslate"><span class="pre">onnx_model</span></code> 两个参数只存在其中之一。
+即，要么是Caffe模型，要么是ONNX模型。</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 模型参数组</span>
+<span class="n">model_parameters</span><span class="p">:</span>
+  <span class="c1"># 原始Caffe浮点模型描述文件</span>
+  <span class="n">prototxt</span><span class="p">:</span> <span class="s1">&#39;***.prototxt&#39;</span>
+
+  <span class="c1"># 原始Caffe浮点模型数据模型文件</span>
+  <span class="n">caffe_model</span><span class="p">:</span> <span class="s1">&#39;****.caffemodel&#39;</span>
+
+  <span class="c1"># 原始Onnx浮点模型文件</span>
+  <span class="n">onnx_model</span><span class="p">:</span> <span class="s1">&#39;****.onnx&#39;</span>
+
+  <span class="c1"># 转换的目标AI芯片架构，保持默认，X3 bpu使用的是bernoulli2架构</span>
+  <span class="n">march</span><span class="p">:</span> <span class="s1">&#39;bernoulli2&#39;</span>
+
+  <span class="c1"># 模型转换输出的用于上板执行的模型文件的名称前缀</span>
+  <span class="n">output_model_file_prefix</span><span class="p">:</span> <span class="s1">&#39;mobilenetv1&#39;</span>
+
+  <span class="c1"># 模型转换输出的结果的存放目录</span>
+  <span class="n">working_dir</span><span class="p">:</span> <span class="s1">&#39;./model_output_dir&#39;</span>
+
+  <span class="c1"># 指定转换后混合异构模型是否保留输出各层的中间结果的能力,保持默认即可</span>
+  <span class="n">layer_out_dump</span><span class="p">:</span> <span class="kc">False</span>
+
+<span class="c1"># 输入信息参数组</span>
+<span class="n">input_parameters</span><span class="p">:</span>
+  <span class="c1"># 原始浮点模型的输入节点名称</span>
+  <span class="n">input_name</span><span class="p">:</span> <span class="s2">&quot;data&quot;</span>
+
+  <span class="c1"># 原始浮点模型的输入数据格式（数量/顺序与input_name一致）</span>
+  <span class="n">input_type_train</span><span class="p">:</span> <span class="s1">&#39;bgr&#39;</span>
+
+  <span class="c1"># 原始浮点模型的输入数据排布（数量/顺序与input_name一致）</span>
+  <span class="n">input_layout_train</span><span class="p">:</span> <span class="s1">&#39;NCHW&#39;</span>
+
+  <span class="c1"># 原始浮点模型的输入数据尺寸</span>
+  <span class="n">input_shape</span><span class="p">:</span> <span class="s1">&#39;1x3x224x224&#39;</span>
+
+  <span class="c1"># 网络实际执行时，输入给网络的batch_size, 默认值为1</span>
+  <span class="n">input_batch</span><span class="p">:</span> <span class="mi">1</span>
+
+  <span class="c1"># 在模型中添加的输入数据预处理方法</span>
+  <span class="n">norm_type</span><span class="p">:</span> <span class="s1">&#39;data_mean_and_scale&#39;</span>
+
+  <span class="c1"># 预处理方法的图像减去的均值, 如果是通道均值，value之间必须用空格分隔</span>
+  <span class="n">mean_value</span><span class="p">:</span> <span class="s1">&#39;103.94 116.78 123.68&#39;</span>
+
+  <span class="c1"># 预处理方法的图像缩放比例，如果是通道缩放比例，value之间必须用空格分隔</span>
+  <span class="n">scale_value</span><span class="p">:</span> <span class="s1">&#39;0.017&#39;</span>
+
+  <span class="c1"># 转换后混合异构模型需要适配的输入数据格式（数量/顺序与input_name一致）</span>
+  <span class="n">input_type_rt</span><span class="p">:</span> <span class="s1">&#39;yuv444&#39;</span>
+
+  <span class="c1"># 输入数据格式的特殊制式</span>
+  <span class="n">input_space_and_range</span><span class="p">:</span> <span class="s1">&#39;regular&#39;</span>
+
+  <span class="c1"># 转换后混合异构模型需要适配的输入数据排布（数量/顺序与input_name一致），若input_type_rt配置为nv12，则此处参数不需要配置</span>
+  <span class="n">input_layout_rt</span><span class="p">:</span> <span class="s1">&#39;NHWC&#39;</span>
+
+<span class="c1"># 校准参数组</span>
+<span class="n">calibration_parameters</span><span class="p">:</span>
+  <span class="c1"># 模型校准使用的标定样本的存放目录</span>
+  <span class="n">cal_data_dir</span><span class="p">:</span> <span class="s1">&#39;./calibration_data&#39;</span>
+
+  <span class="c1"># 指定校准数据二进制文件的数据存储类型。</span>
+  <span class="n">cal_data_type</span><span class="p">:</span> <span class="s1">&#39;float32&#39;</span>
+
+  <span class="c1"># 开启图片校准样本自动处理（skimage read; resize到输入节点尺寸）</span>
+  <span class="c1">#preprocess_on: False</span>
+
+  <span class="c1"># 校准使用的算法类型, 优先使用的 default 校准算法</span>
+  <span class="n">calibration_type</span><span class="p">:</span> <span class="s1">&#39;default&#39;</span>
+
+  <span class="c1"># max 校准方式的参数</span>
+  <span class="c1"># max_percentile: 1.0</span>
+
+  <span class="c1"># 强制指定OP在CPU上运行，一般不需要配置，在模型精度调优阶段可以开启此功能，用于尝试精度优化</span>
+  <span class="c1">#run_on_cpu:  {OP_name}</span>
+
+  <span class="c1"># 强制指定OP在BPU上运行， 一般不需要配置，在模型性能调优阶段可以开启此功能，用于尝试性能优化</span>
+  <span class="c1"># run_on_bpu:  {OP_name}</span>
+
+<span class="c1"># 编译参数组</span>
+<span class="n">compiler_parameters</span><span class="p">:</span>
+  <span class="c1"># 编译策略选择</span>
+  <span class="n">compile_mode</span><span class="p">:</span> <span class="s1">&#39;latency&#39;</span>
+
+  <span class="c1"># 是否打开编译的debug信息，保持默认的 False</span>
+  <span class="n">debug</span><span class="p">:</span> <span class="kc">False</span>
+
+  <span class="c1"># 模型运行核心数</span>
+  <span class="n">core_num</span><span class="p">:</span> <span class="mi">1</span>
+
+  <span class="c1"># 模型编译的优化等级选择，保持默认的 O3</span>
+  <span class="n">optimize_level</span><span class="p">:</span> <span class="s1">&#39;O3&#39;</span>
+
+<span class="c1"># 此参数组，无需配置，只在有自定义CPU算子时开启使用</span>
+<span class="c1">#custom_op:</span>
+  <span class="c1"># 自定义op的校准方式, 推荐使用注册方式 register</span>
+  <span class="c1">#custom_op_method: register</span>
+
+  <span class="c1"># 自定义OP的实现文件, 多个文件可用&quot;;&quot;分隔, 该文件可由模板生成, 详情见自定义OP相关文档</span>
+  <span class="c1">#op_register_files: sample_custom.py</span>
+
+  <span class="c1"># 自定义OP实现文件所在的文件夹, 请使用相对路径</span>
+  <span class="c1">#custom_op_dir: ./custom_op</span>
+</pre></div>
+</div>
+<p>配置文件主要包含模型参数组、输入信息参数组、校准参数组和编译参数组。
+在您的配置文件中，四个参数组位置都需要存在，具体参数分为可选和必选，可选参数可以不配置。
+具体参数的设置形式为： <code class="docutils literal notranslate"><span class="pre">param_name:</span>&#160; <span class="pre">'param_value'</span></code> ，参数存在多个值时使用 <code class="docutils literal notranslate"><span class="pre">';'</span></code> 符号分隔：
+<code class="docutils literal notranslate"><span class="pre">param_name:</span>&#160; <span class="pre">'param_value1;</span> <span class="pre">param_value2;</span> <span class="pre">param_value3'</span></code> 。 例如： run_on_cpu: ‘conv_0; conv_1; conv12’</p>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>当模型为多输入模型时, 建议用户将可选参数（ <code class="docutils literal notranslate"><span class="pre">input_name</span></code>, <code class="docutils literal notranslate"><span class="pre">input_shape</span></code> 等）显式的写出, 以免造成参数对应顺序上的错误。</p>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>请注意，如果设置 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 为 <code class="docutils literal notranslate"><span class="pre">nv12</span></code> ，则模型的输入尺寸中不能出现奇数。</p></li>
+<li><p>请注意，目前XJ3上暂不支持 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 为 <code class="docutils literal notranslate"><span class="pre">yuv444</span></code> 且 <code class="docutils literal notranslate"><span class="pre">input_layout_rt</span></code> 为 <code class="docutils literal notranslate"><span class="pre">NCHW</span></code> 组合的场景。</p></li>
+</ul>
+</div>
+<p>以下是具体参数信息，参数会比较多，我们依照上述的参数组次序介绍。</p>
+<ul class="simple">
+<li><p><strong>模型参数组</strong></p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 28%" />
+<col style="width: 60%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>编
+号</p></th>
+<th class="head"><p>参数名称</p></th>
+<th class="head"><p>参数配置说明</p></th>
+<th class="head"><p>可选/</p>
+<p>必选</p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">prototxt</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定Caffe浮点模型的prototxt文件名称。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：在 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">makertbin</span></code> 的
+<code class="docutils literal notranslate"><span class="pre">model-type</span></code> 为 <code class="docutils literal notranslate"><span class="pre">caffe</span></code> 时必须配置。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">caffe_model</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定Caffe浮点模型的caffemodel文件名称。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：在 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">makertbin</span></code> 的
+<code class="docutils literal notranslate"><span class="pre">model-type</span></code> 为 <code class="docutils literal notranslate"><span class="pre">caffe</span></code> 时必须配置。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">onnx_model</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定ONNX浮点模型的onnx文件名称。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：在 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">makertbin</span></code> 的
+<code class="docutils literal notranslate"><span class="pre">model-type</span></code> 为 <code class="docutils literal notranslate"><span class="pre">onnx</span></code> 时必须配置。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">march</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定产出混合异构模型需要支持的平台架构。</p>
+<p><strong>取值范围</strong>：<code class="docutils literal notranslate"><span class="pre">bernoulli2</span></code>。</p>
+<p><strong>默认配置</strong>： <code class="docutils literal notranslate"><span class="pre">bernoulli2</span></code>。</p>
+<p><strong>参数说明</strong>： X3&amp;J3芯片对应的微框架。
+根据您使用的平台选择。</p>
+</td>
+<td><p>必选</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output_model_file_prefix</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定转换产出混合异构模型的名称前缀。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：输出的定点模型文件的名称前缀。</p>
+</td>
+<td><p>必选</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">working_dir</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定模型转换输出的结果的存放目录。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：<code class="docutils literal notranslate"><span class="pre">model_output</span></code>。</p>
+<p><strong>参数说明</strong>：若该目录不存在, 则工具会自动创建目录。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">layer_out_dump</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定混合异构模型是否保留输出中间层值的能力。</p>
+<p><strong>取值范围</strong>：<code class="docutils literal notranslate"><span class="pre">True</span></code> 、 <code class="docutils literal notranslate"><span class="pre">False</span></code>。</p>
+<p><strong>默认配置</strong>：<code class="docutils literal notranslate"><span class="pre">False</span></code>。</p>
+<p><strong>参数说明</strong>：输出中间层的值是调试需要用到的手段，
+常规状态下请不要开启。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output_nodes</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定模型的输出节点。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：一般情况下，转换工具会自动识别模型的输出节点。
+此参数用于支持您指定一些中间层次作为输出。</p>
+<p>设置值为模型中的具体节点名称，
+多个值的配置方法请参考前文对 <code class="docutils literal notranslate"><span class="pre">param_value</span></code> 配置描述。</p>
+<p>需要您注意的是，一旦设置此参数后，工具将不再自动识别输出节点，
+您通过此参数指定的节点就是全部的输出。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">remove_node_type</span></code></p></td>
+<td><p><strong>参数作用</strong>：设置删除节点的类型。</p>
+<p><strong>取值范围</strong>：”Quantize”, “Transpose”,
+“Dequantize”, “Cast”, “Reshape”。不同类型用”;”分割。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：该参数为隐藏参数，
+不设置或设置为空不影响模型转换过程。
+此参数用于支持您设置待删除节点的类型信息。</p>
+<p>被删除的节点必须在模型的开头或者末尾, 与模型的输入或输出连接。</p>
+<p>注意：待删除节点会按顺序依次删除，并动态更新模型结构；</p>
+<p>同时在节点删除前还会判断该节点是否位于模型的输入输出处。</p>
+<p>因此节点的删除顺序很重要。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">remove_node_name</span></code></p></td>
+<td><p><strong>参数作用</strong>：设置删除节点的名称。</p>
+<p><strong>取值范围</strong>：无。不同类型用”;”分割。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：该参数为隐藏参数，
+不设置或设置为空不影响模型转换过程。
+此参数用于支持您设置待删除节点的名称。</p>
+<p>被删除的节点必须在模型的开头或者末尾, 与模型的输入或输出连接。</p>
+<p>注意：待删除节点会按顺序依次删除，并动态更新模型结构；</p>
+<p>同时在节点删除前还会判断该节点是否位于模型的输入输出处。</p>
+<p>因此节点的删除顺序很重要。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p><strong>输入信息参数组</strong></p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 23%" />
+<col style="width: 68%" />
+<col style="width: 7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>编
+号</p></th>
+<th class="head"><p>参数名称</p></th>
+<th class="head"><p>参数配置说明</p></th>
+<th class="head"><p>可选/</p>
+<p>必选</p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input_name</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定原始浮点模型的输入节点名称。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：浮点模型只有一个输入节点情况时不需要配置。</p>
+<p>多于一个输入节点时必须配置以保证后续类型及校准数据输入顺序的准确性。</p>
+<p>多个值的配置方法请参考前文对param_value配置描述。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input_type_train</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定原始浮点模型的输入数据类型。</p>
+<p><strong>取值范围</strong>： <code class="docutils literal notranslate"><span class="pre">rgb</span></code> 、 <code class="docutils literal notranslate"><span class="pre">bgr</span></code> 、 <code class="docutils literal notranslate"><span class="pre">yuv444</span></code> 、 <code class="docutils literal notranslate"><span class="pre">gray</span></code> 、 <code class="docutils literal notranslate"><span class="pre">featuremap</span></code>。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：每一个输入节点都需要配置一个确定的输入数据类型。</p>
+<p>存在多个输入节点时，设置的节点顺序需要与
+<code class="docutils literal notranslate"><span class="pre">input_name</span></code> 里的顺序严格保持一致。</p>
+<p>多个值的配置方法请参考前文对 <code class="docutils literal notranslate"><span class="pre">param_value</span></code> 配置描述。</p>
+<p>数据类型的选择请参考：
+<a class="reference internal" href="#conversion-interpretation"><span class="std std-ref">转换内部过程解读</span></a>
+部分的介绍。</p>
+</td>
+<td><p>必选</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input_layout_train</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定原始浮点模型的输入数据排布。</p>
+<p><strong>取值范围</strong>：<code class="docutils literal notranslate"><span class="pre">NHWC</span></code> 、 <code class="docutils literal notranslate"><span class="pre">NCHW</span></code>。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：每一个输入节点都需要配置一个确定的输入数据排布，
+这个排布必须与原始浮点模型所采用的数据排布相同。存在多个输入节点时，
+设置的节点顺序需要与 <code class="docutils literal notranslate"><span class="pre">input_name</span></code> 里的顺序严格保持一致。</p>
+<p>多个值的配置方法请参考前文对 <code class="docutils literal notranslate"><span class="pre">param_value</span></code> 配置描述。</p>
+<p>什么是数据排布请参考：
+<a class="reference internal" href="#conversion-interpretation"><span class="std std-ref">转换内部过程解读</span></a>
+部分的介绍。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code></p></td>
+<td><p><strong>参数作用</strong>：转换后混合异构模型需要适配的输入数据格式。</p>
+<p><strong>取值范围</strong>：<code class="docutils literal notranslate"><span class="pre">rgb</span></code> 、 <code class="docutils literal notranslate"><span class="pre">bgr</span></code> 、 <code class="docutils literal notranslate"><span class="pre">yuv444</span></code> 、</p>
+<p><code class="docutils literal notranslate"><span class="pre">nv12</span></code> 、 <code class="docutils literal notranslate"><span class="pre">gray</span></code> 、 <code class="docutils literal notranslate"><span class="pre">featuremap</span></code>。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：这里是指明您需要使用的数据格式，
+不要求与原始模型的数据格式一致，
+但是需要注意在边缘平台喂给模型的数据是使用这个格式。</p>
+<p>每一个输入节点都需要配置一个确定的输入数据类型，存在多个输入节点时，
+设置的节点顺序需要与 <code class="docutils literal notranslate"><span class="pre">input_name</span></code> 里的顺序严格保持一致。</p>
+<p>多个值的配置方法请参考前文对 <code class="docutils literal notranslate"><span class="pre">param_value</span></code> 配置描述。</p>
+<p>数据类型的选择请参考：
+<a class="reference internal" href="#conversion-interpretation"><span class="std std-ref">转换内部过程解读</span></a>
+部分的介绍。</p>
+</td>
+<td><p>必选</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input_layout_rt</span></code></p></td>
+<td><p><strong>参数作用</strong>：转换后混合异构模型需要适配的输入数据排布。</p>
+<p><strong>取值范围</strong>： <code class="docutils literal notranslate"><span class="pre">NCHW</span></code> 、 <code class="docutils literal notranslate"><span class="pre">NHWC</span></code>。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：每一个输入节点都需要配置一个确定的输入数据排布，
+这个输入是您希望给混合异构模型指定的排布。</p>
+<p>不合适的输入数据的排布设置将会影响性能，
+X/J3平台建议用户使用 NHWC 格式输入。</p>
+<p>若input_type_rt配置为nv12，则此处参数不需要配置。</p>
+<p>存在多个输入节点时，设置的节点顺序需要与
+<code class="docutils literal notranslate"><span class="pre">input_name</span></code> 里的顺序严格保持一致。</p>
+<p>多个值的配置方法请参考前文对 <code class="docutils literal notranslate"><span class="pre">param_value</span></code> 配置描述。</p>
+<p>什么是数据排布请参考：
+<a class="reference internal" href="#conversion-interpretation"><span class="std std-ref">转换内部过程解读</span></a>
+部分的介绍。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input_space_and_range</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定输入数据格式的特殊制式。</p>
+<p><strong>取值范围</strong>： <code class="docutils literal notranslate"><span class="pre">regular</span></code> , <code class="docutils literal notranslate"><span class="pre">bt601_video</span></code>。</p>
+<p><strong>默认配置</strong>： <code class="docutils literal notranslate"><span class="pre">regular</span></code>。</p>
+<p><strong>参数说明</strong>：这个参数是为了适配不同ISP输出的yuv420格式，
+在相应 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 为 <code class="docutils literal notranslate"><span class="pre">nv12</span></code> 时，该配置才有效。</p>
+<p><code class="docutils literal notranslate"><span class="pre">regular</span></code> 就是常见的yuv420格式，数值范围为 <code class="docutils literal notranslate"><span class="pre">[0,255]</span></code>；</p>
+<p><code class="docutils literal notranslate"><span class="pre">bt601_video</span></code> 是另一种视频制式yuv420，数值范围为 <code class="docutils literal notranslate"><span class="pre">[16,235]</span></code>。</p>
+<p>更多信息可以通过网络资料了解bt601，
+在没有明确需要的情况下，您不要配置此参数。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input_shape</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定原始浮点模型的输入数据尺寸。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：shape的几个维度以 <code class="docutils literal notranslate"><span class="pre">x</span></code> 连接，例如 <code class="docutils literal notranslate"><span class="pre">1x3x224x224</span></code>。</p>
+<p>原始浮点模型只有一个输入节点情况时可以不配置，
+工具会自动读取模型文件中的尺寸信息。</p>
+<p>配置多个输入节点时，设置的节点顺序需要与 <code class="docutils literal notranslate"><span class="pre">input_name</span></code>
+里的顺序严格保持一致。</p>
+<p>多个值的配置方法请参考前文对 <code class="docutils literal notranslate"><span class="pre">param_value</span></code> 配置描述。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input_batch</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定转换后混合异构模型需要适配的输入batch数量。</p>
+<p><strong>取值范围</strong>：<code class="docutils literal notranslate"><span class="pre">1-128</span></code>。</p>
+<p><strong>默认配置</strong>：<code class="docutils literal notranslate"><span class="pre">1</span></code>。</p>
+<p><strong>参数说明</strong>：这里input_batch为转换后混合异构bin模型输入batch数量，
+但不影响转换后onnx的模型的输入batch数量。</p>
+<p>此参数不配置时默认为1。</p>
+<p>此参数仅适用于单输入模型，且``input_shape``第一维必须为1。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">norm_type</span></code></p></td>
+<td><p><strong>参数作用</strong>：在模型中添加的输入数据预处理方法。</p>
+<p><strong>取值范围</strong>： <code class="docutils literal notranslate"><span class="pre">data_mean_and_scale</span></code> 、 <code class="docutils literal notranslate"><span class="pre">data_mean</span></code> 、</p>
+<p><code class="docutils literal notranslate"><span class="pre">data_scale</span></code> 、 <code class="docutils literal notranslate"><span class="pre">no_preprocess</span></code>。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>： <code class="docutils literal notranslate"><span class="pre">no_preprocess</span></code> 表示不添加任何数据预处理；</p>
+<p><code class="docutils literal notranslate"><span class="pre">data_mean</span></code> 表示提供减均值预处理；</p>
+<p><code class="docutils literal notranslate"><span class="pre">data_scale</span></code> 表示提供乘scale系数预处理；</p>
+<p><code class="docutils literal notranslate"><span class="pre">data_mean_and_scale</span></code> 表示提供先减均值再乘scale系数前处理。</p>
+<p>输入节点时多于一个时，设置的节点顺序需要与 <code class="docutils literal notranslate"><span class="pre">input_name</span></code>
+里的顺序严格保持一致。</p>
+<p>多个值的配置方法请参考前文对 <code class="docutils literal notranslate"><span class="pre">param_value</span></code> 配置描述。</p>
+<p>配置该参数的影响请参考：
+<a class="reference internal" href="#conversion-interpretation"><span class="std std-ref">转换内部过程解读</span></a>
+部分的介绍。</p>
+</td>
+<td><p>必选</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mean_value</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定预处理方法的图像减去的均值。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：当 <code class="docutils literal notranslate"><span class="pre">norm_type</span></code> 存在 <code class="docutils literal notranslate"><span class="pre">data_mean_and_scale</span></code>
+或 <code class="docutils literal notranslate"><span class="pre">data_mean</span></code> 时需要配置该参数。</p>
+<p>对于每一个输入节点而言，存在两种配置方式。</p>
+<p>第一种是仅配置一个数值，表示所有通道都减去这个均值；</p>
+<p>第二种是提供与通道数量一致的数值（这些数值以空格分隔开），
+表示每个通道都会减去不同的均值。</p>
+<p>配置的输入节点数量必须与 <code class="docutils literal notranslate"><span class="pre">norm_type</span></code> 配置的节点数量一致，
+如果存在某个节点不需要 <code class="docutils literal notranslate"><span class="pre">mean</span></code> 处理，则为该节点配置 <code class="docutils literal notranslate"><span class="pre">'None'</span></code>。</p>
+<p>多个值的配置方法请参考前文对 <code class="docutils literal notranslate"><span class="pre">param_value</span></code> 配置描述。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scale_value</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定预处理方法的数值scale系数。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：当 <code class="docutils literal notranslate"><span class="pre">norm_type</span></code> 存在 <code class="docutils literal notranslate"><span class="pre">data_mean_and_scale</span></code> 或
+<code class="docutils literal notranslate"><span class="pre">data_scale</span></code> 时需要配置该参数。</p>
+<p>对于每一个输入节点而言，存在两种配置方式。</p>
+<p>第一种是仅配置一个数值，表示所有通道都乘以这个系数；</p>
+<p>第二种是提供与通道数量一致的数值（这些数值以空格分隔开），
+表示每个通道都会乘以不同的系数。</p>
+<p>配置的输入节点数量必须与 <code class="docutils literal notranslate"><span class="pre">norm_type</span></code> 配置的节点数量一致，
+如果存在某个节点不需要 <code class="docutils literal notranslate"><span class="pre">scale</span></code> 处理，则为该节点配置 <code class="docutils literal notranslate"><span class="pre">'None'</span></code>。</p>
+<p>多个值的配置方法请参考前文对 <code class="docutils literal notranslate"><span class="pre">param_value</span></code> 配置描述。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p><strong>校准参数组</strong></p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 21%" />
+<col style="width: 67%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>编
+号</p></th>
+<th class="head"><p>参数名称</p></th>
+<th class="head"><p>参数配置说明</p></th>
+<th class="head"><p>可选/</p>
+<p>必选</p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cal_data_dir</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定模型校准使用的标定样本的存放目录。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：目录内校准数据需要符合输入配置的要求。</p>
+<p>具体请参考 <a class="reference internal" href="#prepare-calibration-data"><span class="std std-ref">准备校准数据</span></a>
+部分的介绍。配置多个输入节点时，
+设置的节点顺序需要与 <code class="docutils literal notranslate"><span class="pre">input_name</span></code> 里的顺序严格保持一致。</p>
+<p>多个值的配置方法请参考前文对 <code class="docutils literal notranslate"><span class="pre">param_value</span></code> 配置描述。</p>
+<p>当calibration_type为 <code class="docutils literal notranslate"><span class="pre">load</span></code>, <code class="docutils literal notranslate"><span class="pre">skip</span></code> 时，cal_data_dir不用填。</p>
+<p><span class="red">注意：</span>
+为了方便您的使用，如果未发现cal_data_type的配置，我们将根据文件夹
+后缀对数据类型进行配置。如果文件夹后缀以 <code class="docutils literal notranslate"><span class="pre">_f32</span></code> 结尾，则认为数据
+类型是float32，否则认为数据类型是uint8。
+当然，我们强烈建议您通过cal_data_type参数对数据类型进行约束。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">preprocess_on</span></code></p></td>
+<td><p><strong>参数作用</strong>：开启图片校准样本自动处理。</p>
+<p><strong>取值范围</strong>： <code class="docutils literal notranslate"><span class="pre">True</span></code> 、 <code class="docutils literal notranslate"><span class="pre">False</span></code>。</p>
+<p><strong>默认配置</strong>： <code class="docutils literal notranslate"><span class="pre">False</span></code>。</p>
+<p><strong>参数说明</strong>：该选项仅适用于4维图像输入的模型，
+非4维模型不要打开该选项。</p>
+<p>在启动该功能时，<cite>cal_data_dir</cite> 目录下存放的都是jpg/bmp/png
+等图片数据，工具会使用skimage读取图片，
+并resize到输入节点需要的尺寸。</p>
+<p>为了保证校准的效果，建议您保持该参数关闭。</p>
+<p>使用的影响请参考 <a class="reference internal" href="#prepare-calibration-data"><span class="std std-ref">准备校准数据</span></a>
+部分的介绍。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">calibration_type</span></code></p></td>
+<td><p><strong>参数作用</strong>：校准使用的算法类型。</p>
+<p><strong>取值范围</strong>：<code class="docutils literal notranslate"><span class="pre">default</span></code>、<code class="docutils literal notranslate"><span class="pre">kl</span></code>、<code class="docutils literal notranslate"><span class="pre">max</span></code>、<code class="docutils literal notranslate"><span class="pre">load</span></code> 和 <code class="docutils literal notranslate"><span class="pre">skip</span></code> 。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>： <code class="docutils literal notranslate"><span class="pre">kl</span></code> 和 <code class="docutils literal notranslate"><span class="pre">max</span></code> 都是公开的校准量化算法，
+其基本原理可以通过网络资料查阅。</p>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">load</span></code> 方式校准时, qat模型必须是通过horizon_nn提供的
+export_onnx来导出的模型。详情参见
+<a class="reference internal" href="#qat-accuracy"><span class="std std-ref">使用QAT量化感知训练方案进一步提升模型精度</span></a> 。</p>
+<p><code class="docutils literal notranslate"><span class="pre">default</span></code> 是一个自动搜索的策略，
+会尝试从系列校准量化参数中获得一个相对效果较好的组合。</p>
+<p>建议您先尝试 <code class="docutils literal notranslate"><span class="pre">default</span></code>，
+如果最终的精度结果不满足预期，
+再根据 <a class="reference internal" href="#accuracy-optimization"><span class="std std-ref">精度调优</span></a>
+部分建议配置不同的校准参数。</p>
+<p>若您只想尝试对模型性能进行验证，但对精度没有要求，
+则可以尝试 “skip” 方式进行校准。该方式会使用随机数进行校准，
+不需要您准备校准数据，比较适合初次尝试对模型结构进行验证。</p>
+<p><span class="red">注意：</span>
+使用skip方式时，因使用随机数校准, 得到的模型不可用于精度验证。</p>
+</td>
+<td><p>必选</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">max_percentile</span></code></p></td>
+<td><p><strong>参数作用</strong>：该参数为 <code class="docutils literal notranslate"><span class="pre">max</span></code> 校准方法的参数，</p>
+<p>用以调整 <code class="docutils literal notranslate"><span class="pre">max</span></code> 校准的截取点。</p>
+<p><strong>取值范围</strong>： <code class="docutils literal notranslate"><span class="pre">0.0</span></code> ~ <code class="docutils literal notranslate"><span class="pre">1.0</span></code>。</p>
+<p><strong>默认配置</strong>： <code class="docutils literal notranslate"><span class="pre">1.0</span></code>。</p>
+<p><strong>参数说明</strong>：此参数仅在 <code class="docutils literal notranslate"><span class="pre">calibration_type</span></code> 为 <code class="docutils literal notranslate"><span class="pre">max</span></code> 时有效。</p>
+<p>常用配置选项有：0.99999/0.99995/0.99990/0.99950/0.99900。</p>
+<p>建议您先尝试 <code class="docutils literal notranslate"><span class="pre">calibration_type</span></code> 配置 <code class="docutils literal notranslate"><span class="pre">default</span></code>，
+如果最终的精度结果不满足预期，
+再根据 <a class="reference internal" href="#accuracy-optimization"><span class="std std-ref">精度调优</span></a> 部分建议调整该参数。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">per_channel</span></code></p></td>
+<td><p><strong>参数作用</strong>：控制是否针对featuremap的每个channel进行校准。</p>
+<p><strong>取值范围</strong>： <code class="docutils literal notranslate"><span class="pre">True</span></code> 、 <code class="docutils literal notranslate"><span class="pre">False</span></code>。</p>
+<p><strong>默认配置</strong>： <code class="docutils literal notranslate"><span class="pre">False</span></code>。</p>
+<p><strong>参数说明</strong>： <code class="docutils literal notranslate"><span class="pre">calibration_type</span></code> 设置非default时有效。</p>
+<p>建议您先尝试 <code class="docutils literal notranslate"><span class="pre">default</span></code>，
+如果最终的精度结果不满足预期，
+再根据 <a class="reference internal" href="#accuracy-optimization"><span class="std std-ref">精度调优</span></a>
+部分建议调整该参数。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run_on_cpu</span></code></p></td>
+<td><p><strong>参数作用</strong>：强制指定算子在CPU上运行。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：CPU上虽然性能不及BPU，但是提供的是float精度计算。</p>
+<p>如果您确定某些算子需要在CPU上计算，
+可以通过该参数指定。
+设置值为模型中的具体节点名称，</p>
+<p>多个值的配置方法请参考前文对 <code class="docutils literal notranslate"><span class="pre">param_value</span></code> 配置描述。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run_on_bpu</span></code></p></td>
+<td><p><strong>参数作用</strong>：强制指定OP在BPU上运行。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：为了保证最终量化模型的精度，少部分情况下，
+转换工具会将一些具备BPU计算条件的算子放在CPU上运行。</p>
+<p>如果您对性能有较高的要求，愿意以更多一些量化损失为代价，
+则可以通过该参数明确指定算子运行在BPU上。</p>
+<p>设置值为模型中的具体节点名称，
+多个值的配置方法请参考前文对 <code class="docutils literal notranslate"><span class="pre">param_value</span></code> 配置描述。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cal_data_type</span></code></p></td>
+<td><p><strong>参数作用</strong>：指定校准数据二进制文件的数据存储类型。</p>
+<p><strong>取值范围</strong>：<code class="docutils literal notranslate"><span class="pre">float32</span></code>、<code class="docutils literal notranslate"><span class="pre">uint8</span></code>。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：指定模型校准时使用的二进制文件的数据存储类型。</p>
+<p>没有指定值的情况下将会使用文件夹名字后缀来做判断。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">optimization</span></code></p></td>
+<td><p><strong>参数作用</strong>：使模型以 int8 格式输出。</p>
+<p><strong>取值范围</strong>：[‘set_model_output_int8’]</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：
+指定值为set_model_output_int8时，设置模型为 int8 格式低精度输出。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple" id="compiler-parameters">
+<li><p><strong>编译参数组</strong></p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 20%" />
+<col style="width: 69%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>编
+号</p></th>
+<th class="head"><p>参数名称</p></th>
+<th class="head"><p>参数配置说明</p></th>
+<th class="head"><p>可选/</p>
+<p>必选</p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">compile_mode</span></code></p></td>
+<td><p><strong>参数作用</strong>：编译策略选择。</p>
+<p><strong>取值范围</strong>： <code class="docutils literal notranslate"><span class="pre">latency</span></code>、 <code class="docutils literal notranslate"><span class="pre">bandwidth</span></code>。</p>
+<p><strong>默认配置</strong>： <code class="docutils literal notranslate"><span class="pre">latency</span></code>。</p>
+<p><strong>参数说明</strong>： <code class="docutils literal notranslate"><span class="pre">latency</span></code> 以优化推理时间为目标；</p>
+<p><code class="docutils literal notranslate"><span class="pre">bandwidth</span></code> 以优化ddr的访问带宽为目标。</p>
+<p>如果模型没有严重超过预期的带宽占用，建议您使用 <code class="docutils literal notranslate"><span class="pre">latency</span></code> 策略。</p>
+</td>
+<td><p>必选</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">debug</span></code></p></td>
+<td><p><strong>参数作用</strong>：是否打开编译的debug信息。</p>
+<p><strong>取值范围</strong>： <code class="docutils literal notranslate"><span class="pre">True</span></code> 、 <code class="docutils literal notranslate"><span class="pre">False</span></code>。</p>
+<p><strong>默认配置</strong>： <code class="docutils literal notranslate"><span class="pre">False</span></code>。</p>
+<p><strong>参数说明</strong>：开启该参数情况下，
+编译后模型将附带一些调试信息，
+用于支持后续的调优分析过程。</p>
+<p>默认情况下，建议您保持该参数关闭。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">core_num</span></code></p></td>
+<td><p><strong>参数作用</strong>：模型运行核心数。</p>
+<p><strong>取值范围</strong>： <code class="docutils literal notranslate"><span class="pre">1</span></code>、 <code class="docutils literal notranslate"><span class="pre">2</span></code>。</p>
+<p><strong>默认配置</strong>： <code class="docutils literal notranslate"><span class="pre">1</span></code>。</p>
+<p><strong>参数说明</strong>：地平线平台支持利用多个AI加速器核心同时完成一个推理任务，
+多核心适用于输入尺寸较大的情况，
+理想状态下的双核速度可以达到单核的1.5倍左右。</p>
+<p>如果您的模型输入尺寸较大，对于模型速度有极致追求，
+可以配置 <code class="docutils literal notranslate"><span class="pre">core_num=2</span></code>。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">optimize_level</span></code></p></td>
+<td><p><strong>参数作用</strong>：模型编译的优化等级选择。</p>
+<p><strong>取值范围</strong>： <code class="docutils literal notranslate"><span class="pre">O0</span></code> 、 <code class="docutils literal notranslate"><span class="pre">O1</span></code> 、 <code class="docutils literal notranslate"><span class="pre">O2</span></code> 、 <code class="docutils literal notranslate"><span class="pre">O3</span></code>。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：优化等级可选范围为 <code class="docutils literal notranslate"><span class="pre">O0</span></code> ~ <code class="docutils literal notranslate"><span class="pre">O3</span></code>。</p>
+<p><code class="docutils literal notranslate"><span class="pre">O0</span></code> 不做任何优化, 编译速度最快，优化程度最低。</p>
+<p><code class="docutils literal notranslate"><span class="pre">O1</span></code> - <code class="docutils literal notranslate"><span class="pre">O3</span></code> 随着优化等级提高，
+预期编译后的模型的执行速度会更快，
+但是所需编译时间也会变长。</p>
+<p>正常用于生成和验证性能的模型，
+必须使用 <code class="docutils literal notranslate"><span class="pre">O3</span></code> 级别优化才能保证得到最优性能。</p>
+<p>某些流程验证或精度调试过程中，
+可以尝试使用更低级别优化加快过程速度。</p>
+</td>
+<td><p>必选</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input_source</span></code></p></td>
+<td><p><strong>参数作用</strong>：设置上板bin模型的输入数据来源。</p>
+<p><strong>取值范围</strong>： <code class="docutils literal notranslate"><span class="pre">ddr</span></code>, <code class="docutils literal notranslate"><span class="pre">pyramid</span></code>, <code class="docutils literal notranslate"><span class="pre">resizer</span></code>。</p>
+<p><strong>默认配置</strong>： <code class="docutils literal notranslate"><span class="pre">{&quot;input_name&quot;:</span> <span class="pre">&quot;ddr&quot;}</span></code>。</p>
+<p><strong>参数说明</strong>：这个参数是适配工程环境的选项，
+建议您已经全部完成模型验证后再配置。</p>
+<p><code class="docutils literal notranslate"><span class="pre">ddr</span></code> 表示数据来自内存，<code class="docutils literal notranslate"><span class="pre">pyramid</span></code> 和 <code class="docutils literal notranslate"><span class="pre">resizer</span></code>
+表示来自AI芯片上的固定硬件。</p>
+<p>注意：如果设置为resizer，模型的 h*w 要小于18432。</p>
+<p>具体在工程环境中如何适配 <code class="docutils literal notranslate"><span class="pre">pyramid</span></code> 和 <code class="docutils literal notranslate"><span class="pre">resizer</span></code> 数据源，
+此参数配置有点特殊，例如模型输入名称为 data,
+数据源为内存(ddr), 则此处应该配置值为 <code class="docutils literal notranslate"><span class="pre">{&quot;data&quot;:</span> <span class="pre">&quot;ddr&quot;}</span></code>。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">max_time_per_fc</span></code></p></td>
+<td><p>参数作用：指定模型的每个function-call的最大可连续执行时间(单位ms)。</p>
+<p>取值范围：<code class="docutils literal notranslate"><span class="pre">0或1000-4294967295</span></code>。</p>
+<p>默认配置：<code class="docutils literal notranslate"><span class="pre">0</span></code>。</p>
+<p>参数说明：编译后的数据指令模型在BPU上进行推理计算时，
+它将表现为1个或者多个function-call的调用，
+其中function-call是BPU的执行粒度,
+该参数用来限制每个function-call最大的执行时间,
+设置达到后即使这一段function-call还未执行完也会被高优先级模型抢占。</p>
+<p>当一个模型设置了 <code class="docutils literal notranslate"><span class="pre">max_time_per_fc</span></code> 编译参数后，即为低优先级模型，
+它才可以被抢占。</p>
+<p>详情参见 <span class="xref std std-ref">模型优先级控制</span> 部分的介绍。</p>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>此参数仅用于实现模型抢占功能，如无需实现该功能则可以忽略。</p>
+</div>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jobs</span></code></p></td>
+<td><p><strong>参数作用</strong>：设置编译bin模型时的进程数。</p>
+<p><strong>取值范围</strong>：<code class="docutils literal notranslate"><span class="pre">机器支持的最大核心数范围内</span></code>。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：在编译bin模型时，用于设置进程数。
+一定程度上可提高编译速度。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p><strong>自定义算子参数组</strong></p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 24%" />
+<col style="width: 63%" />
+<col style="width: 9%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>编
+号</p></th>
+<th class="head"><p>参数名称</p></th>
+<th class="head"><p>参数配置说明</p></th>
+<th class="head"><p>可选/</p>
+<p>必选</p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">custom_op_method</span></code></p></td>
+<td><p><strong>参数作用</strong>：自定义算子策略选择。</p>
+<p><strong>取值范围</strong>：<code class="docutils literal notranslate"><span class="pre">register</span></code>。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：目前仅支持register策略，具体使用请参考</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">op_register_files</span></code></p></td>
+<td><p><strong>参数作用</strong>：自定义算子的Python实现文件名称。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：多个文件可用 <code class="docutils literal notranslate"><span class="pre">;</span></code> 分隔，算子如何实现请参考</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">custom_op_dir</span></code></p></td>
+<td><p><strong>参数作用</strong>：自定义算子的Python实现文件存放路径。</p>
+<p><strong>取值范围</strong>：无。</p>
+<p><strong>默认配置</strong>：无。</p>
+<p><strong>参数说明</strong>：设置路径时，请使用相对路径。</p>
+</td>
+<td><p>可选</p></td>
+</tr>
+</tbody>
+</table>
+<section id="hzpreprocess">
+<span id="pre-process"></span><h3>预处理HzPreprocess算子说明<a class="headerlink" href="#hzpreprocess" title="永久链接至标题"></a></h3>
+<p>预处理HzPreprocess算子是地平线模型转换工具在模型转换过程中根据yaml配置文件生成的一个插在模型输入节点后的预处理算子节点，用来给模型的输入数据做归一化操作，本节主要介绍 <code class="docutils literal notranslate"><span class="pre">norm_type</span></code> 、 <code class="docutils literal notranslate"><span class="pre">mean_value</span></code> 、 <code class="docutils literal notranslate"><span class="pre">scale_value</span></code> 参数变量和模型预处理 HzPreprocess 算子节点生成的说明。</p>
+<p><strong>norm_type参数说明</strong></p>
+<ul class="simple">
+<li><p>参数作用：此参数为在模型中添加的输入数据预处理方法。</p></li>
+<li><p>参数取值范围及说明：</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">no_preprocess</span></code> 表示不添加任何数据预处理。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data_mean</span></code> 表示提供减均值预处理。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data_scale</span></code> 表示提供乘scale系数预处理。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data_mean_and_scale</span></code> 表示提供先减均值再乘scale系数前处理。</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>当输入节点大于一个时，设置的节点顺序需要与 <code class="docutils literal notranslate"><span class="pre">input_name</span></code> 中的顺序严格保持一致。</p>
+</div>
+<p><strong>mean_value参数说明</strong></p>
+<ul class="simple">
+<li><p>参数作用：此参数表示指定预处理方法的图像减去的均值。</p></li>
+<li><p>使用说明：当 <code class="docutils literal notranslate"><span class="pre">norm_type</span></code> 取值为 <code class="docutils literal notranslate"><span class="pre">data_mean_and_scale</span></code> 或 <code class="docutils literal notranslate"><span class="pre">data_mean</span></code> 时需要配置该参数。</p></li>
+<li><p>参数说明：</p>
+<ul>
+<li><p>当只有一个输入节点时，仅需要配置一个数值，表示所有通道都减去这个均值。</p></li>
+<li><p>当有多个节点时，提供与通道数量一致的数值（这些数值以空格分隔开），表示每个通道都会减去不同的均值。</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ol class="arabic simple">
+<li><p>配置的输入节点数量必须与 <code class="docutils literal notranslate"><span class="pre">norm_type</span></code> 配置的节点数量一致。</p></li>
+<li><p>如果存在某个节点不需要 <code class="docutils literal notranslate"><span class="pre">mean</span></code> 处理，则为该节点配置 <code class="docutils literal notranslate"><span class="pre">'None'</span></code>。</p></li>
+</ol>
+</div>
+<p><strong>scale_value参数说明</strong></p>
+<ul class="simple">
+<li><p>参数作用：此参数表示指定预处理方法的数值scale系数。</p></li>
+<li><p>使用说明：当 <code class="docutils literal notranslate"><span class="pre">norm_type</span></code> 取值为 <code class="docutils literal notranslate"><span class="pre">data_mean_and_scale</span></code> 或 <code class="docutils literal notranslate"><span class="pre">data_scale</span></code> 时需要配置该参数。</p></li>
+<li><p>参数说明：</p>
+<ul>
+<li><p>当只有一个输入节点时，仅需要配置一个数值，表示所有通道都乘以这个系数。</p></li>
+<li><p>当有多个节点时，提供与通道数量一致的数值（这些数值以空格分隔开），表示每个通道都会乘以不同的系数。</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ol class="arabic simple">
+<li><p>配置的输入节点数量必须与 <code class="docutils literal notranslate"><span class="pre">norm_type</span></code> 配置的节点数量一致。</p></li>
+<li><p>如果存在某个节点不需要 <code class="docutils literal notranslate"><span class="pre">scale</span></code> 处理，则为该节点配置 <code class="docutils literal notranslate"><span class="pre">'None'</span></code>。</p></li>
+</ol>
+</div>
+<p><strong>计算公式及示例说明</strong></p>
+<ul class="simple">
+<li><p>模型训练时的数据标准化处理计算公式</p></li>
+</ul>
+<p>yaml文件中的mean和scale参数与训练时的mean、std需要进行换算。</p>
+<p>预处理节点中数据标准化操作的计算方式（即HzPreprocess节点中的计算公式）为：<span class="math notranslate nohighlight">\(norm\_data = ( data − mean ) * scale\)</span> 。</p>
+<p>以yolov3为例，其训练时的预处理代码为：</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">base_transform</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+    <span class="n">x</span> <span class="o">/=</span> <span class="mi">255</span>
+    <span class="n">x</span> <span class="o">-=</span> <span class="n">mean</span>
+    <span class="n">x</span> <span class="o">/=</span> <span class="n">std</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="k">class</span> <span class="nc">BaseTransform</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="p">(</span><span class="mf">0.406</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.485</span><span class="p">),</span> <span class="n">std</span><span class="o">=</span><span class="p">(</span><span class="mf">0.225</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.229</span><span class="p">)):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">std</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>则计算公式为：<span class="math notranslate nohighlight">\(norm\_data= (\frac{data}{255}  −𝑚𝑒𝑎𝑛) * \frac{1}{𝑠𝑡𝑑}\)</span>，</p>
+<p>改写为HzPreprocess节点的计算方式：<span class="math notranslate nohighlight">\(norm\_data= (\frac{data}{255}  −𝑚𝑒𝑎𝑛) * \frac{1}{𝑠𝑡𝑑} =(data−255𝑚𝑒𝑎𝑛) * \frac{1}{255𝑠𝑡𝑑}\)</span> ，</p>
+<p>则：<span class="math notranslate nohighlight">\(mean\_yaml = 255 mean、𝑠𝑐𝑎𝑙𝑒\_𝑦𝑎𝑚𝑙=  \frac{1}{255 𝑠𝑡𝑑}\)</span> 。</p>
+<ul class="simple">
+<li><p>模型推理时的计算公式</p></li>
+</ul>
+<p>通过对yaml配置文件中的配置参数，决定是否加入HzPreprocess节点。
+当配置mean/scale时，做模型转换时，会在输入端新增一个HzPreprocess节点，HzPreprocess节点可以理解为对输入数据做了一个conv操作。</p>
+<p>HzPreprocess内的计算公式为： <span class="math notranslate nohighlight">\(((input（取值范围[-128,127]）+ 128) - mean) * scale\)</span>，其中 <code class="docutils literal notranslate"><span class="pre">weight=scale</span></code>， <code class="docutils literal notranslate"><span class="pre">bias=(128-mean)</span> <span class="pre">*</span> <span class="pre">scale</span></code> 。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ol class="arabic simple">
+<li><p>在yaml中添加mean/scale后，就不需要在前处理内添加MeanTransformer和ScaleTransformer。</p></li>
+<li><p>在yaml中添加mean/scale，会将参数放入到HzPreprocess节点内，HzPreprocess节点为 BPU 节点。</p></li>
+</ol>
+</div>
+</section>
+</section>
+<section id="conversion-interpretation">
+<span id="id13"></span><h2>转换内部过程解读<a class="headerlink" href="#conversion-interpretation" title="永久链接至标题"></a></h2>
+<p>模型转换阶段完成浮点模型到地平线混合异构模型的转换。为了使得这个异构模型能快速高效地在嵌入式端运行，模型转换重点在解决 <strong>输入数据处理</strong> 和 <strong>模型优化编译</strong> 两个问题，本节会依次围绕这两个重点问题展开。</p>
+<p><strong>输入数据处理</strong> 地平线的边缘计算平台会为某些特定类型的模型输入通路提供硬件级的支撑方案。
+例如：视频通路方面的视频处理子系统，为图像采集提供图像裁剪、缩放和其他图像质量优化功能，这些子系统的输出往往是yuv420格式图像，
+而算法模型往往是基于bgr/rgb等一般常用图像格式训练得到的。</p>
+<p>地平线针对此种情况提供的解决方案是：</p>
+<ul class="simple">
+<li><ol class="arabic simple">
+<li><p>每个转换的模型都提供两种描述，一种用于描述原始浮点模型的输入数据（ <code class="docutils literal notranslate"><span class="pre">input_type_train</span></code> 和 <code class="docutils literal notranslate"><span class="pre">input_layout_train</span></code> ），另一种则用于描述我们需要对接的边缘平台的输入数据（ <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 和 <code class="docutils literal notranslate"><span class="pre">input_layout_rt</span></code> ）。</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="2">
+<li><p>图像数据的mean/scale也是比较常见的操作，但yuv420等边缘平台数据格式不再适合做这样的操作，因此，我们也将这些常见图像前处理固化到了模型中。</p></li>
+</ol>
+</li>
+</ul>
+<p>经过以上两种方式处理后，模型转换阶段产出的 <code class="docutils literal notranslate"><span class="pre">***.bin</span></code> 异构模型的输入部分将变成如下图状态。</p>
+<img alt="../../../_images/input_data_process.png" src="../../../_images/input_data_process.png" />
+<p>上图中的数据排布就只有NCHW和NHWC两种数据排布格式，N代表数量、C代表channel、H代表高度、W代表宽度，
+两种不同的排布体现的是不同的内存访问特性。在TensorFlow模型NHWC较常用，Caffe中就都使用NCHW，
+地平线平台不会限制使用的数据排布，但是有两条要求：第一是 <code class="docutils literal notranslate"><span class="pre">input_layout_train</span></code> 必须与原始模型的数据排布一致；
+第二是在边缘平台准备好与 <code class="docutils literal notranslate"><span class="pre">input_layout_rt</span></code> 一致排布的数据，正确的数据排布是顺利解析数据的基础。</p>
+<p>模型转换工具会根据 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 和 <code class="docutils literal notranslate"><span class="pre">input_type_train</span></code> 指定的数据格式自动添加数据转换节点，根据地平线的实际使用经验，
+并不是任意类型组合都是需要的，为了避免您误用，我们只开放了一些固定的类型组合，如下表：</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 7%" />
+<col style="width: 9%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 7%" />
+<col style="width: 14%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">input_type_train</span></code> \ <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code></p></td>
+<td><p>nv12</p></td>
+<td><p>yuv444</p></td>
+<td><p>rgb</p></td>
+<td><p>bgr</p></td>
+<td><p>gray</p></td>
+<td><p>featuremap</p></td>
+</tr>
+<tr class="row-even"><td><p>yuv444</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>N</p></td>
+<td><p>N</p></td>
+<td><p>N</p></td>
+<td><p>N</p></td>
+</tr>
+<tr class="row-odd"><td><p>rgb</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>N</p></td>
+<td><p>N</p></td>
+</tr>
+<tr class="row-even"><td><p>bgr</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>N</p></td>
+<td><p>N</p></td>
+</tr>
+<tr class="row-odd"><td><p>gray</p></td>
+<td><p>N</p></td>
+<td><p>N</p></td>
+<td><p>N</p></td>
+<td><p>N</p></td>
+<td><p>Y</p></td>
+<td><p>N</p></td>
+</tr>
+<tr class="row-even"><td><p>featuremap</p></td>
+<td><p>N</p></td>
+<td><p>N</p></td>
+<td><p>N</p></td>
+<td><p>N</p></td>
+<td><p>N</p></td>
+<td><p>Y</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>表格中第一行是 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 中支持的类型，第一列是 <code class="docutils literal notranslate"><span class="pre">input_type_train</span></code> 支持的类型，
+其中的 <strong>Y/N</strong> 表示是否支持相应的 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 到 <code class="docutils literal notranslate"><span class="pre">input_type_train</span></code> 的转换。
+在模型转换得到的最终产出bin模型中， <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 到 <code class="docutils literal notranslate"><span class="pre">input_type_train</span></code> 是一个内部的过程，
+您只需要关注 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 的数据格式即可。
+<strong>正确理解每种</strong> <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> <strong>的要求，对于嵌入式应用准备推理数据很重要，以下是对</strong>
+<code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> <strong>每种格式的说明：</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>rgb、bgr和gray都是比较常见的图像数据，注意每个数值都采用UINT8表示。</p></li>
+<li><p>yuv444是一种常见的图像格式，注意每个数值都采用UINT8表示。</p></li>
+<li><p>nv12是常见的yuv420图像数据，每个数值都采用UINT8表示。</p></li>
+<li><p>nv12有个比较特别的情况是 <code class="docutils literal notranslate"><span class="pre">input_space_and_range</span></code> 设置 <code class="docutils literal notranslate"><span class="pre">bt601_video</span></code>
+（参考前文对 <code class="docutils literal notranslate"><span class="pre">input_space_and_range</span></code> 参数的介绍），较于常规nv12情况，它的数值范围由[0,255]变成了[16,235]，
+每个数值仍然采用UINT8表示。</p></li>
+<li><p>featuremap输入模型的数据格式type只要求您的数据是四维的，每个数值采用float32表示。例如：雷达和语音等模型处理就常用这个格式。</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>校准数据只需处理到input_type_train即可，同时也要注意 <strong>不要做重复的norm操作</strong>。</p>
+<p>以上 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 与 <code class="docutils literal notranslate"><span class="pre">input_type_train</span></code> 是固化在量化工具链的处理流程中，如果您非常确定不需要转换，
+可将两个 <code class="docutils literal notranslate"><span class="pre">input_type</span></code> 设置成一样就可以了，一样的 <code class="docutils literal notranslate"><span class="pre">input_type</span></code> 会做直通处理，不会影响模型的实际执行性能。</p>
+<p>同样的，数据前处理也是固化在流程中，如果您不需要做任何前处理，通过 <code class="docutils literal notranslate"><span class="pre">norm_type</span></code> 配置关闭这个功能即可，不会影响模型的实际执行性能。</p>
+</div>
+<p><strong>模型优化编译</strong> 完成了模型解析、模型优化、模型校准与量化、模型编译几个重要阶段，其内部工作过程如下图所示。</p>
+<img alt="../../../_images/model_optimization.png" src="../../../_images/model_optimization.png" />
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">input_type_rt*</span></code> 表示input_type_rt的中间格式。</p></li>
+<li><p>XJ3芯片架构只支持推理 <code class="docutils literal notranslate"><span class="pre">NHWC</span></code> 的数据，请用可视化工具Netron查看 <code class="docutils literal notranslate"><span class="pre">quantized_model.onnx</span></code> 输入节点的数据排布，决定是否要在预处理中增加 <code class="docutils literal notranslate"><span class="pre">layout转换</span></code>。</p></li>
+</ol>
+</div>
+<p><strong>模型解析阶段</strong> 对于Caffe浮点模型会完成到ONNX浮点模型的转换。
+在原始浮点模型上会根据转换配置yaml文件中的配置参数决定是否加入数据预处理节点，此阶段产出一个original_float_model.onnx。
+这个ONNX模型计算精度仍然是float32，但在输入部分加入了一个数据预处理节点。</p>
+<p>理想状态下，这个预处理节点应该完成 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 到 <code class="docutils literal notranslate"><span class="pre">input_type_train</span></code> 的完整转换，
+实际情况是整个type转换过程会配合地平线芯片硬件完成，ONNX模型里面并没有包含硬件转换的部分。
+因此ONNX的真实输入类型会使用一种中间类型，这种中间类型就是硬件对 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 的处理结果类型，
+数据layout(NCHW/NHWC)会保持原始浮点模型的输入layout一致。
+每种 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 都有特定的对应中间类型，如下表：</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 19%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 16%" />
+<col style="width: 19%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>nv12</strong></p></td>
+<td><p><strong>yuv444</strong></p></td>
+<td><p><strong>rgb</strong></p></td>
+<td><p><strong>bgr</strong></p></td>
+<td><p><strong>gray</strong></p></td>
+<td><p>featuremap</p></td>
+</tr>
+<tr class="row-even"><td><p>yuv444_128</p></td>
+<td><p>yuv444_128</p></td>
+<td><p>RGB_128</p></td>
+<td><p>BGR_128</p></td>
+<td><p>GRAY_128</p></td>
+<td><p>featuremap</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>表格中第一行加粗部分是 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 指定的数据类型，第二行是特定 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 对应的中间类型，
+这个中间类型就是original_float_model.onnx的输入类型。每个类型解释如下：</p>
+<ul class="simple">
+<li><p>yuv444_128 是yuv444数据减去128结果，每个数值采用int8表示。</p></li>
+<li><p>RGB_128 是RGB数据减去128的结果，每个数值采用int8表示。</p></li>
+<li><p>BGR_128 是BGR数据减去128的结果，每个数值采用int8表示。</p></li>
+<li><p>GRAY_128 是gray数据减去128的结果，每个数值采用int8表示。</p></li>
+<li><p>featuremap 是一个四维张量数据，每个数值采用float32表示。</p></li>
+</ul>
+</div>
+<p><strong>模型优化阶段</strong> 实现模型的一些适用于地平线平台的算子优化策略，例如BN融合到Conv等。
+此阶段的产出是一个optimized_float_model.onnx，这个ONNX模型的计算精度仍然是float32，经过优化后不会影响模型的计算结果。
+模型的输入数据要求还是与前面的original_float_model一致。</p>
+<p><strong>模型校准阶段</strong> 会使用您提供的校准数据来计算必要的量化阈值参数，这些参数会直接输入到量化阶段，不会产生新的模型状态。</p>
+<p><strong>模型量化阶段</strong> 使用校准得到的参数完成模型量化，此阶段的产出是一个quantized_model.onnx。
+这个模型的计算精度已经是int8，使用这个模型可以评估到模型量化带来的精度损失情况。
+这个模型要求输入的基本数据格式仍然与 <code class="docutils literal notranslate"><span class="pre">original_float_model</span></code> 一样，不过layout和数值表示已经发生了变化，
+整体较于 <code class="docutils literal notranslate"><span class="pre">original_float_model</span></code> 输入的变化情况描述如下：</p>
+<ul class="simple">
+<li><p>数据layout均使用NHWC。</p></li>
+<li><p>当 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 的取值为非 <code class="docutils literal notranslate"><span class="pre">featuremap</span></code> 时，则输入的数据类型均使用INT8，
+反之， 当 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 取值为 <code class="docutils literal notranslate"><span class="pre">featuremap</span></code> 时，则输入的数据类型则为float32。</p></li>
+</ul>
+<p><strong>模型编译阶段</strong> 会使用地平线模型编译器，将量化模型转换为地平线平台支持的计算指令和数据，
+这个阶段的产出一个 <code class="docutils literal notranslate"><span class="pre">***.bin</span></code> 模型，这个bin模型就是可在地平线边缘嵌入式平台运行的模型，也就是模型转换的最终产出结果。</p>
+</section>
+<section id="id14">
+<h2>转换结果解读<a class="headerlink" href="#id14" title="永久链接至标题"></a></h2>
+<p>本节将依次介绍模型转换成功状态的解读、转换不成功的分析方法。
+确认模型转换成功，需要您从 <code class="docutils literal notranslate"><span class="pre">makertbin</span></code> 状态信息、相似度信息和 <cite>working_dir</cite> 产出三个方面确认。
+<code class="docutils literal notranslate"><span class="pre">makertbin</span></code> 状态信息方面，转换成功将在控制台输出信息尾部给出明确的提示信息如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">2021</span>-04-21 <span class="m">11</span>:13:08,337 INFO Convert to runtime bin file successfully!
+<span class="m">2021</span>-04-21 <span class="m">11</span>:13:08,337 INFO End Model Convert
+</pre></div>
+</div>
+<p>相似度信息也存在于 <code class="docutils literal notranslate"><span class="pre">makertbin</span></code> 的控制台输出内容中，在 <code class="docutils literal notranslate"><span class="pre">makertbin</span></code> 状态信息之前，其内容形式如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">======================================================================</span>
+Node    ON   Subgraph  Type     Cosine Similarity  Threshold
+----------------------------------------------------------------------
+...    ...     ...     ...       <span class="m">0</span>.999936           <span class="m">127</span>.000000
+...    ...     ...     ...       <span class="m">0</span>.999868           <span class="m">2</span>.557209
+...    ...     ...     ...       <span class="m">0</span>.999268           <span class="m">2</span>.133924
+...    ...     ...     ...       <span class="m">0</span>.996023           <span class="m">3</span>.251645
+...    ...     ...     ...       <span class="m">0</span>.996656           <span class="m">4</span>.495638
+</pre></div>
+</div>
+<p>上面列举的输出内容中，Node、ON、Subgraph、Type与 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">checker</span></code> 工具的解读是一致的，
+请参考前文 <a class="reference internal" href="#check-result"><span class="std std-ref">检查结果解读</span></a>；
+Threshold是每个层次的校准阈值，用于异常状态下向地平线技术支持反馈信息，正常状况下不需要关注；
+Cosine Similarity反映的Node指示的节点中，原始浮点模型与量化模型输出结果的余弦相似度。</p>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>一般情况下， <strong>模型的输出节点 Cosine Similarity &gt;= 0.99 可认为此模型量化正常</strong>，输出节点的相似度低于0.8就有了较明显的精度损失， 当然Cosine Similarity只是指明量化后数据稳定性的一种参考方式，对于模型精度的影响不存在明显的直接关联关系，
+完全准确的精度情况还需要您阅读 <a class="reference internal" href="#accuracy-evaluation"><span class="std std-ref">模型精度分析与调优</span></a> 的内容。</p>
+</div>
+<p>转换产出存放在转换配置参数 <code class="docutils literal notranslate"><span class="pre">working_dir</span></code> 指定的路径中，成功完成模型转换后，
+您可以在该目录下得到以下文件(***部分是您通过转换配置参数 <code class="docutils literal notranslate"><span class="pre">output_model_file_prefix</span></code> 指定的内容)：</p>
+<ul class="simple">
+<li><p>***_original_float_model.onnx</p></li>
+<li><p>***_optimized_float_model.onnx</p></li>
+<li><p>***_quantized_model.onnx</p></li>
+<li><p>***.bin</p></li>
+</ul>
+<p><a class="reference internal" href="#conversion-output"><span class="std std-ref">转换产出物解读</span></a> 介绍了每个产出物的用途。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>在上板运行前，我们建议您完成 <a class="reference internal" href="#performance-evaluation"><span class="std std-ref">模型性能分析与调优</span></a> 介绍的模型性能&amp;精度评测过程，避免将模型转换问题延伸到后续嵌入式端。</p>
+</div>
+<p>如果以上验证模型转换成功的三个方面中，有任一个出现缺失都说明模型转换出现了错误。
+一般情况下，<code class="docutils literal notranslate"><span class="pre">makertbin</span></code> 工具会在出现错误时将错误信息输出至控制台，
+例如：我们在Caffe模型转换时不配置yaml文件中的 <code class="docutils literal notranslate"><span class="pre">prototxt</span></code> 和 <code class="docutils literal notranslate"><span class="pre">caffe_model</span></code> 参数，模型转换工具给出如下提示。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">2021</span>-04-21 <span class="m">14</span>:45:34,085 ERROR Key <span class="s1">&#39;model_parameters&#39;</span> error:
+Missing keys: <span class="s1">&#39;caffe_model&#39;</span>, <span class="s1">&#39;prototxt&#39;</span>
+<span class="m">2021</span>-04-21 <span class="m">14</span>:45:34,085 ERROR yaml file parse failed. Please double check your input
+<span class="m">2021</span>-04-21 <span class="m">14</span>:45:34,085 ERROR exception <span class="k">in</span> command: makertbin
+</pre></div>
+</div>
+<p>如果控制台输出日志信息不能帮助您发现问题，请参考 <a class="reference external" href="../../../FAQs/ai_toolchain_faqs/ai_toolchain_FAQS.html#hb-mapper-makertbin-03-build-sh">模型量化错误及解决方法</a> 章节内容进行查找，若以上步骤仍不能排除问题，请联系地平线技术支持团队或在地平线官方技术社区（<a class="reference external" href="https://developer.horizon.ai/">https://developer.horizon.ai/</a>）提出您的问题，我们将在24小时内给您提供支持。</p>
+</section>
+<section id="conversion-output">
+<span id="id16"></span><h2>转换产出物解读<a class="headerlink" href="#conversion-output" title="永久链接至标题"></a></h2>
+<p>上文提到模型成功转换的产出物包括以下四个部分，本节将介绍每个产出物的用途：</p>
+<ul class="simple">
+<li><p>***_original_float_model.onnx</p></li>
+<li><p>***_optimized_float_model.onnx</p></li>
+<li><p>***_quantized_model.onnx</p></li>
+<li><p>***.bin</p></li>
+</ul>
+<p>***_original_float_model.onnx的产出过程可以参考 <a class="reference internal" href="#conversion-interpretation"><span class="std std-ref">转换内部过程解读</span></a> 的介绍，
+这个模型计算精度与转换输入的原始浮点模型是一模一样的，有个重要的变化就是为了适配地平线平台添加了一些数据预处理计算（增加了一个预处理算子节点 <code class="docutils literal notranslate"><span class="pre">HzPreprocess</span></code>, 可以使用netron工具打开onnx模型查看,此算子的详情可查看 <a class="reference internal" href="#pre-process"><span class="std std-ref">预处理HzPreprocess算子说明</span></a> 内容）。
+一般情况下，您不需要使用这个模型，若在转换结果出现异常时，通过上文介绍的定位方法仍不能解决您的问题，请将这个模型提供给地平线的技术支持团队或在地平线官方技术社区（<a class="reference external" href="https://developer.horizon.ai/">https://developer.horizon.ai/</a>）提出您的问题，将有助于帮助您快速解决问题。</p>
+<p>***_optimized_float_model.onnx的产出过程可以参考 <a class="reference internal" href="#conversion-interpretation"><span class="std std-ref">转换内部过程解读</span></a> 的介绍，
+这个模型经过一些算子级别的优化操作，常见的就是算子融合。
+通过与original_float模型的可视化对比，您可以明显看到一些算子结构级别的变化，不过这些都不影响模型的计算精度。
+一般情况下，您不需要使用这个模型，若在转换结果出现异常时，通过上文介绍的定位方法仍不能解决您的问题，请将这个模型提供给地平线的技术支持团队或在地平线官方技术社区（<a class="reference external" href="https://developer.horizon.ai/">https://developer.horizon.ai/</a>）提出您的问题，将有助于帮助您快速解决问题。</p>
+<p>***_quantized_model.onnx的产出过程可以参考 <a class="reference internal" href="#conversion-interpretation"><span class="std std-ref">转换内部过程解读</span></a> 的介绍，
+这个模型已经完成了校准和量化过程，量化后的模型精度损失情况，可以阅读下文模型精度分析与调优内容来评估此模型。
+这个模型是精度验证过程中必须要使用的模型，具体使用方式请参考 <a class="reference internal" href="#accuracy-evaluation"><span class="std std-ref">模型精度分析与调优</span></a> 的介绍。</p>
+<p>***.bin就是可以用于在地平线芯片上加载运行的模型，
+配合 上板运行(runtime)应用开发说明 章节介绍的内容，
+您就可以将模型快速在地平线芯片上部署运行。不过为了确保模型的性能与精度效果是符合您的预期的，
+我们建议完成 <a class="reference internal" href="#model-conversion"><span class="std std-ref">转换模型</span></a> 和 <a class="reference internal" href="#accuracy-evaluation"><span class="std std-ref">模型精度分析与调优</span></a>
+介绍的性能和精度分析过程后再进入到应用开发和部署。</p>
+</section>
+</section>
+<section id="performance-evaluation">
+<span id="id17"></span><h1><span class="section-number">6.4.1.6. </span>模型性能分析与调优<a class="headerlink" href="#performance-evaluation" title="永久链接至标题"></a></h1>
+<p>本节介绍了如何使用地平线提供的工具评估模型性能，这些工具得到的都是与实际执行基本无异的性能效果，
+如果此阶段发现评估结果不符合预期，建议您尽量在此阶段根据地平线的优化建议解决性能问题，不建议将模型的问题延伸到应用开发阶段。</p>
+<section id="hb-perf">
+<span id="id18"></span><h2>使用 <code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 工具估计性能<a class="headerlink" href="#hb-perf" title="永久链接至标题"></a></h2>
+<p>地平线提供的 <code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 以模型转换得到的 ***.bin为输入，可以直接得到模型预期上板性能，工具使用方式如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_perf  ***.bin
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>如果分析的是 <code class="docutils literal notranslate"><span class="pre">pack</span></code> 后的模型，需要加上一个 <code class="docutils literal notranslate"><span class="pre">-p</span></code> 参数，命令为 <code class="docutils literal notranslate"><span class="pre">hb_perf</span> <span class="pre">-p</span> <span class="pre">***.bin</span></code>。
+关于模型 <code class="docutils literal notranslate"><span class="pre">pack</span></code>，请查看 <span class="xref std std-ref">其他模型工具（可选）</span> 部分的介绍。</p>
+</div>
+<p>命令中的 ***.bin就是模型转换产出的bin模型，命令执行完成后，
+在当前工作目录下会得到一个 <cite>hb_perf_result</cite> 目录，分析结果以html形式提供。
+以下是我们分析一个MobileNet的示例结果，其中mobilenetv1_224x224_nv12.html就是查看分析结果的主页面。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_perf_result/
+└── mobilenetv1_224x224_nv12
+    ├── MOBILENET_subgraph_0.html
+    ├── MOBILENET_subgraph_0.json
+    ├── mobilenetv1_224x224_nv12
+    ├── mobilenetv1_224x224_nv12.html
+    ├── mobilenetv1_224x224_nv12.png
+    └── temp.hbm
+</pre></div>
+</div>
+<p>通过浏览器打开结果主页面，其内容如下图：</p>
+<img alt="../../../_images/hb_mapper_perf_2.png" src="../../../_images/hb_mapper_perf_2.png" />
+<p>分析结果主要由Model Performance Summary、Details和BIN Model Structure三个部分组成。
+Model Performance Summary是整个bin模型的整体性能评估结果，其中各项指标为:</p>
+<ul class="simple">
+<li><p>Model Name——模型名称。</p></li>
+<li><p>Model Latency(ms)——模型整体单帧计算耗时(单位为ms)。</p></li>
+<li><p>Model DDR Occupation(Mb per frame)——模型运行的整体内存占用情况(单位为Mb/frame)。</p></li>
+<li><p>Loaded Bytes per Frame——模型运行每帧读取数据量。</p></li>
+<li><p>Stored Bytes per Frame——模型运行每帧存储数据量。</p></li>
+</ul>
+<p>BIN Model Structure部分提供的是bin模型的子图级可视化结果，图中深青色节点表示运行在BPU上的节点，灰色节点表示在CPU上计算的节点。</p>
+<p>在查看Details和BIN Model Structure时，您需要了解子图（subgraph）的概念。
+如果模型的网络结构中的算子出现了CPU计算的算子，模型转换工具将把这个算子前后连续在BPU计算的部分拆分为两个独立的子图（subgraph）。
+具体可以参考 <a class="reference internal" href="#model-check"><span class="std std-ref">验证模型</span></a> 部分的介绍。</p>
+<p>Details是每份模型BPU子图的具体信息，在主页面中，每个子图提供的指标解读如下：</p>
+<ul class="simple">
+<li><p>Model Subgraph Name——子图名称。</p></li>
+<li><p>Model Subgraph Calculation Load (OPpf)——子图的单帧计算量。</p></li>
+<li><p>Model Subgraph DDR Occupation(Mbpf)——子图的单帧读写数据量（单位为MB）。</p></li>
+<li><p>Model Subgraph Latency(ms)——子图的单帧计算耗时（单位为ms）。</p></li>
+</ul>
+<p>每份子图结果提供了一个明细入口，以上指标都是明细页面提取到的，进入到明细页面可以给您更加细致的参考信息。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>需要特别注意的是，明细页面会根据您是否启用调试级转换而有所区别，
+下图中的Layer Details仅当在配置文件中设置 <code class="docutils literal notranslate"><span class="pre">debug</span></code> 参数为 <code class="docutils literal notranslate"><span class="pre">True</span></code> 时才可以拿到，
+这个 <code class="docutils literal notranslate"><span class="pre">debug</span></code> 参数配置方法请参考 <a class="reference internal" href="#makertbin"><span class="std std-ref">使用 hb_mapper makertbin 工具转换模型</span></a> 部分的介绍。</p>
+</div>
+<p>Layer Details提供到了具体算子级别的分析，在调试分析阶段也是比较不错的参考，
+如果是某些BPU算子导致性能低，可以帮助您定位到这个具体算子。</p>
+<img alt="../../../_images/layer_details.png" src="../../../_images/layer_details.png" />
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 的意义在于了解bin模型子图结构，对于BPU上计算部分，该工具也能提供较全面的静态分析指标。</p>
+<p>但需要注意 <code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 工具分析的结果不含CPU部分的计算评估，如果也需要CPU计算的性能情况，请使用开发板工具实测性能。</p>
+</div>
+</section>
+<section id="id19">
+<h2>开发板实测性能<a class="headerlink" href="#id19" title="永久链接至标题"></a></h2>
+<p>开发板上实测模型性能使用的是开发板上 <code class="docutils literal notranslate"><span class="pre">hrt_model_exec</span> <span class="pre">perf</span></code> 工具，
+<code class="docutils literal notranslate"><span class="pre">hrt</span> <span class="pre">_model_exec</span></code> 是一个模型执行工具，可直接在开发板上评测模型的推理性能、获取模型信息。
+一方面可以让用户拿到模型时实际了解模型真实性能；
+另一方面也可以帮助用户了解模型可以做到的速度极限，对于应用调优的目标极限具有指导意义。</p>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">hrt_model_exec</span> <span class="pre">perf</span></code> 工具前，有两个准备工作。</p>
+<ol class="arabic simple">
+<li><p>确保您已经参考 <strong>环境安装</strong> 章节完成了开发板环境部署，同时请确保开发板所用系统软件SDK版本和工具链模型转换SDK版本来自同一个发布包，保证版本对齐！</p></li>
+<li><p>需要将Ubuntu/CentOS开发机上得到的bin模型拷贝到开发板上（建议放在/userdata目录），
+开发板上是一个Linux系统，可以通过 <code class="docutils literal notranslate"><span class="pre">scp</span></code> 等Linux系统常用方式完成这个拷贝过程。</p></li>
+</ol>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">hrt_model_exec</span> <span class="pre">perf</span></code> 实测性能的参考命令如下（ <strong>注意是在开发板上执行</strong> ）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./hrt_model_exec perf --model_file mobilenetv1_224x224_nv12.bin <span class="se">\</span>
+                      --model_name<span class="o">=</span><span class="s2">&quot;&quot;</span> <span class="se">\</span>
+                      --core_id<span class="o">=</span><span class="m">0</span> <span class="se">\</span>
+                      --frame_count<span class="o">=</span><span class="m">200</span> <span class="se">\</span>
+                      --perf_time<span class="o">=</span><span class="m">0</span> <span class="se">\</span>
+                      --thread_num<span class="o">=</span><span class="m">1</span> <span class="se">\</span>
+                      --profile_path<span class="o">=</span><span class="s2">&quot;.&quot;</span>
+</pre></div>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">hrt_model_exec</span> <span class="pre">perf</span></span></dt>
+<dd><dl class="simple">
+<dt>model_file：</dt><dd><p>需要分析性能的bin模型名称。</p>
+</dd>
+<dt>model_name:</dt><dd><p>需要分析性能的bin模型名字。若 <code class="docutils literal notranslate"><span class="pre">model_file</span></code> 只含一个模型，则可以省略。</p>
+</dd>
+<dt>core_id</dt><dd><p>默认值 <code class="docutils literal notranslate"><span class="pre">0</span></code>，运行模型使用的核心id，<code class="docutils literal notranslate"><span class="pre">0</span></code> 代表任意核心，<code class="docutils literal notranslate"><span class="pre">1</span></code> 代表核心0，<code class="docutils literal notranslate"><span class="pre">2</span></code> 代表核心1。若要分析双核极限帧率，请将此处设为 <code class="docutils literal notranslate"><span class="pre">0</span></code>。</p>
+</dd>
+<dt>frame_count：</dt><dd><p>默认值 <code class="docutils literal notranslate"><span class="pre">200</span></code>，设置推理帧数，工具会执行指定次数后再分析平均耗时。 当 <code class="docutils literal notranslate"><span class="pre">perf_time</span></code> 为 <code class="docutils literal notranslate"><span class="pre">0</span></code> 时生效。</p>
+</dd>
+<dt>perf_time:</dt><dd><p>默认值 <code class="docutils literal notranslate"><span class="pre">0</span></code>，单位分钟。设置推理时间，工具会执行指定时间后再分析平均耗时。</p>
+</dd>
+<dt>thread_num：</dt><dd><p>默认值 <code class="docutils literal notranslate"><span class="pre">1</span></code>，设置运行的线程数，取值范围 <code class="docutils literal notranslate"><span class="pre">[1,8]</span></code>。若要分析极限帧率，请将线程数改大。</p>
+</dd>
+<dt>profile_path：</dt><dd><p>默认关闭，统计工具日志产生路径。该参数引入的分析结果会存放在指定目录下的profiler.log文件中。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>命令执行完成后，您将在控制台得到如下结果。
+最终的评估结果就是 <code class="docutils literal notranslate"><span class="pre">Average</span> <span class="pre">latency</span></code> 和 <code class="docutils literal notranslate"><span class="pre">Frame</span> <span class="pre">rate</span></code>，分别表示平均单帧推理延时和模型极限帧率。
+如果想获得模型在板子上运行的极限帧率，请尝试调节 <code class="docutils literal notranslate"><span class="pre">thread_num</span></code> 的数值，并调节出最优线程数值，不同的数值会输出不同的性能结果。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Running condition:
+  Thread number is: <span class="m">1</span>
+  Frame count   is: <span class="m">200</span>
+  core number   is: <span class="m">1</span>
+  Program run time: <span class="m">726</span>.604000  ms
+Perf result:
+  Frame totally latency is: <span class="m">714</span>.537781  ms
+  Average    latency    is: <span class="m">3</span>.572689  ms
+  Frame      rate       is: <span class="m">275</span>.253095  FPS
+</pre></div>
+</div>
+<p>控制台得到的信息只有整体情况，通过 <code class="docutils literal notranslate"><span class="pre">profile_path</span></code> 控制产生的node_profiler.log文件记录了更加丰富的信息如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+  <span class="s2">&quot;model_latency&quot;</span>: <span class="o">{</span>
+    <span class="s2">&quot;MOBILENET_subgraph_0&quot;</span>: <span class="o">{</span>
+      <span class="s2">&quot;avg_time&quot;</span>: <span class="m">2</span>.889,
+      <span class="s2">&quot;max_time&quot;</span>: <span class="m">2</span>.889,
+      <span class="s2">&quot;min_time&quot;</span>: <span class="m">2</span>.889
+    <span class="o">}</span>,
+    <span class="s2">&quot;MOBILENET_subgraph_0_output_layout_convert&quot;</span>: <span class="o">{</span>
+      <span class="s2">&quot;avg_time&quot;</span>: <span class="m">0</span>.017265,
+      <span class="s2">&quot;max_time&quot;</span>: <span class="m">0</span>.038,
+      <span class="s2">&quot;min_time&quot;</span>: <span class="m">0</span>.015
+    <span class="o">}</span>,
+    <span class="s2">&quot;fc7_1_HzDequantize&quot;</span>: <span class="o">{</span>
+      <span class="s2">&quot;avg_time&quot;</span>: <span class="m">0</span>.07467,
+      <span class="s2">&quot;max_time&quot;</span>: <span class="m">0</span>.146,
+      <span class="s2">&quot;min_time&quot;</span>: <span class="m">0</span>.069
+    <span class="o">}</span>,
+    <span class="s2">&quot;prob&quot;</span>: <span class="o">{</span>
+      <span class="s2">&quot;avg_time&quot;</span>: <span class="m">0</span>.08839,
+      <span class="s2">&quot;max_time&quot;</span>: <span class="m">0</span>.172,
+      <span class="s2">&quot;min_time&quot;</span>: <span class="m">0</span>.052
+    <span class="o">}</span>
+  <span class="o">}</span>,
+  <span class="s2">&quot;task_latency&quot;</span>: <span class="o">{</span>
+    <span class="s2">&quot;TaskRunningTime&quot;</span>: <span class="o">{</span>
+      <span class="s2">&quot;avg_time&quot;</span>: <span class="m">3</span>.43695,
+      <span class="s2">&quot;max_time&quot;</span>: <span class="m">5</span>.883,
+      <span class="s2">&quot;min_time&quot;</span>: <span class="m">3</span>.354
+    <span class="o">}</span>,
+    <span class="s2">&quot;TaskScheduleTime&quot;</span>: <span class="o">{</span>
+      <span class="s2">&quot;avg_time&quot;</span>: <span class="m">0</span>.07456,
+      <span class="s2">&quot;max_time&quot;</span>: <span class="m">0</span>.215,
+      <span class="s2">&quot;min_time&quot;</span>: <span class="m">0</span>.054
+    <span class="o">}</span>,
+    <span class="s2">&quot;TaskSubmitTime&quot;</span>: <span class="o">{</span>
+      <span class="s2">&quot;avg_time&quot;</span>: <span class="m">0</span>.00861,
+      <span class="s2">&quot;max_time&quot;</span>: <span class="m">0</span>.106,
+      <span class="s2">&quot;min_time&quot;</span>: <span class="m">0</span>.006
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>这里的内容会对应到 <a class="reference internal" href="#hb-perf"><span class="std std-ref">使用hb_perf工具估计性能</span></a> 中的BIN Model Structure部分介绍的bin可视化图中，
+图中每个节点都有一个对应节点在profiler.log文件中，可以通过 <code class="docutils literal notranslate"><span class="pre">name</span></code> 对应起来。
+profiler.log文件中记录了每个节点的执行时间，对优化节点有重要的参考意义。</p>
+<p><code class="docutils literal notranslate"><span class="pre">profiler</span></code> 分析是经常使用的操作，前文 <a class="reference internal" href="#check-result"><span class="std std-ref">检查结果解读</span></a> 部分提到检查阶段不用过于关注CPU算子，
+此阶段就能看到CPU算子的具体耗时情况了，如果根据这里的评估认为CPU耗时太长，那就值得优化了。</p>
+</section>
+<section id="model-performance-optimization">
+<span id="id20"></span><h2>模型性能优化<a class="headerlink" href="#model-performance-optimization" title="永久链接至标题"></a></h2>
+<p>根据以上性能分析结果，您可能发现性能结果不及预期，本章节内容介绍了地平线对提升模型性能的建议与措施，
+包括检查yaml配置参数、处理CPU算子、高性能模型设计建议、使用地平线平台友好结构&amp;模型几个方面。</p>
+<p>部分修改可能会影响原始浮点模型的参数空间，意味着需要您重训模型，为了避免性能调优过程中反复调整并训练的代价，
+在得到满意性能效果前，建议您使用随机参数导出模型来验证性能即可。</p>
+<section id="performance-affecting-parameters">
+<span id="id21"></span><h3>检查影响模型性能的yaml参数<a class="headerlink" href="#performance-affecting-parameters" title="永久链接至标题"></a></h3>
+<p>在模型转换的yaml配置文件中，部分参数会实际影响模型的最终性能，可以先检查下是否已正确按照预期配置，
+各参数的具体含义和作用请参考 <a class="reference internal" href="#compiler-parameters"><span class="std std-ref">编译参数组</span></a> 表格。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">layer_out_dump</span></code>：指定模型转换过程中是否输出模型的中间结果，一般仅用于调试功能。
+如果将其配置为 <code class="docutils literal notranslate"><span class="pre">True</span></code>，则会为每个卷积算子增加一个反量化输出节点，它会显著的降低模型上板后的性能。
+所以在性能评测时，务必要将该参数配置为 <code class="docutils literal notranslate"><span class="pre">False</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">compile_mode</span></code>：该参数用于选择模型编译时的优化方向为带宽还是时延，关注性能时请配置为 <code class="docutils literal notranslate"><span class="pre">latency</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">optimize_level</span></code>：该参数用于选择编译器的优化等级，实际使用中应配置为 <code class="docutils literal notranslate"><span class="pre">O3</span></code> 获取最佳性能。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">core_num</span></code>：配置为 <code class="docutils literal notranslate"><span class="pre">2</span></code> 时可同时调用两个核运行，降低单帧推理延迟，但是也会影响整体的吞吐率。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">debug</span></code>：配置为 <code class="docutils literal notranslate"><span class="pre">True</span></code> 将打开编译器的debug模式，能够输出性能仿真的相关信息，如帧率、DDR 带宽占用等。
+一般用于性能评估阶段，在产品化交付时候，可关闭该参数减小模型大小，提高模型执行效率。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_time_per_fc</span></code>：该参数用于控制编译后的模型数据指令的function-call的执行时长，从而实现模型优先级抢占功能。
+设置此参数更改被抢占模型的function-call执行时长会影响该模型的上板性能。</p></li>
+</ul>
+</section>
+<section id="cpu">
+<h3>处理CPU算子<a class="headerlink" href="#cpu" title="永久链接至标题"></a></h3>
+<p>根据 <code class="docutils literal notranslate"><span class="pre">hrt_model_exec</span> <span class="pre">perf</span></code> 的评估，已经确认突出的性能瓶颈是CPU算子导致的。
+此种情况下，我们建议您先查看 <a class="reference internal" href="#op-restrictions"><span class="std std-ref">算子约束</span></a> 的内容，确认当前运行在CPU上的算子是否具备BPU支持的能力。</p>
+<p>如果算子不具备BPU支持能力，那么就是您的算子参数超过了BPU支持的参数约束范围，将相应原始浮点模型计算参数调整到约束范围内即可。
+为了方便您快速知晓超出约束的具体参数，建议您再使用 <a class="reference internal" href="#model-check"><span class="std std-ref">验证模型</span></a> 部分介绍的方法做一遍检查，
+工具将会直接给出超出BPU支持范围的参数提示。</p>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>修改原始浮点模型参数对模型计算精度的影响需要您自己把控，
+例如：Convolution的 <code class="docutils literal notranslate"><span class="pre">input_channel</span></code> 或 <code class="docutils literal notranslate"><span class="pre">output_channel</span></code> 超出范围就是一种较典型的情况，减少channel快速使得该算子被BPU支持，单单只做这一处修改也预计会对模型精度产生影响。</p>
+</div>
+<p>如果算子并不具备BPU支持能力，就需要您在地平线支持的BPU算子中找一个替代算子，并将其替换到原始浮点模型中。
+对于计算密集型的算子，地平线一般都具备BPU支持能力，少数只能在CPU上运行算子也都经过了极致优化。
+所以，这种情况一般由于您使用了一种不被BPU支持的激活函数造成的，而且这个激活函数反复被使用，最终导致bin模型中出现很多子图分割情况。</p>
+</section>
+<section id="id22">
+<h3>高性能模型设计建议<a class="headerlink" href="#id22" title="永久链接至标题"></a></h3>
+<p>根据性能评估结果，CPU上耗时占比可能很小，主要的性能瓶颈还是BPU推理时间过长。
+这种情况下，我们已经把BPU的计算器件都用上了，下一步的调优空间就在于提升计算资源的利用率。
+每种芯片都有自己的硬件特性，算法模型的计算参数是否很好地符合了硬件特性，
+直接决定了计算资源的利用率，符合度越高则利用率越高，反之则低。
+本节内容重点在于阐明地平线的硬件特性。</p>
+<p>首先，地平线的芯片是一款旨在加速CNN（卷积神经网络）的芯片，主要的计算资源都集中在处理各种卷积计算。
+所以，我们希望您的模型是以卷积计算为主的模型，卷积之外的算子都会导致计算资源的利用率降低，不同OP的影响程度会有所不同。</p>
+<p><strong>整体硬件要求</strong></p>
+<p>下表是硬件层面提出的一些计算友好性要求，供您做一个全面参考。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 48%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operators</p></th>
+<th class="head"><p>Restrictions</p></th>
+<th class="head"><p>Note</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="5"><p>Convolution</p></td>
+<td><p>Kernel HxW=[1,7]x[1,7]</p></td>
+<td><p>kernel size 2, 4, 6会造成算力浪费</p></td>
+</tr>
+<tr class="row-odd"><td><p>Channel Num (one group) &lt;= 2048</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Conv with sumin: Stride∈{1, 2}, Others: no restriction</p></td>
+<td><ol class="arabic simple">
+<li><p>Stride &gt; 2的情况会造成算力浪费。</p></li>
+<li><p>Pad不等于kernel_size / 2的情况会引入额外的pad操作，会导致模型性能下降。</p></li>
+</ol>
+</td>
+</tr>
+<tr class="row-odd"><td><p>必须能够被stride整除</p></td>
+<td><p>Dilation会引入额外的数据搬移</p></td>
+</tr>
+<tr class="row-even"><td><p>Size of Kernel: HxWxC &lt;= 32768</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><p>Deconvolution</p></td>
+<td><p>Kernel HxW=[2,14]x[2,14]</p></td>
+<td rowspan="4"><p>Deconvolution is not natively supported by BPU.</p></td>
+</tr>
+<tr class="row-even"><td><p>Channel Num &lt;= 2048</p></td>
+</tr>
+<tr class="row-odd"><td><p>Padding HxW=[0,(Kernel_H-1)/2]x[0,(Kernel_W-1)/2]</p></td>
+</tr>
+<tr class="row-even"><td><p>Stride ∈ {2, 4}</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><p>Fully Connected Convolution</p></td>
+<td><p>Kernel HxW=[1,31]x[1,31], and HxW &lt;= 127</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Channel Num∈[1,2048], or &lt;= 16384 if H and W are both 1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>for int8 output: HxCEIL(W/8)xCEIL(C/4) &lt;= {512(X2/J2), 1024(X3J3)}</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>for int32 output: HxCEIL(W/8)xCEIL(C/4) &lt; {1024(X2/J2), 2048(X3J3)}</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><p>Pooling</p></td>
+<td><p>Average pooling: Kernel HxW=[1,7]x[1,7], Stride∈{1, 2}, Padding HxW=[0,Kernel_H/2]x[0,Kernel_W/2]</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Global average pooling: Kernel HxW &lt;= 8192</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Max pooling: Kernel HxW=[1, 64]x[1,64], Stride=[1,256], Padding &gt;= 0</p></td>
+<td><p>Padding &gt; 1, Stride &gt; 2时会有额外的开销。</p></td>
+</tr>
+<tr class="row-even"><td><p>Global max pooling: Kernel HxW=[1,1024]x[1,1024]</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Upscale</p></td>
+<td><p>Scaling proportional range (1/256,256], precision=1/256</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>RoiAlign/Roiresize</p></td>
+<td><p>Scaling proportional range (1/256,256], precision=1/256</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Channel Concat</p></td>
+<td><p>None</p></td>
+<td><p>Input feature的channel num不是4对齐的话，会比较耗时。</p></td>
+</tr>
+<tr class="row-even"><td><p>Channel Split</p></td>
+<td><p>Input feature channel is multiple of split number.</p></td>
+<td><p>Output features的channel num不是4对齐的话，会比较耗时。</p></td>
+</tr>
+<tr class="row-odd"><td><p>Slice</p></td>
+<td><p>None</p></td>
+<td><p>起始坐标中的W不是8对齐的话，会比较耗时。
+channel方向的slice会占用MAC计算资源。</p></td>
+</tr>
+<tr class="row-even"><td><p>Upsample</p></td>
+<td><p>mode={nearest}, HxWxC -&gt; (2H)x(2W)xC</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><p>Reshape</p></td>
+<td><p>Reshape in the H and W directions, currently N and C are not supported.</p></td>
+<td><p>Input/Output feature的W不是8对齐的话，会非常耗时。</p></td>
+</tr>
+<tr class="row-even"><td><p>reorder upscale: HxWxC -&gt; (2H)x(2W)x(C/4)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>stack neighbor: HxWxC -&gt; (H/2)x(W/2)x(4C)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Shuffle</p></td>
+<td><p>Input feature channel &lt;= 2048, only supports shuffle in C direction</p></td>
+<td><p>如果shuffle的粒度不是4的倍数，会占用MAC计算资源。</p></td>
+</tr>
+<tr class="row-odd"><td><p>Elementwise Add</p></td>
+<td><p>Input feature channel &lt;= 2048</p></td>
+<td><p>会占用MAC计算资源</p></td>
+</tr>
+<tr class="row-even"><td><p>Elementwise Mul</p></td>
+<td><p>Input feature channel &lt;= 2048</p></td>
+<td><p>会占用MAC计算资源，而且效率较低。</p></td>
+</tr>
+<tr class="row-odd"><td><p>Broadcast Mul</p></td>
+<td><p>Input feature channel &lt;= 2048</p></td>
+<td><p>会占用MAC计算资源，而且效率较低。</p></td>
+</tr>
+<tr class="row-even"><td><p>Elementwise Max/Min</p></td>
+<td><p>Input feature channel &lt;= 2048</p></td>
+<td><p>会占用MAC计算资源，而且效率较低。</p></td>
+</tr>
+<tr class="row-odd"><td><p>LookupTable (sigmoid,tanh..)</p></td>
+<td><p>Lookup table: int8 -&gt; int8</p></td>
+<td><p>会占用MAC计算资源，而且效率较低。</p></td>
+</tr>
+<tr class="row-even"><td><p>Pad</p></td>
+<td><p>Pad Zero, Constant or Boundary</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Cross Channel Max</p></td>
+<td><p>Input feature channel ∈ [1, 64*group_num].</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td rowspan="3"><p>Detection Post Process</p></td>
+<td><p>Filter + Sort + NMS</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Anchor num: [1, 64], Class num: [1, 64]</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Max output num: 4096</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Leaky Relu</p></td>
+<td><p>None</p></td>
+<td><p>会占用MAC计算资源，而且效率较低。</p></td>
+</tr>
+<tr class="row-even"><td><p>Prelu</p></td>
+<td><p>None</p></td>
+<td><p>会占用MAC计算资源，而且效率较低。</p></td>
+</tr>
+<tr class="row-odd"><td><p>Relu/Relu6</p></td>
+<td><p>None</p></td>
+<td><p>会占用MAC计算资源，而且效率较低。</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>卷积的Width对齐</strong></p>
+<p>因为计算MAC阵列存在数据对齐要求， 模型输入为 <code class="docutils literal notranslate"><span class="pre">featuremap</span></code> 数据格式时，W在8对齐的时候效率会比较高(Convolution的stride=2时，W需要16对齐)。
+如果不是8或16对齐，那么就会带来算力浪费，导致MAC利用率变低。
+例如：如果convolution的输入feature大小是 1x8x9x32 (NHWC)，那么在实际计算时，
+W会被padding到16（即feature大小变为1x8x16x32），会造成计算资源浪费。</p>
+<p>在设计网络的时候，如果可以改变整个神经网络的输入大小（向上或向下对齐），那么模型的MAC利用率会直接提高。</p>
+<p>模型输入大小的示例，比如一个多层stride=2 conv的网络（从resnet截取），输入224和256/192的区别。</p>
+<img alt="../../../_images/width_alignment.png" src="../../../_images/width_alignment.png" />
+<p><strong>卷积的Channel对齐</strong></p>
+<p>Channel在硬件上是需要8对齐的，在算法设计的时候最好将 <code class="docutils literal notranslate"><span class="pre">kernel</span> <span class="pre">num</span></code> 调整为 <code class="docutils literal notranslate"><span class="pre">8</span></code> 的倍数。</p>
+<img alt="../../../_images/channel_alignment.png" src="../../../_images/channel_alignment.png" />
+<p>对于Group Convolution，channel的对齐情况会更加复杂一些。</p>
+<img alt="../../../_images/group_channel_alignment.png" src="../../../_images/group_channel_alignment.png" />
+<p>如果Kernel不是8的整数倍，那么每个group的 <code class="docutils literal notranslate"><span class="pre">kernel</span> <span class="pre">num</span></code> 需要对齐到 <code class="docutils literal notranslate"><span class="pre">8</span></code>，进而导致之后的convolution也产生算力浪费。
+如上图所示，Convolution2中对weight进行padding之后，下一层的weight也需要进行padding。</p>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>padding的方式是每个group内对齐到8，即padding的数据是分散在整个weight中间。</p>
+</div>
+<img alt="../../../_images/group_channel_alignment_2.png" src="../../../_images/group_channel_alignment_2.png" />
+<p>如果group内channel不是8的整数倍，那么就需要对上一层convolution进行padding。
+如上图所示，Convolution1的kernel num从48被padding到了64。</p>
+<p>另外，如果有连续多个group convolution中发生了group内kernel num或channel num不对齐的情况，那么影响会更大。
+这种情况下我们需要同时考虑多层group conv的对齐要求，会导致更多的padding。
+最差情况下，group convolution会被转换为普通convolution。</p>
+<p><strong>激活函数</strong></p>
+<p>大部分激活函数需要用LUT和Elementwise OP实现，虽然现在可以支持LUT和Elementwise操作，但都是用其它OP拼出来的，效率都不太高。</p>
+<p>如果模型中只有少量的几个地方使用非硬件直接支持的激活函数（非relu），而且计算量不是特别大，那么是可以使用的。
+在这种情况下，对整个模型的计算效率应该不会很大。</p>
+<p>如果模型中需要大量使用非硬件直接支持的激活函数，那么会对模型的执行速度产生非常大的影响。</p>
+<p><strong>其他建议</strong></p>
+<p>地平线芯片上的 <code class="docutils literal notranslate"><span class="pre">depthwise</span> <span class="pre">convolution</span></code> 的计算效率接近100%，所以对于 <code class="docutils literal notranslate"><span class="pre">MobileNet类</span></code> 的模型，BPU芯片具有效率优势。</p>
+<p>另外，在模型设计时，我们应尽量让模型BPU段的输入输出维度降低，以减少量化、反量化节点的耗时和硬件的带宽压力。
+以典型的分割模型为例，我们可以将Argmax算子直接合入模型本身。
+但需注意，只有满足以下条件，Argmax才支持BPU加速：</p>
+<ol class="arabic simple">
+<li><p>Caffe中的Softmax层默认axis=1，而ArgMax层则默认axis=0，算子替换时要保持axis的一致</p></li>
+<li><p>Argmax的Channel需小于等于64，否则只能在CPU上计算</p></li>
+</ol>
+</section>
+<section id="bpu">
+<h3>BPU面向高效率模型优化<a class="headerlink" href="#bpu" title="永久链接至标题"></a></h3>
+<p>地平线X3-BPU对于 <code class="docutils literal notranslate"><span class="pre">Depthwise</span> <span class="pre">Convolution</span></code> 和 <code class="docutils literal notranslate"><span class="pre">Group</span> <span class="pre">Convolution</span></code> 都有专门的优化，若网络模型结构中含有这类算子，那可以使得用户获得最高的计算效率、参数效率。</p>
+<p>作为这两类算子的模型参考示例，量化工具链 <code class="docutils literal notranslate"><span class="pre">model_zoo</span></code> 发布物中提供：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">efficientnet[-lite]</span></code> 系列，追求极致的计算效率、参数效率。
+X3-BPU能够高效支持，以 <code class="docutils literal notranslate"><span class="pre">EfficientNet</span> <span class="pre">Lite0</span></code> 为例，X3-BPU帧率为某端侧30TOPS GPU帧率6倍。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vargnet</span></code> 系列，地平线自主设计模型，充分利用 <code class="docutils literal notranslate"><span class="pre">Group</span> <span class="pre">Convolution</span></code> 的高效率，同时针对X3-BPU做了优化。对于训练超参数相对鲁棒，能够以较低的调参代价切换到不同的任务。</p></li>
+</ul>
+<p>更多的模型结构和业务模型都在持续探索中，我们将提供更加丰富的模型给您作为直接的参考，这些产出将不定期更新至 <a class="reference external" href="https://github.com/HorizonRobotics-Platform/ModelZoo/tree/master">https://github.com/HorizonRobotics-Platform/ModelZoo/tree/master</a>。
+如果以上依然不能满足您的需要，欢迎在地平线官方技术社区（<a class="reference external" href="https://developer.horizon.ai">https://developer.horizon.ai</a>）发帖与我们取得联系，我们将根据您的具体问题提供更具针对性的指导建议。</p>
+</section>
+</section>
+</section>
+<section id="accuracy-evaluation">
+<span id="id23"></span><h1><span class="section-number">6.4.1.7. </span>模型精度分析与调优<a class="headerlink" href="#accuracy-evaluation" title="永久链接至标题"></a></h1>
+<p>基于几十或上百张校准数据实现浮点模型到定点模型转换的后量化方式，不可避免地会存在一定的精度损失。
+但经过大量实际使用经验验证，如果能筛选出最优的量化参数组合，地平线的转换工具在大部分情况下，都可以将精度损失保持在 <code class="docutils literal notranslate"><span class="pre">1%</span></code> 以内。</p>
+<p>本节先介绍了如何正确地进行模型精度分析，如果通过评估发现不及预期，则可以参考 <strong>精度调优</strong> 小节的内容尝试调优，实在无法解决可寻求地平线的技术支持。</p>
+<section id="id24">
+<h2>模型精度分析<a class="headerlink" href="#id24" title="永久链接至标题"></a></h2>
+<p>在进入到此部分介绍前，我们希望您已经了解如何对一个模型进行精度评测。本节介绍的内容是如何使用模型转换的产出物进行推理。</p>
+<p>前文提到模型成功转换的产出物包括以下四个部分：</p>
+<ul class="simple">
+<li><p>***_original_float_model.onnx</p></li>
+<li><p>***_optimized_float_model.onnx</p></li>
+<li><p>***_quantized_model.onnx</p></li>
+<li><p>***.bin</p></li>
+</ul>
+<p>虽然最后的bin模型才是将部署到地平线芯片的模型，考虑到方便在Ubuntu/CentOS开发机上完成精度评测，
+我们提供了***_quantized_model.onnx完成这个精度评测的过程。
+quantized模型已经完成了量化，与最后的bin模型具有一致的精度效果。
+使用地平线开发库加载ONNX模型推理的基本流程如下所示，这份示例代码不仅适用于quantized模型，
+对original和optimized模型同样适用，根据不同模型的输入类型和layout要求准备数据即可。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>建议参考使用地平线模型转换 <code class="docutils literal notranslate"><span class="pre">horizon_model_convert_sample</span></code> 示例包中的caffe、onnx等示例模型的精度验证步骤方法: <code class="docutils literal notranslate"><span class="pre">04_inference.sh</span></code> 和 <code class="docutils literal notranslate"><span class="pre">postprocess.py</span></code> 。</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 加载地平线依赖库</span>
+<span class="kn">from</span> <span class="nn">horizon_tc_ui</span> <span class="kn">import</span> <span class="n">HB_ONNXRuntime</span>
+
+<span class="c1"># 准备模型运行的feed_dict</span>
+<span class="k">def</span> <span class="nf">prepare_input_dict</span><span class="p">(</span><span class="n">input_names</span><span class="p">):</span>
+  <span class="n">feed_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+  <span class="k">for</span> <span class="n">input_name</span> <span class="ow">in</span> <span class="n">input_names</span><span class="p">:</span>
+      <span class="c1"># your_custom_data_prepare代表您的自定义数据</span>
+      <span class="c1"># 根据输入节点的类型和layout要求准备数据即可</span>
+      <span class="n">feed_dict</span><span class="p">[</span><span class="n">input_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">your_custom_data_prepare</span><span class="p">(</span><span class="n">input_name</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">feed_dict</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+  <span class="c1"># 创建推理Session</span>
+  <span class="n">sess</span> <span class="o">=</span> <span class="n">HB_ONNXRuntime</span><span class="p">(</span><span class="n">model_file</span><span class="o">=</span><span class="s1">&#39;***_quantized_model.onnx&#39;</span><span class="p">)</span>
+
+  <span class="c1"># 获取输入节点名称</span>
+  <span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="nb">input</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">sess</span><span class="o">.</span><span class="n">get_inputs</span><span class="p">()]</span>
+  <span class="c1"># 或</span>
+  <span class="n">input_names</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">input_names</span>
+
+  <span class="c1"># 获取输出节点名称</span>
+  <span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">sess</span><span class="o">.</span><span class="n">get_outputs</span><span class="p">()]</span>
+  <span class="c1"># 或</span>
+  <span class="n">output_names</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">output_names</span>
+
+  <span class="c1"># 准备模型输入数据</span>
+  <span class="n">feed_dict</span> <span class="o">=</span> <span class="n">prepare_input_dict</span><span class="p">(</span><span class="n">input_names</span><span class="p">)</span>
+  <span class="c1"># 开始模型推理，推理的返回值是一个list，依次与output_names指定名称一一对应</span>
+  <span class="c1"># 输入图像的类型范围为（RGB/BGR/NV12/YUV444/GRAY）</span>
+  <span class="n">outputs</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">feed_dict</span><span class="p">,</span> <span class="n">input_offset</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+  <span class="c1"># 输入数据的类型范围为（FEATURE）</span>
+  <span class="n">outputs</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run_feature</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">feed_dict</span><span class="p">,</span> <span class="n">input_offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Modification  history:</span>
+<span class="sd">    OE 1.3 ~ 1.6</span>
+<span class="sd">        outputs = sess.run(output_names, feed_dict, input_type_rt=None, float_offset=0)</span>
+<span class="sd">        outputs = sess.run_feature(output_names, feed_dict, {input_name: &quot;featuremap&quot;}, float_offset=0)</span>
+<span class="sd">    OE 1.7</span>
+<span class="sd">        outputs = sess.run(output_names, feed_dict, input_type_rt=None, float_offset=None, input_offset=128)</span>
+<span class="sd">        outputs = sess.run_feature(output_names, feed_dict, {input_name: &quot;featuremap&quot;}, float_offset=0)</span>
+<span class="sd">    OE 1.8 ~ 1.9</span>
+<span class="sd">        outputs = sess.run(output_names, feed_dict, input_offset=128)</span>
+<span class="sd">        outputs = sess.run_feature(output_names, feed_dict, input_offset=128)</span>
+
+<span class="sd">    note: OE 1.5 后架构上的调整，如果更新 OE 需要重新编译模型</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>上述代码中， <code class="docutils literal notranslate"><span class="pre">input_offset</span></code> 参数默认值为128. 对于有前处理节点的模型, 这里都需要做-128的操作. 如果模型输入前并未添加前处理节点, 则需要将 <code class="docutils literal notranslate"><span class="pre">input_offset</span></code> 设置为0.</p>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>对于多输入模型：</p>
+<ul class="simple">
+<li><p>如果输入 input_type 均属于 （ RGB/BGR/NV12/YUV444/GRAY ），可以采用 sess.run 方法做推理.</p></li>
+<li><p>如果输入 input_type 均属于 （ FEATURE ），可以采用 sess.run_feature 方法做推理.</p></li>
+<li><p>如果输入 input_type 为混合类型，暂不支持这种场景.</p></li>
+</ul>
+</div>
+<p>此外, <code class="docutils literal notranslate"><span class="pre">your_custom_data_prepare</span></code> 函数所代表的输入数据准备过程是最容易出现误操作的部分。
+较于您设计&amp;训练原始浮点模型的精度验证过程，我们需要您在数据预处理后将推理输入数据进一步调整，
+这些调整主要是数据格式（RGB、NV12等）、数据精度（int8、float32等）和数据排布（NCHW或NHWC）。
+至于具体怎么调整，这个是由您在模型转换时设置的 <code class="docutils literal notranslate"><span class="pre">input_type_train</span></code>、 <code class="docutils literal notranslate"><span class="pre">input_layout_train</span></code>、 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 和
+<code class="docutils literal notranslate"><span class="pre">input_layout_rt</span></code> 四个参数共同决定的，其详细规则请参考 <a class="reference internal" href="#conversion-interpretation"><span class="std std-ref">转换内部过程解读</span></a> 部分的介绍。</p>
+<p>举个例子，使用ImageNet训练的用于分类的原始浮点模型，它只有一个输入节点。
+这个节点接受BGR顺序的三通道图片，输入数据排布为NCHW。原始浮点模型设计&amp;训练阶段，验证集推理前做的数据预处理如下：</p>
+<ol class="arabic simple">
+<li><p>图像长宽等比scale,短边缩放到256。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">center_crop</span></code> 方法获取224x224大小图像。</p></li>
+<li><p>按通道减mean。</p></li>
+<li><p>数据乘以scale系数。</p></li>
+</ol>
+<p>使用地平线转换这个原始浮点模型时，
+<code class="docutils literal notranslate"><span class="pre">input_type_train</span></code> 设置 <code class="docutils literal notranslate"><span class="pre">bgr</span></code>、 <code class="docutils literal notranslate"><span class="pre">input_layout_train</span></code> 设置 <code class="docutils literal notranslate"><span class="pre">NCHW</span></code>、 <code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 设置 <code class="docutils literal notranslate"><span class="pre">bgr</span></code>、
+<code class="docutils literal notranslate"><span class="pre">input_layout_rt</span></code> 设置 <code class="docutils literal notranslate"><span class="pre">NHWC</span></code>。
+根据 <a class="reference internal" href="#conversion-interpretation"><span class="std std-ref">转换内部过程解读</span></a> 部分介绍的规则，
+***_quantized_model.onnx接受的输入应该为bgr_128、NHWC排布。
+对应到前文的示例代码，<code class="docutils literal notranslate"><span class="pre">your_custom_data_prepare</span></code> 部分提供的数据处理应该一个这样的过程：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 本示例使用skimage，如果是opencv会有所区别</span>
+<span class="c1"># 需要您特别注意的是，transformers中并没有体现减mean和乘scale的处理</span>
+<span class="c1"># mean和scale操作已经融合到了模型中，参考前文norm_type/mean_value/scale_value配置</span>
+<span class="k">def</span> <span class="nf">your_custom_data_prepare_sample</span><span class="p">(</span><span class="n">image_file</span><span class="p">):</span>
+  <span class="c1">#skimage读取图片，已经是NHWC排布</span>
+  <span class="n">image</span> <span class="o">=</span> <span class="n">skimage</span><span class="o">.</span><span class="n">img_as_float</span><span class="p">(</span><span class="n">skimage</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_file</span><span class="p">))</span>
+  <span class="c1"># 长宽等比scale，短边缩放至256</span>
+  <span class="n">image</span> <span class="o">=</span> <span class="n">ShortSideResize</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">short_size</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+  <span class="c1"># CenterCrop获取224x224图像</span>
+  <span class="n">image</span> <span class="o">=</span> <span class="n">CenterCrop</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">crop_size</span><span class="o">=</span><span class="mi">224</span><span class="p">)</span>
+  <span class="c1"># skimage读取结果通道顺序为RGB，转换为bgr_128需要的BGR顺序</span>
+  <span class="n">image</span> <span class="o">=</span> <span class="n">RGB2BGR</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+  <span class="c1"># skimage读取数值范围为[0.0,1.0]，调整为bgr需要的数值范围</span>
+  <span class="n">image</span> <span class="o">=</span> <span class="n">image</span> <span class="o">*</span> <span class="mi">255</span>
+  <span class="c1"># bgr_128是bgr减去128</span>
+  <span class="n">image</span> <span class="o">=</span> <span class="n">image</span> <span class="o">-</span> <span class="mi">128</span>
+  <span class="c1">#bgr_128使用int8</span>
+  <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">image</span>
+</pre></div>
+</div>
+</section>
+<section id="accuracy-optimization">
+<span id="id25"></span><h2>精度调优<a class="headerlink" href="#accuracy-optimization" title="永久链接至标题"></a></h2>
+<p>基于前文的精度分析工作，如果确定模型的量化精度不符合预期，则主要可分为以下两种情况进行解决：</p>
+<ul class="simple">
+<li><p>精度有较明显损失（损失大于4%）。
+这种问题往往是由于yaml配置不当，校验数据集不均衡等导致的，可以根据我们接下来提供的建议逐一排查。</p></li>
+<li><p>精度损失较小（1.5%~3%）。
+排除1导致的精度问题后，如果仍然出现精度有小幅度损失，往往是由于模型自身的敏感性导致，可以使用我们提供的精度调优工具进行调优。</p></li>
+</ul>
+<p>整体精度问题解决流程示意如下图：</p>
+<img alt="../../../_images/accuracy_problem.png" src="../../../_images/accuracy_problem.png" />
+<section id="id26">
+<h3>精度有明显损失（4%以上）<a class="headerlink" href="#id26" title="永久链接至标题"></a></h3>
+<p>若模型精度损失大于4%，通常是因为yaml配置不当，校验数据集不均衡等导致的，建议依次从pipeline、模型转换配置、一致性检查几个方面进行排查。</p>
+<p><strong>pipeline检查</strong></p>
+<p>pipeline是指您完成数据预处理、模型转换、模型推理、后处理、精度评测的全过程，这些步骤请根据上文对应章节来进行检查。
+在以往的实际问题跟进经验中，我们发现大部分情况是在原始浮点模型训练阶段中有变动，却没有及时更新到模型转换步骤，从而精度验证时导致异常。</p>
+<p><strong>模型转换配置检查</strong></p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">input_type_rt</span></code> 和 <code class="docutils literal notranslate"><span class="pre">input_type_train</span></code> 该参数用来区分转后混合异构模型与原始浮点模型需要的数据格式，需要认真检查是否符合预期，尤其是BGR和RGB通道顺序是否正确。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">norm_type</span></code>、 <code class="docutils literal notranslate"><span class="pre">mean_value</span></code>、 <code class="docutils literal notranslate"><span class="pre">scale_value</span></code> 等参数是否配置正确。通过转换配置可以直接在模型中插入mean和scale操作节点，需要确认是否对校验/测试图片进行了重复的mean和scale操作 <strong>重复预处理是错误的易发区</strong>。</p></li>
+</ol>
+<p><strong>数据处理一致性检查</strong></p>
+<p>该部分检查主要针对参考量化工具链开发包示例准备校准数据以及评测代码的用户，主要有以下常见错误：</p>
+<ol class="arabic simple">
+<li><p>未正确指定 <code class="docutils literal notranslate"><span class="pre">read_mode</span></code>：02_preprocess.sh中可通过–read_mode参数指定读图方式，支持 <code class="docutils literal notranslate"><span class="pre">opencv</span></code> 及 <code class="docutils literal notranslate"><span class="pre">skimage</span></code>。</p></li>
+</ol>
+<blockquote>
+<div><p>此外preprocess.py中亦是通过imread_mode参数设定读图方式，也需要做出修改。使用 skimage的图片读取，得到的是 <code class="docutils literal notranslate"><span class="pre">RGB</span></code> 通道顺序，取值范围为 <code class="docutils literal notranslate"><span class="pre">0~1</span></code>，数值类型为 <code class="docutils literal notranslate"><span class="pre">float</span></code>； 而使用 opencv，得到的是 <code class="docutils literal notranslate"><span class="pre">BGR</span></code> 通道顺序，取值范围为 <code class="docutils literal notranslate"><span class="pre">0~255</span></code>，数据类型为 <code class="docutils literal notranslate"><span class="pre">uint8</span></code>。</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>校准数据集的存储格式设置不正确：目前我们采用的是 <code class="docutils literal notranslate"><span class="pre">numpy.tofile</span></code> 来保存校准数据，这种方式不会保存shape和类型信息，因此如果input_type_train为 <code class="docutils literal notranslate"><span class="pre">非featuremap</span></code> 格式，我们会通过校准数据存放路径是否包含 “f32” 来判断数据dtype，若包含f32关键字，则按float32解析数据；反之则按uint8解析数据。</p></li>
+</ol>
+<blockquote>
+<div><p>此外，为方便用户设置校准数据的解析方式，在X3量化工具链v2.2.3a版本之后，在yaml中新增了参数 <code class="docutils literal notranslate"><span class="pre">cal_data_type</span></code> 来设置二进制文件的数据存储类型。</p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>transformer实现方式不一致：地平线提供了一系列常见预处理函数，存放在 <code class="docutils literal notranslate"><span class="pre">/horizon_model_convert_sample/01_common/python/data/transformer.py</span></code> 文件中，部分预处理操作的实现方式可能会有所区别，例如ResizeTransformer，我们采用的是opencv默认插值方式（linear），</p></li>
+</ol>
+<blockquote>
+<div><p>若为其他插值方式可直接修改transformer.py源码，确保与训练时预处理代码保持一致, 具体使用请参考 <a class="reference external" href="../../../FAQs/ai_toolchain_faqs/ai_toolchain_FAQS.html#transformer">transformer使用方法</a> 章节内容。</p>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>推荐您在地平线量化工具链使用过程中，依然使用原始浮点模型训练验证阶段依赖的数据处理库。</p></li>
+</ol>
+<blockquote>
+<div><p>对于鲁棒性较差的模型，不同库实现的功能resize、crop等典型功能都可能引起扰动，进而影响模型精度。</p>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>校验图片集是否合理设置。校准图片集数量应该在 <code class="docutils literal notranslate"><span class="pre">一百张</span></code> 左右，同时最好可以覆盖到数据分布的各种场合，例如在多任务或多分类时，校验图片集可以覆盖到各个预测分支或者各个类别。</p></li>
+</ol>
+<blockquote>
+<div><p>同时避免偏离数据分布的异常图片（过曝光等）。</p>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">***_original_float_model.onnx</span></code> 再验证一遍精度，正常情况下，这个模型的精度应该是与原始浮点模型精度保持 <code class="docutils literal notranslate"><span class="pre">小数点后三到五位对齐</span></code> 。</p></li>
+</ol>
+<blockquote>
+<div><p>如果验证发现不满足这种对齐程度，则表明您的数据处理需要再仔细检查。</p>
+</div></blockquote>
+</section>
+<section id="id28">
+<h3>较小精度损失提升<a class="headerlink" href="#id28" title="永久链接至标题"></a></h3>
+<p>为降低模型精度调优的难度，我们建议您优先尝试将 <code class="docutils literal notranslate"><span class="pre">calibration_type</span></code> 配置为 <code class="docutils literal notranslate"><span class="pre">default</span></code>。default为自动搜索功能，以第一张校准数据输出节点余弦相似度为依据，从max、max-Percentile 0.99995和KL等校准方法中选取最优的方案，
+最终选取的校准方法可关注转换日志类似 <code class="docutils literal notranslate"><span class="pre">“Select</span> <span class="pre">kl</span> <span class="pre">method.”</span></code> 的提示。若自动搜索的精度结果仍然与预期有差距，可尝试以下建议进行调优：</p>
+<ol class="arabic simple">
+<li><p>调整校准方式</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>手动指定 calibration_type，可以选择 <code class="docutils literal notranslate"><span class="pre">kl/max</span></code>；</p></li>
+<li><p>将 calibration_type 配置为 max，并配置 max_percentile 为不同的分位数（取值范围是0-1之间），我们推荐您优先尝试 0.99999、0.99995、0.9999、0.9995、0.999，通过这五个配置观察模型精度的变化趋势，最终找到一个最佳的分位数；</p></li>
+<li><p>尝试启用 <code class="docutils literal notranslate"><span class="pre">per_channel</span></code>，可与之前任意校准方式配合使用。</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>调准校准数据集</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>可以尝试适当 <code class="docutils literal notranslate"><span class="pre">增加或减少</span></code> 数据数量（通常来说检测场景相较于分类场景需要的校准数据要少；此外可以观察模型输出的漏检情况，适当增加对应场景的校准数据）；</p></li>
+<li><p>不要使用纯黑纯白等异常数据，尽量减少使用无目标的背景图作为校准数据；尽可能全面的覆盖典型任务场景，使得校准数据集的分布与训练集近似。</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>将部分尾部算子回退到 CPU 高精度计算</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>一般我们仅会尝试将模型输出层的 <code class="docutils literal notranslate"><span class="pre">1～2</span></code> 个算子回退至 <code class="docutils literal notranslate"><span class="pre">CPU</span></code>，太多的算子会较大程度影响模型最终性能，判断依据可通过观察模型的 <code class="docutils literal notranslate"><span class="pre">余弦相似度</span></code>；</p></li>
+<li><p>指定算子运行在 CPU 上请通过yaml文件中的 <code class="docutils literal notranslate"><span class="pre">run_on_cpu</span></code> 参数，通过指定节点名称将对应算子运行在cpu上（参考示例：run_on_cpu: conv_0）。</p></li>
+<li><p>若run_on_cpu之后模型编译报错，请联系地平线技术支持团队。</p></li>
+</ol>
+</div></blockquote>
+<p>根据以往的使用调优经验，以上策略已经可以应对各种实际问题。</p>
+<p>如果经过以上尝试仍然未能解决您的问题，请根据 <a class="reference external" href="../../../FAQs/ai_toolchain_faqs/ai_toolchain_FAQS.html#checklist">精度调优checklist</a>  文档步骤填写模型配置的具体信息来进行检查，确保每一步排查都已完成；
+若已根据checklist步骤完成排查，但精度仍不满足需求，可将填写完整的 <strong>精度调优checklist</strong> 信息反馈给地平线技术支持团队或在地平线官方技术社区（<a class="reference external" href="https://developer.horizon.ai/">https://developer.horizon.ai/</a>）提出您的问题，我们将在24小时内给您提供支持。</p>
+</section>
+</section>
+<section id="qat">
+<span id="qat-accuracy"></span><h2>使用QAT量化感知训练方案进一步提升模型精度<a class="headerlink" href="#qat" title="永久链接至标题"></a></h2>
+<p>如果通过上述分析，并没有发现任何配置上的问题，但是精度仍不能满足要求，则可能是PTQ（即：Post-training Quantization，后量化训练）本身的限制。
+这时候可以尝试改用QAT（即Quantization Aware Training，量化感知训练）的方式来对模型进行量化。 具体请参考 <a class="reference external" href="../../../FAQs/ai_toolchain_faqs/ai_toolchain_FAQS.html#qat">量化感知训练(QAT)</a> 章节内容。</p>
+</section>
+</section>
+<section id="id30">
+<h1><span class="section-number">6.4.1.8. </span>其它工具使用说明<a class="headerlink" href="#id30" title="永久链接至标题"></a></h1>
+<p>本章节主要介绍模型转换工具以外的其他debug工具的使用方法，这些工具可以协助开发者进行模型修改、模型分析、数据预处理等操作，工具列表如下：</p>
+<ul class="simple">
+<li><p>hb_perf</p></li>
+<li><p>hb_pack</p></li>
+<li><p>hb_model_info</p></li>
+<li><p>hb_model_modifier</p></li>
+<li><p>hb_model_verifier</p></li>
+<li><p>hb_eval_preprocess</p></li>
+</ul>
+<section id="id31">
+<h2><code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 工具<a class="headerlink" href="#id31" title="永久链接至标题"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 是用于分析地平线量化混合模型性能的分析工具。</p>
+<ul class="simple">
+<li><p>使用方法</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hb_perf</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">BIN_FILE</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>命令行参数</p></li>
+</ul>
+<dl class="py data">
+<dt class="sig sig-object py" id="hb_perf">
+<span id="hb_perf的命令行参数"></span><span class="sig-name descname"><span class="pre">hb_perf的命令行参数</span></span><a class="headerlink" href="#hb_perf" title="永久链接至目标"></a></dt>
+<dd><dl class="simple">
+<dt>--version</dt><dd><p>显示版本并退出。</p>
+</dd>
+</dl>
+<dl class="option-list">
+<dt><kbd><span class="option">-m</span></kbd></dt>
+<dd><p>后接模型名称。当指定BIN_FILE为pack模型时, 仅输出指定模型的模型编译信息。</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>--help</dt><dd><p>显示帮助信息。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<ul class="simple">
+<li><p>输出内容说明</p></li>
+</ul>
+<p>模型的信息会输出在当前目录的 <cite>hb_perf_result</cite> 文件夹中。
+其中会有以该模型为名的文件夹，该模型信息将会展示在以其模型名称命名的 <cite>html</cite> 文件中。目录结构如下示例所示:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>hb_perf_result/
+└── mobilenetv1
+    ├── mobilenetv1
+    ├── mobilenetv1.html
+    ├── mobilenetv1.png
+    ├── MOBILENET_subgraph_0.html
+    ├── MOBILENET_subgraph_0.json
+    └── temp.hbm
+</pre></div>
+</div>
+<p>若该模型在编译时未设置为debug模式(<code class="docutils literal notranslate"><span class="pre">compiler_parameters.debug:True</span></code>) 则 <code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 工具会产生如下提示，
+该提示仅表明子图信息中不包括逐层信息, 对模型整体信息的生成没有影响。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">2021</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">12</span> <span class="mi">10</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mi">40</span><span class="p">,</span><span class="mi">000</span> <span class="n">WARNING</span> <span class="n">bpu</span> <span class="n">model</span> <span class="n">don</span><span class="s1">&#39;t have per-layer perf info.</span>
+<span class="mi">2021</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">12</span> <span class="mi">10</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mi">40</span><span class="p">,</span><span class="mi">000</span> <span class="n">WARNING</span> <span class="k">if</span> <span class="n">you</span> <span class="n">need</span> <span class="n">per</span><span class="o">-</span><span class="n">layer</span> <span class="n">perf</span> <span class="n">info</span> <span class="n">please</span> <span class="n">enable</span><span class="p">[</span><span class="n">compiler_parameters</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span><span class="kc">True</span><span class="p">]</span> <span class="n">when</span> <span class="n">use</span> <span class="n">makertbin</span><span class="o">.</span>
+</pre></div>
+</div>
+</section>
+<section id="hb-pack">
+<h2><code class="docutils literal notranslate"><span class="pre">hb_pack</span></code> 工具<a class="headerlink" href="#hb-pack" title="永久链接至标题"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">hb_pack</span></code> 是用于将多个混合模型(*.bin)文件打包为一个模型文件的工具。</p>
+<ul class="simple">
+<li><p>使用方法</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hb_pack</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">BIN_FILE1</span> <span class="n">BIN_FILE2</span> <span class="n">BIN_FILE3</span> <span class="o">-</span><span class="n">o</span> <span class="n">comb</span><span class="o">.</span><span class="n">bin</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>命令行参数</p></li>
+</ul>
+<dl class="py data">
+<dt class="sig sig-object py" id="hb_pack">
+<span id="hb_pack的命令行参数"></span><span class="sig-name descname"><span class="pre">hb_pack的命令行参数</span></span><a class="headerlink" href="#hb_pack" title="永久链接至目标"></a></dt>
+<dd><dl class="simple">
+<dt>--version</dt><dd><p>显示版本并退出。</p>
+</dd>
+<dt>-o, --output_name</dt><dd><p>pack模型的输出名称</p>
+</dd>
+<dt>--help</dt><dd><p>显示帮助信息。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<ul class="simple">
+<li><p>输出内容说明</p></li>
+</ul>
+<p>打包的模型会输出在当前目录文件夹中，该模型会被命名为 <code class="docutils literal notranslate"><span class="pre">output_name</span></code> 指定名称。
+该打包模型中所有子模型的编译信息及性能信息均可通过 <code class="docutils literal notranslate"><span class="pre">hb_model_info</span></code> 及 <code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 获取得到。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>注意，<code class="docutils literal notranslate"><span class="pre">hb_pack</span></code> 不支持对已经打包的模型再次进行打包，否则工作台将会产生以下提示：</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ERROR exception <span class="k">in</span> command: pack
+ERROR model: xxx.bin is a packed model, it can not be packed again!
+</pre></div>
+</div>
+</section>
+<section id="hb-model-info">
+<h2><code class="docutils literal notranslate"><span class="pre">hb_model_info</span></code> 工具<a class="headerlink" href="#hb-model-info" title="永久链接至标题"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">hb_model_info</span></code> 是用于解析混合模型(*.bin)编译时的依赖及参数信息的工具。</p>
+<ul class="simple">
+<li><p>使用方法</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_model_info <span class="si">${</span><span class="nv">model_file</span><span class="si">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>命令行参数</p></li>
+</ul>
+<dl class="py data">
+<dt class="sig sig-object py" id="hb_model_info">
+<span id="hb_model_info的命令行参数"></span><span class="sig-name descname"><span class="pre">hb_model_info的命令行参数</span></span><a class="headerlink" href="#hb_model_info" title="永久链接至目标"></a></dt>
+<dd><dl class="simple">
+<dt>--version</dt><dd><p>显示版本并退出。</p>
+</dd>
+</dl>
+<dl class="option-list">
+<dt><kbd><span class="option">-m</span></kbd></dt>
+<dd><p>后接模型名称。当指定BIN_FILE为pack模型时, 仅输出指定模型的模型编译信息。</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>--help</dt><dd><p>显示帮助信息。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<ul class="simple">
+<li><p>输出内容说明</p></li>
+</ul>
+<p>输出部分将会是模型编译时的一些输入信息，如下所示：</p>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>以下代码块中的版本号信息将随发布包版本变化，此处仅为示例。</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Start hb_model_info....
+hb_model_info version <span class="m">1</span>.3.35
+******** efficient_det_512x512_nv12 info *********
+<span class="c1">############# model deps info #############</span>
+hb_mapper version   : <span class="m">1</span>.3.35
+hbdk version        : <span class="m">3</span>.23.3
+hbdk runtime version: <span class="m">3</span>.13.7
+horizon_nn version  : <span class="m">0</span>.10.10
+<span class="c1">############# model_parameters info #############</span>
+onnx_model          : /release/01_common/model_zoo/mapper/detection/efficient_det/efficientdet_nhwc.onnx
+BPU march           : bernoulli2
+layer_out_dump      : False
+working dir         : /release/04_detection/05_efficient_det/mapper/model_output
+output_model_file_prefix: efficient_det_512x512_nv12
+<span class="c1">############# input_parameters info #############</span>
+------------------------------------------
+---------input info : data ---------
+input_name          : data
+input_type_rt       : nv12
+input_space<span class="p">&amp;</span>range   : regular
+input_layout_rt     : None
+input_type_train    : rgb
+input_layout_train  : NCHW
+norm_type           : data_mean_and_scale
+input_shape         : 1x3x512x512
+mean_value          : <span class="m">123</span>.68,116.779,103.939,
+scale_value         : <span class="m">0</span>.017,
+cal_data_dir        : /release/04_detection/05_efficient_det/mapper/calibration_data_rgb_f32
+---------input info : data end -------
+------------------------------------------
+<span class="c1">############# calibration_parameters info #############</span>
+preprocess_on       : False
+calibration_type    : max
+<span class="c1">############# compiler_parameters info #############</span>
+hbdk_pass_through_params: --fast --O3
+input-source        : <span class="o">{</span><span class="s1">&#39;data&#39;</span>: <span class="s1">&#39;pyramid&#39;</span>, <span class="s1">&#39;_default_value&#39;</span>: <span class="s1">&#39;ddr&#39;</span><span class="o">}</span>
+--------- input/output types -------------------
+model input types   : <span class="o">[</span>&lt;InputDataType.NV12: <span class="m">7</span>&gt;<span class="o">]</span>
+model output types  : <span class="o">[</span>&lt;InputDataType.F32: <span class="m">5</span>&gt;, &lt;InputDataType.F32: <span class="m">5</span>&gt;, &lt;InputDataType.F32: <span class="m">5</span>&gt;, &lt;InputDataTye.F32: <span class="m">5</span>&gt;, &lt;InputDataType.F32: <span class="m">5</span>&gt;, &lt;InputDataType.F32: <span class="m">5</span>&gt;, &lt;InputDataType.F32: <span class="m">5</span>&gt;, &lt;InputDataType.F32: <span class="m">5</span>&gt;, &lt;InputDataType.F32: <span class="m">5</span>&gt;, &lt;InpuDataType.F32: <span class="m">5</span>&gt;<span class="o">]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>当模型中存在被删除节点时，模型信息输出末尾会打印被删除节点的名称，同时会生成 <code class="docutils literal notranslate"><span class="pre">deleted_nodes_info.txt</span></code> 文件，文件中每一行记录了对应被删除节点的初始信息。打印被删除节点的名称如下所示：</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>--------- deleted nodes -------------------
+deleted nodes: spconvretinanethead0_conv91_fwd_chw_HzDequantize
+deleted nodes: spconvretinanethead0_conv95_fwd_chw_HzDequantize
+deleted nodes: spconvretinanethead0_conv99_fwd_chw_HzDequantize
+deleted nodes: spconvretinanethead0_conv103_fwd_chw_HzDequantize
+deleted nodes: spconvretinanethead0_conv107_fwd_chw_HzDequantize
+deleted nodes: spconvretinanethead0_conv93_fwd_chw_HzDequantize
+deleted nodes: spconvretinanethead0_conv97_fwd_chw_HzDequantize
+deleted nodes: spconvretinanethead0_conv101_fwd_chw_HzDequantize
+deleted nodes: spconvretinanethead0_conv105_fwd_chw_HzDequantize
+deleted nodes: spconvretinanethead0_conv109_fwd_chw_HzDequantize
+</pre></div>
+</div>
+</section>
+<section id="hb-model-modifier">
+<h2><code class="docutils literal notranslate"><span class="pre">hb_model_modifier</span></code> 工具<a class="headerlink" href="#hb-model-modifier" title="永久链接至标题"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">hb_model_modifier</span></code> 工具用于对 <code class="docutils literal notranslate"><span class="pre">*.bin</span></code> 模型中输入端的Transpose、Quantize节点和输出端的Transpose、Dequanti、Cast、Reshape、Softmax节点进行删除操作，
+并将删除节点的信息存放在BIN模型中，可以通过 <code class="docutils literal notranslate"><span class="pre">hb_model_info</span></code> 进行查看。</p>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<ol class="arabic simple">
+<li><p>hb_model_modifier工具只能删除紧挨着模型输入或输出的节点。如果待删除节点后面接的是其他节点，则不能进行删除操作。</p></li>
+<li><p>模型节点名称需要注意不要包括 “;” “,” 等特殊符号，否则可能会影响工具的使用。</p></li>
+<li><p>工具不支持对打包的模型进行处理，否则将提示： <code class="docutils literal notranslate"><span class="pre">ERROR</span> <span class="pre">pack</span> <span class="pre">model</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">supported</span></code>。</p></li>
+<li><p>待删除节点会按顺序依次删除, 并且会动态更新模型结构; 同时在节点删除前还会判断该节点是否位于模型的输入输出处, 因此节点的删除顺序很重要。</p></li>
+</ol>
+</div>
+<p>由于删除特定节点后会对模型的输入情况有影响, 因此工具只对模型输入后只有一条通路的情况适用, 若如下图中所示, 同一输入对应了多个节点的情况尚不支持。</p>
+<img alt="../../../_images/hb_model_modifier.png" src="../../../_images/hb_model_modifier.png" />
+<ul class="simple">
+<li><p>使用方式</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>查看可删除的节点：</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_model_modifier model.bin
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>删除单个指定节点（以node1为例）：</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_model_modifier model.bin -r node1
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>删除多个指定节点（以node1、node2、node3为例）：</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_model_modifier model.bin -r node1 -r node2 -r node3
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>删除某类节点（以Dequantize为例）：</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_model_modifier model.bin --all Dequantize
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>删除多种类型节点（以Reshape、Cast、Dequantize为例）：</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_model_modifier model.bin -a Reshape -a Cast -a Dequantize
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>组合使用：</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_model_modifier model.bin -a Reshape -a Cast -a Dequantize -r node1 -r node2 -r node3
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>命令行参数</p></li>
+</ul>
+<dl class="py data">
+<dt class="sig sig-object py" id="hb_model_modifier">
+<span id="hb_model_modifier的命令行参数"></span><span class="sig-name descname"><span class="pre">hb_model_modifier的命令行参数</span></span><a class="headerlink" href="#hb_model_modifier" title="永久链接至目标"></a></dt>
+<dd><dl class="simple">
+<dt>model_file</dt><dd><p>runtime 模型文件名称。</p>
+</dd>
+</dl>
+<dl class="option-list">
+<dt><kbd><span class="option">-r</span></kbd></dt>
+<dd><p>后接指定删除节点的名称。若有多个节点需要删除, 需要指定多次。</p>
+</dd>
+<dt><kbd><span class="option">-o</span></kbd></dt>
+<dd><p>后接修改后的模型输出名称(仅在有 <code class="docutils literal notranslate"><span class="pre">-r</span></code> 参数时生效)。</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>-a/--all</dt><dd><p>后接节点类型. 支持一键删除所有对应类型的功能. 若有多个类型节点需要删除, 需要指定多次。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<ul class="simple">
+<li><p>输出内容说明</p></li>
+</ul>
+<p>若工具后不接任何参数，则工具会打印出可供候选的可删除节点（即模型中的位于输入输出位置的所有Transpose、Quantize、Dequantize、Cast、Reshape、Softmax节点）。</p>
+<p>其中Quantize节点用于将模型 float 类型的输入数据量化至 int8 类型，其计算公式如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">qx</span> <span class="o">=</span> clamp<span class="o">(</span>round<span class="o">(</span>x / scale<span class="o">)</span> + zero<span class="se">\_</span>point, -128, <span class="m">127</span><span class="o">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">round(x)</span></code> 实现浮点数的四舍五入， <code class="docutils literal notranslate"><span class="pre">clamp(x)</span></code> 函数实现将数据钳位在-128~127之间的整数数值。 <code class="docutils literal notranslate"><span class="pre">zero_point</span></code> 为非对称量化零点偏移值，对称量化时 <code class="docutils literal notranslate"><span class="pre">zero_point</span> <span class="pre">=</span> <span class="pre">0</span></code> 。</p>
+<p>C++的参考实现如下：</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int64_t</span><span class="w"> </span><span class="n">quantized_value</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">    </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">round</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">scale</span><span class="p">)));</span><span class="w"></span>
+<span class="n">quantized_value</span><span class="w"> </span><span class="o">=</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">quantized_value</span><span class="p">,</span><span class="w"> </span><span class="n">min_int_value</span><span class="p">),</span><span class="w"> </span><span class="n">max_int_value</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Dequantize节点则用于将模型 <code class="docutils literal notranslate"><span class="pre">int8</span></code> 或 <code class="docutils literal notranslate"><span class="pre">int32</span></code> 类型的输出数据反量化回 <code class="docutils literal notranslate"><span class="pre">float</span></code> 或 <code class="docutils literal notranslate"><span class="pre">double</span></code> 类型，其计算公式如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">deqx</span> <span class="o">=</span> <span class="o">(</span>x - zero<span class="se">\_</span>point<span class="o">)</span> * scale
+</pre></div>
+</div>
+<p>C++的参考实现如下：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">static_cast</span><span class="o">&lt;</span><span class="nb">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>目前工具支持删除：</p>
+<ol class="arabic simple">
+<li><p>输入部位的节点为Quantize或Transpose节点；</p></li>
+<li><p>输出部位的节点为Transpose、Dequanti、Cast、Reshape、Softmax节点。</p></li>
+</ol>
+</div>
+<p>工具打印信息如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_model_modifier resnet50_64x56x56_featuremap.bin
+<span class="m">2022</span>-04-21 <span class="m">18</span>:22:30,207 INFO Nodes that can be deleted: <span class="o">[</span><span class="s1">&#39;data_res2a_branch1_HzQuantize_TransposeInput0&#39;</span>, <span class="s1">&#39;fc1000_reshape_0&#39;</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>在指定 <code class="docutils literal notranslate"><span class="pre">-r</span></code> 选项后，工具会打印模型中该节点的类型，储存在bin文件中的节点信息以及告知指定节点已被删除：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_model_modifier resnet50_64x56x56_featuremap.bin -r data_res2a_branch1_HzQuantize_TransposeInput0
+Node <span class="s1">&#39;data_res2a_branch1_HzQuantize_TransposeInput0&#39;</span> found, its OP <span class="nb">type</span> is <span class="s1">&#39;Transpose&#39;</span>
+Node <span class="s1">&#39;data_res2a_branch1_HzQuantize_TransposeInput0&#39;</span> is removed
+modified model saved as resnet50_64x56x56_featuremap_modified.bin
+</pre></div>
+</div>
+<p>之后可以通过 <code class="docutils literal notranslate"><span class="pre">hb_model_info</span></code> 工具查看被删除节点信息，输出信息末尾会打印被删除节点的名称，同时会生成 <code class="docutils literal notranslate"><span class="pre">deleted_nodes_info.txt</span></code> 文件，文件中每一行记录了对应被删除节点的初始信息。打印被删除节点的名称如下所示：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_model_info resnet50_64x56x56_featuremap_modified.bin
+Start hb_model_info....
+hb_model_info version <span class="m">1</span>.7.0
+********* resnet50_64x56x56_featuremap info *********
+...
+--------- deleted nodes -------------------
+deleted nodes: data_res2a_branch1_HzQuantize_TransposeInput0
+</pre></div>
+</div>
+</section>
+<section id="hb-model-verifier">
+<h2><code class="docutils literal notranslate"><span class="pre">hb_model_verifier</span></code> 工具<a class="headerlink" href="#hb-model-verifier" title="永久链接至标题"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">hb_model_verifier</span></code> 工具是用于对指定的定点模型和runtime模型进行结果验证的工具。
+该工具会使用指定图片，进行定点模型推理，runtime模型板端和x86端模拟器上的推理， runtime模型在板端的推理(如果给定ip可以ping通且板端已经安装 <code class="docutils literal notranslate"><span class="pre">hrt_tools</span></code>, 若无则可以使用OE包中 <code class="docutils literal notranslate"><span class="pre">package/board</span></code> 下的 <code class="docutils literal notranslate"><span class="pre">install.sh</span></code> 脚本进行安装) runtime模型在x86端的推理(确保host端已经安装 <code class="docutils literal notranslate"><span class="pre">hrt_tools</span></code>,
+若无则可以使用OE包中 <code class="docutils literal notranslate"><span class="pre">package/host</span></code> 下的 <code class="docutils literal notranslate"><span class="pre">install.sh</span></code> 脚本进行安装)， 并对其三方的结果进行两两比较，给出是否通过的结论。 若未指定图片，则工具会用默认图片进行推理(featuremap模型会随机生成tensor数据)。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p><code class="docutils literal notranslate"><span class="pre">package</span></code> 资料包获取方式，请参考 <a class="reference external" href="../../env_install/env_install.html#id3">交付物说明</a>。</p>
+</div>
+<ul class="simple">
+<li><p>使用方式</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hb_model_verifier -q <span class="si">${</span><span class="nv">quanti_model</span><span class="si">}</span> <span class="se">\</span>
+                  -b <span class="si">${</span><span class="nv">bin_model</span><span class="si">}</span> <span class="se">\</span>
+                  -a <span class="si">${</span><span class="nv">board_ip</span><span class="si">}</span> <span class="se">\</span>
+                  -i <span class="si">${</span><span class="nv">input_img</span><span class="si">}</span> <span class="se">\</span>
+                  -d <span class="si">${</span><span class="nv">digits</span><span class="si">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>命令行参数</p></li>
+</ul>
+<dl class="py data">
+<dt class="sig sig-object py" id="hb_model_verifier">
+<span id="hb_model_verifier的命令行参数"></span><span class="sig-name descname"><span class="pre">hb_model_verifier的命令行参数</span></span><a class="headerlink" href="#hb_model_verifier" title="永久链接至目标"></a></dt>
+<dd><dl class="simple">
+<dt>--quanti_model, -q</dt><dd><p>定点模型名称。</p>
+</dd>
+<dt>--bin_model, -b</dt><dd><p>bin模型名称。</p>
+</dd>
+<dt>--arm-board-ip, -a</dt><dd><p>上板测试使用的arm board ip地址。</p>
+</dd>
+<dt>--input-img, -i</dt><dd><p>推理测试时使用的图片。 若不指定则会使用默认图片或随机tensor。 对于二进制形式的图片文件需要后缀名为 <code class="docutils literal notranslate"><span class="pre">.bin</span></code> 形式。</p>
+</dd>
+<dt>--compare_digits, -d</dt><dd><p>比较推理结果数值精度，若不指定则会默认比较小数点后五位。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<ul class="simple">
+<li><p>输出内容说明</p></li>
+</ul>
+<p>结果对比最终会在终端展示, 工具会对比ONNX模型运行结果, 模拟器运行及上板结果的两两对比情况, 若无问题应显示如下:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Quanti onnx and Arm result Strict check PASSED
+</pre></div>
+</div>
+<p>在定点模型和runtime模型精度不一致时会输出不一致结果的具体信息。</p>
+<p><code class="docutils literal notranslate"><span class="pre">mismatch</span> <span class="pre">line</span> <span class="pre">num</span></code> 为两种模型精度不一致结果的个数，包括三种不一致情况：</p>
+<p><code class="docutils literal notranslate"><span class="pre">mismatch.line_miss</span> <span class="pre">num</span></code> 为输出结果数量不一致个数；
+<code class="docutils literal notranslate"><span class="pre">mismatch.line_diff</span> <span class="pre">num</span></code> 为输出结果差距过大个数；
+<code class="docutils literal notranslate"><span class="pre">mismatch.line_nan</span> <span class="pre">num</span></code> 为输出为nan的个数。</p>
+<p><code class="docutils literal notranslate"><span class="pre">total</span> <span class="pre">line</span> <span class="pre">num</span></code> 为输出数据总个数。</p>
+<p><code class="docutils literal notranslate"><span class="pre">mismatch</span> <span class="pre">rate</span></code> 为不一致数据个数占输出数据总个数的比例。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>INFO mismatch line num: <span class="m">39</span>
+INFO ****************************
+INFO mismatch.line_miss num: <span class="m">0</span>
+INFO mismatch.line_diff num: <span class="m">39</span>
+INFO mismatch.line_nan num: <span class="m">0</span>
+INFO ****************************
+INFO total line num: <span class="m">327680</span>
+INFO mismatch rate: <span class="m">0</span>.0001190185546875
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hb_model_verifier</span></code> 目前只支持单输入模型。</p></li>
+<li><p>若模型有多个输出，则只会比较第一个输出的结果情况。</p></li>
+<li><p>暂时不支持对已打包的*.bin模型进行验证，否则工作台将产生以下提示：</p></li>
+</ol>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ERROR pack model is not supported
+</pre></div>
+</div>
+</section>
+<section id="hb-eval-preprocess">
+<h2><code class="docutils literal notranslate"><span class="pre">hb_eval_preprocess</span></code> 工具<a class="headerlink" href="#hb-eval-preprocess" title="永久链接至标题"></a></h2>
+<p>用于对模型精度进行评估时，在x86环境下对图片数据进行预处理。
+所谓预处理是指图片数据在送入模型之前的特定处理操作。
+比如：图片resize、crop和padding等。</p>
+<ul class="simple">
+<li><p>使用方法</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hb_eval_preprocess</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>命令行参数</p></li>
+</ul>
+<dl class="py data">
+<dt class="sig sig-object py" id="hb_eval_preprocess">
+<span id="hb_eval_preprocess的命令行参数"></span><span class="sig-name descname"><span class="pre">hb_eval_preprocess的命令行参数</span></span><a class="headerlink" href="#hb_eval_preprocess" title="永久链接至目标"></a></dt>
+<dd><dl class="simple">
+<dt>--version</dt><dd><p>显示版本并退出。</p>
+</dd>
+<dt>-m, --model_name</dt><dd><p>设置模型名称，支持的模型范围可通过 <code class="docutils literal notranslate"><span class="pre">hb_eval_preprocess</span> <span class="pre">--help</span></code> 查看。</p>
+</dd>
+<dt>-i, --image_dir</dt><dd><p>输入图片路径。</p>
+</dd>
+<dt>-o, --output_dir</dt><dd><p>输出路径。</p>
+</dd>
+<dt>-v, --val_txt</dt><dd><p>设置评测所需图片的文件名称，预处理生成的图片将于此文件中的图片名称对应。</p>
+</dd>
+<dt>-h, --help</dt><dd><p>显示帮助信息。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<ul class="simple">
+<li><p>输出内容说明</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">hb_eval_preprocess</span></code> 命令将会在 <code class="docutils literal notranslate"><span class="pre">--output_dir</span></code> 指定的路径下生成图片二进制文件。</p>
+<div class="admonition tip">
+<p class="admonition-title">小技巧</p>
+<p>更多关于 <code class="docutils literal notranslate"><span class="pre">hb_eval_preprocess</span></code> 工具在上板模型精度评估中的应用示例请参见嵌入式应用开发《公版模型评测说明》中的
+<a class="reference external" href="../../horizon_runtime_samples/ai_benchmark/ai-benchmark.html#data-preprocess">数据预处理</a> 一节内容。</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="6.4.1. PTQ原理及步骤详解" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../supported_op_list_and_restrictions.html" class="btn btn-neutral float-right" title="6.4.2. 模型算子支持列表" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

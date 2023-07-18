@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.2.10. sample_usb_cam_4k60 使用说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="3.2.11. Sunrise_camera用户使用说明" href="Sunrise_camera_user_guide.html" />
+    <link rel="prev" title="3.2.9. sample_lcd 使用说明" href="sample_lcd.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">3. Demo使用指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Typical_Application_Scenarios/index.html">3.1. 典型应用场景</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">3.2. VIO使用指引</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="get_sif_data.html">3.2.1. get_sif_data 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_isp_data.html">3.2.2. get_isp_data 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_isp.html">3.2.3. sample_isp 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps.html">3.2.4. sample_vps 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps_zoom.html">3.2.5. sample_vps_zoom 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_osd.html">3.2.6. sample_osd 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html">3.2.7. sample video codec 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vot.html">3.2.8. sample_vot 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_lcd.html">3.2.9. sample_lcd 使用说明</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">3.2.10. sample_usb_cam_4k60 使用说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">3.2.10.1. 程序功能</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">3.2.10.2. 功能使用</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id3">程序部署</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">运行效果说明</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">3.2.10.3. 程序开发</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id6">模块划分</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id7">顶层源码结构</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id8">头文件结构</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id9">源代码结构</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#id10">编译</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sensor">添加新sensor</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html">3.2.11. Sunrise_camera用户使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html">3.2.12. Sunrise_camera开发说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">3. </span>Demo使用指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">3.2. </span>VIO使用指引</a> &raquo;</li>
+      <li><span class="section-number">3.2.10. </span>sample_usb_cam_4k60 使用说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="sample_lcd.html" class="btn btn-neutral float-left" title="3.2.9. sample_lcd 使用说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Sunrise_camera_user_guide.html" class="btn btn-neutral float-right" title="3.2.11. Sunrise_camera用户使用说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sample-usb-cam-4k60">
+<h1><span class="section-number">3.2.10. </span>sample_usb_cam_4k60 使用说明<a class="headerlink" href="#sample-usb-cam-4k60" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">3.2.10.1. </span>程序功能<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">sample_usb_cam_4k60程序</span></code>完成<code class="docutils literal notranslate"><span class="pre">sensor</span></code>、<code class="docutils literal notranslate"><span class="pre">MIPI</span> <span class="pre">CSI</span></code> 、<code class="docutils literal notranslate"><span class="pre">SIF</span></code>、 <code class="docutils literal notranslate"><span class="pre">ISP</span></code> 、<code class="docutils literal notranslate"><span class="pre">VENC</span></code>、<code class="docutils literal notranslate"><span class="pre">USB</span></code>模块的初始化，实现从sensor实时采集数据，到编码器编码输出，通过usb模块传输到pc端预览视频的功能</p>
+<p>软件框图如下所示：</p>
+<p><img alt="../../_images/4k_60_usb_pipeline.png" src="../../_images/4k_60_usb_pipeline.png" /></p>
+</section>
+<section id="id2">
+<h2><span class="section-number">3.2.10.2. </span>功能使用<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<section id="id3">
+<h3>程序部署<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>把 <code class="docutils literal notranslate"><span class="pre">sample/sample_usb_cam_4k60/out</span></code>目录通过winscp等工具拷贝到板子的/userdata目录，进入板子的/userdata/out目录执行sh run_usb_cam_imx415.sh可以把程序运行起来，运行结果如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:/userdata/out# <span class="nb">cd</span> /userdata/
+root@x3sdbx3-samsung2G-3200:/userdata/out# sh run_usb_cam_imx415.sh 
+run_usb_cam_imx415.sh: line <span class="m">17</span>: can<span class="s1">&#39;t create /sys/bus/platform/drivers/ddr_monitor/read_qos_ctrl/all: Permission denied</span>
+<span class="s1">run_usb_cam_imx415.sh: line 18: can&#39;</span>t create /sys/bus/platform/drivers/ddr_monitor/write_qos_ctrl/all: Permission denied
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; g1 is exist. delete it!
+Detecting platform:
+ board : Hobot XJ3 SOC SDB
+ udc   : b2000000.dwc3
+Stopping the USB gadget
+usb-gadget is not running
+Detecting platform:
+ board : Hobot XJ3 SOC SDB
+ udc   : b2000000.dwc3
+show user config:
+USB_VID: 0x1d6b
+USB_PID: 0x0102
+SERIAL: 0x6856e824
+MANUF: hobot
+PRODUCT: xj3
+USE_UVC: <span class="nb">true</span>
+USE_HID: <span class="nb">false</span>
+USE_UAC1: <span class="nb">false</span>
+USE_UAC2: <span class="nb">false</span>
+USE_ADB: <span class="nb">false</span>
+USE_MSD: <span class="nb">false</span>
+USE_ACM: <span class="nb">false</span>
+USE_RNDIS: <span class="nb">false</span>
+USE_ECM: <span class="nb">false</span>
+Creating the USB gadget
+Loading composite module
+Creating gadget directory g_comp
+OK
+init configfs...
+Setting Vendor and Product ID<span class="s1">&#39;s</span>
+<span class="s1">OK</span>
+<span class="s1">single function gadget</span>
+<span class="s1">Setting English strings</span>
+<span class="s1">OK</span>
+<span class="s1">Creating Config</span>
+<span class="s1">Init functions...</span>
+<span class="s1">funciton_init, but do nothing, please init on demand</span>
+<span class="s1">OK</span>
+<span class="s1">Bind functions...</span>
+<span class="s1">Bind functions according to .usb-config file</span>
+<span class="s1">bind uvc...</span>
+<span class="s1">Creating UVC gadget functionality : uvc.0</span>
+<span class="s1">sh: 0: unknown operand</span>
+<span class="s1">OK</span>
+<span class="s1">Pre run userspace daemons(eg. adb)...</span>
+<span class="s1">0</span>
+<span class="s1">0</span>
+<span class="s1">waiting</span>
+<span class="s1">.</span>
+<span class="s1">OK</span>
+<span class="s1">Binding USB Device Controller</span>
+<span class="s1">OK</span>
+<span class="s1">Run some userspace daemons(eg. usb_camera)...</span>
+<span class="s1">usb-gadget start succeed.</span>
+<span class="s1">Open config file ./config/vin_vps_config_usb_cam.json success</span>
+<span class="s1">Open config file1 ./config/vin_vps_config_usb_cam.json</span>
+<span class="s1">Can not find key: tailWeight</span>
+<span class="s1">Can not find key: manualTimeCount</span>
+<span class="s1">Can not find key: autoTimeCount</span>
+<span class="s1">Can not find key: manualAeM1</span>
+<span class="s1">imx415_init_3840x2160_60_fps_linear_setting OK!</span>
+<span class="s1">hb_vps_init grp_attr.maxW = 3840, grp_attr.maxH = 2160</span>
+<span class="s1">chn_attr.width = 3840,chn_attr.height = 2160</span>
+<span class="s1">set ipu chn Attr ok: GrpId = 0, chn_id = 2, chn_attr.enMirror = 0</span>
+<span class="s1">start grp ok: grp_id = 0</span>
+<span class="s1">vps1 us0 factor:0 x:0 y:0 w:968 h:544</span>
+<span class="s1">vps1 us1 factor:0 x:0 y:0 w:968 h:544</span>
+<span class="s1">vps1 us2 factor:0 x:0 y:0 w:968 h:544</span>
+<span class="s1">vps1 us3 factor:0 x:0 y:0 w:968 h:544</span>
+<span class="s1">vps1 us4 factor:0 x:0 y:0 w:968 h:544</span>
+<span class="s1">vps1 us5 factor:0 x:0 y:0 w:968 h:544</span>
+<span class="s1">vps1 us0 factor:0 x:0 y:0 w:968 h:544</span>
+<span class="s1">vps1 us1 factor:0 x:0 y:0 w:968 h:544</span>
+<span class="s1">vps1 us2 factor:0 x:0 y:0 w:968 h:544</span>
+<span class="s1">vps1 us3 factor:0 x:0 y:0 w:968 h:544</span>
+<span class="s1">vps1 us4 factor:0 x:0 y:0 w:968 h:544</span>
+<span class="s1">vps1 us5 factor:0 x:0 y:0 w:968 h:544</span>
+<span class="s1">vps1 us0 factor:0 x:0 y:0 w:648 h:364</span>
+<span class="s1">vps1 us1 factor:0 x:0 y:0 w:648 h:364</span>
+<span class="s1">vps1 us2 factor:0 x:0 y:0 w:648 h:364</span>
+<span class="s1">vps1 us3 factor:0 x:0 y:0 w:648 h:364</span>
+<span class="s1">vps1 us4 factor:0 x:0 y:0 w:648 h:364</span>
+<span class="s1">vps1 us5 factor:0 x:0 y:0 w:648 h:364</span>
+<span class="s1">try to construct empty ring queue##function uvc_gadget_init in</span>
+<span class="s1">udc_find_video_device g_webcam</span>
+<span class="s1">function name not matched. g_comp</span>
+<span class="s1">:g_webcam</span>
+<span class="s1">udc_find_video_device g_comp</span>
+<span class="s1">using uvc device: /dev/video8</span>
+<span class="s1">###uvc_gadget_init###</span>
+<span class="s1">using uvc device: /dev/video8</span>
+<span class="s1">width: 1280</span>
+<span class="s1">height: 720</span>
+<span class="s1">format: 2</span>
+<span class="s1">io_method: 0</span>
+<span class="s1">bulk_mode: 1</span>
+<span class="s1">nbufs: 2</span>
+<span class="s1">mult: 0</span>
+<span class="s1">burst: 9</span>
+<span class="s1">speed: 1</span>
+<span class="s1">mult_alts: 0</span>
+<span class="s1">h264_quirk: 0</span>
+<span class="s1">maxpkt_quirk: 3072</span>
+<span class="s1">uvc device is dwc3-gadget on bus gadget</span>
+<span class="s1">uvc open succeeded, file descriptor = 22</span>
+<span class="s1">uvc_size=4, maxpkt_size=3072</span>
+<span class="s1">##function uvc_gadget_init succeed</span>
+<span class="s1">##function uvc_gadget_start in</span>
+<span class="s1">##function uvc_gadget_start succeed</span>
+<span class="s1">##function uvc_loop in</span>
+<span class="s1">dev-&gt;mask (0x0), entity_id(1), setup_ops((nil)), app doesn&#39;</span>t care
+control request <span class="o">(</span>entity_id <span class="m">01</span> req <span class="m">86</span> cs <span class="m">04</span><span class="o">)</span>
+send real error code last prepared<span class="o">(</span><span class="m">06</span><span class="o">)</span>
+control request <span class="o">(</span>entity_id <span class="m">00</span> req <span class="m">81</span> cs <span class="m">02</span><span class="o">)</span>
+dev-&gt;mask <span class="o">(</span>0x0<span class="o">)</span>, entity_id<span class="o">(</span><span class="m">1</span><span class="o">)</span>, setup_ops<span class="o">((</span>nil<span class="o">))</span>, app doesn<span class="s1">&#39;t care</span>
+<span class="s1">control request (entity_id 01 req 86 cs 09)</span>
+<span class="s1">send real error code last prepared(06)</span>
+<span class="s1">control request (entity_id 00 req 81 cs 02)</span>
+<span class="s1">dev-&gt;mask (0x0), entity_id(1), setup_ops((nil)), app doesn&#39;</span>t care
+control request <span class="o">(</span>entity_id <span class="m">01</span> req <span class="m">86</span> cs 0b<span class="o">)</span>
+send real error code last prepared<span class="o">(</span><span class="m">06</span><span class="o">)</span>
+control request <span class="o">(</span>entity_id <span class="m">00</span> req <span class="m">81</span> cs <span class="m">02</span><span class="o">)</span>
+dev-&gt;mask <span class="o">(</span>0x0<span class="o">)</span>, entity_id<span class="o">(</span><span class="m">1</span><span class="o">)</span>, setup_ops<span class="o">((</span>nil<span class="o">))</span>, app doesn<span class="s1">&#39;t care</span>
+<span class="s1">control request (entity_id 01 req 86 cs 0f)</span>
+<span class="s1">send real error code last prepared(06)</span>
+<span class="s1">control request (entity_id 00 req 81 cs 02)</span>
+<span class="s1">dev-&gt;mask (0x0), entity_id(2), setup_ops((nil)), app doesn&#39;</span>t care
+control request <span class="o">(</span>entity_id <span class="m">02</span> req <span class="m">86</span> cs <span class="m">02</span><span class="o">)</span>
+send real error code last prepared<span class="o">(</span><span class="m">06</span><span class="o">)</span>
+control request <span class="o">(</span>entity_id <span class="m">00</span> req <span class="m">81</span> cs <span class="m">02</span><span class="o">)</span>
+dev-&gt;mask <span class="o">(</span>0x0<span class="o">)</span>, entity_id<span class="o">(</span><span class="m">2</span><span class="o">)</span>, setup_ops<span class="o">((</span>nil<span class="o">))</span>, app doesn<span class="s1">&#39;t care</span>
+<span class="s1">control request (entity_id 02 req 86 cs 03)</span>
+<span class="s1">send real error code last prepared(06)</span>
+<span class="s1">control request (entity_id 00 req 81 cs 02)</span>
+<span class="s1">dev-&gt;mask (0x0), entity_id(2), setup_ops((nil)), app doesn&#39;</span>t care
+control request <span class="o">(</span>entity_id <span class="m">02</span> req <span class="m">86</span> cs <span class="m">06</span><span class="o">)</span>
+send real error code last prepared<span class="o">(</span><span class="m">06</span><span class="o">)</span>
+control request <span class="o">(</span>entity_id <span class="m">00</span> req <span class="m">81</span> cs <span class="m">02</span><span class="o">)</span>
+dev-&gt;mask <span class="o">(</span>0x0<span class="o">)</span>, entity_id<span class="o">(</span><span class="m">2</span><span class="o">)</span>, setup_ops<span class="o">((</span>nil<span class="o">))</span>, app doesn<span class="s1">&#39;t care</span>
+<span class="s1">control request (entity_id 02 req 86 cs 07)</span>
+<span class="s1">send real error code last prepared(06)</span>
+<span class="s1">control request (entity_id 00 req 81 cs 02)</span>
+<span class="s1">dev-&gt;mask (0x0), entity_id(2), setup_ops((nil)), app doesn&#39;</span>t care
+control request <span class="o">(</span>entity_id <span class="m">02</span> req <span class="m">86</span> cs <span class="m">08</span><span class="o">)</span>
+send real error code last prepared<span class="o">(</span><span class="m">06</span><span class="o">)</span>
+control request <span class="o">(</span>entity_id <span class="m">00</span> req <span class="m">81</span> cs <span class="m">02</span><span class="o">)</span>
+dev-&gt;mask <span class="o">(</span>0x0<span class="o">)</span>, entity_id<span class="o">(</span><span class="m">2</span><span class="o">)</span>, setup_ops<span class="o">((</span>nil<span class="o">))</span>, app doesn<span class="s1">&#39;t care</span>
+<span class="s1">control request (entity_id 02 req 86 cs 09)</span>
+<span class="s1">send real error code last prepared(06)</span>
+<span class="s1">control request (entity_id 00 req 81 cs 02)</span>
+<span class="s1">dev-&gt;mask (0x0), entity_id(4), setup_ops((nil)), app doesn&#39;</span>t care
+control request <span class="o">(</span>entity_id <span class="m">04</span> req <span class="m">85</span> cs <span class="m">01</span><span class="o">)</span>
+send real error code last prepared<span class="o">(</span><span class="m">06</span><span class="o">)</span>
+control request <span class="o">(</span>entity_id <span class="m">00</span> req <span class="m">81</span> cs <span class="m">02</span><span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>运行效果说明<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>通过Potplayer播放器选择UVC Camera，分辨率选择H264 3840x2160P 60,打开设备就可以播放UVC视频流，打开视频流后x3侧的打印如下图:</p>
+<p><img alt="../../_images/20220523-173933.png" src="../../_images/20220523-173933.png" /></p>
+<p>potplayer跑起来后的截图如下：</p>
+<p><img alt="../../_images/20220527131109.png" src="../../_images/20220527131109.png" /></p>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">3.2.10.3. </span>程序开发<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<section id="id6">
+<h3>模块划分<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>模块</strong></th>
+<th><strong>目录</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>头文件</td>
+<td>inc</td>
+<td>依赖的sensor头文件，json头文件，utils公共接口头文件，vio依赖公共头文件</td>
+</tr>
+<tr>
+<td>vio源代码模块</td>
+<td>src</td>
+<td>sensor源代码文件，json配置文件解析源文件，utils公共接口源文件，系统vio公共接口源文件</td>
+</tr>
+<tr>
+<td>主程序</td>
+<td>sample_usb_cam.cpp</td>
+<td>main函数入口</td>
+</tr>
+</tbody>
+</table><section id="id7">
+<h4>顶层源码结构<a class="headerlink" href="#id7" title="永久链接至标题"></a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
+├── Makefile							#编译的主程序CMakeLists文件
+├── vin_vps_config_usb_cam.json			#imx415 sensor配置文件
+├── inc								
+│   ├── camera									#sensor依赖头文件
+│   ├── json									#json依赖头文件
+│   ├── utils									#编译依赖的公共头文件
+│   └── vio										#x3m的vio依赖头文件
+├── lib
+│   ├── jsoncpp									#依赖的json库
+├── libguvc.so									#4k60的usb cam依赖库
+├── libimx415.so								#4k60的sensor驱动库
+├── README.md									#程序说明文档
+├── run_usb_cam_imx415.sh						#程序运行脚本
+├── sample_usb_cam.cpp							#主程序代码				
+├── src
+│   ├── camera									#sensor驱动配置代码
+│   ├── utils									#编译依赖的公共源代码
+│   └── vio										#x3m的vio依赖源文件
+└── usb-gadget.sh								#4k60的usb cam驱动加载脚本
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h4>头文件结构<a class="headerlink" href="#id8" title="永久链接至标题"></a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
+├── camera
+│   └── camera.h						#sensor依赖头文件，增加新sensor需要修改此文件
+├── json								#开源的json库头文件
+│   ├── allocator.h
+│   ├── assertions.h
+│   ├── autolink.h
+│   ├── config.h
+│   ├── features.h
+│   ├── forwards.h
+│   ├── json.h
+│   ├── reader.h
+│   ├── value.h
+│   ├── version.h
+│   └── writer.h
+├── utils		
+│   ├── utils.h							#ringbuf定义,dump图片视频等到文件功能的公共接口
+│   └── yuv2yuv.h						#使用neon加速的yuv格式转换标准接口
+└── vio
+    ├── vio_cfg.h						#json配置文件解析头文件
+    ├── vio_cfg_type.h					#json配置属性值头文件
+    ├── vio_log.h						#打印控制头文件
+    ├── vio_sys.h						#vp初始化反初始化，系统vio各模块绑定接口头文件
+    ├── vio_venc.h						#X3系统编码模块初始化反初始化，启停，数据输入输出处理接口
+    ├── vio_video.h						#视频格式枚举定义等通用接口
+    ├── vio_vin.h						#vin结构体定义，初始化反初始化，启停，数据处理接口
+    └── vio_vps.h						#vps初始化反初始化，启停，数据处理接口
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h4>源代码结构<a class="headerlink" href="#id9" title="永久链接至标题"></a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
+├── camera				#sensor依赖源代码文件，增加新sensor需要在此增加对对应sensor源代码文件
+│   ├── camera_base.c
+│   └── camera_imx415.cpp
+├── utils
+│   ├── utils.cpp		#dump图片视频等到文件功能的公共接口源代码文件
+│   └── yuv2yuv.c		#使用neon加速的yuv格式转换标准接口源代码文件
+└── vio
+    ├── vio_cfg.cpp		#json配置文件解析源代码文件
+    ├── vio_sys.cpp		#vp初始化反初始化，系统vio各模块绑定接口源代码文件
+    ├── vio_venc.cpp	#X3系统编码模块初始化反初始化，启停，数据输入输出处理接口源代码文件
+    ├── vio_video.cpp	#视频格式枚举定义等通用接口源代码文件
+    ├── vio_vin.cpp		#vin初始化反初始化，启停，数据处理接口源代码文件
+    └── vio_vps.cpp		#vps初始化反初始化，启停，数据处理接口源代码文件
+</pre></div>
+</div>
+<p>程序启动流程图如下：</p>
+<p><img alt="../../_images/4k60usbcam.drawio.png" src="../../_images/4k60usbcam.drawio.png" /></p>
+</section>
+</section>
+<section id="id10">
+<h3>编译<a class="headerlink" href="#id10" title="永久链接至标题"></a></h3>
+<p>当前代码通过一个Makefile文件配置编译</p>
+<p>依赖的多媒体头文件和库文件分别在BSP SDK的appsdk目录和system/rootfs_yocto/root目录下，编译时需要注意这两个依赖目录位置是否存在</p>
+<p>安装交叉编译工具链后，安装交叉编译工具链后，执行 make 命令直接可以编译生成 sample_usb_cam 程序</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd sample/sample_usb_cam_4k60
+$ make clean # 清理源码，保持干净的代码环境
+$ make
+... ... # 一大段编译打印
+$ ls
+Makefile  sample_usb_cam  inc  README.md  vin_vps_config_usb_cam.json  libguvc.so  libimx415.so  sample_usb_cam.cpp  sample_usb_cam.d  src  lib  run_usb_cam_imx415.sh  sample_usb_cam.obj 
+usb-gadget.sh
+$ make install # 把产出物安装到 out 目录下
+</pre></div>
+</div>
+</section>
+<section id="sensor">
+<h3>添加新sensor<a class="headerlink" href="#sensor" title="永久链接至标题"></a></h3>
+<p>如果有新sensor需要调试，请参考 src/camera 目录下的源码文件，对应添加一个新的sensor配置即可。</p>
+<p>以IMX415的camera_imx415.cpp为例说明关键代码，需要添加MIPI_SENSOR_INFO_S、MIPI_ATTR_S、VIN_DEV_ATTR_S、VIN_PIPE_ATTR_S、VIN_DIS_ATTR_S、VIN_LDC_ATTR_S的新sensor结构体变量：</p>
+<p><img alt="../../_images/20220525-112411.jpg" src="../../_images/20220525-112411.jpg" /></p>
+<p><img alt="../../_images/20220525-112559.png" src="../../_images/20220525-112559.png" /></p>
+<p><img alt="../../_images/20220525-112809.png" src="../../_images/20220525-112809.png" /></p>
+<p><img alt="../../_images/20220525-112844.png" src="../../_images/20220525-112844.png" /></p>
+<p>同时需要在inc/camera/camera.h把增加的新sensor的变量extern出来如下图imx415示例</p>
+<p><img alt="../../_images/20220525-113456.png" src="../../_images/20220525-113456.png" /></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sample_lcd.html" class="btn btn-neutral float-left" title="3.2.9. sample_lcd 使用说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Sunrise_camera_user_guide.html" class="btn btn-neutral float-right" title="3.2.11. Sunrise_camera用户使用说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

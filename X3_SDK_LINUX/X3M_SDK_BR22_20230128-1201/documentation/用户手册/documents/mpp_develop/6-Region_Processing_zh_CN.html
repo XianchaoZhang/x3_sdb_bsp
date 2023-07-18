@@ -1,0 +1,2273 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5.6. 区域处理 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="5.7. 视频输出" href="7-Video_Output_zh_CN.html" />
+    <link rel="prev" title="5.5. 视频处理" href="5-Video_Processing_zh_CN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">5. 多媒体开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1-Overview_zh_CN.html">5.1. 系统概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-System_Control_zh_CN.html">5.2. 系统控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-Video_Input_zh_CN.html">5.3. 视频输入</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html">5.4. ISP图像系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5-Video_Processing_zh_CN.html">5.5. 视频处理</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.6. 区域处理</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">5.6.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">5.6.2. 功能描述</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">5.6.2.1. 基本概念</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">5.6.2.2. 使用示意</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#api">5.6.3. API参考</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rgn-create-hb-rgn-destory">5.6.3.1. HB_RGN_Create/HB_RGN_Destory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rgn-getattr-hb-rgn-setattr">5.6.3.2. HB_RGN_GetAttr/HB_RGN_SetAttr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rgn-setbitmap">5.6.3.3. HB_RGN_SetBitMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rgn-attachtochn-hb-rgn-detachfromchn">5.6.3.4. HB_RGN_AttachToChn/HB_RGN_DetachFromChn</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rgn-setdisplayattr-hb-rgn-getdisplayattr">5.6.3.5. HB_RGN_SetDisplayAttr/HB_RGN_GetDisplayAttr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rgn-getcanvasinfo-hb-rgn-updatecanvas">5.6.3.6. HB_RGN_GetCanvasInfo/HB_RGN_UpdateCanvas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rgn-drawword">5.6.3.7. HB_RGN_DrawWord</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rgn-drawline-hb-rgn-drawlinearray">5.6.3.8. HB_RGN_DrawLine/HB_RGN_DrawLineArray</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rgn-batchbegin-hb-rgn-batchend">5.6.3.9. HB_RGN_BatchBegin/HB_RGN_BatchEnd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rgn-setcolormap">5.6.3.10. HB_RGN_SetColorMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rgn-setsta-hb-rgn-getsta">5.6.3.11. HB_RGN_SetSta/HB_RGN_GetSta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rgn-addtoyuv">5.6.3.12. HB_RGN_AddToYUV</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rgn-setdisplaylevel">5.6.3.13. HB_RGN_SetDisplayLevel</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">5.6.4. 数据结构</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-size-s">5.6.4.1. RGN_SIZE_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-point-s">5.6.4.2. RGN_POINT_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-rect-s">5.6.4.3. RGN_RECT_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-overlay-s">5.6.4.4. RGN_OVERLAY_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-attr-s">5.6.4.5. RGN_ATTR_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-chn-s">5.6.4.6. RGN_CHN_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-overlay-chn-s">5.6.4.7. RGN_OVERLAY_CHN_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-cover-chn-s">5.6.4.8. RGN_COVER_CHN_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-chn-u">5.6.4.9. RGN_CHN_U</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-canvas-s">5.6.4.10. RGN_CANVAS_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-chn-attr-s">5.6.4.11. RGN_CHN_ATTR_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-bitmap-s">5.6.4.12. RGN_BITMAP_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-draw-word-s">5.6.4.13. RGN_DRAW_WORD_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-draw-line-s">5.6.4.14. RGN_DRAW_LINE_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-sta-s">5.6.4.15. RGN_STA_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-type-e">5.6.4.16. RGN_TYPE_E</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-chn-id-e">5.6.4.17. RGN_CHN_ID_E</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-font-size-e">5.6.4.18. RGN_FONT_SIZE_E</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-font-color-e">5.6.4.19. RGN_FONT_COLOR_E</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-pixel-format-e">5.6.4.20. RGN_PIXEL_FORMAT_E</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-handle">5.6.4.21. RGN_HANDLE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-handle-max">5.6.4.22. RGN_HANDLE_MAX</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-handlegroup">5.6.4.23. RGN_HANDLEGROUP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rgn-group-max">5.6.4.24. RGN_GROUP_MAX</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">5.6.5. 错误码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">5.6.6. 参考代码</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="7-Video_Output_zh_CN.html">5.7. 视频输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8-Video_Encode_zh_CN.html">5.8. 视频编码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9-Video_Decode_zh_CN.html">5.9. 视频解码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/index.html">5.10. 图像调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html">5.11. 查询多媒体模块调试信息</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html">5.12. 多媒体性能调试</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">5. </span>多媒体开发指南</a> &raquo;</li>
+      <li><span class="section-number">5.6. </span>区域处理</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="5-Video_Processing_zh_CN.html" class="btn btn-neutral float-left" title="5.5. 视频处理" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="7-Video_Output_zh_CN.html" class="btn btn-neutral float-right" title="5.7. 视频输出" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">5.6. </span>区域处理<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="id2">
+<h2><span class="section-number">5.6.1. </span>概述<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>用户一般都需要在视频中叠加 <code class="docutils literal notranslate"><span class="pre">OSD</span></code> 用于显示一些特定的信息（如：通道号、时间戳等），必要时还会填充色块。这些叠加在视频上的 <code class="docutils literal notranslate"><span class="pre">OSD</span></code> 和遮挡在视频上的色块统称为区域。<code class="docutils literal notranslate"><span class="pre">REGION</span></code> 模块，用于统一管理这些区域资源。</p>
+<p>区域管理可以实现区域的创建，并叠加到视频中或对视频进行遮挡。例如，实际应用中，用户通过<code class="docutils literal notranslate"><span class="pre">HB_RGN_AttachToChn</span></code>创建一个区域，将该区域叠加到某个通道（如US通道）中。在通道进行调度时，则会将 <code class="docutils literal notranslate"><span class="pre">OSD</span></code> 叠加在视频中。一个区域支持通过调用设置通道显示属性接口指定到多个通道中（如：<code class="docutils literal notranslate"><span class="pre">US通道</span></code>和<code class="docutils literal notranslate"><span class="pre">DS通道</span></code>），且支持在每个通道的显示属性（如位置、是否显示等）都不同。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">5.6.2. </span>功能描述<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<section id="id4">
+<h3><span class="section-number">5.6.2.1. </span>基本概念<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>区域类型：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">overlay</span></code>:视频叠加区域，绘制文字、线条等；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cover</span></code>：视频遮挡区域，纯色块遮挡；</p></li>
+</ul>
+<p>位图填充：</p>
+<ul class="simple">
+<li><p>将区域位图叠加到区域内存中，使用<code class="docutils literal notranslate"><span class="pre">HB_RGN_SetBitMap</span></code>方式时如果位图的大小比设定的区域大的话，将会裁剪掉超出区域范围的部分；
+使用<code class="docutils literal notranslate"><span class="pre">HB_RGN_GetCanvasInfo</span></code>/<code class="docutils literal notranslate"><span class="pre">HB_RGN_UpdateCanvas</span></code>方式时需要按照获取的画布大小写入。</p></li>
+</ul>
+<p>区域属性：</p>
+<ul class="simple">
+<li><p>创建区域时需要设置区域的一些基本信息，例如大小、区域类型等。</p></li>
+</ul>
+<p>通道显示属性：</p>
+<ul class="simple">
+<li><p>将区域叠加到通道上时需要设定通道的显示属性，例如叠加的位置、是否显示等，如果设置<code class="docutils literal notranslate"><span class="pre">bShow</span></code>为<code class="docutils literal notranslate"><span class="pre">false</span></code>，将叠加到通道但是不显示区域。</p></li>
+</ul>
+<p>绘制文字：</p>
+<ul class="simple">
+<li><p>可以使用<code class="docutils literal notranslate"><span class="pre">HB_RGN_DrawWord</span></code>绘制文字，支持四种字体大小以及15种字体颜色；</p></li>
+</ul>
+<p>绘制线条：</p>
+<ul class="simple">
+<li><p>可以使用<code class="docutils literal notranslate"><span class="pre">HB_RGN_DrawLine</span></code>/<code class="docutils literal notranslate"><span class="pre">HB_RGN_DrawLineArray</span></code>绘制线条或同时多个线条，支持调整线条粗细以及线条颜色。</p></li>
+</ul>
+<p>区域反色：</p>
+<ul class="simple">
+<li><p>在通道显示属性中有反色开关，如果使能了反色，将会在叠加时使得区域的颜色反转。</p></li>
+</ul>
+</section>
+<section id="id5">
+<h3><span class="section-number">5.6.2.2. </span>使用示意<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>使用过程应该如下所示：</p>
+<ul class="simple">
+<li><p>用户通过创建区域并设置区域属性；</p></li>
+<li><p>用户将区域绑定到通道上；</p></li>
+<li><p>通过<code class="docutils literal notranslate"><span class="pre">HB_RGN_GetAttr</span></code>/<code class="docutils literal notranslate"><span class="pre">HB_RGN_SetAttr</span></code>获取或修改区域属性；</p></li>
+<li><p>使用<code class="docutils literal notranslate"><span class="pre">HB_RGN_SetBitMap</span></code>方式：</p>
+<ul>
+<li><p>使用<code class="docutils literal notranslate"><span class="pre">HB_RGN_DrawWord</span></code>或<code class="docutils literal notranslate"><span class="pre">HB_RGN_DrawLine</span></code>/<code class="docutils literal notranslate"><span class="pre">HB_RGN_DrawLineArray</span></code>绘制文字或线条到用户创建的位图中，然后调用<code class="docutils literal notranslate"><span class="pre">HB_RGN_SetBitMap</span></code>将位图设置到区域中；</p></li>
+<li><p>使用<code class="docutils literal notranslate"><span class="pre">HB_RGN_GetCanvasInfo</span></code>/<code class="docutils literal notranslate"><span class="pre">HB_RGN_UpdateCanvas</span></code>方式：</p></li>
+<li><p>使用<code class="docutils literal notranslate"><span class="pre">HB_RGN_GetCanvasInfo</span></code>获取地址，使用<code class="docutils literal notranslate"><span class="pre">HB_RGN_DrawWord</span></code>或<code class="docutils literal notranslate"><span class="pre">HB_RGN_DrawLine</span></code>/<code class="docutils literal notranslate"><span class="pre">HB_RGN_DrawLineArray</span></code>绘制文字或线条到获取的地址中，再使用<code class="docutils literal notranslate"><span class="pre">HB_RGN_UpdateCanvas</span></code>更新画布。</p></li>
+</ul>
+</li>
+<li><p>通过<code class="docutils literal notranslate"><span class="pre">HB_RGN_SetDisplayAttr</span></code>/<code class="docutils literal notranslate"><span class="pre">HB_RGN_GetDisplayAttr</span></code>获取或设置通道显示属性；</p></li>
+<li><p>最后用户再将区域从通道中撤出，销毁区域；</p></li>
+</ul>
+</section>
+</section>
+<section id="api">
+<h2><span class="section-number">5.6.3. </span>API参考<a class="headerlink" href="#api" title="永久链接至标题"></a></h2>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_Create</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstRegion</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_Destory</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_GetAttr</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="n">RGN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstRegion</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_SetAttr</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstRegion</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_SetBitMap</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_BITMAP_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstBitmapAttr</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_AttachToChn</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChnAttr</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_DetachFromChn</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_SetDisplayAttr</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChnAttr</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_GetDisplayAttr</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="n">RGN_CHN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChnAttr</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_GetCanvasInfo</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="n">RGN_CANVAS_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstCanvasInfo</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_UpdateCanvas</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_DrawWord</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_DRAW_WORD_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstRgnDrawWord</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_DrawLine</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_DRAW_LINE_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstRgnDrawLine</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_DrawLineArray</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="k">const</span><span class="w"> </span><span class="n">RGN_DRAW_LINE_S</span><span class="w"> </span><span class="n">astRgnDrawLine</span><span class="p">[],</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32ArraySize</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_BatchBegin</span><span class="p">(</span><span class="n">RGN_HANDLEGROUP</span><span class="w"> </span><span class="o">*</span><span class="n">pu32Group</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Num</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">handle</span><span class="p">[]);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_BatchEnd</span><span class="p">(</span><span class="n">RGN_HANDLEGROUP</span><span class="w"> </span><span class="n">u32Group</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_SetColorMap</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">color_map</span><span class="p">[</span><span class="mi">15</span><span class="p">]);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_SetSta</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">astStaLevel</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="n">RGN_STA_S</span><span class="w"> </span><span class="n">astStaAttr</span><span class="p">[</span><span class="mi">8</span><span class="p">]);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_GetSta</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">astStaValue</span><span class="p">[</span><span class="mi">8</span><span class="p">][</span><span class="mi">4</span><span class="p">]);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_AddToYUV</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="n">hb_vio_buffer_t</span><span class="w"> </span><span class="o">*</span><span class="n">vio_buffer</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChnAttr</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_SetDisplayLevel</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">osd_level</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<section id="hb-rgn-create-hb-rgn-destory">
+<h3><span class="section-number">5.6.3.1. </span>HB_RGN_Create/HB_RGN_Destory<a class="headerlink" href="#hb-rgn-create-hb-rgn-destory" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_Create</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstRegion</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_Destory</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>创建或销毁一块区域；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Handle</td>
+<td align="center">区域句柄号。取值范围：[0, RGN_HANDLE_MAX)。</td>
+</tr>
+<tr>
+<td align="center">pstRegion</td>
+<td align="center">区域属性指针。</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="left">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="left">失败，参见错误码。</td>
+</tr>
+</tbody>
+</table><p>【注意事项】
+HB_RGN_Create：</p>
+<ol class="simple">
+<li><p>句柄由用户指定，意义等同于ID号，句柄号需在指定范围内；</p></li>
+<li><p>不支持重复创建；</p></li>
+<li><p>区域属性不能为空且属性需合法；</p></li>
+<li><p>创建Cover类型区域的时候只需指定区域类型，区域属性在调用HB_RGN_AttachToChn时指定；</p></li>
+<li><p>创建区域时，会进行最大最小宽高等检查，具体支持像素格式请参考RGN_PIXEL_FORMAT_E；</p></li>
+</ol>
+<p>HB_RGN_Destory：</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>调用此接口之前区域需先调用HB_RGN_DetachFromChn接口；</p></li>
+<li><p>调用该接口的过程中，不允许同时调用HB_RGN_SetAttr及HB_RGN_SetBitMap接口；</p></li>
+</ol>
+<p>【参考代码】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>    RGN_HANDLE handle = 0;
+    RGN_ATTR_S stRegion;
+    int ret;
+    stRegion.enType = OVERLAY_RGN;
+    stRegion.stOverlayAttr.stSize.u32Width = 640;
+    stRegion.stOverlayAttr.stSize.u32Height = 128;
+    stRegion.stOverlayAttr.enBgColor = FONT_KEY_COLOR；
+    stRegion.stOverlayAttr.enPixelFmt = PIXEL_FORMAT_VGA_4;
+
+    ret = HB_RGN_Create(handle, &amp;stRegion);
+    if (ret &lt; 0) {
+        return ret;
+    }
+    ret = HB_RGN_GetAttr(handle, &amp;stRegion);
+    if (ret &lt; 0) {
+        return ret;
+    }
+
+    stRegion.stOverlayAttr.enBgColor = FONT_COLOR_WHITE;
+
+    ret = HB_RGN_SetAttr(handle, &amp;stRegion);
+    if (ret &lt; 0) {
+        return ret;
+    }
+    ret = HB_RGN_Destroy(handle);
+    if (ret &lt; 0) {
+        return ret;
+    }
+</pre></div>
+</div>
+</section>
+<section id="hb-rgn-getattr-hb-rgn-setattr">
+<h3><span class="section-number">5.6.3.2. </span>HB_RGN_GetAttr/HB_RGN_SetAttr<a class="headerlink" href="#hb-rgn-getattr-hb-rgn-setattr" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_GetAttr</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="n">RGN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstRegion</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_SetAttr</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstRegion</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取或设置区域属性；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Handle</td>
+<td align="center">区域句柄号。取值范围：[0, RGN_HANDLE_MAX)。</td>
+</tr>
+<tr>
+<td align="center">pstRegion</td>
+<td align="center">区域属性指针。</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="left">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="left">失败，参见错误码。</td>
+</tr>
+</tbody>
+</table><p>【注意事项】
+HB_RGN_GetAttr：</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>区域属性指针不能为空；</p></li>
+<li><p>区域类型必须为Overlay，Cover属性在HB_RGN_AttachToChn时指定、HB_RGN_SetDisplayAttr时修改；</p></li>
+</ol>
+<p>HB_RGN_SetAttr：</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>区域属性指针不能为空；</p></li>
+<li><p>区域类型必须为Overlay，Cover属性在HB_RGN_AttachToChn时指定、HB_RGN_SetDisplayAttr时修改；</p></li>
+<li><p>在调用HB_RGN_AttachToChn之后不可修改区域大小；</p></li>
+</ol>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>请参见HB_RGN_Create/HB_RGN_Destory举例</p>
+</div></blockquote>
+</section>
+<section id="hb-rgn-setbitmap">
+<h3><span class="section-number">5.6.3.3. </span>HB_RGN_SetBitMap<a class="headerlink" href="#hb-rgn-setbitmap" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_SetBitMap</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_BITMAP_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstBitmapAttr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置位图，填充一块区域；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Handle</td>
+<td align="center">区域句柄号。取值范围：[0, RGN_HANDLE_MAX)。</td>
+</tr>
+<tr>
+<td align="center">pstBitmap</td>
+<td align="center">位图属性指针。</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="left">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="left">失败，参见错误码。</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>支持位图的大小和区域的大小不一致；</p></li>
+<li><p>位图从区域的（0，0）开始加载，位图比区域大时自动裁剪；</p></li>
+<li><p>像素格式必须和区域像素格式一致；</p></li>
+<li><p>位图属性指针不能为空；</p></li>
+<li><p>支持多次调用；</p></li>
+<li><p>此接口只对Overlay类型区域有效；</p></li>
+<li><p>调用了HB_RGN_GetCanvasInfo之后，调用本接口无效，除非调用HB_RGN_UpdateCanvas更新画布生效；</p></li>
+</ol>
+<p>【参考代码】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">handle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_ATTR_S</span><span class="w"> </span><span class="n">stRegion</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">RGN_BITMAP_S</span><span class="w"> </span><span class="n">stBitmapAttr</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stBitmapAttr</span><span class="p">.</span><span class="n">enPixelFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PIXEL_FORMAT_VGA_4</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stBitmapAttr</span><span class="p">.</span><span class="n">stSize</span><span class="p">.</span><span class="n">u32Width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">640</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stBitmapAttr</span><span class="p">.</span><span class="n">stSize</span><span class="p">.</span><span class="n">u32Height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stBitmapAttr</span><span class="p">.</span><span class="n">pAddr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">640</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">64</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">memset</span><span class="p">(</span><span class="n">stBitmapAttr</span><span class="p">.</span><span class="n">pAddr</span><span class="p">,</span><span class="w"> </span><span class="mh">0xff</span><span class="p">,</span><span class="w"> </span><span class="mi">640</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">64</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="n">stChn</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stChn</span><span class="p">.</span><span class="n">s32PipelineId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stChn</span><span class="p">.</span><span class="n">enChnId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CHN_US</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">RGN_DRAW_WORD_S</span><span class="w"> </span><span class="n">stDrawWord</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawWord</span><span class="p">.</span><span class="n">enFontSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FONT_SIZE_MEDIUM</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawWord</span><span class="p">.</span><span class="n">enFontColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FONT_COLOR_WHITE</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawWord</span><span class="p">.</span><span class="n">stPoint</span><span class="p">.</span><span class="n">u32X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawWord</span><span class="p">.</span><span class="n">stPoint</span><span class="p">.</span><span class="n">u32Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">time_t</span><span class="w"> </span><span class="n">tt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">time</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">str</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">strftime</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">str</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;%Y-%m-%d %H:%M:%S&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">localtime</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tt</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawWord</span><span class="p">.</span><span class="n">pu8Str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">str</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawWord</span><span class="p">.</span><span class="n">bFlushEn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawWord</span><span class="p">.</span><span class="n">pAddr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stBitmapAttr</span><span class="p">.</span><span class="n">pAddr</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawWord</span><span class="p">.</span><span class="n">stSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stBitmapAttr</span><span class="p">.</span><span class="n">stSize</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">RGN_DRAW_LINE_S</span><span class="w"> </span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">stStartPoint</span><span class="p">.</span><span class="n">u32X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">400</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">stStartPoint</span><span class="p">.</span><span class="n">u32Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">stEndPoint</span><span class="p">.</span><span class="n">u32X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">stEndPoint</span><span class="p">.</span><span class="n">u32Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">bFlushEn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">pAddr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stBitmapAttr</span><span class="p">.</span><span class="n">pAddr</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">stSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stBitmapAttr</span><span class="p">.</span><span class="n">stSize</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">u32Color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FONT_COLOR_WHITE</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">u32Thick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">memcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">RGN_DRAW_LINE_S</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">stEndPoint</span><span class="p">.</span><span class="n">u32Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_DrawWord</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stDrawWord</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_DrawLine</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stDrawLine</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_DrawLineArray</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">stDrawLine</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_SetBitMap</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stBitmapAttr</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="hb-rgn-attachtochn-hb-rgn-detachfromchn">
+<h3><span class="section-number">5.6.3.4. </span>HB_RGN_AttachToChn/HB_RGN_DetachFromChn<a class="headerlink" href="#hb-rgn-attachtochn-hb-rgn-detachfromchn" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_AttachToChn</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChnAttr</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_DetachFromChn</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>将区域叠加到通道或从通道中撤出；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Handle</td>
+<td align="center">区域句柄号。取值范围：[0, RGN_HANDLE_MAX)。</td>
+</tr>
+<tr>
+<td align="center">pstChn</td>
+<td align="center">通道结构体指针。</td>
+</tr>
+<tr>
+<td align="center">pstChnAttr</td>
+<td align="center">区域通道显示属性指针。</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="left">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="left">失败，参见错误码。</td>
+</tr>
+</tbody>
+</table><p>【注意事项】
+HB_RGN_AttachToChn：</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>通道结构体指针及显示属性结构体指针不能为空；</p></li>
+<li><p>每个通道最多叠加32个区域；</p></li>
+<li><p>叠加到通道上的区域大小范围不能超过通道分辨率；</p></li>
+</ol>
+<p>HB_RGN_DetachFromChn：</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>通道结构体指针不能为空；</p></li>
+</ol>
+<p>【参考代码】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">handle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">osd_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_CHN_ATTR_S</span><span class="w"> </span><span class="n">stChnAttr</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stChnAttr</span><span class="p">.</span><span class="n">bShow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stChnAttr</span><span class="p">.</span><span class="w"> </span><span class="n">bInvertEn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stChnAttr</span><span class="p">.</span><span class="n">unChnAttr</span><span class="p">.</span><span class="n">stOverlayChn</span><span class="p">.</span><span class="n">stPoint</span><span class="p">.</span><span class="n">u32X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stChnAttr</span><span class="p">.</span><span class="n">unChnAttr</span><span class="p">.</span><span class="n">stOverlayChn</span><span class="p">.</span><span class="n">stPoint</span><span class="p">.</span><span class="n">u32Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="n">stChn</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stChn</span><span class="p">.</span><span class="n">s32PipelineId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stChn</span><span class="p">.</span><span class="n">enChnId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CHN_US</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_AttachToChn</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stChn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stChnAttr</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_RGN_GetDisplayAttr</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stChn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stChnAttr</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">stChnAttr</span><span class="p">.</span><span class="n">unChnAttr</span><span class="p">.</span><span class="n">stOverlayChn</span><span class="p">.</span><span class="n">stPoint</span><span class="p">.</span><span class="n">u32X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stChnAttr</span><span class="p">.</span><span class="n">unChnAttr</span><span class="p">.</span><span class="n">stOverlayChn</span><span class="p">.</span><span class="n">stPoint</span><span class="p">.</span><span class="n">u32Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_RGN_SetDisplayAttr</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stChn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stChnAttr</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_RGN_SetDisplayLevel</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stChn</span><span class="p">,</span><span class="w"> </span><span class="n">osd_level</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_RGN_DetachFromChn</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stChn</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="hb-rgn-setdisplayattr-hb-rgn-getdisplayattr">
+<h3><span class="section-number">5.6.3.5. </span>HB_RGN_SetDisplayAttr/HB_RGN_GetDisplayAttr<a class="headerlink" href="#hb-rgn-setdisplayattr-hb-rgn-getdisplayattr" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_SetDisplayAttr</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChnAttr</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_GetDisplayAttr</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="n">RGN_CHN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChnAttr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取或设置区域在通道的显示属性；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Handle</td>
+<td align="center">区域句柄号。取值范围：[0, RGN_HANDLE_MAX)。</td>
+</tr>
+<tr>
+<td align="center">pstChn</td>
+<td align="center">通道结构体指针。</td>
+</tr>
+<tr>
+<td align="center">pstChnAttr</td>
+<td align="center">区域通道显示属性指针。</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="left">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="left">失败，参见错误码。</td>
+</tr>
+</tbody>
+</table><p>【注意事项】
+HB_RGN_SetDisplayAttr：</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>建议先获取属性再设置；</p></li>
+<li><p>通道结构体指针及显示属性结构体指针不能为空；</p></li>
+<li><p>区域需先叠加到通道上；</p></li>
+<li><p>Cover类型的区域大小不可修改；</p></li>
+</ol>
+<p>HB_RGN_GetDisplayAttr:</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>通道结构体指针及显示属性结构体指针不能为空；</p></li>
+</ol>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>请参见HB_RGN_AttachToChn/HB_RGN_DetachFromChn举例</p>
+</div></blockquote>
+</section>
+<section id="hb-rgn-getcanvasinfo-hb-rgn-updatecanvas">
+<h3><span class="section-number">5.6.3.6. </span>HB_RGN_GetCanvasInfo/HB_RGN_UpdateCanvas<a class="headerlink" href="#hb-rgn-getcanvasinfo-hb-rgn-updatecanvas" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_GetCanvasInfo</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="n">RGN_CANVAS_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstCanvasInfo</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_UpdateCanvas</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取或更新显示画布；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Handle</td>
+<td align="center">区域句柄号。取值范围：[0, RGN_HANDLE_MAX)。</td>
+</tr>
+<tr>
+<td align="center">pstCanvasInfo</td>
+<td align="center">区域显示画布信息。</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="left">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="left">失败，参见错误码。</td>
+</tr>
+</tbody>
+</table><p>【注意事项】
+HB_RGN_GetCanvasInfo：</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>与HB_RGN_SetBitMap类似，用于更新Overlay类型区域位图数据；此接口可以直接操作内部buffer节省一次内存拷贝；</p></li>
+<li><p>此接口与HB_RGN_SetBitMap接口互斥。如果已经使用了本接口，那么在调用HB_RGN_UpdateCanvas前，调用HB_RGN_SetBitMap不生效；</p></li>
+</ol>
+<p>HB_RGN_UpdateCanvas：</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>此接口配合HB_RGN_GetCanvasInfo使用，用于更新数据之后切换buffer显示；</p></li>
+<li><p>每次使用此接口之前，都需要调用HB_RGN_GetCanvasInfo获取信息；
+【参考代码】</p></li>
+</ol>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">handle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_ATTR_S</span><span class="w"> </span><span class="n">stRegion</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_CANVAS_S</span><span class="w"> </span><span class="n">stCanvasInfo</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stRegion</span><span class="p">.</span><span class="n">enType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OVERLAY_RGN</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">stRegion</span><span class="p">.</span><span class="n">stOverlayAttr</span><span class="p">.</span><span class="n">stSize</span><span class="p">.</span><span class="n">u32Width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">640</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">stRegion</span><span class="p">.</span><span class="n">stOverlayAttr</span><span class="p">.</span><span class="n">stSize</span><span class="p">.</span><span class="n">u32Height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">stRegion</span><span class="p">.</span><span class="n">stOverlayAttr</span><span class="p">.</span><span class="n">enPixelFmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PIXEL_FORMAT_VGA_4</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_Create</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stRegion</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_GetCanvasInfo</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stCanvasInfo</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_UpdateCanvas</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="hb-rgn-drawword">
+<h3><span class="section-number">5.6.3.7. </span>HB_RGN_DrawWord<a class="headerlink" href="#hb-rgn-drawword" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_DrawWord</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_DRAW_WORD_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstRgnDrawWord</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>从给定的字符串和地址生成位图；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Handle</td>
+<td align="center">区域句柄号。取值范围：[0, RGN_HANDLE_MAX)。</td>
+</tr>
+<tr>
+<td align="center">pstRgnDrawWord</td>
+<td align="center">绘制文字参数指针。</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="left">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="left">失败，参见错误码。</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>属性信息结构体指针及地址指针不能为空；</p></li>
+<li><p>属性信息值需要合法；</p></li>
+<li><p>写入格式为PIXEL_FORMAT_VGA_4格式；</p></li>
+</ol>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>请参见HB_RGN_SetBitMap举例</p>
+</div></blockquote>
+</section>
+<section id="hb-rgn-drawline-hb-rgn-drawlinearray">
+<h3><span class="section-number">5.6.3.8. </span>HB_RGN_DrawLine/HB_RGN_DrawLineArray<a class="headerlink" href="#hb-rgn-drawline-hb-rgn-drawlinearray" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_DrawLine</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_DRAW_LINE_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstRgnDrawLine</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_DrawLineArray</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="k">const</span><span class="w"> </span><span class="n">RGN_DRAW_LINE_S</span><span class="w"> </span><span class="n">astRgnDrawLine</span><span class="p">[],</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32ArraySize</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>画线或批量画线；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Handle</td>
+<td align="center">区域句柄号。取值范围：[0, RGN_HANDLE_MAX)。</td>
+</tr>
+<tr>
+<td align="center">pstRgnDrawLine</td>
+<td align="center">绘制线条参数指针或数组。</td>
+</tr>
+<tr>
+<td align="center">u32ArraySize</td>
+<td align="center">绘制线条数量。</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="left">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="left">失败，参见错误码。</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>属性信息结构体指针及地址指针不能为空；</p></li>
+<li><p>HB_RGN_DrawLineArray接口中数组元素个数必须与数组匹配；</p></li>
+<li><p>写入格式为PIXEL_FORMAT_VGA_4格式；</p></li>
+</ol>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>请参见HB_RGN_SetBitMap举例</p>
+</div></blockquote>
+</section>
+<section id="hb-rgn-batchbegin-hb-rgn-batchend">
+<h3><span class="section-number">5.6.3.9. </span>HB_RGN_BatchBegin/HB_RGN_BatchEnd<a class="headerlink" href="#hb-rgn-batchbegin-hb-rgn-batchend" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_BatchBegin</span><span class="p">(</span><span class="n">RGN_HANDLEGROUP</span><span class="w"> </span><span class="o">*</span><span class="n">pu32Group</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Num</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">handle</span><span class="p">[]);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_BatchEnd</span><span class="p">(</span><span class="n">RGN_HANDLEGROUP</span><span class="w"> </span><span class="n">u32Group</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>批量更新区域；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pu32Group</td>
+<td align="center">批处理组号。<br/>取值范围：[0, RGN_GROUP_MAX)。</td>
+</tr>
+<tr>
+<td align="center">u32Num</td>
+<td align="center">批处理的区域数量。</td>
+</tr>
+<tr>
+<td align="center">handle</td>
+<td align="center">批处理的区域句柄数组。</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="left">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="left">失败，参见错误码。</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>HB_RGN_BatchBegin设置的句柄个数一定要等于数组的长度，且不超过最大值；</p></li>
+<li><p>区域类型一定要是Overlay类型；</p></li>
+<li><p>HB_RGN_BatchBegin必须与 HB_RGN_BatchEnd成对出现；</p></li>
+</ol>
+<p>【参考代码】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">handle_batch</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_HANDLEGROUP</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">handle_batch</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_BatchBegin</span><span class="p">(</span><span class="o">&amp;</span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">handle_batch</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_GetCanvasInfo</span><span class="p">(</span><span class="n">handle_batch</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stCanvasInfo</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_GetCanvasInfo</span><span class="p">(</span><span class="n">handle_batch</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stCanvasInfo</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_GetCanvasInfo</span><span class="p">(</span><span class="n">handle_batch</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stCanvasInfo</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_BatchEnd</span><span class="p">(</span><span class="n">group</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="hb-rgn-setcolormap">
+<h3><span class="section-number">5.6.3.10. </span>HB_RGN_SetColorMap<a class="headerlink" href="#hb-rgn-setcolormap" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_SetColorMap</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">aColorMap</span><span class="p">[</span><span class="mi">15</span><span class="p">]);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置使用颜色的调色板，使用后RGN_FONT_COLOR_E枚举失效，需要区域attach到通道后使用；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pstChn</td>
+<td align="center">通道结构体指针。</td>
+</tr>
+<tr>
+<td align="center">aColorMap</td>
+<td align="center">设置的调色板，设定的颜色值为RGB格式。</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="left">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="left">失败，参见错误码。</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<ol class="simple">
+<li><p>通道结构体指针不能为空；</p></li>
+<li><p>通道在vps模块中对用通道需要使能；</p></li>
+<li><p>设置一次即可所有通道共享；</p></li>
+<li><p>输入颜色值为RGB颜色空间；</p></li>
+<li><p>参数不能传CHN_GRP；</p></li>
+</ol>
+<p>【参考代码】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="n">stChn</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stChn</span><span class="p">.</span><span class="n">s32PipelineId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">stChn</span><span class="p">.</span><span class="n">enChnId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CHN_US</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">aColorMap</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">0xFFFFFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0x000000</span><span class="p">,</span><span class="w"> </span><span class="mh">0x808000</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00BFFF</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00FF00</span><span class="p">,</span><span class="w"></span>
+<span class="w">							</span><span class="mh">0xFFFF00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x8B4513</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF8C00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x800080</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFFC0CB</span><span class="p">,</span><span class="w"></span>
+<span class="w">							</span><span class="mh">0xFF0000</span><span class="p">,</span><span class="w"> </span><span class="mh">0x98F898</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00008B</span><span class="p">,</span><span class="w"> </span><span class="mh">0x006400</span><span class="p">,</span><span class="w"> </span><span class="mh">0x8B0000</span><span class="p">};</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_SetColorMap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">stChn</span><span class="p">,</span><span class="w"> </span><span class="n">aColorMap</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="hb-rgn-setsta-hb-rgn-getsta">
+<h3><span class="section-number">5.6.3.11. </span>HB_RGN_SetSta/HB_RGN_GetSta<a class="headerlink" href="#hb-rgn-setsta-hb-rgn-getsta" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_SetSta</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">astStaLevel</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="n">RGN_STA_S</span><span class="w"> </span><span class="n">astStaAttr</span><span class="p">[</span><span class="mi">8</span><span class="p">]);</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_GetSta</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">astStaValue</span><span class="p">[</span><span class="mi">8</span><span class="p">][</span><span class="mi">4</span><span class="p">]);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置指定最多8块区域，获取指定区域的亮度总和，需要区域attach到通道后使用；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pstChn</td>
+<td align="center">通道结构体指针。</td>
+</tr>
+<tr>
+<td align="center">astStaLevel</td>
+<td align="center">设置的亮度等级(0, 255)。</td>
+</tr>
+<tr>
+<td align="center">astStaAttr</td>
+<td align="center">设置的要获取亮度区域的属性。</td>
+</tr>
+<tr>
+<td align="center">astStaValue</td>
+<td align="center">获取到的落在指定区间内的像素个数。</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="left">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="left">失败，参见错误码。</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<ol class="simple">
+<li><p>通道结构体不能为空；</p></li>
+<li><p>HB_RGN_SetSta与HB_RGN_GetSta需要成对出现；</p></li>
+<li><p>HB_RGN_SetSta用于设置最多8块区域信息，HB_RGN_GetSta获取指定区域亮度信息；</p></li>
+</ol>
+<p>【参考代码】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="n">stChn</span><span class="p">;</span><span class="w"></span>
+<span class="n">stChn</span><span class="p">.</span><span class="n">s32PipelineId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="n">stChn</span><span class="p">.</span><span class="n">enChnId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CHN_US</span><span class="p">;</span><span class="w"></span>
+<span class="kt">uint16_t</span><span class="w"> </span><span class="n">aOsdStaBinValue</span><span class="p">[</span><span class="mi">8</span><span class="p">][</span><span class="mi">4</span><span class="p">];</span><span class="w"></span>
+<span class="n">RGN_STA_S</span><span class="w"> </span><span class="n">aOsdSta</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w"></span>
+<span class="kt">uint8_t</span><span class="w"> </span><span class="n">aStaLevel</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="n">aStaLevel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60</span><span class="p">;</span><span class="w"></span>
+<span class="n">aStaLevel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">120</span><span class="p">;</span><span class="w"></span>
+<span class="n">aStaLevel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">180</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">memset</span><span class="p">(</span><span class="n">aOsdStaBinValue</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">uint16_t</span><span class="p">));</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="n">aOsdSta</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">u8StaEn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">aOsdSta</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">u16StartX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">aOsdSta</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">u16StartY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">aOsdSta</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">u16Width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">aOsdSta</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">u16Height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_SetSta</span><span class="p">(</span><span class="o">&amp;</span><span class="n">stChn</span><span class="p">,</span><span class="w"> </span><span class="n">aStaLevel</span><span class="p">,</span><span class="w"> </span><span class="n">aOsdSta</span><span class="p">);</span><span class="w"></span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_GetSta</span><span class="p">(</span><span class="o">&amp;</span><span class="n">stChn</span><span class="p">,</span><span class="w"> </span><span class="n">aOsdStaBinValue</span><span class="p">);</span><span class="w"></span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="hb-rgn-addtoyuv">
+<h3><span class="section-number">5.6.3.12. </span>HB_RGN_AddToYUV<a class="headerlink" href="#hb-rgn-addtoyuv" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_AddToYUV</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="n">hb_vio_buffer_t</span><span class="w"> </span><span class="o">*</span><span class="n">vio_buffer</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChnAttr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>将区域叠加到一张yuv420格式的图片上；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Handle</td>
+<td align="center">区域句柄号。取值范围：[0, RGN_HANDLE_MAX)。</td>
+</tr>
+<tr>
+<td align="center">vio_buffer</td>
+<td align="center">yuv图片的buffer指针。</td>
+</tr>
+<tr>
+<td align="center">pstChnAttr</td>
+<td align="center">区域通道显示属性指针。</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="left">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="left">失败，参见错误码。</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<ol class="simple">
+<li><p>区域必须已创建；</p></li>
+<li><p>图片buffer结构体指针及显示属性结构体指针不能为空；</p></li>
+</ol>
+<p>【参考代码】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">handle</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">hb_vio_buffer_t</span><span class="w"> </span><span class="n">vio_buffer</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">RGN_CHN_ATTR_S</span><span class="w"> </span><span class="n">stChnAttr</span><span class="p">;</span><span class="w"></span>
+<span class="w"> </span><span class="n">stChnAttr</span><span class="p">.</span><span class="n">bShow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">stChnAttr</span><span class="p">.</span><span class="n">bInvertEn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">stChnAttr</span><span class="p">.</span><span class="n">unChnAttr</span><span class="p">.</span><span class="n">stOverlayChn</span><span class="p">.</span><span class="n">stPoint</span><span class="p">.</span><span class="n">u32X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">stChnAttr</span><span class="p">.</span><span class="n">unChnAttr</span><span class="p">.</span><span class="n">stOverlayChn</span><span class="p">.</span><span class="n">stPoint</span><span class="p">.</span><span class="n">u32Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_RGN_AddToYUV</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vio_buffer</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stChnAttr</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="hb-rgn-setdisplaylevel">
+<h3><span class="section-number">5.6.3.13. </span>HB_RGN_SetDisplayLevel<a class="headerlink" href="#hb-rgn-setdisplaylevel" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int32_t</span><span class="w"> </span><span class="nf">HB_RGN_SetDisplayLevel</span><span class="p">(</span><span class="n">RGN_HANDLE</span><span class="w"> </span><span class="n">Handle</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstChn</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">osd_level</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置区域的显示层级；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Handle</td>
+<td align="center">区域句柄号。取值范围：[0, RGN_HANDLE_MAX)。</td>
+</tr>
+<tr>
+<td align="center">pstChn</td>
+<td align="center">通道结构体指针。</td>
+</tr>
+<tr>
+<td align="center">osd_level</td>
+<td align="center">区域在通道上的显示层级[0, 3]。</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<ol class="simple">
+<li><p>区域必须已创建;</p></li>
+<li><p>通道结构体指针不能为空；</p></li>
+<li><p>设置等级范围为0-3，其中0默认硬件处理，如果超出硬件处理的个数或通道不支持则改为软件处理，1-3由软件处理；</p></li>
+<li><p>同一通道上不同区域可设置不同显示等级；</p></li>
+</ol>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>请参见HB_RGN_AttachToChn/HB_RGN_DetachFromChn举例</p>
+</div></blockquote>
+</section>
+</section>
+<section id="id6">
+<h2><span class="section-number">5.6.4. </span>数据结构<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<section id="rgn-size-s">
+<h3><span class="section-number">5.6.4.1. </span>RGN_SIZE_S<a class="headerlink" href="#rgn-size-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_SIZE_ATTR_S</span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Width</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Height</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_SIZE_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义大小信息的结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">u32Width</td>
+<td align="center">宽度</td>
+</tr>
+<tr>
+<td align="center">u32Height</td>
+<td align="center">高度</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-point-s">
+<h3><span class="section-number">5.6.4.2. </span>RGN_POINT_S<a class="headerlink" href="#rgn-point-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_POINT_ATTR_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32X</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Y</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_POINT_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义坐标信息的结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">u32X</td>
+<td align="center">横坐标</td>
+</tr>
+<tr>
+<td align="center">u32Y</td>
+<td align="center">纵坐标</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-rect-s">
+<h3><span class="section-number">5.6.4.3. </span>RGN_RECT_S<a class="headerlink" href="#rgn-rect-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_RECT_ATTR_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32X</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Y</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Width</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Height</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_RECT_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义矩形信息的结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">u32X</td>
+<td align="center">横坐标</td>
+</tr>
+<tr>
+<td align="center">u32Y</td>
+<td align="center">纵坐标</td>
+</tr>
+<tr>
+<td align="center">u32Width</td>
+<td align="center">宽度</td>
+</tr>
+<tr>
+<td align="center">u32Height</td>
+<td align="center">高度</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-overlay-s">
+<h3><span class="section-number">5.6.4.4. </span>RGN_OVERLAY_S<a class="headerlink" href="#rgn-overlay-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_OVERLAY_ATTR_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_PIXEL_FORMAT_E</span><span class="w"> </span><span class="n">enPixelFmt</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_FONT_COLOR_E</span><span class="w"> </span><span class="n">enBgColor</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_SIZE_S</span><span class="w"> </span><span class="n">stSize</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_OVERLAY_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义叠加区域属性的结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">enPixelFmt</td>
+<td align="left">像素格式</td>
+</tr>
+<tr>
+<td align="center">enBgColor</td>
+<td align="left">位图的背景色</td>
+</tr>
+<tr>
+<td align="center">stSize</td>
+<td align="left">区域大小<br/>PIXEL_FORMAT_VGA_4:<br/>最小宽为32，最小高为2<br/>PIXEL_FORMAT_YUV420SP:<br/>最小宽为2，最小高为2</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-attr-s">
+<h3><span class="section-number">5.6.4.5. </span>RGN_ATTR_S<a class="headerlink" href="#rgn-attr-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_ATTR_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_TYPE_E</span><span class="w"> </span><span class="n">enType</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_OVERLAY_S</span><span class="w"> </span><span class="n">stOverlayAttr</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_ATTR_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义区域信息的结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">enType</td>
+<td align="center">区域类型</td>
+</tr>
+<tr>
+<td align="center">stOverlayAttr</td>
+<td align="center">叠加区域的属性</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-chn-s">
+<h3><span class="section-number">5.6.4.6. </span>RGN_CHN_S<a class="headerlink" href="#rgn-chn-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_CHN_S</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">s32PipelineId</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">enChnId</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_CHN_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义数据流通道结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">s32PipelineId</td>
+<td align="center">pipelineID</td>
+</tr>
+<tr>
+<td align="center">enChnId</td>
+<td align="center">通道ID，范围[0，CHN_MAX_NUM)</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-overlay-chn-s">
+<h3><span class="section-number">5.6.4.7. </span>RGN_OVERLAY_CHN_S<a class="headerlink" href="#rgn-overlay-chn-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_OVERLAY_CHN_ATTR_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_POINT_S</span><span class="w"> </span><span class="n">stPoint</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_OVERLAY_CHN_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义叠加区域显示属性的结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">stPoint</td>
+<td align="center">区域位置</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-cover-chn-s">
+<h3><span class="section-number">5.6.4.8. </span>RGN_COVER_CHN_S<a class="headerlink" href="#rgn-cover-chn-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_COVER_CHN_ATTR_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_RECT_S</span><span class="w"> </span><span class="n">stRect</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Color</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_COVER_CHN_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义遮挡区域显示属性的结构体
+【成员说明】</p>
+</div></blockquote>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">stRect</td>
+<td align="center">区域位置，宽高，最小宽为32，最小高为2</td>
+</tr>
+<tr>
+<td align="center">u32Color</td>
+<td align="center">区域颜色</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-chn-u">
+<h3><span class="section-number">5.6.4.9. </span>RGN_CHN_U<a class="headerlink" href="#rgn-chn-u" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">union</span> <span class="nc">HB_RGN_CHN_ATTR_U</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_OVERLAY_CHN_S</span><span class="w"> </span><span class="n">stOverlayChn</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_COVER_CHN_S</span><span class="w"> </span><span class="n">stCoverChn</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_CHN_U</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义区域通道显示属性的联合体
+【成员说明】</p>
+</div></blockquote>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">stOverlayChn</td>
+<td align="center">叠加区域显示属性</td>
+</tr>
+<tr>
+<td align="center">stCoverChn</td>
+<td align="center">遮挡区域显示属性</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-canvas-s">
+<h3><span class="section-number">5.6.4.10. </span>RGN_CANVAS_S<a class="headerlink" href="#rgn-canvas-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_CANVAS_INFO_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pAddr</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_SIZE_S</span><span class="w"> </span><span class="n">stSize</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_PIXEL_FORMAT_E</span><span class="w"> </span><span class="n">enPixelFmt</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_CANVAS_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义画布信息的结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pAddr</td>
+<td align="center">画布地址</td>
+</tr>
+<tr>
+<td align="center">stSize</td>
+<td align="center">画布大小</td>
+</tr>
+<tr>
+<td align="center">enPixelFmt</td>
+<td align="center">像素格式</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-chn-attr-s">
+<h3><span class="section-number">5.6.4.11. </span>RGN_CHN_ATTR_S<a class="headerlink" href="#rgn-chn-attr-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_CHN_ATTR_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">bShow</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">bInvertEn</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_CHN_U</span><span class="w"> </span><span class="n">unChnAttr</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_CHN_ATTR_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义区域通道显示属性的结构体
+【成员说明】</p>
+</div></blockquote>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">bShow</td>
+<td align="center">区域是否显示</td>
+</tr>
+<tr>
+<td align="center">bInvertEn</td>
+<td align="center">反色是否使能</td>
+</tr>
+<tr>
+<td align="center">unChnAttr</td>
+<td align="center">区域显示属性</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-bitmap-s">
+<h3><span class="section-number">5.6.4.12. </span>RGN_BITMAP_S<a class="headerlink" href="#rgn-bitmap-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_BITMAP_ATTR_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_PIXEL_FORMAT_E</span><span class="w"> </span><span class="n">enPixelFormat</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_SIZE_S</span><span class="w"> </span><span class="n">stSize</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pAddr</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_BITMAP_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义位图属性的结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">enPixelFormat</td>
+<td align="center">像素格式</td>
+</tr>
+<tr>
+<td align="center">stSize</td>
+<td align="center">位图大小</td>
+</tr>
+<tr>
+<td align="center">pAddr</td>
+<td align="center">位图地址</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-draw-word-s">
+<h3><span class="section-number">5.6.4.13. </span>RGN_DRAW_WORD_S<a class="headerlink" href="#rgn-draw-word-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_DRAW_WORD_PARAM_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pAddr</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_SIZE_S</span><span class="w"> </span><span class="n">stSize</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_POINT_S</span><span class="w"> </span><span class="n">stPoint</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="n">pu8Str</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_FONT_COLOR_E</span><span class="w"> </span><span class="n">enFontColor</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_FONT_SIZE_E</span><span class="w"> </span><span class="n">enFontSize</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">bFlushEn</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_DRAW_WORD_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义绘制文字参数的结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pAddr</td>
+<td align="center">绘制文字目标地址</td>
+</tr>
+<tr>
+<td align="center">stSize</td>
+<td align="center">目标地址的尺寸</td>
+</tr>
+<tr>
+<td align="center">stPoint</td>
+<td align="center">文字在位图中的位置</td>
+</tr>
+<tr>
+<td align="center">pu8Str</td>
+<td align="center">绘制的字符串，仅支持GBK编码格式的字符</td>
+</tr>
+<tr>
+<td align="center">enFontColor</td>
+<td align="center">字体颜色</td>
+</tr>
+<tr>
+<td align="center">enFontSize</td>
+<td align="center">字体大小</td>
+</tr>
+<tr>
+<td align="center">bFlushEn</td>
+<td align="center">绘制时是否清空当前地址</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-draw-line-s">
+<h3><span class="section-number">5.6.4.14. </span>RGN_DRAW_LINE_S<a class="headerlink" href="#rgn-draw-line-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_DRAW_LINE_PARAM_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pAddr</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_SIZE_S</span><span class="w"> </span><span class="n">stSize</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_POINT_S</span><span class="w"> </span><span class="n">stStartPoint</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RGN_POINT_S</span><span class="w"> </span><span class="n">stEndPoint</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Thick</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Color</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">bFlushEn</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_DRAW_LINE_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义绘制线条参数结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pAddr</td>
+<td align="center">绘制线条目标地址</td>
+</tr>
+<tr>
+<td align="center">stSize</td>
+<td align="center">地址的尺寸</td>
+</tr>
+<tr>
+<td align="center">stStartPoint</td>
+<td align="center">开始坐标</td>
+</tr>
+<tr>
+<td align="center">stEndPoint</td>
+<td align="center">结束坐标</td>
+</tr>
+<tr>
+<td align="center">u32Thick</td>
+<td align="center">线条宽度</td>
+</tr>
+<tr>
+<td align="center">u32Color</td>
+<td align="center">线条颜色</td>
+</tr>
+<tr>
+<td align="center">bFlushEn</td>
+<td align="center">绘制时是否清空当前地址</td>
+</tr>
+<tr>
+<td align="center">（当使用批量绘制线条时则只有数组中第一个结构体的bFlushEn属性有效）</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-sta-s">
+<h3><span class="section-number">5.6.4.15. </span>RGN_STA_S<a class="headerlink" href="#rgn-sta-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RGN_STA_ATTR_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">u8StaEn</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">u16StartX</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">u16StartY</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">u16Width</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">u16Height</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_STA_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义亮度统计区域属性</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">u8StaEn</td>
+<td align="center">区域是否使能</td>
+</tr>
+<tr>
+<td align="center">u16StartX</td>
+<td align="center">区域起始位置的X坐标</td>
+</tr>
+<tr>
+<td align="center">u16StartY</td>
+<td align="center">区域起始位置的Y坐标</td>
+</tr>
+<tr>
+<td align="center">u16Width</td>
+<td align="center">区域宽度，（2,255）</td>
+</tr>
+<tr>
+<td align="center">u16Height</td>
+<td align="center">区域高度，（2,255）</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-type-e">
+<h3><span class="section-number">5.6.4.16. </span>RGN_TYPE_E<a class="headerlink" href="#rgn-type-e" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">HB_RGN_TYPE_PARAM_E</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">OVERLAY_RGN</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">COVER_RGN</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_TYPE_E</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义区域类型</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">OVERLAY_RGN</td>
+<td align="center">叠加区域类型</td>
+</tr>
+<tr>
+<td align="center">COVER_RGN</td>
+<td align="center">遮挡区域类型</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-chn-id-e">
+<h3><span class="section-number">5.6.4.17. </span>RGN_CHN_ID_E<a class="headerlink" href="#rgn-chn-id-e" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">HB_RGN_CHN_ID_ATTR_E</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="n">CHN_US</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">CHN_DS0</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">CHN_DS1</span><span class="p">,</span><span class="w"></span>
+<span class="w">	</span><span class="n">CHN_DS2</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">CHN_DS3</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">CHN_DS4</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">CHN_GRP</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">CHANNEL_MAX_NUM</span><span class="w"></span>
+<span class="p">}</span><span class="n">RGN_CHN_ID_E</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义通道ID</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">CHN_US</td>
+<td align="center">US通道</td>
+</tr>
+<tr>
+<td align="center">CHN_DS0</td>
+<td align="center">DS0通道</td>
+</tr>
+<tr>
+<td align="center">CHN_DS1</td>
+<td align="center">DS1通道</td>
+</tr>
+<tr>
+<td align="center">CHN_DS2</td>
+<td align="center">DS2通道</td>
+</tr>
+<tr>
+<td align="center">CHN_DS3</td>
+<td align="center">DS3通道</td>
+</tr>
+<tr>
+<td align="center">CHN_DS4</td>
+<td align="center">DS4通道</td>
+</tr>
+<tr>
+<td align="center">CHN_GRP</td>
+<td align="center">GROUP通道，如果使用此通道，因为group操作是在进ipu之前的，所以如果vps做了放大操作，那么osd也会跟着放大</td>
+</tr>
+<tr>
+<td align="center">CHANNEL_MAX_NUM</td>
+<td align="center">通道数量</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-font-size-e">
+<h3><span class="section-number">5.6.4.18. </span>RGN_FONT_SIZE_E<a class="headerlink" href="#rgn-font-size-e" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">HB_RGN_FONT_SIZE_ATTR_E</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="n">FONT_SIZE_SMALL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">	</span><span class="n">FONT_SIZE_MEDIUM</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_SIZE_LARGE</span><span class="p">,</span><span class="w"></span>
+<span class="w">	</span><span class="n">FONT_SIZE_EXTRA_LARGE</span><span class="w"></span>
+<span class="p">}</span><span class="n">RGN_FONT_SIZE_E</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义字体大小</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">FONT_SIZE_SMALL</td>
+<td align="center">小号字体，16*16</td>
+</tr>
+<tr>
+<td align="center">FONT_SIZE_MEDIUM</td>
+<td align="center">中号字体，32*32</td>
+</tr>
+<tr>
+<td align="center">FONT_SIZE_LARGE</td>
+<td align="center">大号字体，48*48</td>
+</tr>
+<tr>
+<td align="center">FONT_SIZE_EXTRA_LARGE</td>
+<td align="center">超大号字体，64*64</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-font-color-e">
+<h3><span class="section-number">5.6.4.19. </span>RGN_FONT_COLOR_E<a class="headerlink" href="#rgn-font-color-e" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">HB_RGN_FONT_COLOR_ATTR_E</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="n">FONT_COLOR_WHITE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">	</span><span class="n">FONT_COLOR_BLACK</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_COLOR_GREY</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_COLOR_BLUE</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_COLOR_GREEN</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_COLOR_YELLOW</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_COLOR_BROWN</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_COLOR_ORANGE</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_COLOR_PURPLE</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_COLOR_PINK</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_COLOR_RED</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_COLOR_CYAN</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_COLOR_DARKBLUE</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_COLOR_DARKGREEN</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_COLOR_DARKRED</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">FONT_KEY_COLOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="w"></span>
+<span class="p">}</span><span class="n">RGN_FONT_COLOR_E</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义字体颜色，当调用完HB_RGN_SetColorMap后此枚举失效；</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">FONT_COLOR_WHITE</td>
+<td align="center">白色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_BLACK</td>
+<td align="center">黑色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_GREY</td>
+<td align="center">灰色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_BLUE</td>
+<td align="center">蓝色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_GREEN</td>
+<td align="center">绿色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_YELLOW</td>
+<td align="center">黄色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_BROWN</td>
+<td align="center">棕色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_ORANGE</td>
+<td align="center">橘黄色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_PURPLE</td>
+<td align="center">紫色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_PINK</td>
+<td align="center">粉红色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_RED</td>
+<td align="center">红色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_CYAN</td>
+<td align="center">青色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_DARKBLUE</td>
+<td align="center">深蓝色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_DARKGREEN</td>
+<td align="center">深绿色</td>
+</tr>
+<tr>
+<td align="center">FONT_COLOR_DARKRED</td>
+<td align="center">深红色</td>
+</tr>
+<tr>
+<td align="center">FONT_KEY_COLOR</td>
+<td align="center">不叠加，使用图片原色</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-pixel-format-e">
+<h3><span class="section-number">5.6.4.20. </span>RGN_PIXEL_FORMAT_E<a class="headerlink" href="#rgn-pixel-format-e" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">HB_PIXEL_FORMAT_ATTR_E</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">PIXEL_FORMAT_VGA_4</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">PIXEL_FORMAT_YUV420SP</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RGN_PIXEL_FORMAT_E</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义像素格式</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">PIXEL_FORMAT_VGA_4</td>
+<td align="center">4bit的16色像素格式<br/>[此像素格式为每个像素占4个bit（0-15），作为颜色索引一一之后对应RGN_FONT_COLOR_E]</td>
+</tr>
+<tr>
+<td align="center">PIXEL_FORMAT_YUV420SP</td>
+<td align="center">YUV420SP像素格式</td>
+</tr>
+</tbody>
+</table></section>
+<section id="rgn-handle">
+<h3><span class="section-number">5.6.4.21. </span>RGN_HANDLE<a class="headerlink" href="#rgn-handle" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">RGN_HANDLE</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义区域句柄</p>
+</div></blockquote>
+</section>
+<section id="rgn-handle-max">
+<h3><span class="section-number">5.6.4.22. </span>RGN_HANDLE_MAX<a class="headerlink" href="#rgn-handle-max" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define RGN_HANDLE_MAX 256</span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义最大区域句柄数量</p>
+</div></blockquote>
+</section>
+<section id="rgn-handlegroup">
+<h3><span class="section-number">5.6.4.23. </span>RGN_HANDLEGROUP<a class="headerlink" href="#rgn-handlegroup" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">RGN_HANDLEGROUP</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义批处理组号</p>
+</div></blockquote>
+</section>
+<section id="rgn-group-max">
+<h3><span class="section-number">5.6.4.24. </span>RGN_GROUP_MAX<a class="headerlink" href="#rgn-group-max" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define RGN_GROUP_MAX 8</span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义最大批处理数量</p>
+</div></blockquote>
+</section>
+</section>
+<section id="id7">
+<h2><span class="section-number">5.6.5. </span>错误码<a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<p>RGN错误码如下表：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">错误码</th>
+<th align="left">宏定义</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">-268762113</td>
+<td align="left">HB_ERR_RGN_INVALID_CHNID</td>
+<td align="left">通道ID错误</td>
+</tr>
+<tr>
+<td align="center">-268762114</td>
+<td align="left">HB_ERR_RGN_ILLEGAL_PARAM</td>
+<td align="left">输入参数错误</td>
+</tr>
+<tr>
+<td align="center">-268762115</td>
+<td align="left">HB_ERR_RGN_EXIST</td>
+<td align="left">区域Handle已存在</td>
+</tr>
+<tr>
+<td align="center">-268762116</td>
+<td align="left">HB_ERR_RGN_UNEXIST</td>
+<td align="left">区域Handle不存在</td>
+</tr>
+<tr>
+<td align="center">-268762117</td>
+<td align="left">HB_ERR_RGN_NULL_PTR</td>
+<td align="left">空指针</td>
+</tr>
+<tr>
+<td align="center">-268762118</td>
+<td align="left">HB_ERR_RGN_NOMEM</td>
+<td align="left">内存不足</td>
+</tr>
+<tr>
+<td align="center">-268762119</td>
+<td align="left">HB_ERR_RGN_OPEN_FILE_FAIL</td>
+<td align="left">打开字库文件失败</td>
+</tr>
+<tr>
+<td align="center">-268762120</td>
+<td align="left">HB_ERR_RGN_INVALID_OPERATION</td>
+<td align="left">无效操作</td>
+</tr>
+<tr>
+<td align="center">-268762121</td>
+<td align="left">HB_ERR_RGN_PROCESS_FAIL  OSD</td>
+<td align="left">处理失败</td>
+</tr>
+</tbody>
+</table></section>
+<section id="id8">
+<h2><span class="section-number">5.6.6. </span>参考代码<a class="headerlink" href="#id8" title="永久链接至标题"></a></h2>
+<p>OSD部分示例代码可以参考，<a class="reference external" href="../samples/Mpp_Usage_Guidelines/sample_osd.html">sample_osd</a>。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="5-Video_Processing_zh_CN.html" class="btn btn-neutral float-left" title="5.5. 视频处理" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="7-Video_Output_zh_CN.html" class="btn btn-neutral float-right" title="5.7. 视频输出" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

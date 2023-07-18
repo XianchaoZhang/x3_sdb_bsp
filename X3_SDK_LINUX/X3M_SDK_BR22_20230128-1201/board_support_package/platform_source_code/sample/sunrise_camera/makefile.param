@@ -1,0 +1,5 @@
+PLATFORM := x3
+MODEL_TYPE := sdb
+
+PRO_ROOT := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+include ${PRO_ROOT}config/config_$(PLATFORM)_$(MODEL_TYPE).mk

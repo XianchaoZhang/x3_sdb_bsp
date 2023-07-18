@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.9.1. Yocto 根文件系统制作 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.9.2. Ubuntu 根文件系统制作" href="ubuntu-20.04_rootfs.html" />
+    <link rel="prev" title="4.9. 根文件系统制作" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../driver_develop_guide/index.html">4.3. 驱动开发指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.9. 根文件系统制作</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.9.1. Yocto 根文件系统制作</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.9.1.1. 环境准备</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hobot-yocto-bsp">4.9.1.2. hobot-yocto bsp包获取</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">4.9.1.3. 编译步骤说明</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ubuntu-20.04_rootfs.html">4.9.2. Ubuntu 根文件系统制作</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.9. </span>根文件系统制作</a> &raquo;</li>
+      <li><span class="section-number">4.9.1. </span>Yocto 根文件系统制作</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="4.9. 根文件系统制作" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="ubuntu-20.04_rootfs.html" class="btn btn-neutral float-right" title="4.9.2. Ubuntu 根文件系统制作" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="yocto">
+<h1><span class="section-number">4.9.1. </span>Yocto 根文件系统制作<a class="headerlink" href="#yocto" title="永久链接至标题"></a></h1>
+<p>horizon目前支持 yocto2.6：thud 版本</p>
+<section id="id1">
+<h2><span class="section-number">4.9.1.1. </span>环境准备<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>100G磁盘可用空间</p></li>
+<li><p>构建主机满足以下要求：</p></li>
+</ul>
+<p>​			Git 1.8.3.1 or greater</p>
+<p>​			tar 1.28 or greater</p>
+<p>​			Python 3.6.0 or greater.</p>
+<p>​			gcc 5.0 or greater.</p>
+<ul class="simple">
+<li><p>在ubuntu上编译yocto需要安装一下依赖包(ubuntu版本建议&gt;=18.04)：</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt install gawk wget git diffstat unzip texinfo gcc build-essential chrpath socat cpio python3 python3-pip python3-pexpect xz-utils debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev pylint3 xterm python3-subunit mesa-common-dev zstd liblz4-tool
+</pre></div>
+</div>
+</section>
+<section id="hobot-yocto-bsp">
+<h2><span class="section-number">4.9.1.2. </span>hobot-yocto bsp包获取<a class="headerlink" href="#hobot-yocto-bsp" title="永久链接至标题"></a></h2>
+<p>从 <a class="reference external" href="https://pan.horizon.ai/index.php/s/JTitK4g8SLzSGa6?path=%2FYocto_thud">Yocto_thud_for_hobot</a> 下载地平线 X3M yocto BSP配方。</p>
+<p>下载解压后的目录树如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
+├── build-yocto-rootfs.sh     //编译horizon rootfs顶层脚本文件, 会自动拉取开源的meta-openembedded, poky层。
+├── bblayers.conf.sample      //包含layer的配置文件
+├── local.conf.sample         //制作rootfs的顶层配置文件
+├── meta-horizon              //horizon层，包含horizon芯片rootfs相关配方
+	└── meta-selinux          //存放编译horizon selinux的配方层
+	└── recipes-benchmark     //性能测试工具的配方，包含（iperf3, memtester）
+	└── recipes-core          //启动相关以及一些核心配方（glibc, busybox, udev）
+	└── recipes-devtools	  //常用到的第三方工具的配方
+	└── recipes-kernel        //horizon kernel的配方，以及kernel性能测试工具配方
+	└── recipes-x2            //xj2芯片制作rootfs的配方
+	└── recipes-xj3			  //xj3芯片制作rootfs的配方
+		└── xj3-hobot-image.bb
+	└── conf
+		└── distro                //发行版配置
+		└── horizon-thud-patch    //针对yocto thud版本地平线打的一些patch，在执行顶层build-yocto-rootfs.sh编译时会自动打上
+		└── machine               //针对特定处理器的配置文件，编译器优化等
+	└── class                     //配方中共享的一些信息或者特定功能具体实现的函数等
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2><span class="section-number">4.9.1.3. </span>编译步骤说明<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>1、在顶层目录下直接执行：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">build</span><span class="o">-</span><span class="n">yocto</span><span class="o">-</span><span class="n">rootfs</span><span class="o">.</span><span class="n">sh</span> <span class="n">xj3</span><span class="o">-</span><span class="n">hobot</span><span class="o">-</span><span class="n">image</span>  
+</pre></div>
+</div>
+<p>即可自动下载社区thud版本的poky，meta-openembedded，并打上对thud版本的依赖补丁，最后集成meta-horizon，编译出horizon  yocto rootfs（对应 bsp源码包中 <strong>system/rootfs_yocto/root/</strong> 目录下的内容）</p>
+<p>2、编译的输出目录：build/tmp-build/deploy/images/hobotarm64/</p>
+<p>3、编译输出后的xj3-hobot-image-hobotarm64.tar.gz包，直接整个替换BSP源码中的 <strong>system/rootfs_yocto/root/</strong> 即可。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="4.9. 根文件系统制作" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="ubuntu-20.04_rootfs.html" class="btn btn-neutral float-right" title="4.9.2. Ubuntu 根文件系统制作" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

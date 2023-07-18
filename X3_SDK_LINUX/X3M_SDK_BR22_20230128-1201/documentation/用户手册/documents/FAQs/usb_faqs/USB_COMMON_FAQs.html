@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>8.8.1. USB常见问题(FAQ) &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="8.8.2. USB WEBCAM常见问题(FAQ)" href="USB_WEBCAM_FAQs.html" />
+    <link rel="prev" title="8.8. 总线类" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">8. FAQ</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html">8.1. 环境类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id3">8.2. 系统类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id8">8.3. 视频处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id12">8.4. 编解码类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id14">8.5. 外设类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id15">8.6. 硬件类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id19">8.7. 工具类</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">8.8. 总线类</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">8.8.1. USB常见问题(FAQ)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">8.8.1.1. 主机</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">8.8.1.2. 从设备</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#x3m">8.8.1.3. 热插拔(x3m做设备)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#otg">8.8.1.4. OTG</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="USB_WEBCAM_FAQs.html">8.8.2. USB WEBCAM常见问题(FAQ)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ai_toolchain_faqs/index.html">8.9. 量化工具链类</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">8. </span>FAQ</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">8.8. </span>总线类</a> &raquo;</li>
+      <li><span class="section-number">8.8.1. </span>USB常见问题(FAQ)</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="8.8. 总线类" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="USB_WEBCAM_FAQs.html" class="btn btn-neutral float-right" title="8.8.2. USB WEBCAM常见问题(FAQ)" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usb-faq">
+<h1><span class="section-number">8.8.1. </span>USB常见问题(FAQ)<a class="headerlink" href="#usb-faq" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">8.8.1.1. </span>主机<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>usb供电相关</p>
+<ol class="simple">
+<li><p>usb控制器和phy需要3路电, 两路0.8v(VDD_USB, VDD_USB_VP),
+一路3.3v电(VDD_USB_VPH)</p></li>
+<li><p>vbus 5v供电是板级供电, 现在不需要接进芯片usb phy的vbus管脚, 芯片的phy
+vbus管脚未出球</p></li>
+</ol>
+</li>
+<li><p>如何切换到主模式?</p>
+<ol class="simple">
+<li><p>如果支持otg, 插入otg线, 通过usb id系统会切换usb模式到主模式</p></li>
+<li><p>sdb开发板开机不插micro-b usb线, 默认为主模式</p></li>
+<li><p>手动命令行切换, echo host &gt;
+/sys/devices/platform/soc/b2000000.usb/b2000000.dwc3/role</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="id2">
+<h2><span class="section-number">8.8.1.2. </span>从设备<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>如何切换到设备模式?</p>
+<ol class="simple">
+<li><p>大部分开发板开机即为设备模式(sdb开发板未接usb线开机为主模式)</p></li>
+<li><p>手动命令行切换, echo device &gt;
+/sys/devices/platform/soc/b2000000.usb/b2000000.dwc3/role</p></li>
+</ol>
+</li>
+<li><p>一些场景的usb-gadget设备</p></li>
+</ul>
+<ol>
+<li><p>adb - 开发板开机默认为adb模式 (sdb需插着usb线开机), 命令行控制如下</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service adbd stop
+service adbd start
+</pre></div>
+</div>
+</li>
+<li><p>mass storage</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service adbd stop
+/etc/init.d/usb-gadget.sh start msd
+</pre></div>
+</div>
+</li>
+<li><p>Ethernet</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service adbd stop
+/etc/init.d/usb-gadget.sh start rndis
+</pre></div>
+</div>
+</li>
+<li><p>uvc 简单测试用例</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service adbd stop
+/etc/init.d/usb-gadget.sh start uvc-rndis
+usb_webcam -e <span class="m">2</span> -t <span class="m">10</span> -b
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="x3m">
+<h2><span class="section-number">8.8.1.3. </span>热插拔(x3m做设备)<a class="headerlink" href="#x3m" title="永久链接至标题"></a></h2>
+<ol class="simple">
+<li><p>vbus_pin?</p></li>
+</ol>
+<p>由于芯片usb phy的vbus没有出球, vbus需要接个gpio管脚, 否则影响usb3.0热插拔。</p>
+<p>具体参考硬件文档的 <a class="reference external" href="../../_files/ES-EN-2511-1-J3_Hardware_Reference_Design_Errata_V0P4.pdf">ES-EN-2511-1-J3_Hardware_Reference_Design_Errata_V0P4.pdf</a></p>
+<p>软件patch可参考 <a class="reference external" href="../../_files/0001-usb-gadget-bug-XJ3-2741-fix-usb-is-t-recognized-when.patch">0001-usb-gadget-bug-XJ3-2741-fix-usb-is-t-recognized-when.patch</a></p>
+<p>*更新: usb2.0/3.0 都必须接下gpio口, 否则都缺失了拔出的disconnect事件。…</p>
+<p><img alt="Generated" src="../../_images/38362081b7bfc2347951e1eba6759f4d.png" /></p>
+</section>
+<section id="otg">
+<h2><span class="section-number">8.8.1.4. </span>OTG<a class="headerlink" href="#otg" title="永久链接至标题"></a></h2>
+<ul>
+<li><p>id_pin</p>
+<p>id_pin硬件设计需要强制接在sd0_wrpt管脚</p>
+<p>id_pin 低电平 - 主机模式</p>
+<p>id_pin 高电平 - 设备模式</p>
+</li>
+<li><p>id_pin轮询模式
+请参考patch <a class="reference external" href="../../_files/0001-usb-extcon-usb-gpio-bug-XJ3-3477-add-poll-mode-for-e.patch">0001-usb-extcon-usb-gpio-bug-XJ3-3477-add-poll-mode-for-e.patch</a></p>
+<ol class="simple">
+<li><p>进uboot</p></li>
+<li><p>setenv extra_bootargs extcon-usb-gpio.id_poll_mode=1</p></li>
+<li><p>saveenv</p></li>
+<li><p>Reset</p></li>
+</ol>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="8.8. 总线类" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="USB_WEBCAM_FAQs.html" class="btn btn-neutral float-right" title="8.8.2. USB WEBCAM常见问题(FAQ)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

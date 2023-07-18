@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.4.9. I2S压力测试 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.4.10. USB驱动性能测试" href="10-usb_performance.html" />
+    <link rel="prev" title="4.4.8. SPI压力测试" href="8-spi_stress.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../driver_develop_guide/index.html">4.3. 驱动开发指南</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.4. 硬件单元测试</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-overview.html">4.4.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-env_reliability.html">4.4.2. 环境可靠性测试（定频）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-emmc.html">4.4.3. EMMC相关测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-nand_flash.html">4.4.4. NAND-Flash压力测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-camera_stress.html">4.4.5. CAMERA压力测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-uart_stress.html">4.4.6. UART压力测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-wifi_stress.html">4.4.7. SDIO(WIFI)压力测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-spi_stress.html">4.4.8. SPI压力测试</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.4.9. I2S压力测试</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.4.9.1. 硬件要求</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">4.4.9.2. 测试方法</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">4.4.9.3. 测试标准</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="10-usb_performance.html">4.4.10. USB驱动性能测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-network_performance.html">4.4.11. 网络性能测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-cpu_performance.html">4.4.12. CPU性能测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="13-warm_cold_bootup.html">4.4.13. 冷热启动测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-extra_ddr_dfs.html">4.4.14. （附加测试）环境可靠性测试（DDR DFS 2666/1333/333变频）</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.4. </span>硬件单元测试</a> &raquo;</li>
+      <li><span class="section-number">4.4.9. </span>I2S压力测试</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="8-spi_stress.html" class="btn btn-neutral float-left" title="4.4.8. SPI压力测试" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="10-usb_performance.html" class="btn btn-neutral float-right" title="4.4.10. USB驱动性能测试" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="i2s">
+<h1><span class="section-number">4.4.9. </span>I2S压力测试<a class="headerlink" href="#i2s" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">4.4.9.1. </span>硬件要求<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>设别需要支持麦克风采集音频和Speaker放音。</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">4.4.9.2. </span>测试方法<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<ol class="simple">
+<li><p>进入<code class="docutils literal notranslate"><span class="pre">i2s_test</span></code>文件夹，执行<code class="docutils literal notranslate"><span class="pre">sh</span> <span class="pre">i2c_stress.sh</span> <span class="pre">&amp;</span></code>进行循环录音、放音测试。</p></li>
+</ol>
+</section>
+<section id="id3">
+<h2><span class="section-number">4.4.9.3. </span>测试标准<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<ol class="simple">
+<li><p>高温：45°、低温：-10°、常温下，程序正常执行，不会出现重启挂死的情况。</p></li>
+<li><p>LOG中没有<code class="docutils literal notranslate"><span class="pre">fail</span></code>、<code class="docutils literal notranslate"><span class="pre">error</span></code>、<code class="docutils literal notranslate"><span class="pre">timeout</span></code>等异常打印。</p></li>
+<li><p>能稳定运行48小时。</p></li>
+<li><p>放音过程中，音频正常。录音文件拷出之后播放正常无杂音。</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="8-spi_stress.html" class="btn btn-neutral float-left" title="4.4.8. SPI压力测试" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="10-usb_performance.html" class="btn btn-neutral float-right" title="4.4.10. USB驱动性能测试" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

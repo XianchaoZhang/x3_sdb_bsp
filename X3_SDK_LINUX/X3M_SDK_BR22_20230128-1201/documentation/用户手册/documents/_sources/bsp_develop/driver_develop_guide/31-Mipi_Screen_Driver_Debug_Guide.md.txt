@@ -1,0 +1,231 @@
+# X3 mipi 屏适配说明
+
+**如何适配一个新的mipi-dsi显示屏（开源驱动）**
+
+用户如果想点亮一个新的`mipi-dsi`显示屏，可以从`hobot_iar_cdev.c`文件中的`hobot_iar_store`函数入手，该函数实现驱动与用户的交互，接收并解析用户的echo指令。例如用户输入`echo dsi720p > /sys/devices/virtual/graphics/iar_cdev/iar_test_attr`，那么驱动将会执行以下代码：
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=NDcwMWQ0NjYxNmQ1MjExZDE5ZTJjZDE2NTk5MGI1ODNfYnJlZUZpdDkwMDFtUzNhbGozV0NjcXZQaEluaVZRTEhfVG9rZW46Ym94Y25pQmw4bjJXU1pZeWRPMEJmWkxiNXJkXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image002.png)
+
+ 
+
+该段代码即可点亮一个`mipi-dsi`屏幕，点亮一个`mipi-dsi`屏幕的流程如下：
+
+![Generated](_static/_images/mipi_screen_develop/clip_image004.png)
+
+ 
+
+其中`user_config_display`函数来配置`iar`模块硬件，主要包括输入输出分辨率的配置，显示方式配置等，用户可以根据需求添加新的display_type，目前支持的mipi-dsi显示屏的分辨率有`720*1280`，`1280*720`和`1080*1920`,如果客户屏幕是目前驱动支持的分辨率就不需要添加新的display_type, 用户添加新的display_type后，配置可参考目前支持的mipi-dsi的配置，只需要修改分辨率即可，其他配置不用改。
+
+`set_mipi_display`函数用来配置`mipi-dsi core`和屏幕，输入参数为屏幕类型，0为`1080*1920`的屏幕，1和2为`720*1280`类型的屏幕。
+
+关于不同的屏幕类型，涉及到的不同配置如下：
+
+- MIPI_HSFREQRANGE 
+
+涉及代码如图
+
+![img](_static/_images/mipi_screen_develop/clip_image006.jpg)
+
+ 
+
+可以看到对于`1080*1920`的屏幕该参数配置的值是`0x23`, 对于`720*1280`的屏幕该参数配置的值是`0x16`, 该参数的具体含义如下`（drivers/media/platform/hobot/mipi/hobot_mipi_dphy.c g_pll_sel_table）`：
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjIzYWVhN2QyNzkyZmNiMzY2MGI0ZmU5NjIyOGQ2YzJfUWY4aTlGSnlEY3pvdzNadjJHVDRmWk9obVloUERiSGFfVG9rZW46Ym94Y240T08zdER6aVRuTEVKbHFmbzNqc0RjXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image007.png)
+
+ 
+
+例如，`0x23`表示频率范围是`235Mbps~250Mbps`, `0x16`表示频率范围是`425Mbps~475Mbps`，iar屏幕对应的频率的计算公式如下(屏幕分辨率宽+hbp+hfp+hs)\*(屏幕分辨率高+vbp+vfp+vs)\*(每个像素bit)\*(帧率)/4，比如屏幕的分辨率是800*1280，每个像素24bit，4lane，那套用公式就是(800+8+48+52)\*(1280+6+16+15)\*24\*60/4，计算出是430Mbps那么就是选0x16，一般调试720\*1280/800\*1280的屏幕分辨率都选0x16。
+
+- mipi_dphy_config 
+
+用户可以默认用panel_no为2的配置
+
+- mipi_dsi_video_cofing 
+
+该函数主要用来配置mipi-dsi屏幕的时序，配置参数来源于mipi-dsi屏幕的硬件手册。该函数的输入参数为struct video_timing, 该结构体定义如下
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTZkOWRmOTJhYjA2ZTMwMTNjOWM4OWVlMmRjZWU3YTBfVzN6aDE3cmYwdmJKR0poSTUzZ3BBY1ZTajIzc2JhM3hfVG9rZW46Ym94Y25wbDV6OU0zd0lCaDFUZnVTZkdlM2RjXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image008.png)
+
+ 
+
+vid_pkt_size: configures the video packet size
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=NzlkNDg3MjE3NTQwYTYxOTM4ZmZiNjlkMzUyNTk4NGJfSVllRTRDR1l1TWZzcndIVnRsZnluSFphTXY3Uk1wTkRfVG9rZW46Ym94Y25lNEFYdzFhUFZIYjNNZWF6ZGhlWEJnXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image010.png)
+
+ 
+
+vid_num_chunks: configures the number of chunks to use.The data in each chunk has the size provided by vid_pkt_size.
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=NTUxNTc2YmUzZmJkNzNmNzdjNTgzZGJmNThjYzBiMGFfZlNrbVNSSXFBNFFWcFBWVkQ1YUlXYVpFZ0xtQzdUZ1NfVG9rZW46Ym94Y25sYXNwR0lYdVRYbm9iWEFMTkRQQ01jXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image012.png)
+
+ 
+
+通常没有特殊需求时该参数设置为0即可
+
+vid_null_size: configures the size of the null packets
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=YTNjYjI4ODNiYTc1NjE5M2E3NWQzN2Y1YzNiMmY0MTNfY29WQVlFcmFzN1VEd2hBRk02cFRSa0tXT29iZFROdU1fVG9rZW46Ym94Y25wVHk2bzJ5b1NKbndMWmhRNW5LbVFiXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image014.png)
+
+ 
+
+通常没有特殊需求是该参数设置为0即可
+
+vid_hsa: configures the video HSA time
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=MzdkYjhlM2NkMzc2YjQzOTE3M2Q0ZGU1ZGMyN2ZiYzFfRmxpeFVvMXd4V0Z4SVpGTGFaUXpHSjJ4MnZ6dU1FVXBfVG9rZW46Ym94Y25OaGRsVW4yY2VMOHo0QzBnWDZnSndlXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image016.png)
+
+ 
+
+vid_hbp: configures the video HBP time
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=MDBkMmQyNzlmNDFhMDQ5YzlkMDJjN2IwNWViYWViNmNfWmdQd3poSktyREpORkt0emx3THJmZHh2eTh5elRTd3BfVG9rZW46Ym94Y25CQ0RFeGxzN2dUY2xMN2o3TGIxeXloXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image018.png)
+
+ 
+
+vid_hline_time: configures the overall time for each video line
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjU5ODk0MDBkZTBkM2M5OGRkMmFlNTk5MWI0ZmViM2FfM1hseDFIZ2FLTHdCNkxzVGJjR0xxaWNFNUdCc3pXTGtfVG9rZW46Ym94Y25MOVdsUlRUdkVtMzl2bXZZcFB6cEpoXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image020.png)
+
+ 
+
+vid_vsa: configures the VSA period
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDMxM2JiMzFjODVhZjc0OWI3NjhmOGMyNWQ1ODUxMmVfa0V3NlI3NU1Qd2pnN1h5eUhHaUp1cUxWaUdSNkZnNTRfVG9rZW46Ym94Y24zU3dROTRGYjVLZndaMTBoeXZJS1ZoXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image022.png)
+
+ 
+
+vid_vbp: configures the VBP period
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTczNzRiNWNlM2QzNWRhODJjNzY4ODRhZjYxMDNhYjdfZFZPWXhNcVlaUlhJV2RrdlR5cGJnTGNmWW12UG1VVVJfVG9rZW46Ym94Y25iY1hOOHFFWGR3b1MyMzFPaWFEQkNnXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image024.png)
+
+ 
+
+vid_vfp: configures the VFP period
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=NzY4ZWMwOTljMjdhM2FhYjdjODUxYjk2ZWZiODAyYThfRXpzeVZPb01HQVhlVHAwTFFTMVhKTFlHRUprcmhVeEFfVG9rZW46Ym94Y25Fa0J1Z0FjRUFMZzBmRW90ZEduMkxlXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image026.png)
+
+ 
+
+vid_vactive_line: configures the vertical resolution of video
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=N2ZhYzQyZGRjYTM4Y2M0NDc5ZTUzOGJiNGQzMWU5NTJfYUZDVFlrNlRva1J5c0ZHVkd6ZG4wZ0FLamw3ZTU3cnpfVG9rZW46Ym94Y25jNzdZcmdZYTFNNUl5RUtxbE1CdnFkXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image028.png)
+
+ 
+
+- mipi_dsi_panel_init 
+
+该函数用来配置屏幕，具体的配置序列由屏厂提供，屏幕配置示例代码可以参考下面
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmE4ZmE5ZTc3YzM0YTI3ZmVjMTQwYmJiM2UxMTY5ZjhfZldtUzdFcFR6ZTNtNzhnWmxMWXNRRWtZNXNnVHIyU29fVG9rZW46Ym94Y24yMDJZNXJFaDltUUp1c3F5SGRpaE5jXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image030.png)
+
+ 
+
+用户需要根据屏厂提供的屏幕配置序列构造一个结构体数组，该数组中的每一个成员代表一条配置指令，构造好初始化序列数组后就可以按找上图方式，根据不同的配置指令类型调用对应的配置函数进行指令配置。初始化序列数组如下图形式：
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTc0OTRhNDBhYTQ0MTJkZmY5YTBlMjk0NjdlZGQ3ZTZfeHQzV2h0dlJDNjhKNVJSM09GVXZkaHFxVDVWajFjaXRfVG9rZW46Ym94Y25Oc3N2RnRkcFBCVGJndkR3RzRrVFBiXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image032.png)
+
+ 
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=YjM4NDRlNTAxYjM1YjcyOTkwMGQ5ZmIwMGNlOWQxMGFfMHRsUmV6M1gwMEdaUlBNZm9JZXZhWGZ5OU5FS1VGaG9fVG9rZW46Ym94Y255U1pVNkZtOGs2c2Fkek1QV3VscWZkXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image034.png)
+
+ 
+
+其中cmd_type包含以下几种：
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=NzU0NTQ3OGM4ZWQzZWJkMDYwY2JkNWJlMWRlMTI4YzJfZ3RZV2FDYTd0MDkwQXNjTlppaG1XVk91NUtJRFM1RWdfVG9rZW46Ym94Y25SRkpDYzZHZlNFOWFnbE1KMlhOWWtnXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image035.png)
+
+ 
+
+其中MIPI_LCP表示长包，对应mipi屏幕配置协议中的0x39 data type
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=MjNmMzA3OTc3OWYyNzM1Njk4YzFkODdlODg5NTEyMDZfMWpkWUV5bWJtZnRjNUZGRUxaekQ2OER5YUptU0pwR2xfVG9rZW46Ym94Y25aSzJSSmdDV1NZS200dHNZR1B1T3llXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image037.png)
+
+MIPI_S1P表示带一个参数的短包，对应mipi屏幕配置协议中的0x15 data type
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=MzBjODQxZmVhMzg3MGI0NDExMzZiMWVlMDQxODc4ZGVfQkFqZE00M2hUbWtwdmw0UkwzbllpbmpvNW9saDJmNk5fVG9rZW46Ym94Y25tNW9GbHNTMmlKTDNHdWkyNHR6WjBmXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image039.png)
+
+MIPI_SNP表示不带参数的短包，对应mipi屏幕配置协议中的0x5 data type
+
+![https://horizonrobotics.feishu.cn/space/api/box/stream/download/asynccode/?code=OTE5MjkyZGIzYmFiZTJmN2YzMzE3NjhkNWE5NzQ4ZWFfM25MZ0c3dDFoSnhrZHhQWUJOb1pmdFhkMGZ2a0tjRkJfVG9rZW46Ym94Y240QjdJd3BOSUxhSHJVa0FyNDJVU2tnXzE2MzA0NzI0MDc6MTYzMDQ3NjAwN19WNA](_static/_images/mipi_screen_develop/clip_image041.png)
+
+MIPI_SLP不属于屏幕配置指令，而是单纯的sleep命令，用来保证屏幕配置的时序需求
+
+MIPI_OFF不属于屏幕配置指令，代表屏幕配置序列结束
+
+屏幕配置完成后调用mipi_dsi_set_mode(0)来结束屏幕配置，使mipi-dsi core进入正常的工作模式
+
+ 
+
+## mipi-dsi显示屏调试
+
+mipi-dsi输出从芯片角度看由两个硬件IP组成，分别是`iar core`和`mipi-dsi core`，`iar core`输出并行信号给到`mipi-dsi core`。因此mipi-dsi屏幕调试需要调好两个硬件IP，两个硬件IP有各自的时序参数。
+
+通常的调试方法是先调`mipi-dsi core`，再调`iar core`
+
+- Mipi-dsi core调试 
+
+根据mipi-dsi屏幕手册，填入mip-dsi core相关的时序参数，时序参数参考上一节中的介绍，主要需要填入的包括hsfrequency range还有struct video_timing结构体。然后设置mipi-dsi core进入pattern模式，pattern模式包括横条color bar和竖条的color bar，看这两种pattern模式是否都显示正常，如果都显示正常就可以固定mipi-dsi core这个IP的时序参数，如果pattern模式不正常可能需要在现有的mipi-dsi的时序参数下进行微调，微调时可以通过参数变化和屏幕显示现象变化发现规律，按照规律调整即可。pattern正常显示的标准为横条和竖条颜色正常，位置正常没有串位现象，没有严重闪动现象，由于之前调试中可能mipi-dsi core的时钟没有完全匹配，会导致后面即使正常了也会使屏幕有轻微闪动，这种轻微闪动属于正常现象。
+
+Mipi-dsi core进入pattern模式的方法：
+
+通过这个函数设置即可
+
+![img](_static/_images/mipi_screen_develop/clip_image043.jpg)
+
+![img](_static/_images/mipi_screen_develop/clip_image045.png)
+
+![img](_static/_images/mipi_screen_develop/clip_image047.png)
+
+![img](_static/_images/mipi_screen_develop/clip_image049.jpg)
+
+![img](_static/_images/mipi_screen_develop/clip_image051.jpg)
+
+![img](_static/_images/mipi_screen_develop/clip_image053.jpg)
+
+- Iar core 调试 
+
+Iar core除了基本的分辨率设置，主要需要调试的也是时序参数，时序参数主要包括pixel clock和struct disp_timing这个结构体。
+
+![img](_static/_images/mipi_screen_develop/clip_image054.png)
+
+其中disp_timing中的参数含义如下：
+
+![img](_static/_images/mipi_screen_develop/clip_image056.jpg)
+
+![img](_static/_images/mipi_screen_develop/clip_image058.jpg)
+
+如果是标准分辨率，这些时序配置可以参考CEA协议进行配置：
+
+ 
+
+ 
+
+![img](_static/_images/mipi_screen_develop/clip_image060.jpg)
+
+![img](_static/_images/mipi_screen_develop/clip_image062.jpg)
+
+![img](_static/_images/mipi_screen_develop/clip_image064.jpg)
+
+![img](_static/_images/mipi_screen_develop/clip_image066.jpg)
+
+![img](_static/_images/mipi_screen_develop/clip_image068.png)
+
+ 
+
+![img](_static/_images/mipi_screen_develop/clip_image070.jpg)
+
+![img](_static/_images/mipi_screen_develop/clip_image072.jpg)
+
+![img](_static/_images/mipi_screen_develop/clip_image074.jpg)
+
+![img](_static/_images/mipi_screen_develop/clip_image076.jpg)
+
+![img](_static/_images/mipi_screen_develop/clip_image078.png)
+
+详细时序图可以参考以下链接：
+
+[EIA-CEA-861-B - 道客巴巴 (doc88.com)](http://www.doc88.com/p-33579663436.html)
+
+![img](_static/_images/mipi_screen_develop/clip_image080.png)
+
+如果是非标准分辨率，可以找一个接近的分辨率进行设置，然后再那个时序参数上进行微调。如果有图像显示，只是有闪烁或串位现象说明参数差的不多，微调即可，如果图像完全没有的话可以先试着调整pixel clk。

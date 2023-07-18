@@ -1,0 +1,66 @@
+# Yocto 根文件系统制作
+
+horizon目前支持 yocto2.6：thud 版本
+
+## 环境准备
+
+- 100G磁盘可用空间
+
+- 构建主机满足以下要求：
+
+​			Git 1.8.3.1 or greater
+
+​			tar 1.28 or greater
+
+​			Python 3.6.0 or greater.
+
+​			gcc 5.0 or greater.
+
+- 在ubuntu上编译yocto需要安装一下依赖包(ubuntu版本建议>=18.04)：
+
+```bash
+sudo apt install gawk wget git diffstat unzip texinfo gcc build-essential chrpath socat cpio python3 python3-pip python3-pexpect xz-utils debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev pylint3 xterm python3-subunit mesa-common-dev zstd liblz4-tool
+```
+
+## hobot-yocto bsp包获取
+
+从 [Yocto_thud_for_hobot](https://pan.horizon.ai/index.php/s/JTitK4g8SLzSGa6?path=%2FYocto_thud) 下载地平线 X3M yocto BSP配方。
+
+下载解压后的目录树如下：
+
+```
+.
+├── build-yocto-rootfs.sh     //编译horizon rootfs顶层脚本文件, 会自动拉取开源的meta-openembedded, poky层。
+├── bblayers.conf.sample      //包含layer的配置文件
+├── local.conf.sample         //制作rootfs的顶层配置文件
+├── meta-horizon              //horizon层，包含horizon芯片rootfs相关配方
+	└── meta-selinux          //存放编译horizon selinux的配方层
+	└── recipes-benchmark     //性能测试工具的配方，包含（iperf3, memtester）
+	└── recipes-core          //启动相关以及一些核心配方（glibc, busybox, udev）
+	└── recipes-devtools	  //常用到的第三方工具的配方
+	└── recipes-kernel        //horizon kernel的配方，以及kernel性能测试工具配方
+	└── recipes-x2            //xj2芯片制作rootfs的配方
+	└── recipes-xj3			  //xj3芯片制作rootfs的配方
+		└── xj3-hobot-image.bb
+	└── conf
+		└── distro                //发行版配置
+		└── horizon-thud-patch    //针对yocto thud版本地平线打的一些patch，在执行顶层build-yocto-rootfs.sh编译时会自动打上
+		└── machine               //针对特定处理器的配置文件，编译器优化等
+	└── class                     //配方中共享的一些信息或者特定功能具体实现的函数等
+```
+
+
+
+## 编译步骤说明
+
+1、在顶层目录下直接执行：
+
+```
+./build-yocto-rootfs.sh xj3-hobot-image  
+```
+
+即可自动下载社区thud版本的poky，meta-openembedded，并打上对thud版本的依赖补丁，最后集成meta-horizon，编译出horizon  yocto rootfs（对应 bsp源码包中 **system/rootfs_yocto/root/** 目录下的内容）
+
+2、编译的输出目录：build/tmp-build/deploy/images/hobotarm64/
+
+3、编译输出后的xj3-hobot-image-hobotarm64.tar.gz包，直接整个替换BSP源码中的 **system/rootfs_yocto/root/** 即可。

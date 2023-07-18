@@ -1,0 +1,3 @@
+/usr/sbin/flash_eraseall
+/bin/busybox 50
+/usr/sbin/flash_eraseall.mtd-utils 100

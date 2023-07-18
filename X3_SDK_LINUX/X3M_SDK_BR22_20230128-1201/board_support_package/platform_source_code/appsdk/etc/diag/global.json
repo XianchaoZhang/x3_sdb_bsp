@@ -1,0 +1,31 @@
+{
+  "name": "xj3_diagnose",
+  "version": "V0.90",
+  "mode": "release",
+  "spi": "on",
+  "bitmask_period": "0",
+  "enable_file": "0",
+  "context": {
+    "selftest": {
+      "redirect": "selftest_cfg.json"
+    },
+    "general": {
+      "redirect": "general_env.json"
+    },
+    "kernel": {
+      "redirect": "kernel_dtc.json"
+    },
+    "model": {
+      "redirect": "model_dtc.json"
+    },
+    "perception": {
+      "redirect": "perception_dtc.json"
+    },
+    "adas": {
+      "redirect": "adas_dtc.json"
+    },
+    "ap": {
+      "redirect": "ap_dtc.json"
+    }
+  }
+}

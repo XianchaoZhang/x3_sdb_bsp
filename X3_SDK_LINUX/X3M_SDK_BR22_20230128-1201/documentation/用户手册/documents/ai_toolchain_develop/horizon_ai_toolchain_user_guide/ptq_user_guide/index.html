@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6.4.1. PTQ原理及步骤详解 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+    <link rel="next" title="6.4.1.1. 简介" href="chapter_model_conversion.html" />
+    <link rel="prev" title="6.4. 训练后量化(PTQ)使用说明" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">6. 量化工具链开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../preface_toolchain_overview.html">6.1. 简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../env_install.html">6.2. 环境安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html">6.3. 快速体验</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">6.4. 训练后量化(PTQ)使用说明</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">6.4.1. PTQ原理及步骤详解</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="chapter_model_conversion.html">6.4.1.1. 简介</a></li>
+<li class="toctree-l4"><a class="reference internal" href="chapter_model_conversion.html#op-restrictions">6.4.1.2. 模型算子约束</a></li>
+<li class="toctree-l4"><a class="reference internal" href="chapter_model_conversion.html#fp-model-preparation">6.4.1.3. 模型准备</a></li>
+<li class="toctree-l4"><a class="reference internal" href="chapter_model_conversion.html#model-check">6.4.1.4. 模型验证</a></li>
+<li class="toctree-l4"><a class="reference internal" href="chapter_model_conversion.html#model-conversion">6.4.1.5. 模型转换</a></li>
+<li class="toctree-l4"><a class="reference internal" href="chapter_model_conversion.html#performance-evaluation">6.4.1.6. 模型性能分析与调优</a></li>
+<li class="toctree-l4"><a class="reference internal" href="chapter_model_conversion.html#accuracy-evaluation">6.4.1.7. 模型精度分析与调优</a></li>
+<li class="toctree-l4"><a class="reference internal" href="chapter_model_conversion.html#id30">6.4.1.8. 其它工具使用说明</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../supported_op_list_and_restrictions.html">6.4.2. 模型算子支持列表</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../horizon_runtime_samples/index.html">6.5. 上板运行(runtime)应用开发说明</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html"><span class="section-number">6. </span>量化工具链开发指南</a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">6.4. </span>训练后量化(PTQ)使用说明</a> &raquo;</li>
+      <li><span class="section-number">6.4.1. </span>PTQ原理及步骤详解</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../index.html" class="btn btn-neutral float-left" title="6.4. 训练后量化(PTQ)使用说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="chapter_model_conversion.html" class="btn btn-neutral float-right" title="6.4.1.1. 简介" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ptq">
+<h1><span class="section-number">6.4.1. </span>PTQ原理及步骤详解<a class="headerlink" href="#ptq" title="永久链接至标题"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="chapter_model_conversion.html">6.4.1.1. 简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter_model_conversion.html#op-restrictions">6.4.1.2. 模型算子约束</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter_model_conversion.html#fp-model-preparation">6.4.1.3. 模型准备</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter_model_conversion.html#model-check">6.4.1.4. 模型验证</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#hb-mapper-checker">使用 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">checker</span></code> 工具验证模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#id6">检查异常处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#check-result">检查结果解读</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#id9">检查结果的调优指导</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chapter_model_conversion.html#model-conversion">6.4.1.5. 模型转换</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#prepare-calibration-data">准备校准数据</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#hb-mapper-makertbin">使用 <code class="docutils literal notranslate"><span class="pre">hb_mapper</span> <span class="pre">makertbin</span></code> 工具转换模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#yaml">模型转换yaml配置参数说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="chapter_model_conversion.html#hzpreprocess">预处理HzPreprocess算子说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#conversion-interpretation">转换内部过程解读</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#id14">转换结果解读</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#conversion-output">转换产出物解读</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chapter_model_conversion.html#performance-evaluation">6.4.1.6. 模型性能分析与调优</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#hb-perf">使用 <code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 工具估计性能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#id19">开发板实测性能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#model-performance-optimization">模型性能优化</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="chapter_model_conversion.html#performance-affecting-parameters">检查影响模型性能的yaml参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chapter_model_conversion.html#cpu">处理CPU算子</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chapter_model_conversion.html#id22">高性能模型设计建议</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chapter_model_conversion.html#bpu">BPU面向高效率模型优化</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chapter_model_conversion.html#accuracy-evaluation">6.4.1.7. 模型精度分析与调优</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#id24">模型精度分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#accuracy-optimization">精度调优</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="chapter_model_conversion.html#id26">精度有明显损失（4%以上）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chapter_model_conversion.html#id28">较小精度损失提升</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#qat">使用QAT量化感知训练方案进一步提升模型精度</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="chapter_model_conversion.html#id30">6.4.1.8. 其它工具使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#id31"><code class="docutils literal notranslate"><span class="pre">hb_perf</span></code> 工具</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#hb-pack"><code class="docutils literal notranslate"><span class="pre">hb_pack</span></code> 工具</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#hb-model-info"><code class="docutils literal notranslate"><span class="pre">hb_model_info</span></code> 工具</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#hb-model-modifier"><code class="docutils literal notranslate"><span class="pre">hb_model_modifier</span></code> 工具</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#hb-model-verifier"><code class="docutils literal notranslate"><span class="pre">hb_model_verifier</span></code> 工具</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_model_conversion.html#hb-eval-preprocess"><code class="docutils literal notranslate"><span class="pre">hb_eval_preprocess</span></code> 工具</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="6.4. 训练后量化(PTQ)使用说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="chapter_model_conversion.html" class="btn btn-neutral float-right" title="6.4.1.1. 简介" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

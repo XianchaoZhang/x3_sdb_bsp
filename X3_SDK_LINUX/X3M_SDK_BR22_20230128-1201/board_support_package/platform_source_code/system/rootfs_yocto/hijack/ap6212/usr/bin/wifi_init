@@ -1,0 +1,67 @@
+#!/bin/sh
+
+# set -x
+
+restart_wifi_interface()
+{
+    killall -9 hostapd udhcpd > /dev/null 2>&1
+    killall -9 wpa_supplicant udhcpc > /dev/null 2>&1
+
+    # flush wlan0 ip
+    ip addr flush dev wlan0
+    sleep 0.5
+
+    ifconfig wlan0 down
+    sleep 1
+    ifconfig wlan0 up
+}
+
+init_ap()
+{
+    echo "Initialize wlan0 to ap mode"
+
+    restart_wifi_interface
+
+    ifconfig wlan0 10.5.5.1 netmask 255.255.255.0
+
+    udhcpd /etc/udhcpd.conf
+
+    # start hostapd
+    hostapd -B /etc/hostapd.conf
+
+    echo "Finish initialize wlan0 to ap mode"
+}
+
+init_sta()
+{
+    echo "Initialize wlan0 to station mode"
+
+    restart_wifi_interface
+
+    # start wpa_supplicant
+    cp /etc/wpa_supplicant.conf /tmp/wpa_supplicant.conf
+    wpa_supplicant -D nl80211 -i wlan0 -c /tmp/wpa_supplicant.conf -B > /dev/null 2>&1
+
+    echo "Finish initialize wlan0 to station mode"
+}
+
+main()
+{
+    if [ $# -ne 1 ]; then
+        echo "uages: $0 [sta | ap]"
+    fi
+
+    case "$1" in
+        sta)
+            init_sta
+            ;;
+        ap)
+            init_ap
+            ;;
+        *)
+            echo "mode $1 not supported!"
+            ;;
+    esac
+}
+
+main $@

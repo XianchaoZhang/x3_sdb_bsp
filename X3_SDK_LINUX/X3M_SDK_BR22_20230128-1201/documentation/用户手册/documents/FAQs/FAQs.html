@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>8.1. 环境类 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="8.8. 总线类" href="usb_faqs/index.html" />
+    <link rel="prev" title="8. FAQ" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">8. FAQ</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">8.1. 环境类</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ubootbootargs">8.1.1. UBOOT的bootargs怎么设置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fastboot">8.1.2. 如何用fastboot命令行烧录系统镜像</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">8.1.3. 如何在根文件系统修改文件</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">8.2. 系统类</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#poweroff">8.2.1. PowerOff 命令会关闭哪些电</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ddr">8.2.2. 如何查看ddr带宽统计</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ip">8.2.3. 如何设置ip且重启后有效</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cpu-bpu">8.2.4. 如何查看cpu bpu信息统计</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uid">8.2.5. 如何读取芯片uid命令</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bpu">8.2.6. 如何查看bpu支持的频率</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cpu">8.2.7. 如何查看cpu频率模式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">8.2.8. 如何查看cpu降频温度</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">8.2.9. 关闭cpu核的方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">8.2.10. 中断绑定cpu核方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pwmlwpm">8.2.11. PWM、LWPM频率范围和开启方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mclk">8.2.12. MCLK时钟分频</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#emmc">8.2.13. EMMC烧录器文件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vio">8.2.14. VIO时钟自适应开关</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bclkrclk">8.2.15. 音频Bclk、Rclk关系</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ion-uboot-dtsion">8.2.16. ion大小查看命令，uboot下修改命令，dts修改ion大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#x3-usb">8.2.17. X3 usb规格相关</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usb">8.2.18. usb支持传输模式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#x3-usb-hostdevice">8.2.19. X3 usb host和device切换命令</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">8.2.20. 如何查看和修改系统寄存器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#i2c">8.2.21. i2c命令使用</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#x3i2s">8.2.22. X3查看i2s时钟状态</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#x3-ddremmc">8.2.23. X3 ddr和emmc压测命令</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uart">8.2.24. 如何使用uart工具手动一步一步烧写固件</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">8.3. 视频处理</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#version-0807sdk-qos">8.3.1. Version_0807版本SDK QOS配置方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">8.3.2. 如何打开VIO各模块主要日志</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">8.3.3. 如何打开VIO各模块中断日志</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#x3sif-isp-ipu-pym-vpu">8.3.4. X3查看sif,isp,ipu,pym,vpu等帧率命令</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">8.3.5. 如何查看VIO各模块中断状态</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id12">8.4. 编解码类</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id13">8.4.1. 视频码流头部信息不正确报错</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id14">8.5. 外设类</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sensor">8.5.1. 如何判断sensor硬件连接是否正常</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eth-phy">8.5.2. ETH phy寄存器读取方法</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id15">8.6. 硬件类</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tf">8.6.1. TF卡接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#x3">8.6.2. X3 电源上电斜率要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16">8.6.3. X3 上掉电时序要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lpddr4-ddr4-lpddr4">8.6.4. LPDDR4&amp;DDR4选型优缺点，更推荐使用LPDDR4</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usb-id-usb">8.6.5. USB ID：硬件配置USB主从模式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usb-vbus">8.6.6. USB_VBUS引脚，插拔检测</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">8.6.7. UART串口数量少</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id18">8.6.8. 最小系统整体运行、待机功耗测试</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#x3-adc">8.6.9. X3 ADC引脚数目</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id19">8.7. 工具类</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#no-space-left-on-device">8.7.1. 升级失败-No space left on device</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id20">8.7.2. 升级失败-芯片串口被占用</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usb_faqs/index.html">8.8. 总线类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ai_toolchain_faqs/index.html">8.9. 量化工具链类</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">8. </span>FAQ</a> &raquo;</li>
+      <li><span class="section-number">8.1. </span>环境类</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="8. FAQ" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="usb_faqs/index.html" class="btn btn-neutral float-right" title="8.8. 总线类" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">8.1. </span>环境类<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="ubootbootargs">
+<h2><span class="section-number">8.1.1. </span>UBOOT的bootargs怎么设置<a class="headerlink" href="#ubootbootargs" title="永久链接至标题"></a></h2>
+<p>通过串口连接，在系统启动时，快速持续按下回车键，进入uboot，然后做如下设置：</p>
+<ul class="simple">
+<li><p>当前启动有效</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>setenv bootargs ${bootargs} &lt;items to add&gt;
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>长期有效</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">使用extra_bootargs</span><span class="p">:</span> 
+<span class="n">setenv</span> <span class="n">extra_bootargs</span> <span class="o">&lt;</span><span class="n">itmes</span> <span class="n">to</span> <span class="n">add</span><span class="o">&gt;</span><span class="p">;</span> 
+<span class="n">saveenv</span>
+
+<span class="n">使用custom_bootargs</span><span class="p">:</span>
+<span class="n">setenv</span> <span class="n">custem_bootargs</span> <span class="n">true</span><span class="p">;</span> 
+<span class="n">setenv</span> <span class="n">bootargs</span> <span class="o">&lt;</span><span class="n">customized</span> <span class="n">bootargs</span><span class="o">&gt;</span><span class="p">;</span> 
+<span class="n">saveenv</span> 
+</pre></div>
+</div>
+</section>
+<section id="fastboot">
+<h2><span class="section-number">8.1.2. </span>如何用fastboot命令行烧录系统镜像<a class="headerlink" href="#fastboot" title="永久链接至标题"></a></h2>
+<p>X3开发板进入fastboot模式，板子在uboot下输入：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fastboot</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>或者开发板正常启动后，进入到shell下输入：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>reboot fastboot
+</pre></div>
+</div>
+<p>在PC上烧录系统镜像，拷贝要烧录的系统disk.img到对应目录，在PC端输入</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fastboot</span> <span class="n">flash</span> <span class="mh">0x0</span> <span class="n">disk</span><span class="o">.</span><span class="n">img</span>            <span class="c1"># 整体镜像烧录</span>
+<span class="n">fastboot</span> <span class="n">flash</span> <span class="n">uboot</span> <span class="n">uboot</span><span class="o">.</span><span class="n">img</span>         <span class="c1"># 烧录uboot分区</span>
+<span class="n">fastboot</span> <span class="n">flash</span> <span class="n">boot</span> <span class="n">boot</span><span class="o">.</span><span class="n">img</span>           <span class="c1"># 烧录boot分区</span>
+<span class="n">fastboot</span> <span class="n">flash</span> <span class="n">system</span> <span class="n">system</span><span class="o">.</span><span class="n">img</span>       <span class="c1"># 烧录system分区</span>
+</pre></div>
+</div>
+<p><img alt="fastboot_burn_image" src="../_images/fastboot_burn_image.png" /></p>
+</section>
+<section id="id2">
+<h2><span class="section-number">8.1.3. </span>如何在根文件系统修改文件<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>需要给根文件系统添加读写权限</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mount</span> <span class="o">-</span><span class="n">o</span> <span class="n">rw</span><span class="p">,</span> <span class="n">remount</span> <span class="o">/</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id3">
+<h1><span class="section-number">8.2. </span>系统类<a class="headerlink" href="#id3" title="永久链接至标题"></a></h1>
+<section id="poweroff">
+<h2><span class="section-number">8.2.1. </span>PowerOff 命令会关闭哪些电<a class="headerlink" href="#poweroff" title="永久链接至标题"></a></h2>
+<p>poweroff 会去拉en_vdd_core_pd的pin，就看每个项目上，这根pin能控制哪几路电了。按道理需要把group3和group4的电断掉</p>
+</section>
+<section id="ddr">
+<h2><span class="section-number">8.2.2. </span>如何查看ddr带宽统计<a class="headerlink" href="#ddr" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrut_ddr</span> <span class="o">-</span><span class="n">t</span> <span class="nb">all</span> <span class="o">-</span><span class="n">p</span> <span class="mi">1000</span>
+</pre></div>
+</div>
+</section>
+<section id="ip">
+<h2><span class="section-number">8.2.3. </span>如何设置ip且重启后有效<a class="headerlink" href="#ip" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrut_ipfull</span> <span class="n">s</span> <span class="mf">192.168.1.10</span> <span class="mf">255.255.255.0</span> <span class="mf">192.168.1.1</span>
+</pre></div>
+</div>
+</section>
+<section id="cpu-bpu">
+<h2><span class="section-number">8.2.4. </span>如何查看cpu bpu信息统计<a class="headerlink" href="#cpu-bpu" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrut_somstatus</span> <span class="o">-</span><span class="n">n</span> <span class="mi">1000</span>
+</pre></div>
+</div>
+</section>
+<section id="uid">
+<h2><span class="section-number">8.2.5. </span>如何读取芯片uid命令<a class="headerlink" href="#uid" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">socinfo</span><span class="o">/</span><span class="n">soc_uid</span>
+</pre></div>
+</div>
+</section>
+<section id="bpu">
+<h2><span class="section-number">8.2.6. </span>如何查看bpu支持的频率<a class="headerlink" href="#bpu" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">devfreq</span><span class="o">/</span><span class="n">devfreq1</span><span class="o">/</span><span class="n">available_frequencies</span>
+</pre></div>
+</div>
+</section>
+<section id="cpu">
+<h2><span class="section-number">8.2.7. </span>如何查看cpu频率模式<a class="headerlink" href="#cpu" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">cpu</span><span class="o">/</span><span class="n">cpufreq</span><span class="o">/</span><span class="n">policy0</span><span class="o">/</span><span class="n">scaling_governor</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h2><span class="section-number">8.2.8. </span>如何查看cpu降频温度<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">virtual</span><span class="o">/</span><span class="n">thermal</span><span class="o">/</span><span class="n">thermal_zone0</span><span class="o">/</span><span class="n">trip_point_1_temp</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2><span class="section-number">8.2.9. </span>关闭cpu核的方法<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="mi">0</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">cpu</span><span class="o">/</span><span class="n">cpu2</span><span class="o">/</span><span class="n">online</span>
+<span class="n">echo</span> <span class="mi">0</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">cpu</span><span class="o">/</span><span class="n">cpu3</span><span class="o">/</span><span class="n">online</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h2><span class="section-number">8.2.10. </span>中断绑定cpu核方法<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>echo 8 &gt; /proc/irq/175/smp_affinity绑定核到core3，echo后的8对应core3，1/2/4/8分别对应core0-3，175是中断号
+</pre></div>
+</div>
+</section>
+<section id="pwmlwpm">
+<h2><span class="section-number">8.2.11. </span>PWM、LWPM频率范围和开启方法<a class="headerlink" href="#pwmlwpm" title="永久链接至标题"></a></h2>
+<p>PWM的时钟，默认支持频率范围是192MHz 到46.8KHz,LPWM的时钟，支持频率范围是24.4Hz ~100KHz.</p>
+<p>开启pwm可以用如下echo命令</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>for i in 0 3
+do
+        cd /sys/class/pwm/pwmchip${i}
+        echo 0 &gt; export
+        echo 1 &gt; export
+        echo 2 &gt; export
+        cd pwm0
+        echo 10000 &gt; period
+        echo 3000  &gt; duty_cycle
+        echo 1 &gt; enable
+        cd ../pwm1
+        echo 10000 &gt; period
+        echo 1000  &gt; duty_cycle
+        echo 1 &gt; enable
+        cd ../pwm2
+        echo 10000 &gt; period
+        echo 1000  &gt; duty_cycle
+        echo 1 &gt; enable
+done
+</pre></div>
+</div>
+<p>注意lpwm开启后还需要输入</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">soc</span><span class="o">/</span><span class="n">a5018000</span><span class="o">.</span><span class="n">lpwm</span><span class="o">/</span><span class="n">lpwm_swtrig</span>
+</pre></div>
+</div>
+</section>
+<section id="mclk">
+<h2><span class="section-number">8.2.12. </span>MCLK时钟分频<a class="headerlink" href="#mclk" title="永久链接至标题"></a></h2>
+<p>X3的MCLK时钟分频由vio（可选）内部分两级，输出频率如下：
+分频源 源频率 一级分频 二级分频 输出频率
+vio2_pllmux 2376M 1~32 (默认16) 1~8 (默认4) 9.28M~ (默认37.125M)
+vio_pllmux 1632M 1~32 1~8 6.375M~
+注: 一级分频为4路共用，因此使用时最好输出同一频率，否则需注意会否冲突！
+默认未使能为SENSOR_MCLK输出功能，该PIN可用于普通GPIO，使能后方可输出
+所以如果要保持sensor0_mclk输出37.125M, sensor1_mclk配一个接近24M的时钟如下：
+2376 / 16 = 148.5 – 一级分频(共用)
+148.5 / 4 = 37.125 –sensor0_mclk
+148.5 / 6 = 24.75 –sensor1_mclk
+以上频率都是内部有做自动的换算，使用者只需要填入一级分频/二级分频能分的出来的频率，如果分不出来内部会分一个最接近的</p>
+</section>
+<section id="emmc">
+<h2><span class="section-number">8.2.13. </span>EMMC烧录器文件<a class="headerlink" href="#emmc" title="永久链接至标题"></a></h2>
+<p>emmc的空片烧录，ycoto的linux和ubuntu的系统都可以直接使用disk.img文件，这个文件就是个二进制文件，可以用烧录器直接烧写到emmc（注意空片烧录需要完整得烧录一次disk.img才能单独烧录uboot.img等分区）</p>
+<p>如果是批量生产，建议先烧录后贴片：</p>
+<p>1）烧录的时候首先确认工厂烧录器支持emmc型号，就可以直接烧录。</p>
+<p>2）如果烧录器不支持，但是可以支持相同封装的，则可以让烧录器厂家把emmc型号添加进去。</p>
+<p>3）如果此类封装emmc的烧录器都不支持，则可以找专门的第三方烧录厂。</p>
+<p>4）烧录界面的配置，可以咨询烧录器厂家，不同的烧录器有些差别。</p>
+</section>
+<section id="vio">
+<h2><span class="section-number">8.2.14. </span>VIO时钟自适应开关<a class="headerlink" href="#vio" title="永久链接至标题"></a></h2>
+<ul>
+<li><p>vio模块以ko加载方式</p>
+<p>把echo 1 &gt; /sys/module/hobot_dev_ips/parameters/clk_en增加到/etc/init.d/load.sh的安装ko之前</p>
+</li>
+<li><p>vio模块直接编译到内核</p>
+<p>在uboot cmdline中传入hobot_dev_ips.clk_en=1</p>
+<p>注意vio时钟默认是全开的，如果不使用vio模块降功耗可以打开自适应开关关闭，能节省功耗。</p>
+</li>
+</ul>
+</section>
+<section id="bclkrclk">
+<h2><span class="section-number">8.2.15. </span>音频Bclk、Rclk关系<a class="headerlink" href="#bclkrclk" title="永久链接至标题"></a></h2>
+<p>Bclk是根据应用层传进来的采样率(Rclk)和dts里面配置的slot_width动态计算出来的，Bclk=Rclk*slot_width</p>
+</section>
+<section id="ion-uboot-dtsion">
+<h2><span class="section-number">8.2.16. </span>ion大小查看命令，uboot下修改命令，dts修改ion大小<a class="headerlink" href="#ion-uboot-dtsion" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>memstat可以查看ion总大小
+<img alt="ion_memstat" src="../_images/ion_memstat.png" /></p></li>
+<li><p>cat /sys/kernel/debug/ion/heaps/ion_cma可以查看当前ion使用大小
+<img alt="ion_cmd" src="../_images/ion_cma.png" /></p></li>
+<li><p>在uboot下面使用如下命令可以修改ion大小到1G
+setenv ion_size ‘1024’
+saveenv</p></li>
+<li><p>修改如下截图的dts圈红部分可以修改ion大小</p></li>
+</ul>
+<p><img alt="ion" src="../_images/ion_setting.png" /></p>
+<p>注意：ion最大只能分出1.7G，因为低2G区域是留给dma使用的，dma无法用高2G，在低2G中，还需要预留300M左右给系统使用，所以ion只能分出1.7G。</p>
+</section>
+<section id="x3-usb">
+<h2><span class="section-number">8.2.17. </span>X3 usb规格相关<a class="headerlink" href="#x3-usb" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>usb endpoint端点加上ep0总共9个，4对半，除去ep0 7个, 3对半
+端点的max packet size大小 ep0in/out 512bytes 其余端点都可以1024 ~ 1032bytes
+In 最多6个，Out没限制，是可以配置的，如下几种组合：
+6 In + 3 Out
+5 In + 4 Out 
+4 In + 5 Out 
+3 In + 6 Out
+2 In + 7 Out
+1 In + 8 Out
+目前没做灵活的配置, 修改代码重新初始化
+drivers/usb/dwc3/gadget.c
+dwc3_gadget_init_endpoints
+</pre></div>
+</div>
+</section>
+<section id="usb">
+<h2><span class="section-number">8.2.18. </span>usb支持传输模式<a class="headerlink" href="#usb" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>usb isoc - 等时,bulk - 批量都支持</p></li>
+<li><p>usb2.0的最大传输带宽为480Mbps（即60MB/s，x3实际虚拟U盘测试大概是 42~44MBps），usb2.0 bulk传输 大概是42MBps的带宽.</p></li>
+<li><p>usb2.0 isoc传输  是24MBps的带宽.</p></li>
+<li><p>usb3.0虚拟磁盘测 373MBps</p></li>
+<li><p>usb3.0 isoc模式就220MBps左右带宽</p></li>
+<li><p>usb3.0 bulk 模式375MBps左右</p></li>
+</ul>
+</section>
+<section id="x3-usb-hostdevice">
+<h2><span class="section-number">8.2.19. </span>X3 usb host和device切换命令<a class="headerlink" href="#x3-usb-hostdevice" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usb</span> <span class="n">host改成usb</span> <span class="n">device命令</span>
+<span class="n">echo</span> <span class="n">device</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">soc</span><span class="o">/</span><span class="n">b2000000</span><span class="o">.</span><span class="n">usb</span><span class="o">/</span><span class="n">b2000000</span><span class="o">.</span><span class="n">dwc3</span><span class="o">/</span><span class="n">role</span>
+<span class="n">echo</span> <span class="n">soc</span><span class="p">:</span><span class="n">usb</span><span class="o">-</span><span class="nb">id</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">drivers</span><span class="o">/</span><span class="n">extcon</span><span class="o">-</span><span class="n">usb</span><span class="o">-</span><span class="n">gpio</span><span class="o">/</span><span class="n">unbind</span>
+<span class="n">usb</span> <span class="n">device改成host命令</span>
+<span class="n">echo</span> <span class="n">host</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">soc</span><span class="o">/</span><span class="n">b2000000</span><span class="o">.</span><span class="n">usb</span><span class="o">/</span><span class="n">b2000000</span><span class="o">.</span><span class="n">dwc3</span><span class="o">/</span><span class="n">role</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h2><span class="section-number">8.2.20. </span>如何查看和修改系统寄存器<a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<p>使用devmem命令可以直接访问物理地址读写寄存器，常规用法：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">devmem</span> <span class="n">ADDRESS</span> <span class="p">[</span><span class="n">WIDTH</span> <span class="p">[</span><span class="n">VALUE</span><span class="p">]]</span>
+</pre></div>
+</div>
+</section>
+<section id="i2c">
+<h2><span class="section-number">8.2.21. </span>i2c命令使用<a class="headerlink" href="#i2c" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">i2cdetect</span> <span class="o">-</span><span class="n">l</span> 
+<span class="c1">#用来列举I2C bus和上面所有的设备</span>
+<span class="n">i2cdetect</span> <span class="o">-</span><span class="n">y</span> <span class="o">-</span><span class="n">r</span> <span class="mi">1</span> 
+<span class="c1">#可以用來差看bus 1上有哪些地址挂载</span>
+<span class="n">i2ctransfer</span> <span class="o">-</span><span class="n">f</span> <span class="o">-</span><span class="n">y</span> <span class="mi">1</span> <span class="n">w3</span><span class="o">@</span><span class="mh">0x36</span> <span class="mh">0x50</span> <span class="mh">0x81</span> <span class="mh">0x01</span>
+<span class="c1">#0x36为I2C设备的地址, 0x5081为要写的寄存器地址, 0x01为写入的值。</span>
+<span class="n">i2ctransfer</span> <span class="o">-</span><span class="n">f</span> <span class="o">-</span><span class="n">y</span> <span class="mi">1</span> <span class="n">w2</span><span class="o">@</span><span class="mh">0x36</span> <span class="mh">0x30</span> <span class="mh">0x0A</span> <span class="n">r3</span>
+<span class="c1">#0x36为I2C设备的地址, 0x300A为要读的寄存器地址, r3为连续读3Byte, 0x56 0x08 0x41 为读到的寄存器的值。</span>
+</pre></div>
+</div>
+</section>
+<section id="x3i2s">
+<h2><span class="section-number">8.2.22. </span>X3查看i2s时钟状态<a class="headerlink" href="#x3i2s" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>devmem 0xa1000350 （读取i2s0的状态信息，bit20 读到的值是1，表示时钟是disable的状态）
+devmem 0xa1000360 （读取i2s1的状态信息，bit20 读到的值是1，表示时钟是disable的状态）
+</pre></div>
+</div>
+</section>
+<section id="x3-ddremmc">
+<h2><span class="section-number">8.2.23. </span>X3 ddr和emmc压测命令<a class="headerlink" href="#x3-ddremmc" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">测试ddr</span>
+<span class="n">echo</span> <span class="mi">4</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">vm</span><span class="o">/</span><span class="n">drop_caches</span>
+<span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">stressapptest</span> <span class="o">-</span><span class="n">s</span> <span class="mi">172800</span> <span class="o">-</span><span class="n">M</span> <span class="mi">100</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">sat</span><span class="o">.</span><span class="n">io1</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">sat</span><span class="o">.</span><span class="n">io2</span> <span class="o">-</span><span class="n">i</span> <span class="mi">4</span> <span class="o">-</span><span class="n">m</span> <span class="mi">8</span> <span class="o">-</span><span class="n">C</span> <span class="mi">2</span> <span class="o">-</span><span class="n">W</span>  <span class="o">&gt;</span> <span class="o">/</span><span class="n">userdata</span><span class="o">/</span><span class="n">ddr</span><span class="o">.</span><span class="n">log</span> <span class="o">&amp;</span>
+<span class="n">测试emmc性能</span>
+<span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">iozone</span> <span class="o">-</span><span class="n">e</span> <span class="o">-</span><span class="n">I</span> <span class="o">-</span><span class="n">a</span> <span class="o">-</span><span class="n">r</span> <span class="mi">4</span><span class="n">K</span> <span class="o">-</span><span class="n">r</span> <span class="mi">16</span><span class="n">K</span> <span class="o">-</span><span class="n">r</span> <span class="mi">64</span><span class="n">K</span> <span class="o">-</span><span class="n">r</span> <span class="mi">256</span><span class="n">K</span> <span class="o">-</span><span class="n">r</span> <span class="mi">1</span><span class="n">M</span> <span class="o">-</span><span class="n">r</span> <span class="mi">4</span><span class="n">M</span> <span class="o">-</span><span class="n">r</span> <span class="mi">16</span><span class="n">M</span> <span class="o">-</span><span class="n">s</span> <span class="mi">16</span><span class="n">K</span> <span class="o">-</span><span class="n">s</span> <span class="mi">1</span><span class="n">M</span> <span class="o">-</span><span class="n">s</span> <span class="mi">16</span><span class="n">M</span> <span class="o">-</span><span class="n">s</span> <span class="mi">128</span><span class="n">M</span> <span class="o">-</span><span class="n">s</span> <span class="mi">1</span><span class="n">G</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">userdata</span><span class="o">/</span><span class="n">iozone</span> <span class="o">-</span><span class="n">Rb</span> <span class="o">/</span><span class="n">userdata</span><span class="o">/</span><span class="n">test_iozone_emmc_ext4</span><span class="o">.</span><span class="n">xls</span>
+</pre></div>
+</div>
+</section>
+<section id="uart">
+<h2><span class="section-number">8.2.24. </span>如何使用uart工具手动一步一步烧写固件<a class="headerlink" href="#uart" title="永久链接至标题"></a></h2>
+<p>有时使用hbupdate工具升级失败，通过手动uart烧录来获取更多信息，判断错误点，手动uart烧写步骤：</p>
+<ul class="simple">
+<li><p>在SDK包的 software_tools/update_tools 目录下找到 entry_uart.py</p></li>
+<li><p>设备串口和电脑连接起来，设备保持下电</p></li>
+</ul>
+<ul class="simple">
+<li><p>通过SecureCRT连接设备串口，将附件entry_uart.py脚本通过serial中script的run选项选中该脚本，开始运行</p></li>
+</ul>
+<p><img alt="image-20220330110638247" src="../_images/image-20220330110638247.png" /></p>
+<ul class="simple">
+<li><p>运行脚本后，立即将开发板上电，上电后即可进入串口下载模式，在’ C’未打印结束（大概3分钟）时选择Transfer 中’Send Xmodem’模式进行spl固件的下载，可在hbupdate工具中查找，如hbupdate\data\board_config\xj3-key1\boot_config\boot_file\boot_config\spl-uart-secure.bin。</p></li>
+</ul>
+<p><img alt="image-20220330111509974" src="../_images/image-20220330111509974.png" /></p>
+<p><img alt="image-20220330111837468" src="../_images/image-20220330111837468.png" /></p>
+<p><img alt="image-20220330112328054" src="../_images/image-20220330112328054.png" /></p>
+<ul>
+<li><p>加载并运行完SPL后，自动进入上传加载ddr bin文件的程序，通过serial工具中transfer中的’ Send Ymodem’模式进行上传bin文件，选择正确的bin文件（如update/data/xj3-ddr/SAMSUNG-LPDDR4-3200-110-ddr.bin）。</p>
+<p><img alt="image-20220324185128388" src="../_images/image-20220324185128388.png" /></p>
+<p><img alt="image-20220330112850304" src="../_images/image-20220330112850304.png" /></p>
+</li>
+<li><p>加载完ddr bin后，自动进入上传加载boot pkg文件程序，通过serial工具中transfer中的’ send Ymodem’模式进行上传boot*.pkg文件，选择正确的pkg文件（如果没有该文件可在hbupdate工具与spl同目录下选择正确的pkg文件）。</p></li>
+</ul>
+<p><img alt="image-20220330113231046" src="../_images/image-20220330113231046.png" /></p>
+<p><img alt="entry_uart_ymodem" src="../_images/entry_uart_ymodem.png" /></p>
+<ul class="simple">
+<li><p>正常加载后设备进入uboot ，后续可通过fastboot烧录或手动tftp将镜像上传烧录。</p></li>
+</ul>
+</section>
+</section>
+<section id="id8">
+<h1><span class="section-number">8.3. </span>视频处理<a class="headerlink" href="#id8" title="永久链接至标题"></a></h1>
+<section id="version-0807sdk-qos">
+<h2><span class="section-number">8.3.1. </span>Version_0807版本SDK QOS配置方法<a class="headerlink" href="#version-0807sdk-qos" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">devmem</span> <span class="mh">0xa1000044</span> <span class="mi">32</span> <span class="mh">0x1010</span> <span class="o">//</span><span class="n">pll</span>
+<span class="n">devmem</span> <span class="mh">0xa1000144</span> <span class="mi">32</span> <span class="mh">0x11</span> <span class="o">//</span><span class="n">sif</span> <span class="n">mclk</span>
+<span class="n">devmem</span> <span class="mh">0xa4000038</span> <span class="mi">32</span> <span class="mh">0x10100000</span> <span class="o">//</span><span class="n">axibus_ctrl</span>
+<span class="n">devmem</span> <span class="mh">0xA2D10000</span> <span class="mi">32</span> <span class="mh">0x04032211</span> <span class="o">//</span><span class="n">read_qos_ctrl</span>
+<span class="n">devmem</span> <span class="mh">0xA2D10004</span> <span class="mi">32</span> <span class="mh">0x04032211</span> <span class="o">//</span><span class="n">write_qos_ctrl</span>
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h2><span class="section-number">8.3.2. </span>如何打开VIO各模块主要日志<a class="headerlink" href="#id9" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="s2">&quot;file vio_group_api.c +p&quot;</span> <span class="o">&gt;/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">dynamic_debug</span><span class="o">/</span><span class="n">control</span>
+<span class="n">echo</span> <span class="s2">&quot;file acamera.c +p&quot;</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">dynamic_debug</span><span class="o">/</span><span class="n">control</span>
+<span class="n">echo</span> <span class="s2">&quot;file hobot_dev_sif.c +p&quot;</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">dynamic_debug</span><span class="o">/</span><span class="n">control</span>
+<span class="n">echo</span> <span class="s2">&quot;file hobot_dev_ipu.c +p&quot;</span> <span class="o">&gt;/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">dynamic_debug</span><span class="o">/</span><span class="n">control</span>
+<span class="n">echo</span> <span class="s2">&quot;file hobot_dev_pym.c +p&quot;</span> <span class="o">&gt;/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">dynamic_debug</span><span class="o">/</span><span class="n">control</span>
+<span class="n">echo</span> <span class="s2">&quot;file system_dwe_api.c +p&quot;</span> <span class="o">&gt;/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">dynamic_debug</span><span class="o">/</span><span class="n">control</span>
+<span class="n">echo</span> <span class="s2">&quot;file dwe_subdev.c +p&quot;</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">dynamic_debug</span><span class="o">/</span><span class="n">control</span>
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h2><span class="section-number">8.3.3. </span>如何打开VIO各模块中断日志<a class="headerlink" href="#id10" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="s2">&quot;func sif_isr +p&quot;</span> <span class="o">&gt;/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">dynamic_debug</span><span class="o">/</span><span class="n">control</span>
+<span class="n">echo</span> <span class="s2">&quot;func acamera_interrupt_handler +p&quot;</span> <span class="o">&gt;/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">dynamic_debug</span><span class="o">/</span><span class="n">control</span>
+<span class="n">echo</span> <span class="s2">&quot;func x3_ldc_irq +p&quot;</span> <span class="o">&gt;/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">dynamic_debug</span><span class="o">/</span><span class="n">control</span>
+<span class="n">echo</span> <span class="s2">&quot;func ipu_isr +p&quot;</span> <span class="o">&gt;/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">dynamic_debug</span><span class="o">/</span><span class="n">control</span>
+<span class="n">echo</span> <span class="s2">&quot;func pym_isr +p&quot;</span> <span class="o">&gt;/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">dynamic_debug</span><span class="o">/</span><span class="n">control</span>
+</pre></div>
+</div>
+</section>
+<section id="x3sif-isp-ipu-pym-vpu">
+<h2><span class="section-number">8.3.4. </span>X3查看sif,isp,ipu,pym,vpu等帧率命令<a class="headerlink" href="#x3sif-isp-ipu-pym-vpu" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cat /sys/devices/platform/soc/a4042000.pym/fps （查看pym帧率）
+cat /sys/devices/platform/soc/b3000000.isp/fps （查看isp帧率）
+cat /sys/devices/platform/soc/a4001000.sif/fps  （查看sif帧率）
+cat /sys/devices/platform/soc/a4040000.ipu/fps  （查看ipu帧率）
+cat /sys/devices/platform/soc/a8000000.vpu/fps   （查看vpu帧率）
+cat /sys/devices/platform/soc/a4010000.gdc0/fps  （查看gdc帧率）
+</pre></div>
+</div>
+</section>
+<section id="id11">
+<h2><span class="section-number">8.3.5. </span>如何查看VIO各模块中断状态<a class="headerlink" href="#id11" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="n">interrupts</span> <span class="o">|</span> <span class="n">egrep</span> <span class="s2">&quot;sif|isp|ipu|gdc&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id12">
+<h1><span class="section-number">8.4. </span>编解码类<a class="headerlink" href="#id12" title="永久链接至标题"></a></h1>
+<section id="id13">
+<h2><span class="section-number">8.4.1. </span>视频码流头部信息不正确报错<a class="headerlink" href="#id13" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ERROR</span><span class="p">][</span><span class="n">MM</span><span class="p">][</span><span class="n">src</span><span class="o">/</span><span class="n">vdi</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">vdi_osal</span><span class="o">.</span><span class="n">c</span><span class="p">:</span><span class="mi">174</span><span class="p">]</span> <span class="p">[</span><span class="n">ERROR</span><span class="p">][</span><span class="mf">869.56942</span><span class="p">][</span><span class="mi">3344</span><span class="p">:</span><span class="mi">3543</span><span class="p">][</span><span class="n">VideoDecoder</span><span class="p">]</span> <span class="n">DecodeHeader</span><span class="p">:</span><span class="mi">1554</span> <span class="n">FAILED</span> <span class="n">TO</span> <span class="n">DEC_PIC_HDR</span><span class="p">:</span> <span class="n">ret</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">SEQERR</span><span class="p">(</span><span class="mi">00005000</span><span class="p">)</span> <span class="p">[</span><span class="n">ERROR</span><span class="p">][</span><span class="n">MM</span><span class="p">][</span><span class="n">src</span><span class="o">/</span><span class="n">vdi</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">vdi_osal</span><span class="o">.</span><span class="n">c</span><span class="p">:</span><span class="mi">174</span><span class="p">]</span> <span class="p">[</span><span class="n">ERROR</span><span class="p">][</span><span class="mf">869.56980</span><span class="p">][</span><span class="mi">3344</span><span class="p">:</span><span class="mi">3543</span><span class="p">][</span><span class="n">COMPONENT</span><span class="p">]</span> <span class="n">Component</span> <span class="n">wave_decoder</span> <span class="n">will</span> <span class="n">be</span> <span class="n">terminated</span>
+</pre></div>
+</div>
+<p>需要输入给解码模块的码流的第一个帧，给sps，pps，idr，如果只给sps，就会报如上错误。</p>
+</section>
+</section>
+<section id="id14">
+<h1><span class="section-number">8.5. </span>外设类<a class="headerlink" href="#id14" title="永久链接至标题"></a></h1>
+<section id="sensor">
+<h2><span class="section-number">8.5.1. </span>如何判断sensor硬件连接是否正常<a class="headerlink" href="#sensor" title="永久链接至标题"></a></h2>
+<p>使能mclk</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">vps</span><span class="o">/</span><span class="n">mipi_host1</span><span class="o">/</span><span class="n">param</span><span class="o">/</span><span class="n">snrclk_en</span>
+<span class="n">echo</span> <span class="mi">24000000</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">vps</span><span class="o">/</span><span class="n">mipi_host1</span><span class="o">/</span><span class="n">param</span><span class="o">/</span><span class="n">snrclk_freq</span>
+<span class="n">echo</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">vps</span><span class="o">/</span><span class="n">mipi_host0</span><span class="o">/</span><span class="n">param</span><span class="o">/</span><span class="n">snrclk_en</span>
+<span class="n">echo</span> <span class="mi">24000000</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">vps</span><span class="o">/</span><span class="n">mipi_host0</span><span class="o">/</span><span class="n">param</span><span class="o">/</span><span class="n">snrclk_freq</span>
+</pre></div>
+</div>
+<p>在sdb开发板上，使用 i2cdetect -r -y 2 探测，探测到的地址 40 是 F37, 1a 是 imx415</p>
+</section>
+<section id="eth-phy">
+<h2><span class="section-number">8.5.2. </span>ETH phy寄存器读取方法<a class="headerlink" href="#eth-phy" title="永久链接至标题"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>uboot下可以直接使用mii命令，例如
+mii dump
+mii read
+kernel读取phy寄存器方法
+cat /sys/class/net/eth0/phy_reg/phy_reg
+然后使用dmesg，即可读取部分phy寄存器
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id15">
+<h1><span class="section-number">8.6. </span>硬件类<a class="headerlink" href="#id15" title="永久链接至标题"></a></h1>
+<section id="tf">
+<h2><span class="section-number">8.6.1. </span>TF卡接口<a class="headerlink" href="#tf" title="永久链接至标题"></a></h2>
+<p>X3 SDB提供一路TF Card接口，硬件设计上IO接口电平固定为3V3，因此无法支持TF 1.8V高速传输模式。</p>
+</section>
+<section id="x3">
+<h2><span class="section-number">8.6.2. </span>X3 电源上电斜率要求<a class="headerlink" href="#x3" title="永久链接至标题"></a></h2>
+<p>X3 对上电斜率有要求，硬件需要实际进行测试。具体要求见Hardware-Design Guide中 1.1.4 Power-On and Power-OFF sequences 表格中的MAX Ramp Rate。当实际硬件测试不满足设计时，可以加MOS软启动电路进行解决。</p>
+</section>
+<section id="id16">
+<h2><span class="section-number">8.6.3. </span>X3 上掉电时序要求<a class="headerlink" href="#id16" title="永久链接至标题"></a></h2>
+<p>X3对上掉电时序要求参考Hardware-Design Guide中 1.1.4 Power-On and Power-OFF sequences
+掉电时序不能满足设计要求的话，可以不做控制。时序中需要特别注意如下问题：
+DDR对上掉电时序是由要求的，不符合要求会导致DDR异常，设计需要将DDR的时序考虑在内
+LPDDR4的时序要求：VDD_1V8先于VDD_DDR_1V1上电，VDD_DDR_1V1先于VDD_1V8掉电（详细见DDR的规格书）</p>
+</section>
+<section id="lpddr4-ddr4-lpddr4">
+<h2><span class="section-number">8.6.4. </span>LPDDR4&amp;DDR4选型优缺点，更推荐使用LPDDR4<a class="headerlink" href="#lpddr4-ddr4-lpddr4" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>DDR4的方案需要用两颗，成本会有一定优化，优化空间不是很大。</p></li>
+<li><p>LPDDR4的带宽比较有优势能支持3200Mbs。DDR4基本支持2666Mbs以下。</p></li>
+<li><p>从容量设计角度LPDDR4可以支持pin2pin替代，增加了设计冗余。</p></li>
+</ul>
+</section>
+<section id="usb-id-usb">
+<h2><span class="section-number">8.6.5. </span>USB ID：硬件配置USB主从模式<a class="headerlink" href="#usb-id-usb" title="永久链接至标题"></a></h2>
+<p>引脚号AA13 USB_ID芯片端已NC，此引脚NC不连接。硬件引脚已变更为引脚号C12 SD0_WPROT
+SD0_WPROT上拉4.7K至1V8 X3做device，下拉4.7K至地 X3做host。</p>
+</section>
+<section id="usb-vbus">
+<h2><span class="section-number">8.6.6. </span>USB_VBUS引脚，插拔检测<a class="headerlink" href="#usb-vbus" title="永久链接至标题"></a></h2>
+<p>引脚号 Y14 USB_VBUS 芯片端已NC，此引脚NC不连接。需要另取一个IO脚做USB_VBUS的检测。</p>
+<ul class="simple">
+<li><p>X3 USB做host时，不需要USB_VBUS检测，支持热拔插。</p></li>
+<li><p>X3 USB做device时，需要增加一个IO做USB_VBUS检测，已支持热拔插。</p></li>
+</ul>
+</section>
+<section id="id17">
+<h2><span class="section-number">8.6.7. </span>UART串口数量少<a class="headerlink" href="#id17" title="永久链接至标题"></a></h2>
+<p>可以通过spi转uart的方式扩展。</p>
+</section>
+<section id="id18">
+<h2><span class="section-number">8.6.8. </span>最小系统整体运行、待机功耗测试<a class="headerlink" href="#id18" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>deepsleep场景下， X3功耗能控制在74mW以内。</p></li>
+<li><p>静态场景下，在kernel启动时，X3功耗在800mW。</p></li>
+</ul>
+</section>
+<section id="x3-adc">
+<h2><span class="section-number">8.6.9. </span>X3 ADC引脚数目<a class="headerlink" href="#x3-adc" title="永久链接至标题"></a></h2>
+<p>目前仅有一个，如需要多个ADC引脚，需增加外设芯片。</p>
+</section>
+</section>
+<section id="id19">
+<h1><span class="section-number">8.7. </span>工具类<a class="headerlink" href="#id19" title="永久链接至标题"></a></h1>
+<section id="no-space-left-on-device">
+<h2><span class="section-number">8.7.1. </span>升级失败-No space left on device<a class="headerlink" href="#no-space-left-on-device" title="永久链接至标题"></a></h2>
+<p>报错信息： “ No space left on device”</p>
+<p>解决方法：请检查安装升级工具的分区磁盘空间是否不足</p>
+<p><img alt="image-20220331134436880" src="../_images/image-20220331134436880.png" /></p>
+</section>
+<section id="id20">
+<h2><span class="section-number">8.7.2. </span>升级失败-芯片串口被占用<a class="headerlink" href="#id20" title="永久链接至标题"></a></h2>
+<p>报错信息：如图所示。</p>
+<p>解决方法：检查是否有其他程序（MobaXterm、SecureCRT、XShell等软件）已经打开了串口，请关闭掉他们的连接。</p>
+<p><img alt="image-20220402193931741" src="../_images/image-20220402193931741.png" /></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="8. FAQ" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="usb_faqs/index.html" class="btn btn-neutral float-right" title="8.8. 总线类" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

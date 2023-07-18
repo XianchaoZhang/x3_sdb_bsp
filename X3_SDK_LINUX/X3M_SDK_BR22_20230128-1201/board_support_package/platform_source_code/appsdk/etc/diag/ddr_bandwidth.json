@@ -1,0 +1,8 @@
+{
+	"cpu_thresh": "500",
+	"bif_thresh": "500",
+	"bpu0_thresh": "500",
+	"bpu1_thresh": "500",
+	"vio_thresh": "500",
+	"peri_thresh": "500"
+}

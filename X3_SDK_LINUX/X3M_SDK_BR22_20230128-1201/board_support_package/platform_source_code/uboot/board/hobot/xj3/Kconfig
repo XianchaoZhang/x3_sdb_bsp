@@ -1,0 +1,15 @@
+if TARGET_XJ3
+
+config SYS_BOARD
+	default "xj3"
+
+config SYS_VENDOR
+	default "hobot"
+
+config SYS_SOC
+	default "xj3"
+
+config SYS_CONFIG_NAME
+	default "xj3"
+
+endif

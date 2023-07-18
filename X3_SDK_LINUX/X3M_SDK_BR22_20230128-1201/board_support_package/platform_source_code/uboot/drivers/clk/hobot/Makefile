@@ -1,0 +1,10 @@
+obj-${CONFIG_CLK_HB}		+= fixed-clk.o
+obj-${CONFIG_CLK_HB}		+= laintpll.o
+obj-${CONFIG_CLK_HB}		+= fracpll.o
+obj-${CONFIG_CLK_HB}		+= mux.o
+obj-${CONFIG_CLK_HB}		+= divider.o
+obj-${CONFIG_CLK_HB}		+= gate.o
+obj-${CONFIG_CLK_HB}		+= div-gate.o
+obj-${CONFIG_CLK_HB}		+= endiv.o
+obj-${CONFIG_CLK_HB}		+= gpio.o
+obj-${CONFIG_CLK_HB}		+= fixed-factor.o

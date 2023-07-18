@@ -1,0 +1,358 @@
+# Ubuntu 根文件系统制作
+
+## 环境配置
+
+编译x3 ubuntu 根文件系统，建议使用ubuntu-18.04版本的操作系统，并安装以下的包：
+
+```
+sudo apt-get install wget ca-certificates device-tree-compiler pv bc lzop zip binfmt-support \
+build-essential ccache debootstrap ntpdate gawk gcc-arm-linux-gnueabihf qemu-user-static \
+u-boot-tools uuid-dev zlib1g-dev unzip libusb-1.0-0-dev fakeroot parted pkg-config \
+libncurses5-dev whiptail debian-keyring debian-archive-keyring f2fs-tools libfile-fcntllock-perl \
+rsync libssl-dev nfs-kernel-server btrfs-progs ncurses-term p7zip-full kmod dosfstools \
+libc6-dev-armhf-cross imagemagick curl patchutils liblz4-tool libpython2.7-dev linux-base swig acl \
+python3-dev python3-distutils libfdt-dev locales ncurses-base pixz dialog systemd-container udev \
+lib32stdc++6 libc6-i386 lib32ncurses5 lib32tinfo5 bison libbison-dev flex libfl-dev cryptsetup gpg \
+gnupg1 gpgv1 gpgv2 cpio aria2 pigz dirmngr python3-distutils distcc git dos2unix apt-cacher-ng
+```
+
+## 重点工具介绍
+
+### debootstrap
+
+debootstrap是debian/ubuntu下的一个工具，用来构建一套基本的系统(根文件系统)。生成的目录符合Linux文件系统标准(FHS)，即包含了 /boot、 /etc、 /bin、 /usr 等等目录，但它比发行版本的Linux体积小很多，当然功能也没那么强大，因此只能说是“基本的系统”。在我们的xj3平台上可以按照需求定制自己的ubuntu系统。
+
+ubuntu系统（PC）下安装debootstrap
+
+```bash
+sudo apt-get install debootstrap
+```
+
+使用方式
+
+```bash
+# 可加参数指定源
+sudo debootstrap --arch [平台] [发行版本代号] [目录] [源]
+```
+
+### chroot
+
+chroot，即 change root directory (更改 root 目录)。在 linux 系统中，系统默认的目录结构都是以 `/`，即是以根 (root) 开始的。而在使用 chroot 之后，系统的目录结构将以指定的位置作为 `/` 位置。
+
+### mkfs.ext4
+
+mkfs.ext4命令可以磁盘分区创建ext4文件系统，可以实现ext4文件系统格式化。该命令是mke2fs命令的符号链接，使用方法和mke2fs命令一样。
+
+### parted
+
+parted命令是由GNU组织开发的一款功能强大的磁盘分区和分区大小调整工具，与fdisk不同，它支持调整分区的大小。作为一种设计用于Linux的工具，它没有构建成处理与fdisk关联的多种分区类型，但是，它可以处理最常见的分区格式，包括：ext2、ext3、fat16、fat32、NTFS、ReiserFS、JFS、XFS、UFS、HFS以及Linux交换分区。
+
+## 制作XJ3-Ubuntu rootfs脚本代码
+
+从 [Ubuntu根文件系统制作](https://pan.horizon.ai/index.php/s/JTitK4g8SLzSGa6?path=%2Fubuntu_20.04_rootfs) 下载脚本代码。
+
+执行以下命令生成ubuntu根文件系统：
+
+```bash
+mkdir ubuntu_rootfs
+cd ubuntu_rootfs
+# 复制 make_ubuntu_rootfs.sh 到前面目录
+chmod +x make_ubuntu_rootfs.sh
+sudo ./make_ubuntu_rootfs.sh
+```
+
+编译成功的输出结果：
+
+```bash
+ubuntu_src/                             # 编译输出目录
+├── focal-xj3-arm64                     # 编译成功后生成的根文件系统，会有比较多的系统临时文件
+├── focal-xj3-arm64.tar.xz0             # 以下几个压缩文件是剔除 dev、 proc、 sys等系统临时文件的根文件系统
+├── focal-xj3-arm64.tar.xz1
+├── focal-xj3-arm64.tar.xz2
+├── focal-xj3-arm64.tar.xz3
+└── focal-xj3-arm64.tar.xz.info         # 当前系统安装了哪些 apt 包
+
+system/                                 # 解压 focal-xj3-arm64.tar.xz[0-9] 的测试目录
+├── app
+├── bin -> usr/bin
+├── boot
+├── dev
+├── etc
+├── home
+├── lib -> usr/lib
+├── media
+├── mnt
+├── opt
+├── proc
+├── root
+├── run
+├── sbin -> usr/sbin
+├── srv
+├── sys
+├── tmp
+├── userdata
+├── usr
+└── var
+
+21 directories, 5 files
+```
+
+ubuntu_src 目录下的 focal-xj3-arm64.tar.xz[0-9] 这些压缩包文件用于替换 BSP 源码 **system/rootfs_ubuntu** 目录下的ubuntu根文件系统源码。
+
+## 脚本代码解析
+
+### debootstrap拉取定制的ubuntu根文件系统
+
+debootstrap这个命令执行步骤可以分为两步：
+
+怎么”定制“呢，debootstrap有很多参数，可以按需配置debootstrap
+
+```Bash
+debootstrap --variant=minbase \
+        --include=${DEBOOTSTRAP_LIST// /,} \
+        --arch=${ARCH} \
+        --components=${DEBOOTSTRAP_COMPONENTS} \
+        --foreign ${RELEASE} \
+        $dst_dir \
+        $apt_mirror
+```
+
+上述代码中
+
+--variant:选择最小的minbase
+
+--include:在生成rootfs的时候要添加的组件，上面的步骤阅读说明里有组件名单
+
+--arch:指定制作的文件系统是什么架构的，在这里选择arm64
+
+--components:选择"main,universe"
+
+--foreign：在与主机架构不相同时需要指定此参数，仅做初始化的解包，${RELEASE} 代表发行版本 XJ3-ubuntu可选的有bionic和focal，分别代表18.04的版本和20.04的版本
+
+$dst_dir:这个是要存放文件系统的文件夹
+
+$apt_mirror:代表镜像的源地址，`我们选择国内的源http://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/` 一般使用本地缓存代理来做加速
+
+执行上述命令之后在$dst_dir里就生成了定制的rootfs，进入$dst_dir可以看到bin lib usr等等目录
+
+拷贝/usr/bin/qemu-aarch64-static 到$dst_dir/usr/bin
+
+拷贝/usr/share/keyrings/*-archive-keyring.gpg 到$dst_dir/usr/share/keyrings/
+
+### chroot执行debootstrap的第二阶段
+
+执行
+
+```
+chroot ${dst_dir} /bin/bash -c "/debootstrap/debootstrap --second-stage"
+```
+
+上面的指令代表的意思就是改变根文件系统到${`dst_dir`}中执行`/debootstrap/debootstrap --second-stage`这个命令，-c 代表执行完前面的命令之后返回当前的shell
+
+### 挂载根文件系统的dev sysfs proc 等目录
+
+```Bash
+mount -t proc chproc "${dst_dir}"/proc
+mount -t sysfs chsys "${dst_dir}"/sys
+mount -t devtmpfs chdev "${dst_dir}"/dev || mount --bind /dev "${dst_dir}"/dev
+mount -t devpts chpts "${dst_dir}"/dev/pts
+```
+
+### 设置apt的软件源 修改根文件系统中的etc/apt/sources.list
+
+
+
+```Bash
+deb http://${UBUNTU_MIRROR} $release main restricted universe multiverse
+#deb-src http://${UBUNTU_MIRROR} $release main restricted universe multiverse
+
+deb http://${UBUNTU_MIRROR} ${release}-security main restricted universe multiverse
+#deb-src http://${UBUNTU_MIRROR} ${release}-security main restricted universe multiverse
+
+deb http://${UBUNTU_MIRROR} ${release}-updates main restricted universe multiverse
+#deb-src http://${UBUNTU_MIRROR} ${release}-updates main restricted universe multiverse
+
+deb http://${UBUNTU_MIRROR} ${release}-backports main restricted universe multiverse
+#deb-src http://${UBUNTU_MIRROR} ${release}-backports main restricted universe multiverse
+```
+
+### 用apt安装包
+
+```Bash
+log_out "Updating base packages" "${dst_dir}" "info"
+eval 'LC_ALL=C LANG=C chroot ${dst_dir} /bin/bash -c "apt-get -q -y $apt_extra update"'
+[[ $? -ne 0 ]] && exit -1
+log_out "Upgrading base packages" "${dst_dir}" "info"
+eval 'LC_ALL=C LANG=C chroot ${dst_dir} /bin/bash -c "apt-get -q -y $apt_extra upgrade"'
+[[ $? -ne 0 ]] && exit -1
+log_out "Installing base packages" "${dst_dir}" "info"
+eval 'LC_ALL=C LANG=C chroot ${dst_dir} /bin/bash -c "DEBIAN_FRONTEND=noninteractive apt-get -y -q $apt_extra --no-install-recommends install $ADD_PACKAGE_LIST"'
+[[ $? -ne 0 ]] && exit -1
+chroot ${dst_dir} /bin/bash -c "dpkg --get-selections" | grep -v deinstall | awk '{print $1}' | cut -f1 -d':' > ${tar_file}.info
+log_out "Configure hostname" "$HOST" "info"
+```
+
+从上述代码中可以看的出来就是chroot到生成的根文件系统中去然后执行了apt update,apt upgrade和apt install $ADD_PACKAGE_LIST三个命令，主要就是用apt工具更新软件，下载必要的软件。
+
+为了加快apt的速度，添加了代理`local apt_extra="-o Acquire::http::Proxy=\"http://localhost:3142\""`
+
+
+
+### 修改hostname
+
+```Bash
+echo "$HOST" > ${dst_dir}/etc/hostname
+```
+
+编辑/etc/hostname内容为xj3ubuntu
+
+
+
+### 为了下面能安装python库，需要修改dns
+
+```Bash
+#首先删掉链接文件
+rm ${dst_dir}/etc/resolv.conf
+#重新生成新的文件
+echo "nameserver $NAMESERVER" > ${dst_dir}/etc/resolv.conf
+```
+
+### 安装python库
+
+```Bash
+chroot ${dst_dir} /bin/bash -c "pip install $PYTHON_PACKAGE_LIST"
+```
+
+目前只预装了下面的俩python库
+
+```Bash
+PYTHON_PACKAGE_LIST="numpy opencv-python "
+```
+
+### 配置udev
+
+```Bash
+#解决自动加载驱动的bug
+sed -i 's/ENV{MODALIAS}/# ENV{MODALIAS}/' "${dst_dir}"/lib/udev/rules.d/80-drivers.rules
+
+#解决加载camera 驱动panic的问题
+sed -i 's/IMPORT{program}/# IMPORT{program}/' "${dst_dir}"/lib/udev/rules.d/60-persistent-v4l.rules
+
+#解决 ubuntu20.04 usb storage和sdcard的udev自动mount的问题
+mkdir "${dst_dir}"/etc/systemd/system/systemd-udevd.service.d
+cat <<-EOF >> "${dst_dir}"/etc/systemd/system/systemd-udevd.service.d/00-hobot-private.conf
+[Service]
+PrivateMounts=no
+EOF
+```
+
+解决 ubuntu20.04 usb storage和sdcard的udev自动mount失败的问题
+
+### 配置ssh
+
+```Bash
+log_out "Configure ssh" ""${dst_dir}"/etc/ssh/sshd_config" "info"
+# permit root login via SSH for the first boot
+sed -i 's/#\?PermitRootLogin .*/PermitRootLogin yes/' "${dst_dir}"/etc/ssh/sshd_config
+# enable PubkeyAuthentication
+sed -i 's/#\?PubkeyAuthentication .*/PubkeyAuthentication yes/' "${dst_dir}"/etc/ssh/sshd_config
+```
+
+解决了root用户不能通过ssh 登录的问题
+
+### 配置console
+
+```Bash
+# # console fix due to Debian bug
+sed -e 's/CHARMAP=".*"/CHARMAP="'$CONSOLE_CHAR'"/g' -i "${dst_dir}"/etc/default/console-setup
+```
+
+### 配置/etc/hosts文件
+
+```Bash
+cat <<-EOF >> "${dst_dir}"/etc/hosts
+127.0.0.1   localhost
+127.0.0.1   $HOST
+EOF
+```
+
+### 配置网络
+
+```PowerShell
+cat <<-EOF >> "${dst_dir}"/etc/network/interfaces
+auto ${ethdev}
+iface ${ethdev} inet static
+        address ${address}
+        netmask ${netmask}
+        #network ${network}
+        #broadcast ${broadcast}
+        gateway ${gateway}
+EOF
+    
+```
+
+目前是按照下面的配置
+
+```Bash
+ethdev="eth0"
+address="192.168.1.10"
+netmask="255.255.255.0"
+gateway="192.168.1.1"
+```
+
+### 配置串口
+
+```Perl
+cp "${dst_dir}"/lib/systemd/system/serial-getty@.service "${dst_dir}/lib/systemd/system/serial-getty@ttyS0.service"
+sed -i "s/--keep-baud 115200/--keep-baud 921600,115200/"  "${dst_dir}/lib/systemd/system/serial-getty@ttyS0.service"
+log_out "Enabling serial console" "ttyS0" "info"
+chroot "${dst_dir}" /bin/bash -c "systemctl daemon-reload"
+chroot "${dst_dir}" /bin/bash -c "systemctl --no-reload enable serial-getty@ttyS0.service"
+```
+
+这里配置的是`/dev/ttyS1`
+
+### 配置rootfs的用户和密码，目前用户： root和xj3
+
+```Bash
+chroot "${dst_dir}" /bin/bash -c "(echo $ROOTPWD;echo $ROOTPWD;) | passwd root"
+chroot "${dst_dir}" /bin/bash -c "adduser --quiet --disabled-password --shell /bin/bash --home /home/${XJ3_USERNAME} --gecos ${XJ3_USERNAME} ${XJ3_USERNAME}"
+chroot "${dst_dir}" /bin/bash -c "(echo ${XJ3_PWD};echo ${XJ3_PWD};) | passwd ${XJ3_USERNAME}"
+```
+
+### 配置network manager
+
+```Bash
+sed "s/managed=\(.*\)/managed=true/g" -i "${dst_dir}"/etc/NetworkManager/NetworkManager.conf
+# most likely we don't need to wait for nm to get online
+chroot "${dst_dir}" /bin/bash -c "systemctl disable NetworkManager-wait-online.service"
+# Just regular DNS and maintain /etc/resolv.conf as a file
+sed "/dns/d" -i "${dst_dir}"/etc/NetworkManager/NetworkManager.conf
+sed "s/\[main\]/\[main\]\ndns=default\nrc-manager=file/g" -i "${dst_dir}"/etc/NetworkManager/NetworkManager.conf
+if [[ -n $NM_IGNORE_DEVICES ]]; then
+    mkdir -p "${dst_dir}"/etc/NetworkManager/conf.d/
+    cat <<-EOF > "${dst_dir}"/etc/NetworkManager/conf.d/10-ignore-interfaces.conf
+    [keyfile]
+    unmanaged-devices=$NM_IGNORE_DEVICES
+    EOF
+fi
+```
+
+### 最后就是卸载之前挂载的dev,proc,sys节点
+
+```Bash
+umount -l --recursive "${dst_dir}"/dev >/dev/null 2>&1
+umount -l "${dst_dir}"/proc >/dev/null 2>&1
+umount -l "${dst_dir}"/sys >/dev/null 2>&1
+```
+
+### 打包rootfs
+
+```Bash
+tar -Jcf - -C $src_dir/ --exclude='./dev/*' --exclude='./proc/*' --exclude='./run/*' --exclude='./tmp/*' --exclude='./sys/*' .  | split -b 99m -d -a 1 - ${tar_file}
+```
+
+打包的时候不要打包sys proc dev tmp run目录，等解压的时候在创建
+
+
+

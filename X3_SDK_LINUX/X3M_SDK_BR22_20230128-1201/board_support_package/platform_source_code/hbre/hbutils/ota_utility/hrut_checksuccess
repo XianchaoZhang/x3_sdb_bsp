@@ -1,0 +1,29 @@
+#!/bin/sh
+
+ota_logpath="/tmp/cache"
+if [ ! -d "$ota_logpath" ];then
+    ota_logpath="/userdata/cache"
+fi
+
+file="${ota_logpath}/result"
+if [ ! -f $file ];then
+   echo "Error: $file not exist!"
+fi
+
+log=$(tail -n 1 $file)
+
+echo "$log"
+echo "$log"
+echo "$log"
+
+if [ x"$log" = x"0" ];then
+    exit 0
+fi
+
+if [ x"$log" = x"1" ];then
+    exit 1
+fi
+
+if [ x"$log" = x"2" ];then
+    exit 2
+fi

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.9.2. Ubuntu 根文件系统制作 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.10. X3降功耗用户指南" href="../Low_Power_Solution_User_Guide.html" />
+    <link rel="prev" title="4.9.1. Yocto 根文件系统制作" href="yocto_rootfs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../driver_develop_guide/index.html">4.3. 驱动开发指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.9. 根文件系统制作</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="yocto_rootfs.html">4.9.1. Yocto 根文件系统制作</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.9.2. Ubuntu 根文件系统制作</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.9.2.1. 环境配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">4.9.2.2. 重点工具介绍</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#debootstrap">debootstrap</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#chroot">chroot</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#mkfs-ext4">mkfs.ext4</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#parted">parted</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#xj3-ubuntu-rootfs">4.9.2.3. 制作XJ3-Ubuntu rootfs脚本代码</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">4.9.2.4. 脚本代码解析</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#debootstrapubuntu">debootstrap拉取定制的ubuntu根文件系统</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#chrootdebootstrap">chroot执行debootstrap的第二阶段</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#dev-sysfs-proc">挂载根文件系统的dev sysfs proc 等目录</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#apt-etc-apt-sources-list">设置apt的软件源 修改根文件系统中的etc/apt/sources.list</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#apt">用apt安装包</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hostname">修改hostname</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#python-dns">为了下面能安装python库，需要修改dns</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#python">安装python库</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#udev">配置udev</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#ssh">配置ssh</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#console">配置console</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#etc-hosts">配置/etc/hosts文件</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">配置网络</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id5">配置串口</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rootfs-rootxj3">配置rootfs的用户和密码，目前用户： root和xj3</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#network-manager">配置network manager</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#dev-proc-sys">最后就是卸载之前挂载的dev,proc,sys节点</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rootfs">打包rootfs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.9. </span>根文件系统制作</a> &raquo;</li>
+      <li><span class="section-number">4.9.2. </span>Ubuntu 根文件系统制作</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="yocto_rootfs.html" class="btn btn-neutral float-left" title="4.9.1. Yocto 根文件系统制作" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../Low_Power_Solution_User_Guide.html" class="btn btn-neutral float-right" title="4.10. X3降功耗用户指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ubuntu">
+<h1><span class="section-number">4.9.2. </span>Ubuntu 根文件系统制作<a class="headerlink" href="#ubuntu" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">4.9.2.1. </span>环境配置<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>编译x3 ubuntu 根文件系统，建议使用ubuntu-18.04版本的操作系统，并安装以下的包：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">wget</span> <span class="n">ca</span><span class="o">-</span><span class="n">certificates</span> <span class="n">device</span><span class="o">-</span><span class="n">tree</span><span class="o">-</span><span class="n">compiler</span> <span class="n">pv</span> <span class="n">bc</span> <span class="n">lzop</span> <span class="nb">zip</span> <span class="n">binfmt</span><span class="o">-</span><span class="n">support</span> \
+<span class="n">build</span><span class="o">-</span><span class="n">essential</span> <span class="n">ccache</span> <span class="n">debootstrap</span> <span class="n">ntpdate</span> <span class="n">gawk</span> <span class="n">gcc</span><span class="o">-</span><span class="n">arm</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnueabihf</span> <span class="n">qemu</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">static</span> \
+<span class="n">u</span><span class="o">-</span><span class="n">boot</span><span class="o">-</span><span class="n">tools</span> <span class="n">uuid</span><span class="o">-</span><span class="n">dev</span> <span class="n">zlib1g</span><span class="o">-</span><span class="n">dev</span> <span class="n">unzip</span> <span class="n">libusb</span><span class="o">-</span><span class="mf">1.0</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="n">dev</span> <span class="n">fakeroot</span> <span class="n">parted</span> <span class="n">pkg</span><span class="o">-</span><span class="n">config</span> \
+<span class="n">libncurses5</span><span class="o">-</span><span class="n">dev</span> <span class="n">whiptail</span> <span class="n">debian</span><span class="o">-</span><span class="n">keyring</span> <span class="n">debian</span><span class="o">-</span><span class="n">archive</span><span class="o">-</span><span class="n">keyring</span> <span class="n">f2fs</span><span class="o">-</span><span class="n">tools</span> <span class="n">libfile</span><span class="o">-</span><span class="n">fcntllock</span><span class="o">-</span><span class="n">perl</span> \
+<span class="n">rsync</span> <span class="n">libssl</span><span class="o">-</span><span class="n">dev</span> <span class="n">nfs</span><span class="o">-</span><span class="n">kernel</span><span class="o">-</span><span class="n">server</span> <span class="n">btrfs</span><span class="o">-</span><span class="n">progs</span> <span class="n">ncurses</span><span class="o">-</span><span class="n">term</span> <span class="n">p7zip</span><span class="o">-</span><span class="n">full</span> <span class="n">kmod</span> <span class="n">dosfstools</span> \
+<span class="n">libc6</span><span class="o">-</span><span class="n">dev</span><span class="o">-</span><span class="n">armhf</span><span class="o">-</span><span class="n">cross</span> <span class="n">imagemagick</span> <span class="n">curl</span> <span class="n">patchutils</span> <span class="n">liblz4</span><span class="o">-</span><span class="n">tool</span> <span class="n">libpython2</span><span class="mf">.7</span><span class="o">-</span><span class="n">dev</span> <span class="n">linux</span><span class="o">-</span><span class="n">base</span> <span class="n">swig</span> <span class="n">acl</span> \
+<span class="n">python3</span><span class="o">-</span><span class="n">dev</span> <span class="n">python3</span><span class="o">-</span><span class="n">distutils</span> <span class="n">libfdt</span><span class="o">-</span><span class="n">dev</span> <span class="n">locales</span> <span class="n">ncurses</span><span class="o">-</span><span class="n">base</span> <span class="n">pixz</span> <span class="n">dialog</span> <span class="n">systemd</span><span class="o">-</span><span class="n">container</span> <span class="n">udev</span> \
+<span class="n">lib32stdc</span><span class="o">++</span><span class="mi">6</span> <span class="n">libc6</span><span class="o">-</span><span class="n">i386</span> <span class="n">lib32ncurses5</span> <span class="n">lib32tinfo5</span> <span class="n">bison</span> <span class="n">libbison</span><span class="o">-</span><span class="n">dev</span> <span class="n">flex</span> <span class="n">libfl</span><span class="o">-</span><span class="n">dev</span> <span class="n">cryptsetup</span> <span class="n">gpg</span> \
+<span class="n">gnupg1</span> <span class="n">gpgv1</span> <span class="n">gpgv2</span> <span class="n">cpio</span> <span class="n">aria2</span> <span class="n">pigz</span> <span class="n">dirmngr</span> <span class="n">python3</span><span class="o">-</span><span class="n">distutils</span> <span class="n">distcc</span> <span class="n">git</span> <span class="n">dos2unix</span> <span class="n">apt</span><span class="o">-</span><span class="n">cacher</span><span class="o">-</span><span class="n">ng</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2><span class="section-number">4.9.2.2. </span>重点工具介绍<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<section id="debootstrap">
+<h3>debootstrap<a class="headerlink" href="#debootstrap" title="永久链接至标题"></a></h3>
+<p>debootstrap是debian/ubuntu下的一个工具，用来构建一套基本的系统(根文件系统)。生成的目录符合Linux文件系统标准(FHS)，即包含了 /boot、 /etc、 /bin、 /usr 等等目录，但它比发行版本的Linux体积小很多，当然功能也没那么强大，因此只能说是“基本的系统”。在我们的xj3平台上可以按照需求定制自己的ubuntu系统。</p>
+<p>ubuntu系统（PC）下安装debootstrap</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get install debootstrap
+</pre></div>
+</div>
+<p>使用方式</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 可加参数指定源</span>
+sudo debootstrap --arch <span class="o">[</span>平台<span class="o">]</span> <span class="o">[</span>发行版本代号<span class="o">]</span> <span class="o">[</span>目录<span class="o">]</span> <span class="o">[</span>源<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<section id="chroot">
+<h3>chroot<a class="headerlink" href="#chroot" title="永久链接至标题"></a></h3>
+<p>chroot，即 change root directory (更改 root 目录)。在 linux 系统中，系统默认的目录结构都是以 <code class="docutils literal notranslate"><span class="pre">/</span></code>，即是以根 (root) 开始的。而在使用 chroot 之后，系统的目录结构将以指定的位置作为 <code class="docutils literal notranslate"><span class="pre">/</span></code> 位置。</p>
+</section>
+<section id="mkfs-ext4">
+<h3>mkfs.ext4<a class="headerlink" href="#mkfs-ext4" title="永久链接至标题"></a></h3>
+<p>mkfs.ext4命令可以磁盘分区创建ext4文件系统，可以实现ext4文件系统格式化。该命令是mke2fs命令的符号链接，使用方法和mke2fs命令一样。</p>
+</section>
+<section id="parted">
+<h3>parted<a class="headerlink" href="#parted" title="永久链接至标题"></a></h3>
+<p>parted命令是由GNU组织开发的一款功能强大的磁盘分区和分区大小调整工具，与fdisk不同，它支持调整分区的大小。作为一种设计用于Linux的工具，它没有构建成处理与fdisk关联的多种分区类型，但是，它可以处理最常见的分区格式，包括：ext2、ext3、fat16、fat32、NTFS、ReiserFS、JFS、XFS、UFS、HFS以及Linux交换分区。</p>
+</section>
+</section>
+<section id="xj3-ubuntu-rootfs">
+<h2><span class="section-number">4.9.2.3. </span>制作XJ3-Ubuntu rootfs脚本代码<a class="headerlink" href="#xj3-ubuntu-rootfs" title="永久链接至标题"></a></h2>
+<p>从 <a class="reference external" href="https://pan.horizon.ai/index.php/s/JTitK4g8SLzSGa6?path=%2Fubuntu_20.04_rootfs">Ubuntu根文件系统制作</a> 下载脚本代码。</p>
+<p>执行以下命令生成ubuntu根文件系统：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir ubuntu_rootfs
+<span class="nb">cd</span> ubuntu_rootfs
+<span class="c1"># 复制 make_ubuntu_rootfs.sh 到前面目录</span>
+chmod +x make_ubuntu_rootfs.sh
+sudo ./make_ubuntu_rootfs.sh
+</pre></div>
+</div>
+<p>编译成功的输出结果：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ubuntu_src/                             <span class="c1"># 编译输出目录</span>
+├── focal-xj3-arm64                     <span class="c1"># 编译成功后生成的根文件系统，会有比较多的系统临时文件</span>
+├── focal-xj3-arm64.tar.xz0             <span class="c1"># 以下几个压缩文件是剔除 dev、 proc、 sys等系统临时文件的根文件系统</span>
+├── focal-xj3-arm64.tar.xz1
+├── focal-xj3-arm64.tar.xz2
+├── focal-xj3-arm64.tar.xz3
+└── focal-xj3-arm64.tar.xz.info         <span class="c1"># 当前系统安装了哪些 apt 包</span>
+
+system/                                 <span class="c1"># 解压 focal-xj3-arm64.tar.xz[0-9] 的测试目录</span>
+├── app
+├── bin -&gt; usr/bin
+├── boot
+├── dev
+├── etc
+├── home
+├── lib -&gt; usr/lib
+├── media
+├── mnt
+├── opt
+├── proc
+├── root
+├── run
+├── sbin -&gt; usr/sbin
+├── srv
+├── sys
+├── tmp
+├── userdata
+├── usr
+└── var
+
+<span class="m">21</span> directories, <span class="m">5</span> files
+</pre></div>
+</div>
+<p>ubuntu_src 目录下的 focal-xj3-arm64.tar.xz[0-9] 这些压缩包文件用于替换 BSP 源码 <strong>system/rootfs_ubuntu</strong> 目录下的ubuntu根文件系统源码。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">4.9.2.4. </span>脚本代码解析<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<section id="debootstrapubuntu">
+<h3>debootstrap拉取定制的ubuntu根文件系统<a class="headerlink" href="#debootstrapubuntu" title="永久链接至标题"></a></h3>
+<p>debootstrap这个命令执行步骤可以分为两步：</p>
+<p>怎么”定制“呢，debootstrap有很多参数，可以按需配置debootstrap</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>debootstrap --variant<span class="o">=</span>minbase <span class="se">\</span>
+        --include<span class="o">=</span><span class="si">${</span><span class="nv">DEBOOTSTRAP_LIST</span><span class="p">// /,</span><span class="si">}</span> <span class="se">\</span>
+        --arch<span class="o">=</span><span class="si">${</span><span class="nv">ARCH</span><span class="si">}</span> <span class="se">\</span>
+        --components<span class="o">=</span><span class="si">${</span><span class="nv">DEBOOTSTRAP_COMPONENTS</span><span class="si">}</span> <span class="se">\</span>
+        --foreign <span class="si">${</span><span class="nv">RELEASE</span><span class="si">}</span> <span class="se">\</span>
+        <span class="nv">$dst_dir</span> <span class="se">\</span>
+        <span class="nv">$apt_mirror</span>
+</pre></div>
+</div>
+<p>上述代码中</p>
+<p>–variant:选择最小的minbase</p>
+<p>–include:在生成rootfs的时候要添加的组件，上面的步骤阅读说明里有组件名单</p>
+<p>–arch:指定制作的文件系统是什么架构的，在这里选择arm64</p>
+<p>–components:选择”main,universe”</p>
+<p>–foreign：在与主机架构不相同时需要指定此参数，仅做初始化的解包，${RELEASE} 代表发行版本 XJ3-ubuntu可选的有bionic和focal，分别代表18.04的版本和20.04的版本</p>
+<p>$dst_dir:这个是要存放文件系统的文件夹</p>
+<p>$apt_mirror:代表镜像的源地址，<code class="docutils literal notranslate"><span class="pre">我们选择国内的源http://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/</span></code> 一般使用本地缓存代理来做加速</p>
+<p>执行上述命令之后在$dst_dir里就生成了定制的rootfs，进入$dst_dir可以看到bin lib usr等等目录</p>
+<p>拷贝/usr/bin/qemu-aarch64-static 到$dst_dir/usr/bin</p>
+<p>拷贝/usr/share/keyrings/*-archive-keyring.gpg 到$dst_dir/usr/share/keyrings/</p>
+</section>
+<section id="chrootdebootstrap">
+<h3>chroot执行debootstrap的第二阶段<a class="headerlink" href="#chrootdebootstrap" title="永久链接至标题"></a></h3>
+<p>执行</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>chroot ${dst_dir} /bin/bash -c &quot;/debootstrap/debootstrap --second-stage&quot;
+</pre></div>
+</div>
+<p>上面的指令代表的意思就是改变根文件系统到${<code class="docutils literal notranslate"><span class="pre">dst_dir</span></code>}中执行<code class="docutils literal notranslate"><span class="pre">/debootstrap/debootstrap</span> <span class="pre">--second-stage</span></code>这个命令，-c 代表执行完前面的命令之后返回当前的shell</p>
+</section>
+<section id="dev-sysfs-proc">
+<h3>挂载根文件系统的dev sysfs proc 等目录<a class="headerlink" href="#dev-sysfs-proc" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>mount -t proc chproc <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/proc
+mount -t sysfs chsys <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/sys
+mount -t devtmpfs chdev <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/dev <span class="o">||</span> mount --bind /dev <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/dev
+mount -t devpts chpts <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/dev/pts
+</pre></div>
+</div>
+</section>
+<section id="apt-etc-apt-sources-list">
+<h3>设置apt的软件源 修改根文件系统中的etc/apt/sources.list<a class="headerlink" href="#apt-etc-apt-sources-list" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>deb http://<span class="si">${</span><span class="nv">UBUNTU_MIRROR</span><span class="si">}</span> <span class="nv">$release</span> main restricted universe multiverse
+<span class="c1">#deb-src http://${UBUNTU_MIRROR} $release main restricted universe multiverse</span>
+
+deb http://<span class="si">${</span><span class="nv">UBUNTU_MIRROR</span><span class="si">}</span> <span class="si">${</span><span class="nv">release</span><span class="si">}</span>-security main restricted universe multiverse
+<span class="c1">#deb-src http://${UBUNTU_MIRROR} ${release}-security main restricted universe multiverse</span>
+
+deb http://<span class="si">${</span><span class="nv">UBUNTU_MIRROR</span><span class="si">}</span> <span class="si">${</span><span class="nv">release</span><span class="si">}</span>-updates main restricted universe multiverse
+<span class="c1">#deb-src http://${UBUNTU_MIRROR} ${release}-updates main restricted universe multiverse</span>
+
+deb http://<span class="si">${</span><span class="nv">UBUNTU_MIRROR</span><span class="si">}</span> <span class="si">${</span><span class="nv">release</span><span class="si">}</span>-backports main restricted universe multiverse
+<span class="c1">#deb-src http://${UBUNTU_MIRROR} ${release}-backports main restricted universe multiverse</span>
+</pre></div>
+</div>
+</section>
+<section id="apt">
+<h3>用apt安装包<a class="headerlink" href="#apt" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>log_out <span class="s2">&quot;Updating base packages&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span> <span class="s2">&quot;info&quot;</span>
+<span class="nb">eval</span> <span class="s1">&#39;LC_ALL=C LANG=C chroot ${dst_dir} /bin/bash -c &quot;apt-get -q -y $apt_extra update&quot;&#39;</span>
+<span class="o">[[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> -1
+log_out <span class="s2">&quot;Upgrading base packages&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span> <span class="s2">&quot;info&quot;</span>
+<span class="nb">eval</span> <span class="s1">&#39;LC_ALL=C LANG=C chroot ${dst_dir} /bin/bash -c &quot;apt-get -q -y $apt_extra upgrade&quot;&#39;</span>
+<span class="o">[[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> -1
+log_out <span class="s2">&quot;Installing base packages&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span> <span class="s2">&quot;info&quot;</span>
+<span class="nb">eval</span> <span class="s1">&#39;LC_ALL=C LANG=C chroot ${dst_dir} /bin/bash -c &quot;DEBIAN_FRONTEND=noninteractive apt-get -y -q $apt_extra --no-install-recommends install $ADD_PACKAGE_LIST&quot;&#39;</span>
+<span class="o">[[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> -1
+chroot <span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span> /bin/bash -c <span class="s2">&quot;dpkg --get-selections&quot;</span> <span class="p">|</span> grep -v deinstall <span class="p">|</span> awk <span class="s1">&#39;{print $1}&#39;</span> <span class="p">|</span> cut -f1 -d<span class="s1">&#39;:&#39;</span> &gt; <span class="si">${</span><span class="nv">tar_file</span><span class="si">}</span>.info
+log_out <span class="s2">&quot;Configure hostname&quot;</span> <span class="s2">&quot;</span><span class="nv">$HOST</span><span class="s2">&quot;</span> <span class="s2">&quot;info&quot;</span>
+</pre></div>
+</div>
+<p>从上述代码中可以看的出来就是chroot到生成的根文件系统中去然后执行了apt update,apt upgrade和apt install $ADD_PACKAGE_LIST三个命令，主要就是用apt工具更新软件，下载必要的软件。</p>
+<p>为了加快apt的速度，添加了代理<code class="docutils literal notranslate"><span class="pre">local</span> <span class="pre">apt_extra=&quot;-o</span> <span class="pre">Acquire::http::Proxy=\&quot;http://localhost:3142\&quot;&quot;</span></code></p>
+</section>
+<section id="hostname">
+<h3>修改hostname<a class="headerlink" href="#hostname" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$HOST</span><span class="s2">&quot;</span> &gt; <span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span>/etc/hostname
+</pre></div>
+</div>
+<p>编辑/etc/hostname内容为xj3ubuntu</p>
+</section>
+<section id="python-dns">
+<h3>为了下面能安装python库，需要修改dns<a class="headerlink" href="#python-dns" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#首先删掉链接文件</span>
+rm <span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span>/etc/resolv.conf
+<span class="c1">#重新生成新的文件</span>
+<span class="nb">echo</span> <span class="s2">&quot;nameserver </span><span class="nv">$NAMESERVER</span><span class="s2">&quot;</span> &gt; <span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span>/etc/resolv.conf
+</pre></div>
+</div>
+</section>
+<section id="python">
+<h3>安装python库<a class="headerlink" href="#python" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>chroot <span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span> /bin/bash -c <span class="s2">&quot;pip install </span><span class="nv">$PYTHON_PACKAGE_LIST</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>目前只预装了下面的俩python库</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="nv">PYTHON_PACKAGE_LIST</span><span class="o">=</span><span class="s2">&quot;numpy opencv-python &quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="udev">
+<h3>配置udev<a class="headerlink" href="#udev" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#解决自动加载驱动的bug</span>
+sed -i <span class="s1">&#39;s/ENV{MODALIAS}/# ENV{MODALIAS}/&#39;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/lib/udev/rules.d/80-drivers.rules
+
+<span class="c1">#解决加载camera 驱动panic的问题</span>
+sed -i <span class="s1">&#39;s/IMPORT{program}/# IMPORT{program}/&#39;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/lib/udev/rules.d/60-persistent-v4l.rules
+
+<span class="c1">#解决 ubuntu20.04 usb storage和sdcard的udev自动mount的问题</span>
+mkdir <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/etc/systemd/system/systemd-udevd.service.d
+cat <span class="s">&lt;&lt;-EOF &gt;&gt; &quot;${dst_dir}&quot;/etc/systemd/system/systemd-udevd.service.d/00-hobot-private.conf</span>
+<span class="s">[Service]</span>
+<span class="s">PrivateMounts=no</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+<p>解决 ubuntu20.04 usb storage和sdcard的udev自动mount失败的问题</p>
+</section>
+<section id="ssh">
+<h3>配置ssh<a class="headerlink" href="#ssh" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>log_out <span class="s2">&quot;Configure ssh&quot;</span> <span class="s2">&quot;&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;/etc/ssh/sshd_config&quot;</span> <span class="s2">&quot;info&quot;</span>
+<span class="c1"># permit root login via SSH for the first boot</span>
+sed -i <span class="s1">&#39;s/#\?PermitRootLogin .*/PermitRootLogin yes/&#39;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/etc/ssh/sshd_config
+<span class="c1"># enable PubkeyAuthentication</span>
+sed -i <span class="s1">&#39;s/#\?PubkeyAuthentication .*/PubkeyAuthentication yes/&#39;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/etc/ssh/sshd_config
+</pre></div>
+</div>
+<p>解决了root用户不能通过ssh 登录的问题</p>
+</section>
+<section id="console">
+<h3>配置console<a class="headerlink" href="#console" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># # console fix due to Debian bug</span>
+sed -e <span class="s1">&#39;s/CHARMAP=&quot;.*&quot;/CHARMAP=&quot;&#39;</span><span class="nv">$CONSOLE_CHAR</span><span class="s1">&#39;&quot;/g&#39;</span> -i <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/etc/default/console-setup
+</pre></div>
+</div>
+</section>
+<section id="etc-hosts">
+<h3>配置/etc/hosts文件<a class="headerlink" href="#etc-hosts" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>cat <span class="s">&lt;&lt;-EOF &gt;&gt; &quot;${dst_dir}&quot;/etc/hosts</span>
+<span class="s">127.0.0.1   localhost</span>
+<span class="s">127.0.0.1   $HOST</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>配置网络<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<div class="highlight-PowerShell notranslate"><div class="highlight"><pre><span></span><span class="nb">cat </span><span class="p">&lt;&lt;</span><span class="n">-EOF</span> <span class="p">&gt;&gt;</span> <span class="s2">&quot;${dst_dir}&quot;</span><span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">network</span><span class="p">/</span><span class="n">interfaces</span>
+<span class="n">auto</span> <span class="p">${</span><span class="n">ethdev</span><span class="p">}</span>
+<span class="n">iface</span> <span class="p">${</span><span class="n">ethdev</span><span class="p">}</span> <span class="n">inet</span> <span class="n">static</span>
+        <span class="n">address</span> <span class="p">${</span><span class="n">address</span><span class="p">}</span>
+        <span class="n">netmask</span> <span class="p">${</span><span class="n">netmask</span><span class="p">}</span>
+        <span class="c">#network ${network}</span>
+        <span class="c">#broadcast ${broadcast}</span>
+        <span class="n">gateway</span> <span class="p">${</span><span class="n">gateway</span><span class="p">}</span>
+<span class="n">EOF</span>
+    
+</pre></div>
+</div>
+<p>目前是按照下面的配置</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span><span class="nv">ethdev</span><span class="o">=</span><span class="s2">&quot;eth0&quot;</span>
+<span class="nv">address</span><span class="o">=</span><span class="s2">&quot;192.168.1.10&quot;</span>
+<span class="nv">netmask</span><span class="o">=</span><span class="s2">&quot;255.255.255.0&quot;</span>
+<span class="nv">gateway</span><span class="o">=</span><span class="s2">&quot;192.168.1.1&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>配置串口<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<div class="highlight-Perl notranslate"><div class="highlight"><pre><span></span>cp &quot;${dst_dir}&quot;/lib/systemd/system/serial-getty@.service &quot;${dst_dir}/lib/systemd/system/serial-getty@ttyS0.service&quot;
+sed -i &quot;s/--keep-baud 115200/--keep-baud 921600,115200/&quot;  &quot;${dst_dir}/lib/systemd/system/serial-getty@ttyS0.service&quot;
+log_out &quot;Enabling serial console&quot; &quot;ttyS0&quot; &quot;info&quot;
+chroot &quot;${dst_dir}&quot; /bin/bash -c &quot;systemctl daemon-reload&quot;
+chroot &quot;${dst_dir}&quot; /bin/bash -c &quot;systemctl --no-reload enable serial-getty@ttyS0.service&quot;
+</pre></div>
+</div>
+<p>这里配置的是<code class="docutils literal notranslate"><span class="pre">/dev/ttyS1</span></code></p>
+</section>
+<section id="rootfs-rootxj3">
+<h3>配置rootfs的用户和密码，目前用户： root和xj3<a class="headerlink" href="#rootfs-rootxj3" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>chroot <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span> /bin/bash -c <span class="s2">&quot;(echo </span><span class="nv">$ROOTPWD</span><span class="s2">;echo </span><span class="nv">$ROOTPWD</span><span class="s2">;) | passwd root&quot;</span>
+chroot <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span> /bin/bash -c <span class="s2">&quot;adduser --quiet --disabled-password --shell /bin/bash --home /home/</span><span class="si">${</span><span class="nv">XJ3_USERNAME</span><span class="si">}</span><span class="s2"> --gecos </span><span class="si">${</span><span class="nv">XJ3_USERNAME</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">XJ3_USERNAME</span><span class="si">}</span><span class="s2">&quot;</span>
+chroot <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span> /bin/bash -c <span class="s2">&quot;(echo </span><span class="si">${</span><span class="nv">XJ3_PWD</span><span class="si">}</span><span class="s2">;echo </span><span class="si">${</span><span class="nv">XJ3_PWD</span><span class="si">}</span><span class="s2">;) | passwd </span><span class="si">${</span><span class="nv">XJ3_USERNAME</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="network-manager">
+<h3>配置network manager<a class="headerlink" href="#network-manager" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>sed <span class="s2">&quot;s/managed=\(.*\)/managed=true/g&quot;</span> -i <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/etc/NetworkManager/NetworkManager.conf
+<span class="c1"># most likely we don&#39;t need to wait for nm to get online</span>
+chroot <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span> /bin/bash -c <span class="s2">&quot;systemctl disable NetworkManager-wait-online.service&quot;</span>
+<span class="c1"># Just regular DNS and maintain /etc/resolv.conf as a file</span>
+sed <span class="s2">&quot;/dns/d&quot;</span> -i <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/etc/NetworkManager/NetworkManager.conf
+sed <span class="s2">&quot;s/\[main\]/\[main\]\ndns=default\nrc-manager=file/g&quot;</span> -i <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/etc/NetworkManager/NetworkManager.conf
+<span class="k">if</span> <span class="o">[[</span> -n <span class="nv">$NM_IGNORE_DEVICES</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    mkdir -p <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/etc/NetworkManager/conf.d/
+    cat <span class="s">&lt;&lt;-EOF &gt; &quot;${dst_dir}&quot;/etc/NetworkManager/conf.d/10-ignore-interfaces.conf</span>
+<span class="s">    [keyfile]</span>
+<span class="s">    unmanaged-devices=$NM_IGNORE_DEVICES</span>
+<span class="s">    EOF</span>
+<span class="k">fi</span>
+</pre></div>
+</div>
+</section>
+<section id="dev-proc-sys">
+<h3>最后就是卸载之前挂载的dev,proc,sys节点<a class="headerlink" href="#dev-proc-sys" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>umount -l --recursive <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/dev &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+umount -l <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/proc &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+umount -l <span class="s2">&quot;</span><span class="si">${</span><span class="nv">dst_dir</span><span class="si">}</span><span class="s2">&quot;</span>/sys &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+</pre></div>
+</div>
+</section>
+<section id="rootfs">
+<h3>打包rootfs<a class="headerlink" href="#rootfs" title="永久链接至标题"></a></h3>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>tar -Jcf - -C <span class="nv">$src_dir</span>/ --exclude<span class="o">=</span><span class="s1">&#39;./dev/*&#39;</span> --exclude<span class="o">=</span><span class="s1">&#39;./proc/*&#39;</span> --exclude<span class="o">=</span><span class="s1">&#39;./run/*&#39;</span> --exclude<span class="o">=</span><span class="s1">&#39;./tmp/*&#39;</span> --exclude<span class="o">=</span><span class="s1">&#39;./sys/*&#39;</span> .  <span class="p">|</span> split -b 99m -d -a <span class="m">1</span> - <span class="si">${</span><span class="nv">tar_file</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>打包的时候不要打包sys proc dev tmp run目录，等解压的时候在创建</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="yocto_rootfs.html" class="btn btn-neutral float-left" title="4.9.1. Yocto 根文件系统制作" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../Low_Power_Solution_User_Guide.html" class="btn btn-neutral float-right" title="4.10. X3降功耗用户指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

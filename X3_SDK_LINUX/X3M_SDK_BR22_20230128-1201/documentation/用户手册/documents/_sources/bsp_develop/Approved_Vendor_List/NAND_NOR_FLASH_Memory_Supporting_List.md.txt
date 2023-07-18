@@ -1,0 +1,24 @@
+# NAND/NOR Flash Memory 支持列表
+
+## NAND Flash Memory
+
+| Vendor  | Part Number   | Size  | Temperature |
+| ------- | ------------- | ----- | ----------- |
+| GD      | GD5F1GQ4RCxxG | 1Gbit | -40 ~ 85℃   |
+| GD      | GD5F1GQ5xExxG | 1Gbit | -40 ~ 85℃   |
+| GD      | GD5F1GRQRBxIG | 1Gbit | -40 ~ 85℃   |
+| GD      | GD5F4GQ4UA    | 1Gbit | -40 ~ 85℃   |
+| Winbond | W25N02JW      | 2Gbit | -40 ~ 85℃   |
+| Winbond | W25N02GW      | 1Gbit | -40 ~ 85℃   |
+| Winbond | W25M02GV      | 1Gbit | -40 ~ 85℃   |
+| ESMT    | F50D4G41XB    | 4Gbit | 0 ~  70℃    |
+| XTX     | XTX26Q04C     | 4Gbit | -40  ~ 85℃  |
+
+## NOR FLASH Memory 
+
+| Vendor  | Part Number | Size    | Temperature |
+| ------- | ----------- | ------- | ----------- |
+| GD      | gd25lq256d  | 256Mbit | -40 ~ 105℃  |
+| GD      | gd25lq128d  | 128Mbit | -40 ~ 105℃  |
+| ISSI    | is25wp512   | 512Mbit | -40 ~ 105℃  |
+| Winbond | w25q256jw   | 256Mbit | -40 ~ 85℃   |

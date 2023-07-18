@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5.1. 系统概述 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="5.2. 系统控制" href="2-System_Control_zh_CN.html" />
+    <link rel="prev" title="5. 多媒体开发指南" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">5. 多媒体开发指南</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.1. 系统概述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">5.1.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">5.1.2. 多媒体系统架构</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">5.1.3. 术语约定</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-System_Control_zh_CN.html">5.2. 系统控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-Video_Input_zh_CN.html">5.3. 视频输入</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html">5.4. ISP图像系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5-Video_Processing_zh_CN.html">5.5. 视频处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6-Region_Processing_zh_CN.html">5.6. 区域处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7-Video_Output_zh_CN.html">5.7. 视频输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8-Video_Encode_zh_CN.html">5.8. 视频编码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9-Video_Decode_zh_CN.html">5.9. 视频解码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/index.html">5.10. 图像调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html">5.11. 查询多媒体模块调试信息</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html">5.12. 多媒体性能调试</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">5. </span>多媒体开发指南</a> &raquo;</li>
+      <li><span class="section-number">5.1. </span>系统概述</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="5. 多媒体开发指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="2-System_Control_zh_CN.html" class="btn btn-neutral float-right" title="5.2. 系统控制" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">5.1. </span>系统概述<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="id2">
+<h2><span class="section-number">5.1.1. </span>概述<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>地平线提供的多媒体接口包含系统控制、视频输入、视频处理（ISP图像处理器、裁剪、缩放、旋转、矫正）、H.264/H.265/JPEG/MJPEG编码和解码、视频输出显示等功能，接口做了抽象化的封装，支持应用快速进行软件开发。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">5.1.2. </span>多媒体系统架构<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p>地平线多媒体处理的主要内部处理流程如下图所示，主要分为视频输入（ VIN ）、视频处理（ VPS ）、视频编码（ VENC ）、视频解码（ VDEC ）、视频输出 (VOT) 、区域处理（ REGION ）、AI算法推理（BPU）等模块。</p>
+<p><img alt="X3-ss_mm_system_topology" src="../_images/X3-ss_mm_system_topology-16485465559782.png" /></p>
+</section>
+<section id="id4">
+<h2><span class="section-number">5.1.3. </span>术语约定<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>缩写</th>
+<th>全称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VIN</td>
+<td>Video IN</td>
+<td>包含视频处理接入、图像信号处理器、畸变矫正和防抖处理，接收来自sensor的数据并处理，也可以直接接收内存中的图像数据</td>
+</tr>
+<tr>
+<td>VPS</td>
+<td>Video Process System</td>
+<td>包含图像旋转、图像裁剪、缩放功能，可对同一种输入源输出不同分辨率的图像。输入源可以是VIN模块，也可以是内存中的图像数据</td>
+</tr>
+<tr>
+<td>VENC</td>
+<td>Video Encode</td>
+<td>VENC编码模块支持H.264/H.265/JPEG/MJPEG编码，VPS模块处理后的数据可通过编码模块按不同协议编码做码流输出</td>
+</tr>
+<tr>
+<td>VDEC</td>
+<td>Video Decode</td>
+<td>VDEC解码模块支持H.264/H.265/JPEG/MJPEG解码，可对已编码的码流进行解码，交给VPS模块做进一步处理，输出到VOT模块进行显示</td>
+</tr>
+<tr>
+<td>VPU</td>
+<td>Video Processing Unit</td>
+<td>视频处理单元，完成视频的编解码功能</td>
+</tr>
+<tr>
+<td>JPU</td>
+<td>JPEG Processing Unit</td>
+<td>JPEG 图片处理单元，完成JPEG、MJPEG的编解码功能</td>
+</tr>
+<tr>
+<td>VOT</td>
+<td>Video Output</td>
+<td>视频输出模块接收VPS、VDEC的图像数据，可输出到显示设备</td>
+</tr>
+<tr>
+<td>VIO</td>
+<td>Video IN/OUT</td>
+<td>视频输入、输出，包括VIN和VOT模块</td>
+</tr>
+<tr>
+<td>MIPI</td>
+<td>Mobile Industry Processor Interface</td>
+<td>移动产业处理器接口</td>
+</tr>
+<tr>
+<td>CSI</td>
+<td>Camera Serial Interface</td>
+<td>相机串行接口。CSI接口与DSI接口同属一门，都是MIPI（移动产业处理器接口联盟）制定的一种接口规范</td>
+</tr>
+<tr>
+<td>DVP</td>
+<td>Digital Video Port</td>
+<td>数字视频端口</td>
+</tr>
+<tr>
+<td>SIF</td>
+<td>Sensor Interface</td>
+<td>sensor接口，用来接收mipi、dvp或者内存的图像数据</td>
+</tr>
+<tr>
+<td>ISP</td>
+<td>Image Signal Processor</td>
+<td>图像信号处理器，完成图像的效果调校</td>
+</tr>
+<tr>
+<td>LDC</td>
+<td>Lens Distortion Correction</td>
+<td>镜头畸变校正</td>
+</tr>
+<tr>
+<td>DIS</td>
+<td>Digital Image Stabilizer</td>
+<td>数字图像稳定</td>
+</tr>
+<tr>
+<td>DWE</td>
+<td>Dewarp Engine</td>
+<td>畸变矫正引擎，主要是将LDC和DIS集成在一起，包括LDC的畸变矫正和DIS的统计结果</td>
+</tr>
+<tr>
+<td>IPU</td>
+<td>Image Process Unit</td>
+<td>图像信号处理单元，支持图像的旋转、图像裁剪、缩放功能</td>
+</tr>
+<tr>
+<td>GDC</td>
+<td>Geometrical Distortion Correction</td>
+<td>几何畸变矫正</td>
+</tr>
+<tr>
+<td>PYM</td>
+<td>Pyramid</td>
+<td>图像金字塔</td>
+</tr>
+<tr>
+<td>OSD</td>
+<td>On Screen Display</td>
+<td>视频图像叠层显示</td>
+</tr>
+<tr>
+<td>BPU</td>
+<td>Brain Process Unit</td>
+<td>地平线机器人自主研发的可编程AI加速引擎</td>
+</tr>
+<tr>
+<td>HAL</td>
+<td>Hardware Abstraction Layer</td>
+<td>硬件抽象层</td>
+</tr>
+<tr>
+<td>FW</td>
+<td>Firmware</td>
+<td>固件</td>
+</tr>
+<tr>
+<td>Sensor</td>
+<td>Sensor</td>
+<td>如不做特别说明，特指CMOS图像传感器</td>
+</tr>
+</tbody>
+</table></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="5. 多媒体开发指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="2-System_Control_zh_CN.html" class="btn btn-neutral float-right" title="5.2. 系统控制" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

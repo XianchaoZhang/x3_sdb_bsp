@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.2.12. Sunrise_camera开发说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4. BSP开发指南" href="../../bsp_develop/index.html" />
+    <link rel="prev" title="3.2.11. Sunrise_camera用户使用说明" href="Sunrise_camera_user_guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">3. Demo使用指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Typical_Application_Scenarios/index.html">3.1. 典型应用场景</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">3.2. VIO使用指引</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="get_sif_data.html">3.2.1. get_sif_data 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_isp_data.html">3.2.2. get_isp_data 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_isp.html">3.2.3. sample_isp 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps.html">3.2.4. sample_vps 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps_zoom.html">3.2.5. sample_vps_zoom 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_osd.html">3.2.6. sample_osd 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html">3.2.7. sample video codec 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vot.html">3.2.8. sample_vot 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_lcd.html">3.2.9. sample_lcd 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_usb_cam_4k60.html">3.2.10. sample_usb_cam_4k60 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html">3.2.11. Sunrise_camera用户使用说明</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">3.2.12. Sunrise_camera开发说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">3.2.12.1. Sunrise camera 系统设计</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id2">系统框图</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id3">微核设计</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">架构优缺点</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">3.2.12.2. Sunrise camera架构视图</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id6">模块划分</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#communicate">核心模块（communicate）</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id7">概述</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id8">功能描述</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id9">模块代码结构</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id10">接口描述</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#common">公共库模块（common）</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id11">概述</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id12">功能描述</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id13">模块代码结构</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#camera-camera">Camera模块（Camera）</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id14">概述</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id15">功能描述</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id16">模块代码结构</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#x3-config-json">x3_config.json配置文件主要参数说明</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#transport">对外交互模块（Transport）</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id17">概述</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#rtsp-server">RTSP Server模块</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#wesocket-server">Wesocket Server 模块</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#main">主程序入口（main）</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id18">概述</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id19">执行流程</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#webserver">WebServer</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id20">概述</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id21">功能描述</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id22">模块代码结构</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#sensor">3.2.12.3. 添加新Sensor支持</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id23">概述</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id24">新增sensor的相关代码</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id25">添加sensor库</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#vin">添加VIN配置代码</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id26">新增预配置接口</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id27">场景应用参数选择代码</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id28">自动检测sensor是否连接</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#web-jssensor">web js中增加解析新sensor的代码</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#id29">sensor点亮指南</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#bpu">3.2.12.4. 算法推理BPU</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id30">概述</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id31">添加一个新模型流程</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id32">准备算法模型</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id33">添加初始化过程</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id34">推理线程处理函数</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id35">后处理线程函数</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id36">后处理代码</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#web">Web页面上增加渲染处理</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">3. </span>Demo使用指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">3.2. </span>VIO使用指引</a> &raquo;</li>
+      <li><span class="section-number">3.2.12. </span>Sunrise_camera开发说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="Sunrise_camera_user_guide.html" class="btn btn-neutral float-left" title="3.2.11. Sunrise_camera用户使用说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../../bsp_develop/index.html" class="btn btn-neutral float-right" title="4. BSP开发指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sunrise-camera">
+<h1><span class="section-number">3.2.12. </span>Sunrise_camera开发说明<a class="headerlink" href="#sunrise-camera" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">3.2.12.1. </span>Sunrise camera 系统设计<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<section id="id2">
+<h3>系统框图<a class="headerlink" href="#id2" title="永久链接至标题"></a></h3>
+<p>Sunrise camera实现了IPC、 USB camera、video box三种场景应用的demo展示。</p>
+<p>Sunrise camera 源码包括用户操作层的 WebPages，整个通信模块层，整个功能模块层；本文档主要介绍这三个模块的设计。</p>
+<p>Hal层模块由地平线平台软件、算法工具链研发，包括系统BSP、多媒体相关模块调用接口库，BPU模块推理库等；</p>
+<p>Kernel版本包含标准驱动库的基础上，添加地平线X3M/E相关模块驱动。</p>
+<p>软件框图如下所示：</p>
+<p><img alt="image-20220307205702988" src="../../_images/image-20220307205702988.png" /></p>
+</section>
+<section id="id3">
+<h3>微核设计<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>微核架构（microkernel architecture）又称为”插件架构”（plug-in architecture），指的是软件的内核相对较小，主要功能和业务逻辑都通过插件实现。</p>
+<p>内核（core）通常只包含系统运行的最小功能。插件则是互相独立的，插件之间的通信，应该减少到最低，避免出现互相依赖的问题。</p>
+</section>
+<section id="id4">
+<h3>架构优缺点<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p><strong>优点</strong></p>
+<p>良好的功能延伸性，需要什么功能，开发插件即可。</p>
+<p>功能之间是隔离的，插件可以独立的加载和卸载，容易部署。</p>
+<p>可定制性高，适应不同的开发需要。</p>
+<p>可以渐进式开发，逐步添加功能。</p>
+<p><strong>缺点</strong></p>
+<p>扩展性差，内核通常是一个独立单元，不容易做成分布式。</p>
+<p>开发难度相对较高，因为涉及到插件与内核的通信，以及插件登记。</p>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">3.2.12.2. </span>Sunrise camera架构视图<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<section id="id6">
+<h3>模块划分<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>模块</strong></th>
+<th><strong>目录</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>核心模块</td>
+<td>communicate</td>
+<td>核心模块</td>
+</tr>
+<tr>
+<td>公共库模块</td>
+<td>common</td>
+<td>公共操作函数，log/lock，内存环形缓冲区，线程操作，队列操作等</td>
+</tr>
+<tr>
+<td>Camera模块</td>
+<td>Platform</td>
+<td>X3芯片或者其他芯片的平台相关代码</td>
+</tr>
+<tr>
+<td>对外交互模块</td>
+<td>Transport</td>
+<td>设备和外接交互部分，rtspserver、websocket等</td>
+</tr>
+<tr>
+<td>主程序入口</td>
+<td>Main</td>
+<td>Main函数入口</td>
+</tr>
+</tbody>
+</table><p><strong>顶层代码结构</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.
+├── build.sh			<span class="c1"># 当本源码放到 BPS 的PlatformSDK/unittest 目录下，在lunch编译环境后，可以使用本编译脚本</span>
+├── common				<span class="c1"># 公共库模块代码</span>
+├── communicate			<span class="c1"># 核心通信模块</span>
+├── config				<span class="c1"># 编译配置目录，X3使用config_x3_sdb.mk</span>
+├── docs				<span class="c1"># 用户使用文档和开发文档</span>
+├── main				<span class="c1"># 主入口程序</span>
+├── Makefile			<span class="c1"># 编译脚本，当在/opt目录下部署交叉编译工具链后，本源码可以在任意目录下执行编译</span>
+├── makefile.param		<span class="c1"># 编译配置，指定 config_x3_sdb.mk 作为编译目标</span>
+├── Platform			<span class="c1"># Camera模块，平台、应用场景代码，X3相关代码都在本目录下实现</span>
+├── start_app.sh			<span class="c1"># 设备上的启动脚本，可以配置成上电自启动</span>
+├── Transport			<span class="c1"># rtspserver 和 websocket模块代码实现</span>
+└── WebServer			<span class="c1"># lighttpd程序、配置和web页面</span>
+</pre></div>
+</div>
+<p><strong>编译</strong></p>
+<ol class="simple">
+<li><p>建议使用 Ubuntu-18.04操作系统</p></li>
+<li><p>检查是否已经安装好地平线X3芯片对应的交叉编译工具链，一般放在PlatformSDK资料包中，详细配置请参考BSP开发手册。</p></li>
+<li><p>在安装交叉编译工具链后，可在任意目录下执行 make 编译。在源码当前目录会生成 sunrise_camera目录。打包 sunrise_camera目录， WebServer 目录 和 start_app.sh 三个文件后下载到设备上运行。</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tar -czvf sunrise_camera_v1.0.0.tar.gz sunrise_camera WebServer start_app.sh
+</pre></div>
+</div>
+</section>
+<section id="communicate">
+<h3>核心模块（communicate）<a class="headerlink" href="#communicate" title="永久链接至标题"></a></h3>
+<section id="id7">
+<h4>概述<a class="headerlink" href="#id7" title="永久链接至标题"></a></h4>
+<p>架构核心模块，最小运行单位；根据编译选项调用模块注册接口函数注册其他支出的模块，并且中转模块CMD指令。</p>
+<p>当模块间交互时，接收到的CMD如果已经注册和使能，则中转到受理子模块处理完成后返回请求模块。</p>
+<p>当模块间交互时，接收到的CMD没有注册或者未使能，则CMD调用失败。</p>
+</section>
+<section id="id8">
+<h4>功能描述<a class="headerlink" href="#id8" title="永久链接至标题"></a></h4>
+<ol class="simple">
+<li><p>模块插件静态插拔控制</p></li>
+<li><p>模块CMD指令中转</p></li>
+</ol>
+<p><img alt="image-20220307211044226" src="../../_images/image-20220307211044226.png" /></p>
+<p>示例：</p>
+<p>camera子模块中定义了 SDK_CMD_CAMERA_GET_CHIP_TYPE 命令，调用camera_cmd_register 函数注册该CMD后，当websocket子模块收到web页面请求获取芯片类型时，websocket模块可以通过以下代码调用camera子模块中的接口。</p>
+<p>整个过程如下图所示：</p>
+<p><img alt="image-20220307211103942" src="../../_images/image-20220307211103942.png" /></p>
+</section>
+<section id="id9">
+<h4>模块代码结构<a class="headerlink" href="#id9" title="永久链接至标题"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.
+├── include
+│   ├── sdk_common_cmd.h			<span class="c1"># 定义系统中所有子模块的CMD</span>
+│   ├── sdk_common_struct.h		<span class="c1"># 定义每个CMD对应使用到的数据结构</span>
+│   └── sdk_communicate.h			<span class="c1"># 定义本模块接口函数</span>
+├── Makefile
+└── src
+    └── sdk_communicate.c			<span class="c1"># 接口代码实现</span>
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h4>接口描述<a class="headerlink" href="#id10" title="永久链接至标题"></a></h4>
+<p><strong>sdk_globle_prerare</strong></p>
+<p>各子模块的xxx_cmd_register()函数会集中放到这个函数中，主程序启动时，通过调用本接口将所有子模块需要注册并使能的的CMD注册进子系统中。</p>
+<p>每个子模块都要实现 xxx_cmd_register()，在该函数中实现子模块CMD注册。这是整个系统能够正常运行的基本前提。</p>
+<p>示例：</p>
+<p><img alt="image-20220307211216299" src="../../_images/image-20220307211216299.png" /></p>
+<p><strong>sdk_cmd_register</strong></p>
+<p>CMD注册接口。</p>
+<p><strong>sdk_cmd_unregister</strong></p>
+<p>CMD注销接口。</p>
+<p><strong>sdk_cmd_impl</strong></p>
+<p>子模块通过调用本接口实现调用其他子模块实现的接口功能。</p>
+</section>
+</section>
+<section id="common">
+<h3>公共库模块（common）<a class="headerlink" href="#common" title="永久链接至标题"></a></h3>
+<section id="id11">
+<h4>概述<a class="headerlink" href="#id11" title="永久链接至标题"></a></h4>
+<p>程序公共库类，包含但不限于日志操作、锁操作、线程封装、环形缓冲区操作、cJSON、base64；</p>
+<p>本模块主要把编程中会使用到的公共类、公共函数进行封装；避免相同操作的函数实现在多处出现。</p>
+<p>本模块的更新影响所有模块，需要谨慎操作。</p>
+</section>
+<section id="id12">
+<h4>功能描述<a class="headerlink" href="#id12" title="永久链接至标题"></a></h4>
+<p>无</p>
+</section>
+<section id="id13">
+<h4>模块代码结构<a class="headerlink" href="#id13" title="永久链接至标题"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.
+├── Makefile					<span class="c1"># 编译脚本</span>
+├── makefile.param
+└── utils
+    ├── include				<span class="c1"># 头文件</span>
+    │   ├── aes256.h
+    │   ├── base64.h
+    │   ├── cJSON_Direct.h
+    │   ├── cJSON.h
+    │   ├── cmap.h
+    │   ├── common_utils.h
+    │   ├── cqueue.h
+    │   ├── gen_rand.h
+    │   ├── lock_utils.h
+    │   ├── mqueue.h
+    │   ├── mthread.h
+    │   ├── nalu_utils.h
+    │   ├── sha256.h
+    │   ├── stream_define.h
+    │   ├── stream_manager.h
+    │   └── utils_log.h
+    ├── Makefile
+    └── src
+        ├── aes256.c
+        ├── base64.c
+        ├── cJSON.c
+        ├── cJSON_Direct.c
+        ├── cmap.c
+        ├── common_utils.c
+        ├── cqueue.c
+        ├── gen_rand.c
+        ├── lock_utils.c
+        ├── mqueue.c
+        ├── mthread.c
+        ├── nalu_utils.c
+        ├── sha256.c
+        ├── stream_manager.c
+        └── utils_log.c
+</pre></div>
+</div>
+</section>
+</section>
+<section id="camera-camera">
+<h3>Camera模块（Camera）<a class="headerlink" href="#camera-camera" title="永久链接至标题"></a></h3>
+<section id="id14">
+<h4>概述<a class="headerlink" href="#id14" title="永久链接至标题"></a></h4>
+<p>模块主要包括：视频编码、ISP控制、图像控制、OSD水印、抓拍、视频输出。</p>
+<p>本模块内部结构如下：</p>
+<p>api_camera作为本模块入口，定义支持的CMD命令集；</p>
+<p>camera_handle完成配置读写、场景接口赋值；</p>
+<p>x3_ipc_impl、x3_sub_cam_impl、x3_box_impl实现场景功能；</p>
+<p>x3_bpu模块实现算法推理，作为一个公共模块供调用。</p>
+<p><img alt="image-20220307211420601" src="../../_images/image-20220307211420601.png" /></p>
+</section>
+<section id="id15">
+<h4>功能描述<a class="headerlink" href="#id15" title="永久链接至标题"></a></h4>
+<p>目前本模块下实现了 IPC、 USB camera、video box三种应用场景的接口实现。新增一个应用场景的实现，只要实现 camera_ops_t 结构体定义的接口即可。</p>
+<p><img alt="image-20220307211515182" src="../../_images/image-20220307211515182.png" /></p>
+<p>启动一个场景应用的流程如下：</p>
+<p><img alt="image-20220307211524720" src="../../_images/image-20220307211524720.png" /></p>
+<p>其他子模块的初始化、启动流程都可以参考本流程图。</p>
+</section>
+<section id="id16">
+<h4>模块代码结构<a class="headerlink" href="#id16" title="永久链接至标题"></a></h4>
+<p>代码路径： Platform/x3</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.
+├── api					<span class="c1"># CMD注册</span>
+├── main				<span class="c1"># CMD 注册的实际功能接口实现</span>
+├── Makefile			<span class="c1"># 编译脚本</span>
+├── makefile.param		<span class="c1"># 编译配置</span>
+├── model_zoom			<span class="c1"># 模型仓库</span>
+├── sync_media_sdk.sh	<span class="c1"># 从BPS Platform 的 prebuilts/root目录下同步使用到的sdk 库和头文件的脚本</span>
+├── test_data			<span class="c1"># 存放测试用的h264码流文件和程序配置文件 x3_config.json</span>
+├── x3_auto_start		<span class="c1"># 配置自启动的时候，可以直接使用本目录下的init.rc文件替换设备上 /init.rc文件</span>
+├── x3_bpu				<span class="c1"># bpu 算法接口使用封装</span>
+├── x3_bpu_predict		<span class="c1"># bpu predict库文件和头文件</span>
+├── x3_camera			<span class="c1"># IPC、 USB camera、box场景功能实现</span>
+├── x3_media_sdk		<span class="c1"># 媒体库和头文件</span>
+├── x3_sdk_readme.md	<span class="c1"># 媒体和bpu库同步说明</span>
+├── x3_sdk_swap			<span class="c1"># x3 硬件模块接口的简单封装</span>
+├── x3_sensor_libs		<span class="c1"># sensor用到的库，适配添加新sensor时需要向这个目录中提交需要的驱动接口库、ISP参数库和gdc配置文件，gdc配置文件视情况添加</span>
+└── x3_tools			<span class="c1"># live555MediaServer rtsp推流测试程序，把视频文件放到本目录下，再启动本程序，会自动建立推流服务。</span>
+</pre></div>
+</div>
+</section>
+<section id="x3-config-json">
+<h4>x3_config.json配置文件主要参数说明<a class="headerlink" href="#x3-config-json" title="永久链接至标题"></a></h4>
+<p>solution_id：场景配置</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>0</th>
+<th>IP摄像头</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>USB摄像头</td>
+</tr>
+<tr>
+<td>2</td>
+<td>智能盒子</td>
+</tr>
+</tbody>
+</table><ul class="simple">
+<li><p>ipc_solution-&gt;pipeline_num :表示当前ipc运行时启动sensor的数量，目前支持最多2路</p></li>
+<li><p>sensor_name： 图像传感器型号，目前支持F37，IMX415, OS8A10, OS8A10_2K</p></li>
+<li><p>venc_bitrate: H264编码码率</p></li>
+<li><p>box_solution-&gt;box_chns: 智能盒子方案运行编解码路数，支持1路，4路</p></li>
+<li><p>alog_id：默认算法模型</p></li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>0</th>
+<th>不启动算法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Mobilenet_v2  模型来自公版模型，可在地平线工具链中获取</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Yolov5  模型来自公版模型，可在地平线工具链中获取</td>
+</tr>
+<tr>
+<td>3</td>
+<td>地平线自研多任务模型，可在 ai express软件包中获取</td>
+</tr>
+</tbody>
+</table><p><img alt="image-20220307211732411" src="../../_images/image-20220307211732411.png" /></p>
+</section>
+</section>
+<section id="transport">
+<h3>对外交互模块（Transport）<a class="headerlink" href="#transport" title="永久链接至标题"></a></h3>
+<section id="id17">
+<h4>概述<a class="headerlink" href="#id17" title="永久链接至标题"></a></h4>
+<p>遵循传输协议与终端或平台交互的具体子模块；包含通过网络、rtspserver和websocket通信模块；</p>
+<p>交互模块是模块间交互最多的部分，需要严格遵守设计约定。在向其他模块请求数据时都要通过定义的模块CMD进行处理。</p>
+</section>
+<section id="rtsp-server">
+<h4>RTSP Server模块<a class="headerlink" href="#rtsp-server" title="永久链接至标题"></a></h4>
+<p>本模块是对live555的封装实现，把live555封装成init、prepare、start和add_sms等几个简单接口。目前x3上仅支持H264码流的推流。</p>
+<p>本模块的启动和使用可以参考 主程序入口 章节的流程介绍。</p>
+</section>
+<section id="wesocket-server">
+<h4>Wesocket Server 模块<a class="headerlink" href="#wesocket-server" title="永久链接至标题"></a></h4>
+<p>本模块完成与web上的操作交互，在web上进行相应操作后，websocket server接收到相应kind的命令和参数，在代码handle_user_massage.c 的 handle_user_msg 函数中处理进行相应的功能处理，如果要添加新的交互命令，请在该函数中增加。</p>
+<p>目前支持的交互命令：场景切换、场景参数获取和设置、获取芯片类型、h264码率设置、系统时间同步、websocket码流拉流和停止等。</p>
+</section>
+</section>
+<section id="main">
+<h3>主程序入口（main）<a class="headerlink" href="#main" title="永久链接至标题"></a></h3>
+<section id="id18">
+<h4>概述<a class="headerlink" href="#id18" title="永久链接至标题"></a></h4>
+<p>主程序入口，模块启动。</p>
+<p>当前基本的子模块启动顺序如下，需要注意各模块启动顺序需要根据子模块间的依赖关系顺序启动。</p>
+</section>
+<section id="id19">
+<h4>执行流程<a class="headerlink" href="#id19" title="永久链接至标题"></a></h4>
+<p><img alt="image-20220307211837929" src="../../_images/image-20220307211837929.png" /></p>
+</section>
+</section>
+<section id="webserver">
+<h3>WebServer<a class="headerlink" href="#webserver" title="永久链接至标题"></a></h3>
+<section id="id20">
+<h4>概述<a class="headerlink" href="#id20" title="永久链接至标题"></a></h4>
+<p>本模块提供lighttpd实现web httpd服务，让用户可以直接通过浏览器预览视频和配置应用场景。</p>
+</section>
+<section id="id21">
+<h4>功能描述<a class="headerlink" href="#id21" title="永久链接至标题"></a></h4>
+<p>提供lighttpd编译说明，依赖库，编译好可在X3上执行的程序，并且提供一份配置好的配置文件，在lighttpd/webpages目录下存放web页面、css、js程序。</p>
+</section>
+<section id="id22">
+<h4>模块代码结构<a class="headerlink" href="#id22" title="永久链接至标题"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.
+├── fcgi					<span class="c1"># fcgi模块库</span>
+│   ├── include
+│   ├── lib
+│   └── version.txt
+├── lighttpd-x3				<span class="c1"># lighttpd</span>
+│   ├── cache
+│   ├── cgi-bin
+│   ├── config				<span class="c1"># 在x3能直接使用的配置文件</span>
+│   ├── lib
+│   ├── log
+│   ├── sbin
+│   ├── server.pem
+│   ├── share
+│   ├── socktes
+│   ├── upload
+│   ├── vhosts
+│   └── webpages				<span class="c1"># web页面、css、js文件</span>
+├── pcre					<span class="c1"># lighttpd 对齐有依赖</span>
+│   ├── include
+│   ├── lib
+│   └── version.txt
+├── README.txt
+└── start_lighttpd.sh			<span class="c1"># 单独启动WebServer的脚本</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="sensor">
+<h2><span class="section-number">3.2.12.3. </span>添加新Sensor支持<a class="headerlink" href="#sensor" title="永久链接至标题"></a></h2>
+<section id="id23">
+<h3>概述<a class="headerlink" href="#id23" title="永久链接至标题"></a></h3>
+<p>目前本源码已支持最常使用的F37（1080P）、IMX415(4K)、OS8A10三种sensor，其中OS8A10支持4K和 2K两种分辨率。三种sensor覆盖了最常用的2M、4M、8M三种分辨率的使用。</p>
+</section>
+<section id="id24">
+<h3>新增sensor的相关代码<a class="headerlink" href="#id24" title="永久链接至标题"></a></h3>
+<p>需要新增或修改内容概述如下表所示：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>项目</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>添加sensor库</td>
+<td>sensor接口驱动库 libxxx.so</td>
+<td>sensor控制，存放sensor配置寄存器</td>
+</tr>
+<tr>
+<td></td>
+<td>ISP参数库 libxxx_linear.so libxxx_dol2.so</td>
+<td>存放ISP  tunning的配置参数</td>
+</tr>
+<tr>
+<td></td>
+<td>(非必须项)gdc配置文件</td>
+<td>畸变矫正参数</td>
+</tr>
+<tr>
+<td>添加VIN配置代码</td>
+<td>sensor_xxx_config.c</td>
+<td>配置sensor、mipi、isp、ldc、dis模块数据结构参数</td>
+</tr>
+<tr>
+<td></td>
+<td>sensor_xxx_config.h</td>
+<td></td>
+</tr>
+<tr>
+<td>新增预配置接口</td>
+<td>x3_preparam.c</td>
+<td>vin参数配置统一组织</td>
+</tr>
+<tr>
+<td>场景应用参数选择代码</td>
+<td>x3_ipc_impl.c</td>
+<td>每个场景下都有x3_xxx_init_param接口用来初始化X3各模块在当前场景下的参数</td>
+</tr>
+<tr>
+<td></td>
+<td>x3_usb_cam_impl.c</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>x3_box_impl.c</td>
+<td></td>
+</tr>
+<tr>
+<td>自动检测sensor是否连接</td>
+<td>x3_utils.c</td>
+<td>通过x3_get_hard_capability接口扫描i2c总线粗略获取已连接sensor</td>
+</tr>
+<tr>
+<td>web js中增加解析新sensor的代码</td>
+<td>WebServer/lighttpd-x3/webpages/js/index.js</td>
+<td>在set_sensor_list函数中解析sensor bit位</td>
+</tr>
+</tbody>
+</table><section id="id25">
+<h4>添加sensor库<a class="headerlink" href="#id25" title="永久链接至标题"></a></h4>
+<p>新增一颗新的sensor，需要把该sensor的驱动接口库 libxxx.so，ISP 参数库 libxxx_linear.so，gdc配置参数（非必须）添加到Platform/x3/x3_sensor_libs目录下。</p>
+<p><img alt="image-20220307213143633" src="../../_images/image-20220307213143633.png" /></p>
+</section>
+<section id="vin">
+<h4>添加VIN配置代码<a class="headerlink" href="#vin" title="永久链接至标题"></a></h4>
+<p>Platform/x3/x3_camera/src 目录下添加 sensor_xxx_config.c</p>
+<p>Platform/x3/x3_camera/include 目录下添加 sensor_xxx_config.h</p>
+<p>需要实现以下数据结构：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>MIPI_SENSOR_INFO_S			# 定义 sensor 初始化的属性信息
+MIPI_ATTR_S					# 定义 mipi 初始化参数信息
+VIN_DEV_ATTR_S				# 定义 dev 初始化的属性信息
+VIN_PIPE_ATTR_S				# 定义 ISP 属性信息
+VIN_DIS_ATTR_S				# 定义 DIS 属性信息
+VIN_LDC_ATTR_S				# 定义 LDC 属性信息
+</pre></div>
+</div>
+<p>各结构体的属性参数说明可以查阅 已有 sensor_f37_config.c 文件中的注释。</p>
+<p><img alt="image-20220307213226361" src="../../_images/image-20220307213226361.png" /></p>
+</section>
+<section id="id26">
+<h4>新增预配置接口<a class="headerlink" href="#id26" title="永久链接至标题"></a></h4>
+<p>x3_preparam.c 源码中新增vin预配置属性接口。</p>
+<p>int xxx_vin_param_init(x3_vin_info_t* vin_info)</p>
+<p><img alt="image-20220307213239516" src="../../_images/image-20220307213239516.png" /></p>
+</section>
+<section id="id27">
+<h4>场景应用参数选择代码<a class="headerlink" href="#id27" title="永久链接至标题"></a></h4>
+<p>xxx_init_param 接口中添加根据Sensor名来选择使用相应的sensor vin配置参数。</p>
+<p><img alt="image-20220307213325982" src="../../_images/image-20220307213325982.png" /></p>
+</section>
+<section id="id28">
+<h4>自动检测sensor是否连接<a class="headerlink" href="#id28" title="永久链接至标题"></a></h4>
+<p>Platform/x3/x3_camera/src/x3_utils.c 代码的x3_get_hard_capability函数通过扫描i2c，根据sensor使用的I2c地址来粗略的检查当前接入了哪些sensor。</p>
+<p>Ps：这种方式存在天然的缺陷，必须满足每种sensor的i2c地址不重复，而且使用的i2c总线比较固定，如果有其他非sensor器件的地址和已知sensor地址冲突，也会产生问题。</p>
+<p><img alt="image-20220307213338152" src="../../_images/image-20220307213338152.png" /></p>
+<p>每个bit对应一种sensor。</p>
+<p>检测到的能力集会通过websocket方式传给web页面上显示，供场景配置是选择使用。</p>
+</section>
+<section id="web-jssensor">
+<h4>web js中增加解析新sensor的代码<a class="headerlink" href="#web-jssensor" title="永久链接至标题"></a></h4>
+<p>WebServer/lighttpd-x3/webpages/js/index.js， 接口 set_sensor_list中增加对新sensor bit位的处理。</p>
+<p><img alt="image-20220307213413843" src="../../_images/image-20220307213413843.png" /></p>
+</section>
+</section>
+<section id="id29">
+<h3>sensor点亮指南<a class="headerlink" href="#id29" title="永久链接至标题"></a></h3>
+<p>在 3.2.1 节中提到sensor库，这是另外一个方向的研究。</p>
+<p>以下是sensor点亮的几个主要步骤：</p>
+<ol class="simple">
+<li><p>经过新sensor点亮调试产出驱动接口库。</p></li>
+<li><p>经过ISP工程师的图像tuning阐述ISP参数库。</p></li>
+<li><p>畸变矫正调试产出gdc配置文件。</p></li>
+</ol>
+</section>
+</section>
+<section id="bpu">
+<h2><span class="section-number">3.2.12.4. </span>算法推理BPU<a class="headerlink" href="#bpu" title="永久链接至标题"></a></h2>
+<section id="id30">
+<h3>概述<a class="headerlink" href="#id30" title="永久链接至标题"></a></h3>
+<p>本模块完成算法模型加载、数据前处理、推理、算法后处理并返回json格式的结果。</p>
+<p>模块运行时序如下。</p>
+<p><img alt="image-20220307213539978" src="../../_images/image-20220307213539978.png" /></p>
+</section>
+<section id="id31">
+<h3>添加一个新模型流程<a class="headerlink" href="#id31" title="永久链接至标题"></a></h3>
+<p>当前sunrise_camera仅支持三个模型的运行demo，我们不可避免要跑其他的模型来测试效果，本节描述新增一个算法模型的基本步骤。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>项目</strong></th>
+<th><strong>文件</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>准备算法模型</td>
+<td>放到Platform/x3/model_zoom目录下（<em>.bin,  </em>.hbm）</td>
+<td>配置sensor、mipi、isp、ldc、dis模块数据结构参数</td>
+</tr>
+<tr>
+<td>添加初始化过程</td>
+<td>x3_bpu.c</td>
+<td>x3_bpu_sample_init 添加新id</td>
+</tr>
+<tr>
+<td>推理线程处理函数</td>
+<td>x3_bpu.c</td>
+<td>在处理函数中准备输出tensor，调用HB_BPU_runModel推理，得到结果后，把结果放入output队列。示例：thread_run_yolo5</td>
+</tr>
+<tr>
+<td>后处理线程函数</td>
+<td>x3_bpu.c</td>
+<td>从output队列中取出算法结果，调用后处理方法进行处理，得到json格式的结果字符串。如果设置了回调函数，则调用回调。</td>
+</tr>
+<tr>
+<td>后处理代码</td>
+<td>yolo5_post_process.cpp  personMultitask_post_process.cpp</td>
+<td>算法模型都要对应后处理方法，比如分类模型要把返回的id和类型名对应起来，检测模型要把检测框映射到原始图像的位置上。</td>
+</tr>
+<tr>
+<td>Web页面上增加渲染处理</td>
+<td>index.js</td>
+<td>非必须</td>
+</tr>
+</tbody>
+</table><section id="id32">
+<h4>准备算法模型<a class="headerlink" href="#id32" title="永久链接至标题"></a></h4>
+<p>x3板端模型有两种后缀名，bin文件和hbm文件：</p>
+<ol class="simple">
+<li><p>bin模型：通过浮点转定点工具链转换得到的模型，以bin作为后缀</p></li>
+<li><p>hbm模型：通过地平线定点模型训练框架直接训练得到</p></li>
+</ol>
+<p>算法模型的详细开发说明请参考《浮点转定点工具链》文档。</p>
+</section>
+<section id="id33">
+<h4>添加初始化过程<a class="headerlink" href="#id33" title="永久链接至标题"></a></h4>
+<p>在 x3_bpu.c 中的x3_bpu_sample_init()函数中定义新的id处理流，指定对应id使用的算法模型。</p>
+<p><img alt="image-20220307213725782" src="../../_images/image-20220307213725782.png" /></p>
+<p>算法任务启动时，根据id启动相应的推理线程和算法后处理线程。</p>
+<p><img alt="image-20220307213733766" src="../../_images/image-20220307213733766.png" /></p>
+</section>
+<section id="id34">
+<h4>推理线程处理函数<a class="headerlink" href="#id34" title="永久链接至标题"></a></h4>
+<p>在推理线程中实现输出结果tensor的准备；从yuv队列中取出yuv数据，调用HB_BPU_runModel推理得到算法结果；再把算法结果推进output Queue，供后处理使用。</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>static void *thread_run_yolo5(void *ptr)
+{
+	// 准备模型输出节点tensor，5组输出buff轮转，简单处理，理论上后处理的速度是要比算法推理更快的
+	BPU_TENSOR_S output_tensors[5][3];
+	int cur_ouput_buf_idx = 0;
+	for (i = 0; i &lt; 5; i++) {
+		ret = prepare_output_tensor(output_tensors[i], bpu_model);
+	}
+
+	while (privThread-&gt;eState == E_THREAD_RUNNING) {
+		// 获取yuv
+		if (mQueueDequeueTimed(&amp;bpu_handle-&gt;m_input_queue, 100, (void**)&amp;input_tensor) == E_QUEUE_ERROR_TIMEOUT)
+			continue;
+
+		// 模型推理infer
+		ret = HB_BPU_runModel(bpu_model,
+				input_tensor,
+				bpu_model-&gt;input_num,
+				output_tensors[cur_ouput_buf_idx],
+				bpu_model-&gt;output_num,
+				&amp;run_ctrl_s,
+				true,			  // 同步模式
+				&amp;task_handle);	  // 这里为同步模式，其实用不到，传入空指针也行
+
+		// 后处理数据入队
+		Yolo5PostProcessInfo_t *post_info;
+		post_info = (Yolo5PostProcessInfo_t *)malloc(sizeof(Yolo5PostProcessInfo_t));
+		… …
+		mQueueEnqueue(&amp;bpu_handle-&gt;m_output_queue, post_info);
+		cur_ouput_buf_idx++;
+		cur_ouput_buf_idx %= 5;
+}
+}
+</pre></div>
+</div>
+</section>
+<section id="id35">
+<h4>后处理线程函数<a class="headerlink" href="#id35" title="永久链接至标题"></a></h4>
+<p>后处理线程中实现从output queue中获取算法结果；调用后处理函数；调用算法任务回调函数处理算法结果（当前的回调有作用的都是直接发送给web，在web上渲染算法结果）。</p>
+<p><img alt="image-20220307213819895" src="../../_images/image-20220307213819895.png" /></p>
+</section>
+<section id="id36">
+<h4>后处理代码<a class="headerlink" href="#id36" title="永久链接至标题"></a></h4>
+<p>每个算法模型建议都添加一个后处理方法：</p>
+<ul class="simple">
+<li><p>yolov5： yolo5_post_process.cpp</p></li>
+<li><p>personMulti：personMultitask_post_process.cpp</p></li>
+<li><p>mobilenet_v2：分类模型的处理较简单，就是把id和类型名进行对应</p></li>
+</ul>
+<p>在后处理方法中要完成以下几件事情：</p>
+<p>分析输出结果，分类模型要完成类型名的匹配，检测模型要完成算法结果框到原始图像坐标的映射等；</p>
+<p>算法结果处理成json格式。为了方便使用，在函数中进行json格式化，比如传导给web，这里输出的结果可以直接使用。</p>
+<p><img alt="image-20220307213847244" src="../../_images/image-20220307213847244.png" /></p>
+</section>
+<section id="web">
+<h4>Web页面上增加渲染处理<a class="headerlink" href="#web" title="永久链接至标题"></a></h4>
+<p>本部分非必须实现部分，在当前的实现中，yolov5和personMulti的算法结果会渲染到web页面上，数据流程是在算法后处理返回json格式的结果后，通过websocket发送结果信息给到web页面，在web实现了一个画布，在画布上渲染算法结果。</p>
+<p><img alt="image-20220307213901096" src="../../_images/image-20220307213901096.png" /></p>
+<p>在index.js文件中添加算法模型的渲染函数。</p>
+<p><img alt="image-20220307213908973" src="../../_images/image-20220307213908973.png" /></p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Sunrise_camera_user_guide.html" class="btn btn-neutral float-left" title="3.2.11. Sunrise_camera用户使用说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../../bsp_develop/index.html" class="btn btn-neutral float-right" title="4. BSP开发指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

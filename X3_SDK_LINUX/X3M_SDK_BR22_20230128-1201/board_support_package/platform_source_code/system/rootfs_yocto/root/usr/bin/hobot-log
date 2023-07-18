@@ -1,0 +1,328 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Description: pack kernel/usersapce/pstore/coredump/reset log
+### END INIT INFO
+
+conf_path=/tmp/hb_lob.conf
+if [ -f "${conf_path}" ];then
+	. ${conf_path}
+else
+	ROTATESIZE=2048
+	ROTATEGENS=50
+fi
+
+MAX_BYTES_IN_LOG=$((${ROTATESIZE} * 1024))  #2M
+#kernel log information
+KER_ORI_LOG_DIR=/userdata/log/kernel
+KER_SAVE_LOG_DIR=$KER_ORI_LOG_DIR
+KER_TAR_LOG_DIR="$KER_ORI_LOG_DIR/tar_log"
+#usersapce log information
+USR_ORI_LOG_DIR=/userdata/log/usr
+USR_SAVE_LOG_DIR=$USR_ORI_LOG_DIR
+USR_TAR_LOG_DIR="$USR_ORI_LOG_DIR/tar_log"
+#reset log information
+RESET_LOG_DIR="/userdata/log"
+#pstore log information
+PSTORE_FS=`cat /proc/mounts |grep "^pstore" |awk '{print $2}'`
+PSTORE_LOG=/userdata/log/pstore
+PSTORE_LOGMAX=100
+PSTORE_LOGINDEX=0
+#coredump log information
+CORE_DUMP_LOG_DIR=/userdata/log/coredump
+RESET_REASON_MAX=$((1024 * 1024))  # 1M
+LOG_EXE_FLAG=0
+
+set_pstore()
+{
+	if [ ! -z "${PSTORE_FS}" ] && [ -f ${PSTORE_FS}/console-ramoops-0 ] && [ ! -e ${PSTORE_LOG}/disable ]; then
+		if [ ! -f ${PSTORE_FS}/dmesg-ramoops-0 ] && [ ! -e ${PSTORE_LOG}/always ]; then
+			return 0
+		fi
+		mkdir -p ${PSTORE_LOG}
+		if [ -f ${PSTORE_LOG}/max ]; then
+			PSTORE_LOGMAX=`cat ${PSTORE_LOG}/max`
+		else
+			echo ${PSTORE_LOGMAX} > ${PSTORE_LOG}/max
+		fi
+		if [ -f ${PSTORE_LOG}/index ]; then
+			PSTORE_LOGINDEX=`cat ${PSTORE_LOG}/index`
+			PSTORE_LOGINDEX=`expr ${PSTORE_LOGINDEX} + 1`
+		fi
+		if [ ${PSTORE_LOGMAX} -gt 0 ]; then
+			PSTORE_LOGCNT=`ls ${PSTORE_LOG} -l |grep "^d" |wc -l`
+			if [ ${PSTORE_LOGCNT} -ge ${PSTORE_LOGMAX} ]; then
+				PSTORE_LOGCNT=`expr ${PSTORE_LOGCNT} - ${PSTORE_LOGMAX} + 1`
+				PSTORE_LOGDEL=`ls ${PSTORE_LOG} -l |grep "^d" |awk '{print $9}' |sort -n |head -n ${PSTORE_LOGCNT}`
+				for d in ${PSTORE_LOGDEL}; do
+					rm -fr ${PSTORE_LOG}/${d}
+				done
+			fi
+		fi
+		PSTORE_LOGDATE=`date +%Y%m%d-%H%M%S`
+		PSTORE_LOGDIR=${PSTORE_LOG}/${PSTORE_LOGINDEX}.${PSTORE_LOGDATE}
+		if [ -d ${PSTORE_LOGDIR} ]; then
+			rm -fr ${PSTORE_LOGDIR}
+		fi
+		mkdir -p ${PSTORE_LOGDIR}
+		echo "pstore log to ${PSTORE_LOGDIR}"
+		mv ${PSTORE_FS}/* ${PSTORE_LOGDIR}/
+		echo ${PSTORE_LOGINDEX} > ${PSTORE_LOG}/index
+		sync
+	fi
+
+}
+
+#$1 dir name
+check_dir()
+{
+	ifs_cnt=0
+	LOG_DIR=""
+	dir=$(ls -l $1 |awk '/^d/ {print $NF}')
+	ifs_old=$IFS
+	for dir_name in $dir
+	do
+		IFS=$'-'
+		for i in $(echo "$dir_name")
+		do
+			if [ $i -ge 0 ] 2>/dev/null ; then
+				ifs_cnt=`expr $ifs_cnt + 1`
+			else
+				ifs_cnt=0
+				break
+			fi
+		done
+		if [ $ifs_cnt -eq 6 ]; then
+			LOG_DIR=$dir_name
+			break
+		fi
+	done
+	IFS=$ifs_old
+}
+
+#$1 file_name
+#$2 origin log dir
+date2ymdhms()
+{
+	file_day=$(ls -l --full-time $2/$1 |awk '{print $6}')
+	file_time=$(ls -l --full-time $2/$1 |awk '{print $7}')
+	ifs_old=$IFS
+	IFS=$':'
+	time_type=$file_day
+	file_time_cnt=0
+	for i in $(echo "$file_time")
+	do
+		# this is only for ubuntu
+		if [ $file_time_cnt -eq 2 ]; then
+			IFS=$'.'
+			for j in $(echo "$i")
+			do
+				time_type="$time_type-$j"
+				break
+			done
+			IFS=$':'
+			break
+
+		fi
+		file_time_cnt=`expr $file_time_cnt + 1`
+		time_type="$time_type-$i"
+	done
+	IFS=$ifs_old
+
+}
+
+#$1 save log dir
+#$2 tar log dir
+check_tar_log()
+{
+	log_cnt=`ls -l $1/$LOG_DIR |grep "^-" |wc -l`
+	if [ $log_cnt -ge $ROTATEGENS ]; then
+		cd $1
+		tar -cvzf "$2/$LOG_DIR.tar.gz" "$LOG_DIR"
+		rm $1/$LOG_DIR -r
+	fi
+	tar_cnt=`ls -l $2 |grep "^-" |wc -l`
+	if [ $tar_cnt -gt $ROTATEGENS ]; then
+		tar_name=`ls -ltr $2 | grep "^-" | head -n 1 | awk '{print $9}'`
+		rm $2/$tar_name
+	fi
+}
+
+#$1 origin log dir
+#$2 save log dir
+#$3 tar log dir
+check_first_log()
+{
+
+	if [ ! -d $1 ]; then
+		mkdir $1 -p
+		mkdir $3 -p
+	fi
+
+	ls -ltr $1| grep "^-"| while read x
+	do
+		file_size=`echo $x | awk '{print $5}'`
+		file_name=`echo $x | awk '{print $9}'`
+		if [ $file_size -eq 0 ]; then
+			continue
+		fi
+		if [ -z $file_name ]; then
+			continue
+		fi
+		date2ymdhms $file_name $1
+		time_type_name=$time_type
+		if [ -z "$time_type_name" ]; then
+			continue
+		fi
+		check_dir $2
+		if [ -z $LOG_DIR ]; then
+			LOG_DIR=$time_type_name
+			mkdir $2/$LOG_DIR
+		fi
+		#Prevents multiple files from being generated in the same second
+		#When generate a new file, file replaced, file time don't match up, slove it
+		file_name_repeat=$(ls $2/$LOG_DIR/${time_type_name}.* | awk -F '/' 'NR==1{print $NF}')
+		if [ -n "$file_name_repeat" ]; then
+			date2ymdhms $file_name_repeat $2/$LOG_DIR
+			file_name_tag=$(echo "$file_name_repeat" | awk -F '.' '{print $2}')
+			if [ -e "$2/$LOG_DIR/$time_type.$file_name_tag" ]; then
+				file_inode=$(ls -i $2/$LOG_DIR/$time_type.$file_name_tag | awk '{print $1}')
+				time_type=${time_type}-${file_inode}
+			fi
+			mv $2/$LOG_DIR/$file_name_repeat $2/$LOG_DIR/"$time_type.$file_name_tag"
+
+		fi
+		if [ $1 = $KER_ORI_LOG_DIR ]; then
+			mv $1/$file_name $2/$LOG_DIR/"$time_type_name.kmsg"
+		else
+			mv $1/$file_name $2/$LOG_DIR/"$time_type_name.umsg"
+		fi
+		check_log_cnt $2/$LOG_DIR
+		if [ $file_name = "messge" ]; then
+			touch message
+		fi
+	done
+}
+
+#check log file count
+check_log_cnt()
+{
+	log_cnt=`ls -l $1 |grep "^-" |wc -l`
+	while [ $log_cnt -gt $ROTATEGENS ];
+	do
+		delfile_name=`ls -ltr $1 | grep "^-" | head -n 1 | awk '{print $9}'`
+		rm $1/$delfile_name
+		log_cnt=`ls -l $1 |grep "^-" |wc -l`
+	done
+}
+
+#$1 origin log dir
+#$2 save log dir
+#$3 tar log dir
+check_log()
+{
+
+	if [ ! -d $1 ]; then
+		mkdir $1 -p
+		mkdir $3 -p
+	fi
+	while true
+	do
+		# file name may change, slove archived failure
+		max_file_size=$(ls -lS $1/message.* 2> /dev/null | awk 'NR==1{print $5}')
+		if [ -z "$max_file_size" ] || [ "$max_file_size" -lt $MAX_BYTES_IN_LOG ]; then
+			break
+		fi
+		ls -ltr $1| grep "^-"| while read x
+		do
+			file_size=`echo $x | awk '{print $5}'`
+			file_name=`echo $x | awk '{print $9}'`
+			if [ -z $file_name ]  || [ $file_name = "message" ]; then
+				continue
+			fi
+			date2ymdhms $file_name $1
+			time_type_name=$time_type
+			if [ -z "$time_type_name" ]; then
+					continue
+			fi
+			if [ $file_size -ge $MAX_BYTES_IN_LOG ]; then
+				check_dir $2
+				if [ -z $LOG_DIR ]; then
+					LOG_DIR=$time_type_name
+					mkdir $2/$LOG_DIR
+				fi
+				#Prevents multiple files from being generated in the same second
+				#When generate a new file, file replaced, file time don't match up, slove it
+				file_name_repeat=$(ls $2/$LOG_DIR/${time_type_name}.* | awk -F '/' 'NR==1{print $NF}')
+				if [ -n "$file_name_repeat" ]; then
+					date2ymdhms $file_name_repeat $2/$LOG_DIR
+					file_name_tag=$(echo "$file_name_repeat" | awk -F '.' '{print $2}')
+					if [ -e "$2/$LOG_DIR/$time_type.$file_name_tag" ]; then
+						file_inode=$(ls -i $2/$LOG_DIR/$time_type.$file_name_tag | awk '{print $1}')
+						time_type=${time_type}-${file_inode}
+					fi
+					mv $2/$LOG_DIR/$file_name_repeat $2/$LOG_DIR/"$time_type.$file_name_tag"
+
+				fi
+				if [ $1 = $KER_ORI_LOG_DIR ]; then
+					mv $1/$file_name $2/$LOG_DIR/"$time_type_name.kmsg"
+				else
+					mv $1/$file_name $2/$LOG_DIR/"$time_type_name.umsg"
+				fi
+				check_log_cnt $2/$LOG_DIR
+
+			fi
+		done
+	done
+}
+
+#check syslogd/klog/logcat process
+check_process()
+{
+	ps |grep logd |grep -v grep
+	if [ $? -ne 0 ]; then
+		/etc/init.d/syslog start
+	fi
+	ps |grep logcat |grep -v grep
+	if [ $? -ne 0 ]; then
+		start-stop-daemon -S -b -n logcat -a /usr/bin/logcat -- -v time -f /userdata/log/usr/message -r$ROTATESIZE -n $ROTATEGENS
+	fi
+}
+
+#record reset reason, max is 1M
+record_reset_reason()
+{
+    if [ -f $RESET_LOG_DIR/reset_reason.txt ]; then
+        local file_size=$(wc -c < $RESET_LOG_DIR/reset_reason.txt)
+        if [ $file_size -gt $RESET_REASON_MAX ]; then
+                tail -n 100 $RESET_LOG_DIR/reset_reason.txt > $RESET_LOG_DIR/reset_reason_tmp.txt
+                cat $RESET_LOG_DIR/reset_reason_tmp.txt > $RESET_LOG_DIR/reset_reason.txt
+                rm $RESET_LOG_DIR/reset_reason_tmp.txt
+        fi
+    fi
+    UBOOTCMD=`cat /proc/cmdline| sed 's/ /\n/g' | grep -i hobot`
+    BOOTREASON=`echo ${UBOOTCMD#*=}`
+    echo "$(date +"%Y-%m-%d-%H-%M-%S"): $BOOTREASON" >>"$RESET_LOG_DIR/reset_reason.txt"
+}
+
+if [ ! -d $RESET_LOG_DIR ]; then
+	mkdir $RESET_LOG_DIR -p
+fi
+if [ ! -d $CORE_DUMP_LOG_DIR ]; then
+	mkdir $CORE_DUMP_LOG_DIR -p
+	chmod 777 $CORE_DUMP_LOG_DIR
+fi
+
+record_reset_reason
+set_pstore
+while :
+do
+	check_log $KER_ORI_LOG_DIR $KER_SAVE_LOG_DIR $KER_TAR_LOG_DIR
+	check_log $USR_ORI_LOG_DIR $USR_SAVE_LOG_DIR $USR_TAR_LOG_DIR
+	if [ $LOG_EXE_FLAG -eq 0 ]; then
+		check_first_log $KER_ORI_LOG_DIR $KER_SAVE_LOG_DIR $KER_TAR_LOG_DIR
+		check_first_log $USR_ORI_LOG_DIR $USR_SAVE_LOG_DIR $USR_TAR_LOG_DIR
+		setprop syslog.start 1
+		LOG_EXE_FLAG=1
+	fi
+	sleep 600
+done

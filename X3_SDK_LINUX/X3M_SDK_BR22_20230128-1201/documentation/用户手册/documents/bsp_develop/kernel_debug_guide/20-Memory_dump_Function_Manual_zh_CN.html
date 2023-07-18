@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.5.2. 内存dump功能使用指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.5.3. swinfo操作说明(mem-dump功能指导)" href="21-swinfo_Manual_mem_dump_function_synopsis_zh_CN.html" />
+    <link rel="prev" title="4.5.1. 使用kgdb调试内核" href="19-Using_kgdb_to_debug_kernel_zh_CN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../driver_develop_guide/index.html">4.3. 驱动开发指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.5. 内核调试指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="19-Using_kgdb_to_debug_kernel_zh_CN.html">4.5.1. 使用kgdb调试内核</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.5.2. 内存dump功能使用指南</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.5.2.1. 准备工作</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#tftp">TFTP网络</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tf-sd">TF/SD卡</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#emmc">EMMC</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#u">U盘</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">4.5.2.2. 手动dump</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id3">TFTP网络</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">TF/SD卡</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id5">EMMC</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">4.5.2.3. 自动dump</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id7">TFTP网络</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id8">TF/SD卡</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id9">EMMC</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="21-swinfo_Manual_mem_dump_function_synopsis_zh_CN.html">4.5.3. swinfo操作说明(mem-dump功能指导)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="22-Using_crash_to_Analysis_ramdump_zh_CN.html">4.5.4. crash分析ramdump</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.5. </span>内核调试指南</a> &raquo;</li>
+      <li><span class="section-number">4.5.2. </span>内存dump功能使用指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="19-Using_kgdb_to_debug_kernel_zh_CN.html" class="btn btn-neutral float-left" title="4.5.1. 使用kgdb调试内核" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="21-swinfo_Manual_mem_dump_function_synopsis_zh_CN.html" class="btn btn-neutral float-right" title="4.5.3. swinfo操作说明(mem-dump功能指导)" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dump">
+<h1><span class="section-number">4.5.2. </span>内存dump功能使用指南<a class="headerlink" href="#dump" title="永久链接至标题"></a></h1>
+<p>更多功能说明可参考：<a class="reference internal" href="21-swinfo_Manual_mem_dump_function_synopsis_zh_CN.html"><span class="doc">swinfo操作说明(mem-dump功能指导)</span></a></p>
+<p>dump出的img镜像文件使用参考：<a class="reference internal" href="22-Using_crash_to_Analysis_ramdump_zh_CN.html"><span class="doc">crash分析ramdump</span></a></p>
+<section id="id1">
+<h2><span class="section-number">4.5.2.1. </span>准备工作<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>根据场景需要选择不同的dump方式，需求进行不同的准备工作。</p>
+<section id="tftp">
+<h3>TFTP网络<a class="headerlink" href="#tftp" title="永久链接至标题"></a></h3>
+<p>PC网口连接待dump设备(记下该PC网口IP，如192.168.1.1)，并配置好tftp服务。</p>
+</section>
+<section id="tf-sd">
+<h3>TF/SD卡<a class="headerlink" href="#tf-sd" title="永久链接至标题"></a></h3>
+<p>对TF/SD卡进行gpt分区并格式化为FAT文件系统(格式化一次即可)：可在PC上完成，若要在X3J3上完成，需要使用parted及mkfs.fat工具。以下例子假设TF/SD卡被挂载为”mmcblk1”：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>parted /dev/mmcblk1 mktable gpt
+parted /dev/mmcblk1 mkpart primary fat32 1Mib <span class="m">100</span>%
+mkfs.fat /dev/mmcblk1p1
+</pre></div>
+</div>
+</section>
+<section id="emmc">
+<h3>EMMC<a class="headerlink" href="#emmc" title="永久链接至标题"></a></h3>
+<p>获取userdata分区的分区编号：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fdisk</span> <span class="o">-</span><span class="n">l</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">userdata</span>
+    <span class="mi">12</span>         <span class="mi">1094950</span>        <span class="mi">30597086</span> <span class="mf">14.0</span><span class="n">G</span> <span class="n">userdata</span>
+<span class="c1"># 如命令结果，为12 </span>
+</pre></div>
+</div>
+<p>进入Recovery模式后使用以下命令:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>umount /userdata
+mkfs.ext4 -O 64bit -L userdata -F /dev/mmcblk0p12
+mount -t ext4 /dev/mmcblk0p12 /userdata
+</pre></div>
+</div>
+<p>在内核内，可以通过以下命令进入Recovery模式：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hrut_resetreason recovery
+reboot
+</pre></div>
+</div>
+</section>
+<section id="u">
+<h3>U盘<a class="headerlink" href="#u" title="永久链接至标题"></a></h3>
+<p>需要将U盘格式化为FAT32文件系统。</p>
+</section>
+</section>
+<section id="id2">
+<h2><span class="section-number">4.5.2.2. </span>手动dump<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>linux下提供系统重启后必停在uboot命令行等待的方法，可配合手动dump使用：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">4</span> &gt; /sys/kernel/hobot-swinfo/boot
+</pre></div>
+</div>
+<p><font color=red>注意：</font>此时可通过uboot命令清除该等待配置标志：swinfo boot 0，
+上述操作非必须，在任何方式进入到uboot命令行，都可通过命令可完成3种不同方式的手动dump：</p>
+<section id="id3">
+<h3>TFTP网络<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>配置本地IP及服务器(上述PC网口)IP后，使用tftp命令dump内存到TFTP服务器根目录，以下0x200000到0x3f200000为1G内存大小非保护区域(请根据实际情况设置)：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>setenv ipaddr <span class="m">192</span>.168.1.10<span class="p">;</span>setenv serverip <span class="m">192</span>.168.1.1<span class="p">;</span>tput 0x200000 0x3fe00000 dump_ddr_40000000.img
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>TF/SD卡<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>使用fatwrite命令dump内存到TF/SD卡根目录，以下0x200000到0x3f200000为1G内存大小非保护区域(请根据实际情况设置)：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mmc rescan<span class="p">;</span> part list mmc <span class="m">1</span><span class="p">;</span> fatwrite mmc <span class="m">1</span>:1 0x200000 /dump_ddr_40000000.img 0x3fe00000
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>EMMC<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>使用ext4write命令dump内存到EMMC的userdate分区根目录，0x200000到0x3f200000为1G内存大小非保护区域(请根据实际情况设置)：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mmc rescan<span class="p">;</span> part list mmc <span class="m">0</span><span class="p">;</span> ext4write mmc <span class="m">0</span>:c 0x200000 /dump_ddr_40000000.img 0x3fe00000
+</pre></div>
+</div>
+<p>如系统报“hash tree directory Error ext4fs_write()”则需往userdata内的文件夹dump，例如/userdata/log：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ext4write mmc <span class="m">0</span>:c 0x200000 /log/dump_ddr_40000000.img 0x3fe00000
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id6">
+<h2><span class="section-number">4.5.2.3. </span>自动dump<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>linux下提供系统重启后自动进入uboot完成dump的配置，同样有3种方法：（配置完成后系统测试运行，待crash发生并重启后，将自动dump出dump_ddr_xxx.img内存镜像以便分析）</p>
+<section id="id7">
+<h3>TFTP网络<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<p>配置重启后自动使用TFTP进行dump，服务器IP为192.168.1.64：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">192</span>.168.1.64 &gt; /sys/kernel/hobot-swinfo/dump
+</pre></div>
+</div>
+<p>上述命令直接操作了标志，下次重启必会进uboot进行dump，若只想在panic时才dump，可使用预配置：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">dump</span><span class="o">=</span><span class="m">192</span>.168.1.64 &gt; /sys/kernel/hobot-swinfo/panic
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h3>TF/SD卡<a class="headerlink" href="#id8" title="永久链接至标题"></a></h3>
+<p>配置重启后自动使用TF/SD卡进行dump：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">5</span> &gt; /sys/kernel/hobot-swinfo/boot
+</pre></div>
+</div>
+<p>上述命令直接操作了标志，下次重启必会进uboot进行dump，若只想在panic时才dump，可使用预配置：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">boot</span><span class="o">=</span><span class="m">5</span> &gt; /sys/kernel/hobot-swinfo/panic
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h3>EMMC<a class="headerlink" href="#id9" title="永久链接至标题"></a></h3>
+<p>配置重启后自动使用EMMC的userdata区进行dump：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">6</span> &gt; /sys/kernel/hobot-swinfo/boot
+</pre></div>
+</div>
+<p>上述命令直接操作了标志，下次重启必会进uboot进行dump，若只想在panic时才dump，可使用预配置：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">boot</span><span class="o">=</span><span class="m">6</span> &gt; /sys/kernel/hobot-swinfo/panic
+</pre></div>
+</div>
+<p><font color=red>注意：</font>上述自动dump配置完成后，在系统重启(或panic重启)时，都将进入到uboot并自动执行相应dump命令，不管成功与否都将停在uboot命令行内。若dump失败(TFTP方式易失败)，可使用自动dump生成的命令再次进行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>run dumpcmd
+</pre></div>
+</div>
+<p>更多功能说明可参考：<a class="reference internal" href="21-swinfo_Manual_mem_dump_function_synopsis_zh_CN.html"><span class="doc">swinfo操作说明(mem-dump功能指导)</span></a></p>
+<p>dump出的img镜像文件分析请参考：<a class="reference internal" href="22-Using_crash_to_Analysis_ramdump_zh_CN.html"><span class="doc">crash分析ramdump</span></a></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="19-Using_kgdb_to_debug_kernel_zh_CN.html" class="btn btn-neutral float-left" title="4.5.1. 使用kgdb调试内核" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="21-swinfo_Manual_mem_dump_function_synopsis_zh_CN.html" class="btn btn-neutral float-right" title="4.5.3. swinfo操作说明(mem-dump功能指导)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

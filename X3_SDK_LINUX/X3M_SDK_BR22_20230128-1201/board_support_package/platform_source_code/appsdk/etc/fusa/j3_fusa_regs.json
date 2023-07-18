@@ -1,0 +1,46 @@
+{
+	"registers": [
+		{
+			"name": "bpu0_register",
+			"enable": 1,
+			"addr": "0xA3000000",
+			"val": "0x80f1"
+		},
+		{
+			"name": "bpu1_register",
+			"enable": 1,
+			"addr": "0xA3001000",
+			"val": "0x80f1"
+		},
+		{
+			"name": "spi_ctrl_register",
+			"enable": 0,
+			"addr": "0xA5004008",
+			"val": "0x3B210000"
+		},
+		{
+			"name": "dma_ctrl_register",
+			"enable": 0,
+			"addr": "0xA5004034",
+			"val": "0x0000361B"
+		},
+		{
+			"name": "ipi_vcid_register",
+			"enable": 0,
+			"addr": "0xA4012084",
+			"val": "0"
+		},
+		{
+			"name": "mipi_ctrl1_register",
+			"enable": 0,
+			"addr": "0xA40000E8",
+			"val": "0"
+		},
+		{
+			"name": "mipi_ctrl2_register",
+			"enable": 0,
+			"addr": "0xA40000EC",
+			"val": "0x08000000"
+		}
+	]
+}

@@ -1,0 +1,18 @@
+#
+# HOBOT BPU drivers
+#
+menuconfig HOBOT_BPU
+	bool "HOBOT BPU subsystem support"
+
+if HOBOT_BPU
+
+config BPU
+	tristate "BPU framework driver"
+	default y
+	help
+	  Say y here to support the hobot BPU(Brain Processing Unit)
+
+	  If unsure, say N.
+
+endif # HOBOT_BPU
+

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.24. 添加自定义内容进系统镜像 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.4. 硬件单元测试" href="../unit_test/index.html" />
+    <link rel="prev" title="4.3.23. 自定义启动项" href="35-Auto-start.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.3.24. 添加自定义内容进系统镜像</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#system">4.3.24.1. 添加文件进system分区</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">4.3.24.2. 新增新分区方式</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id3">内容准备</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">生成分区镜像</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id5">集成编译脚本</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id6">修改分区表</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id7">自动挂载新分区</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#app-start-sh">自启动app_start.sh</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id8">编译打包</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id9">刷机验证</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.24. </span>添加自定义内容进系统镜像</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="35-Auto-start.html" class="btn btn-neutral float-left" title="4.3.23. 自定义启动项" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../unit_test/index.html" class="btn btn-neutral float-right" title="4.4. 硬件单元测试" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">4.3.24. </span>添加自定义内容进系统镜像<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>在开发过程中经常需要把一些配置文件或者开发的程序打包进系统镜像。本章节介绍两个两种方式来添加文件进系统镜像：</p>
+<ul class="simple">
+<li><p>添加文件进根文件系统所在的<code class="docutils literal notranslate"><span class="pre">system</span></code>分区</p></li>
+<li><p>新增新分区，把自定义文件存放到新分区中，生成对应的新分区镜像</p></li>
+</ul>
+<section id="system">
+<h2><span class="section-number">4.3.24.1. </span>添加文件进system分区<a class="headerlink" href="#system" title="永久链接至标题"></a></h2>
+<p>添加用户自定义文件进根文件系统的方式比较简单，只需要把准备好的文件复制到<code class="docutils literal notranslate"><span class="pre">system/rootfs_yocto/hijack</span></code>目录下，然后修改该目录下的<code class="docutils literal notranslate"><span class="pre">do_hijack.sh</span></code>脚本，把新增的文件添加进根文件系统。</p>
+<p>例如添加可以修改 <code class="docutils literal notranslate"><span class="pre">usr/bin/defaultip.sh</span></code> 默认的以太网IP配置文件。具体操作可以参考<code class="docutils literal notranslate"><span class="pre">do_hijack.sh</span></code>的做法。</p>
+<p><strong>注意事项：</strong></p>
+<p>当前<code class="docutils literal notranslate"><span class="pre">system</span></code>分区分配的大小是<code class="docutils literal notranslate"><span class="pre">150MB</span></code>，剩余给用户使用的空间只有<code class="docutils literal notranslate"><span class="pre">10MB</span></code>左右，如果添加文件后，总大小超过的<code class="docutils literal notranslate"><span class="pre">150MB</span></code>的分区大小，会导致生成<code class="docutils literal notranslate"><span class="pre">system</span></code>分区镜像失败。可以通过扩大<code class="docutils literal notranslate"><span class="pre">system</span></code>分区大小解决，请参考 <a class="reference external" href="../board_bring_up.html#id5">分区表配置</a> 修改分区表。</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">4.3.24.2. </span>新增新分区方式<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>本方法适用于要专门设置一个分区来管理程序的场景，比如应用程序专门放到一个分区内，便于管理。</p>
+<p>以下步骤说明，全部以配置新增<code class="docutils literal notranslate"><span class="pre">app</span></code>分区为例进行说明。</p>
+<section id="id3">
+<h3>内容准备<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>准备一个目录<code class="docutils literal notranslate"><span class="pre">app</span></code>用来存放新分区内的文件，并且在里面添加一个 <code class="docutils literal notranslate"><span class="pre">app_start.sh</span></code>的脚本程序，等会完成配置后，需要让<code class="docutils literal notranslate"><span class="pre">app_start.sh</span></code>在开机时自启动。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 在源码根目录下执行以下命令</span>
+mkdir app
+<span class="nb">cd</span> app
+<span class="nb">echo</span> <span class="s2">&quot;#!/bin/sh&quot;</span> &gt; app_start.sh
+<span class="nb">echo</span> <span class="s1">&#39;echo &quot;This is the test code&quot;&#39;</span> &gt;&gt; app_start.sh
+chmod <span class="m">777</span> app_start.sh
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>生成分区镜像<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>在<code class="docutils literal notranslate"><span class="pre">build</span></code>目录下添加脚本来生成<code class="docutils literal notranslate"><span class="pre">app</span></code>分区镜像。</p>
+<ul class="simple">
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">make_ext4fs</span></code> 工具生成 <code class="docutils literal notranslate"><span class="pre">ext4</span></code>格式的分区镜像</p></li>
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">mksquashfs</span></code> 工具生成 <code class="docutils literal notranslate"><span class="pre">squashfs</span></code>格式的分区镜像</p></li>
+<li><p>生成的镜像会在板级配置文件中指定的输出目录下，名为<code class="docutils literal notranslate"><span class="pre">app.img</span></code></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="nb">set</span> -e
+
+<span class="nb">export</span> <span class="nv">HR_TOP_DIR</span><span class="o">=</span><span class="k">$(</span>realpath <span class="k">$(</span><span class="nb">cd</span> <span class="k">$(</span>dirname <span class="nv">$0</span><span class="k">)</span><span class="p">;</span> <span class="nb">pwd</span><span class="k">)</span>/../<span class="k">)</span>
+<span class="nb">export</span> <span class="nv">HR_LOCAL_DIR</span><span class="o">=</span><span class="k">$(</span>realpath <span class="k">$(</span><span class="nb">cd</span> <span class="k">$(</span>dirname <span class="nv">$0</span><span class="k">)</span><span class="p">;</span> <span class="nb">pwd</span><span class="k">))</span>
+
+<span class="c1"># check board config</span>
+check_board_config <span class="si">${</span><span class="p">@:</span><span class="nv">1</span><span class="si">}</span>
+
+<span class="c1"># 编译出来的镜像保存位置</span>
+<span class="nb">export</span> <span class="nv">IMAGE_DEPLOY_DIR</span><span class="o">=</span><span class="si">${</span><span class="nv">HR_IMAGE_DEPLOY_DIR</span><span class="si">}</span>
+<span class="o">[</span> ! -z <span class="si">${</span><span class="nv">IMAGE_DEPLOY_DIR</span><span class="si">}</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> ! -d <span class="nv">$IMAGE_DEPLOY_DIR</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> mkdir <span class="nv">$IMAGE_DEPLOY_DIR</span>
+
+rm -f <span class="si">${</span><span class="nv">IMAGE_OUT_DIR</span><span class="si">}</span>/app.img
+
+<span class="c1"># 指定app分区的源文件目录</span>
+<span class="nv">APP_DIR</span><span class="o">=</span><span class="si">${</span><span class="nv">HR_TOP_DIR</span><span class="si">}</span>/app
+
+<span class="c1"># 对于emmc的存储介质，支持 &quot;ext4&quot; 和 &quot;squashfs&quot; 两种文件系统格式</span>
+<span class="c1"># 生成 &quot;ext4&quot; 格式的分区镜像</span>
+<span class="c1"># 参数说明： -l 指定分区大小， -L 指定分区的label， 生成的镜像名， 源文件目录</span>
+make_ext4fs -l <span class="m">268435456</span> -L app <span class="si">${</span><span class="nv">IMAGE_DEPLOY_DIR</span><span class="si">}</span>/app.img <span class="si">${</span><span class="nv">APP_DIR</span><span class="si">}</span>
+
+<span class="c1"># 生成 &quot;squashfs&quot; 格式的分区镜像，并且可以设置不通的压缩算法：lx4, xz等</span>
+<span class="c1"># 当需要使用 squashfs 文件系统是，根据自身具体的需求取消以下命令的注释</span>
+<span class="c1"># mksquashfs ${APP_DIR} ${IMAGE_DEPLOY_DIR}/app.img -b 64K -comp lz4 -noappend -all-root</span>
+<span class="c1"># mksquashfs ${APP_DIR} ${IMAGE_DEPLOY_DIR}/app.img -b 256K -comp xz -noappend -all-root</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>集成编译脚本<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>把编译脚本添加进 <code class="docutils literal notranslate"><span class="pre">xbuild.sh</span></code>中，方便调用执行。</p>
+<ul class="simple">
+<li><p>添加编译选项 <code class="docutils literal notranslate"><span class="pre">app</span></code> 到 <code class="docutils literal notranslate"><span class="pre">avail_func</span></code>中。</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">avail_func</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;miniboot&quot;</span> <span class="s2">&quot;uboot&quot;</span> <span class="s2">&quot;boot&quot;</span> <span class="s2">&quot;hbre&quot;</span> <span class="s2">&quot;debs&quot;</span> <span class="s2">&quot;system&quot;</span> <span class="s2">&quot;pack&quot;</span> <span class="s2">&quot;factory&quot;</span> <span class="s2">&quot;lunch&quot;</span> <span class="s2">&quot;app&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>添加 <code class="docutils literal notranslate"><span class="pre">build_app</span></code> 对应 <code class="docutils literal notranslate"><span class="pre">app</span></code>的编译。</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> build_app
+<span class="o">{</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="nb">echo</span> <span class="s2">&quot;******************************&quot;</span>
+        <span class="nb">echo</span> <span class="s2">&quot;begin to build app&quot;</span>
+        bash mk_app.sh <span class="o">||</span> <span class="nb">exit</span> <span class="m">1</span>
+        <span class="nb">echo</span> <span class="s2">&quot;end build app&quot;</span>
+        <span class="nb">echo</span> <span class="s2">&quot;******************************&quot;</span>
+    <span class="k">fi</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>整体编译时编译app分区</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    if [ -d ${HR_TOP_DIR}/app ];then
+        build_app
+    fi
+</pre></div>
+</div>
+<p>完成以上配置后，现在就可以执行以下命令编译生成<code class="docutils literal notranslate"><span class="pre">app.img</span></code>镜像：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> build
+./xbuild.sh app
+
+begin to build app
+Creating filesystem with parameters:
+    Size: <span class="m">268435456</span>
+    Block size: <span class="m">4096</span>
+    Blocks per group: <span class="m">32768</span>
+    Inodes per group: <span class="m">6400</span>
+    Inode size: <span class="m">256</span>
+    Journal blocks: <span class="m">1024</span>
+    Label: app
+    Blocks: <span class="m">25600</span>
+    Block groups: <span class="m">1</span>
+    Reserved block group size: <span class="m">7</span>
+Created filesystem with <span class="m">12</span>/6400 inodes and <span class="m">1439</span>/25600 blocks
+end build app
+******************************
+*********************************
+Congratulations, build SUCCEEDED.
+*********************************
+</pre></div>
+</div>
+<p>生成的镜像为 <code class="docutils literal notranslate"><span class="pre">deploy/app.img</span></code>，大小<code class="docutils literal notranslate"><span class="pre">256MB</span></code>。如果是 <code class="docutils literal notranslate"><span class="pre">ext4</span></code>格式，可以选择通过执行 <code class="docutils literal notranslate"><span class="pre">resize2fs</span> <span class="pre">app.img</span></code>命令缩小固件大小，同时在旭日X3M设备上需要执行以下命令恢复为分区大小。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>resize2fs <span class="sb">`</span>findmnt -n -o SOURCE /app <span class="p">|</span> sed <span class="s1">&#39;s~\[.*\]~~&#39;</span><span class="sb">`</span> 
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>修改分区表<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<p>添加新分区进分区表，以 <code class="docutils literal notranslate"><span class="pre">device/horizon/x3/emmc_yocto_abboot_gpt.conf</span></code>为例说明：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span><span class="p">:</span><span class="n">app</span><span class="o">/</span><span class="n">app</span><span class="o">.</span><span class="n">img</span><span class="p">:</span><span class="n">ext4</span><span class="p">:</span><span class="mi">870912</span><span class="n">s</span><span class="p">:</span><span class="mi">1395199</span><span class="n">s</span><span class="p">:</span><span class="mi">1</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>在分区表中显示app分区</p></li>
+<li><p>设置<code class="docutils literal notranslate"><span class="pre">app</span></code>分区使用<code class="docutils literal notranslate"><span class="pre">app.img</span></code>作为镜像名，</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ext4</span></code>格式，大小<code class="docutils literal notranslate"><span class="pre">256MB</span></code>（s代表block，每个block 512字节）</p></li>
+<li><p>最后的1表示打包进<code class="docutils literal notranslate"><span class="pre">disk.img</span></code>中</p></li>
+</ul>
+<p>具体分区表的配置请参考 <a class="reference external" href="../board_bring_up.html#id5">分区表配置</a> 修改分区表。</p>
+<p>完成以上分区配置后，对sdk执行全量编译即可把app打包进<code class="docutils literal notranslate"><span class="pre">disk.img</span></code>中。</p>
+</section>
+<section id="id7">
+<h3>自动挂载新分区<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<p>添加新分区后，需要配置<code class="docutils literal notranslate"><span class="pre">system/rootfs_yocto/root/etc/fstab</span></code>，让新分区能在系统启动时自动完成挂载。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LABEL</span><span class="o">=</span><span class="n">app</span>  <span class="o">/</span><span class="n">app</span>  <span class="n">auto</span> <span class="n">defaults</span>  <span class="mi">0</span>  <span class="mi">1</span>
+</pre></div>
+</div>
+<p>注：/app 目录需要在制作跟文件系统时创建后，否则会挂载失败。</p>
+</section>
+<section id="app-start-sh">
+<h3>自启动app_start.sh<a class="headerlink" href="#app-start-sh" title="永久链接至标题"></a></h3>
+<p>修改<code class="docutils literal notranslate"><span class="pre">system/rootfs_yocto/root/init.rc</span></code>，添加以下内容，设置开机自启动<code class="docutils literal notranslate"><span class="pre">/app/app_start.sh</span></code>。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">service</span> <span class="n">app_start</span> <span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">app_start</span><span class="o">.</span><span class="n">sh</span>
+	<span class="k">class</span> <span class="nc">loadko_ready</span>
+	<span class="n">oneshot</span>
+	<span class="n">console</span>
+</pre></div>
+</div>
+<p>自启动的配置说明，请查阅 <a class="reference internal" href="35-Auto-start.html"><span class="doc">自定义启动项</span></a>。</p>
+</section>
+<section id="id8">
+<h3>编译打包<a class="headerlink" href="#id8" title="永久链接至标题"></a></h3>
+<p>xbuild.sh 中调用编译脚本和打包镜像，并合并进系统镜像</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">build</span>
+<span class="o">./</span><span class="n">xbuild</span>
+</pre></div>
+</div>
+<p>可以看到最后的编译部分已经把<code class="docutils literal notranslate"><span class="pre">app.img</span></code>添加进<code class="docutils literal notranslate"><span class="pre">disk.img</span></code>了。</p>
+<p><img alt="image-20220518203025972" src="../../_images/image-20220518203025972.png" /></p>
+</section>
+<section id="id9">
+<h3>刷机验证<a class="headerlink" href="#id9" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>启动时如果通过串口连接设备，那么可以在串口的打印日志上看到<code class="docutils literal notranslate"><span class="pre">This</span> <span class="pre">is</span> <span class="pre">the</span> <span class="pre">test</span> <span class="pre">code</span></code>，说明 <code class="docutils literal notranslate"><span class="pre">app_start.sh</span></code>已经运行。</p></li>
+</ul>
+<p><img alt="image-20220518210918050" src="../../_images/image-20220518210918050.png" /></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fdisk</span> <span class="pre">-l</span></code>命令可以看到 <code class="docutils literal notranslate"><span class="pre">app</span></code> 分区，大小<code class="docutils literal notranslate"><span class="pre">256MB</span></code></p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@x3sdbx3</span><span class="o">-</span><span class="n">samsung2G</span><span class="o">-</span><span class="mi">3200</span><span class="p">:</span><span class="o">~</span><span class="c1"># fdisk -l</span>
+<span class="n">Found</span> <span class="n">valid</span> <span class="n">GPT</span> <span class="k">with</span> <span class="n">protective</span> <span class="n">MBR</span><span class="p">;</span> <span class="n">using</span> <span class="n">GPT</span>
+
+<span class="n">Disk</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">mmcblk0</span><span class="p">:</span> <span class="mi">30597120</span> <span class="n">sectors</span><span class="p">,</span> <span class="mi">2652</span><span class="n">M</span>
+<span class="n">Logical</span> <span class="n">sector</span> <span class="n">size</span><span class="p">:</span> <span class="mi">512</span>
+<span class="n">Disk</span> <span class="n">identifier</span> <span class="p">(</span><span class="n">GUID</span><span class="p">):</span> <span class="n">b8be2e38</span><span class="o">-</span><span class="n">f515</span><span class="o">-</span><span class="mi">6244</span><span class="o">-</span><span class="n">b2ec</span><span class="o">-</span><span class="mi">9</span><span class="n">ec24e7280e0</span>
+<span class="n">Partition</span> <span class="n">table</span> <span class="n">holds</span> <span class="n">up</span> <span class="n">to</span> <span class="mi">128</span> <span class="n">entries</span>
+<span class="n">First</span> <span class="n">usable</span> <span class="n">sector</span> <span class="ow">is</span> <span class="mi">34</span><span class="p">,</span> <span class="n">last</span> <span class="n">usable</span> <span class="n">sector</span> <span class="ow">is</span> <span class="mi">30597086</span>
+
+<span class="n">Number</span>  <span class="n">Start</span> <span class="p">(</span><span class="n">sector</span><span class="p">)</span>    <span class="n">End</span> <span class="p">(</span><span class="n">sector</span><span class="p">)</span>  <span class="n">Size</span> <span class="n">Name</span>
+     <span class="mi">1</span>              <span class="mi">34</span>              <span class="mi">39</span>  <span class="mi">3072</span> <span class="n">veeprom</span>
+     <span class="mi">2</span>              <span class="mi">40</span>            <span class="mi">2047</span> <span class="mi">1004</span><span class="n">K</span> <span class="n">miniboot</span>
+     <span class="mi">3</span>            <span class="mi">2048</span>            <span class="mi">6143</span> <span class="mi">2048</span><span class="n">K</span> <span class="n">uboot</span>
+     <span class="mi">4</span>            <span class="mi">6144</span>           <span class="mi">10239</span> <span class="mi">2048</span><span class="n">K</span> <span class="n">uboot_b</span>
+     <span class="mi">5</span>           <span class="mi">10240</span>           <span class="mi">10495</span>  <span class="mi">128</span><span class="n">K</span> <span class="n">vbmeta</span>
+     <span class="mi">6</span>           <span class="mi">10496</span>           <span class="mi">10751</span>  <span class="mi">128</span><span class="n">K</span> <span class="n">vbmeta_b</span>
+     <span class="mi">7</span>           <span class="mi">10752</span>           <span class="mi">31231</span> <span class="mf">10.0</span><span class="n">M</span> <span class="n">boot</span>
+     <span class="mi">8</span>           <span class="mi">31232</span>           <span class="mi">51711</span> <span class="mf">10.0</span><span class="n">M</span> <span class="n">boot_b</span>
+     <span class="mi">9</span>           <span class="mi">51712</span>          <span class="mi">358911</span>  <span class="mi">150</span><span class="n">M</span> <span class="n">system</span>
+    <span class="mi">10</span>          <span class="mi">358912</span>          <span class="mi">666111</span>  <span class="mi">150</span><span class="n">M</span> <span class="n">system_b</span>
+    <span class="mi">11</span>          <span class="mi">666112</span>          <span class="mi">870911</span>  <span class="mi">100</span><span class="n">M</span> <span class="n">bpu</span>
+    <span class="mi">12</span>          <span class="mi">870912</span>         <span class="mi">1395199</span>  <span class="mi">256</span><span class="n">M</span> <span class="n">app</span>
+    <span class="mi">13</span>         <span class="mi">1395200</span>        <span class="mi">30597086</span> <span class="mf">13.9</span><span class="n">G</span> <span class="n">userdata</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mount</span></code>命令可以看到app分区已经自动挂载</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@x3sdbx3</span><span class="o">-</span><span class="n">samsung2G</span><span class="o">-</span><span class="mi">3200</span><span class="p">:</span><span class="o">~</span><span class="c1"># mount </span>
+<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">root</span> <span class="n">on</span> <span class="o">/</span> <span class="nb">type</span> <span class="n">ext4</span> <span class="p">(</span><span class="n">ro</span><span class="p">,</span><span class="n">relatime</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">ordered</span><span class="p">)</span>
+<span class="o">....</span>
+<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">mmcblk0p12</span> <span class="n">on</span> <span class="o">/</span><span class="n">app</span> <span class="nb">type</span> <span class="n">ext4</span> <span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="n">relatime</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">ordered</span><span class="p">)</span>
+<span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">mmcblk0p13</span> <span class="n">on</span> <span class="o">/</span><span class="n">userdata</span> <span class="nb">type</span> <span class="n">ext4</span> <span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="n">relatime</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">ordered</span><span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">/app</span></code> 命令可以看到存在 <code class="docutils literal notranslate"><span class="pre">app_start.sh</span></code> 文件</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@x3sdbx3</span><span class="o">-</span><span class="n">samsung2G</span><span class="o">-</span><span class="mi">3200</span><span class="p">:</span><span class="o">~</span><span class="c1"># ls /app/</span>
+<span class="n">app_start</span><span class="o">.</span><span class="n">sh</span>  <span class="n">lost</span><span class="o">+</span><span class="n">found</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="35-Auto-start.html" class="btn btn-neutral float-left" title="4.3.23. 自定义启动项" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../unit_test/index.html" class="btn btn-neutral float-right" title="4.4. 硬件单元测试" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

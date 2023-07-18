@@ -1,0 +1,4 @@
+hrut_camt_setflag 1 1
+hrut_camt_configure 1 start
+hrut_camt_frmrate_type0 1 0 100000
+hrut_camt_configure 1 complete

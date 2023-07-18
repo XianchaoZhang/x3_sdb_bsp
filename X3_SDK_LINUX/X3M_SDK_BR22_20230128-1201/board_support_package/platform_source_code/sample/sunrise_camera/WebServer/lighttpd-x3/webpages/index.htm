@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<HEAD>
+	<title>Horizon Robotics Solutions Demo</title>
+	<meta http-equiv="Content-Type"
+		  content="text/html; charset=utf-8" />
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1">
+	<link rel="stylesheet"
+		  href="CSS/bootstrap.min.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/index.js"></script>
+	<style>
+		body{
+            margin:0; 
+            padding:0;
+            font-family: Lato,Helvetica,Arial,sans-serif;
+                font-size: 14px;
+                line-height: 1.72222;
+                color: #34495e;
+                background-color: #fff;
+        }
+        .wrap {
+                min-width: 100%;
+                position: absolute;
+                background: #eff3f6 bottom;
+                min-height: 100%;
+                overflow: hidden;
+            }
+        .left{
+            	margin-left:0px;
+                position: absolute;
+                box-sizing: border-box;
+                width: 10%;
+                height: 100%;
+                background: #F6F6F6 bottom;
+                text-align-last: center;
+            }
+        .right{
+                box-sizing: border-box;
+                float: left;
+                box-sizing: border-box;
+                padding-left: 10%;
+                overflow-y: overlay;
+                overflow-x: hidden;
+                clear: both;
+                min-width: 100%;
+                min-height: 500px;
+                height: 100%;
+            }
+
+        .container { position:relative; }
+        .container video {
+                position:relative;
+                z-index:0;
+              }
+        .overlay {
+                position:absolute;
+                top:0;
+                right:0;
+                z-index:1;
+                width:100%;
+                height:100%;
+            }
+       .Canvas{
+                z-index:1;/*确保在遮盖的元素的上方*/
+                top:0px;
+                left:0px;
+            }
+       .display-flex {
+                display: inline-flex;
+            }
+       .buttons {
+                padding-top: 10px;
+                position: relative;
+                height: 35px;
+            }
+       button {
+       		width: 120px;
+            height: 35px;
+       }
+
+       select {
+       		width: 120px;
+            height: 35px;
+       }
+    </style>
+</HEAD>
+<BODY>
+	<div class="wrap">
+		<!-- 左边内容 -->
+		<div id="left"
+			 class="left">
+			 <center>
+				<img src="image/aionhorizon.png"
+					 style="width:100%">
+				<div class="buttons">
+					<button class="btn btn-primary"
+							type="button"
+							onclick=show_dev_info()>设备信息</button>
+				</div>
+
+				<div class="buttons">
+					<button class="btn btn-primary"
+							type="button"
+							onclick=show_solution_configs()>场景配置</button>
+				</div>
+				</br>
+				<div>
+					<p id="solution_status">
+						当前无方案运行！
+					</p>
+					
+				</div>
+
+				<div id="div_personMulti_setting"
+					 class="buttons"
+					 style="display:none;">
+					<button class="btn btn2"
+							type="button"
+							onclick=render_setting()>算法渲染配置</button>
+				</div>
+
+				<div id="div_switch_stream"
+					 style="padding-top: 10px; display:none;">
+					<select id="selectStream"
+							class="selectDesign"
+							onchange=view_stream_change()>
+						<option value="0">主码流</option>
+						<option value="1">子码流</option>
+					</select>
+				</div>
+
+				<div id="div_sel_bitrate" style="padding-top: 5px;">
+					选择码率:
+					<select id="selectBitRate"
+							class="selectDesign"
+							onchange=view_bitrate_change()>
+						<option value=0>Default</option>
+						<option value=512>512kbps</option>
+						<option value=1024>1024kbps</option>
+						<option value=2048>2048kbps</option>
+						<option value=4096>4096kbps</option>
+						<option value=8192>8192kbps</option>
+						<option value=16384>16384kbps</option>
+					</select>
+				</div>
+
+				<div id="div_snap_bnts"
+					 style="display:none;">
+					<div class="buttons">
+						<button class="snap"
+								type="button"
+								onclick=get_raw_frame()>抓拍raw图</button>
+					</div>
+					<div class="buttons">
+						<button class="snap"
+								type="button"
+								onclick=get_yuv_frame()>抓拍yuv图</button>
+					</div>
+				</div>
+			</center>
+		</div>
+		<!-- 右边内容 -->
+		<div id="right"
+			 class="tab-content right">
+
+			 <div id="dev_info"
+				 style="width:80%; height:80%; padding-left: 20px; display: none;width: fit-content;border:1px solid #ddd"
+				<p style="font-size:15px; font-weight:bold;">芯片类型: <span style="font-weight: lighter;"
+						  id="chip_type"></span>
+				</p>
+				<p style="font-size:15px; font-weight:bold;">rtsp码流url: <span style="font-weight: lighter;"
+						  id="rtsp_url"></span>
+				</p>
+				<p style="font-size:15px; font-weight:bold;">软件版本: <span style="font-weight: lighter;"
+						  id="app_version"></span>
+				</p>
+			</div>
+
+			<div id="solution_configs" style="display: none;">
+				<div style="padding-left: 20px; line-height: 45px;width:50%; display:table-cell;">
+					<div id="div_ipc_slt">
+						<input type="radio"
+							   name="solution_id"
+							   value="1"
+							   checked=""
+							   onchange="btn_solution_id_click(1)"/>IP摄像头
+						<div style="width: fit-content;border:1px solid #ddd">
+							单目/双目：
+							<input type="radio"
+								   name="pipeline_num"
+								   value="1"
+								   checked="" />单目
+							<input type="radio"
+								   name="pipeline_num"
+								   value="2" />双目
+							<div id="div_ipc_pipeline0">
+								选择sensor:
+								<select name="sensor_name"
+										class="selectDesign">
+										<option value=0>Default</option>
+								</select>
+								设置码率:
+								<select name="venc_bitrate"
+										class="selectDesign">
+									<option value=0>Default</option>
+									<option value=512>512kbps</option>
+									<option value=1024>1024kbps</option>
+									<option value=2048>2048kbps</option>
+									<option value=4096>4096kbps</option>
+									<option value=8192>8192kbps</option>
+									<option value=16384>16384kbps</option>
+								</select>
+								选择算法:
+								<select name="alog_id"
+										class="selectDesign">
+									<option value="0">无</option>
+									<option value="1">mobilenet_v2</option>
+									<option value="2">yolov5</option>
+									<option value="3">personMulti</option>
+									<option value="4">fcos</option>
+								</select>
+							</div>
+							<div id="div_ipc_pipeline1"
+								 style="display: block;">
+								选择sensor:
+								<select name="sensor_name"
+										class="selectDesign">
+										<option value=0>Default</option>
+								</select>
+								设置码率:
+								<select name="venc_bitrate"
+										class="selectDesign">
+									<option value=0>Default</option>
+									<option value=512>512kbps</option>
+									<option value=1024>1024kbps</option>
+									<option value=2048>2048kbps</option>
+									<option value=4096>4096kbps</option>
+									<option value=8192>8192kbps</option>
+									<option value=16384>16384kbps</option>
+								</select>
+								选择算法:
+								<select name="alog_id"
+										class="selectDesign">
+									<option value="0">无</option>
+									<option value="1">mobilenet_v2</option>
+									<option value="2">yolov5</option>
+									<option value="3">personMulti</option>
+									<option value="4">fcos</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div id="div_usb_cam_slt">
+						<input type="radio"
+							   name="solution_id"
+							   value="2"
+							   onchange="btn_solution_id_click(2)"/>USB摄像头
+						<div style="width: fit-content;border:1px solid #ddd">
+							选择sensor:
+							<select name="sensor_name"
+									class="selectDesign">
+									<option value=0>Default</option>
+							</select>
+							<p style="display: none;">选择算法:</p>
+							<select name="alog_id"
+										class="selectDesign"
+										style="display: none;">
+								<option value="0">无</option>
+								<option value="2">yolov5</option>
+								<option value="3">personMulti</option>
+								<option value="4">fcos</option>
+							</select>
+						</div>
+					</div>
+					<div id="div_box_slt">
+						<input type="radio"
+							   name="solution_id"
+							   value="3"
+							   onchange="btn_solution_id_click(3)"/>智能盒子
+						<div style="width: fit-content;border:1px solid #ddd">
+						选择路数:
+							<select name="box_chns"
+									class="selectDesign">
+								<option value=0>1路1080P</option>
+								<option value=1>4路1080P</option>
+							</select>
+							设置码率:
+							<select name="venc_bitrate"
+									class="selectDesign">
+								<option value=0>Default</option>
+								<option value=512>512kbps</option>
+								<option value=1024>1024kbps</option>
+								<option value=2048>2048kbps</option>
+								<option value=4096>4096kbps</option>
+								<option value=8192>8192kbps</option>
+								<option value=16384>16384kbps</option>
+							</select>
+							选择算法:
+							<select name="alog_id"
+									class="selectDesign">
+								<option value="0">无</option>
+								<option value="1">mobilenet_v2</option>
+								<option value="2">yolov5</option>
+								<option value="3">personMulti</option>
+								<option value="4">fcos</option>
+							</select>
+						</div>
+					</div>
+					<div id="div_ctl_btns"
+						style="text-align: center;">
+						<button class="btn btn-primary"
+								type="button"
+								onclick=switch_solution()>提交</button>
+						<button class="btn btn-primary"
+								type="button"
+								onclick=save_solution_configs()>保存当前配置</button>
+						<button class="btn btn-warning"
+								type="button"
+								onclick=recovery_solution_configs()>恢复默认配置</button>
+					</div>
+				</div>
+				<div style="width:50%;display:table-cell;vertical-align: middle;">
+					<img id="solution_image"
+						 src="image/box-slt.jpg"
+						 style="display: block;max-width:100%; max-height:100%" />
+				</div>
+			</div>
+			<div id="render_setting"
+				 style="width:100%; height:80%; display: none;">
+				<div id="person_result_display">
+					<br>
+					<input type="checkbox"
+						   name="display_type"
+						   checked="checked"
+						   value=1 />人脸
+					<input type="checkbox"
+						   name="display_type"
+						   value=2 />人头
+					<input type="checkbox"
+						   name="display_type"
+						   checked="checked"
+						   value=4 />人体
+					<input type="checkbox"
+						   name="display_type"
+						   checked="checked"
+						   value=8 />骨骼点
+					<br>
+					<br>
+				</div>
+			</div>
+			<div id="div_h264_display" class="container"
+				 style="width:100%; height:100%">
+				<video id="video"
+					   muted
+					   style="width:100%; height:100%">
+				</video>
+				<div class="overlay" style="padding-right: 20px;text-shadow: 0 0 8px #32003c; color: white;">
+					<br>
+					<p id="frame_fps"
+					   style="filter: invert(100%);text-align: right;">播放帧率</p>
+					<p id="smart_fps"
+					   style="filter: invert(100%);text-align: right;">智能帧率</p>
+					<p id="mobilenetv2_result"
+					   style="filter: invert(100%);text-align: right; display: none;">mobilenetv2算法结果</p>
+					<p id="slt_sw_ctips"
+					   style="filter: invert(100%);text-align: center; display: none; font-size: 48px; color: red;">应用方案切换中...</p>
+					<p id="app_status"
+					   style="filter: invert(100%);text-align: center; display: none; font-size: 48px; color: blue;">应用切换状态反馈</p>
+				</div>
+				<div id="canvas_overlay"
+					 class="overlay">
+					<canvas class="Canvas"
+							id="canvas">
+						<p>Your browserdoes not support the canvas element!</p>
+					</canvas>
+				</div>
+			</div>
+			<div id="div_usb_display"
+				style="width:100%; height:100%; display: none;">
+				<div style="border:1px solid #ddd">
+					<button id="usb_open"
+						type="button"
+						onclick=open_video()>打开摄像头</button>
+				    <button id="usb_close"
+				    	type="button"
+				    	onclick=close_video()>关闭摄像头</button>
+			    </div>
+			    <div style="border:1px solid #ddd">
+					<video id="usb_video" style="max-width:100%; max-height:100%" autoplay></video>
+				</div>
+			</div>
+		</div>
+	</div>
+</BODY>
+</HTML>

@@ -1,0 +1,8 @@
+# automounting usb flash drives
+KERNEL=="sd[a-z][1-9]", ACTION=="add", RUN+="/bin/mkdir -p /media/%k"
+KERNEL=="sd[a-z][1-9]", ACTION=="add", RUN+="/bin/mount /dev/%k /media/%k"
+
+# umount usb flash drivers
+KERNEL=="sd[a-z][1-9]", ACTION=="remove", RUN+="/bin/sync"
+KERNEL=="sd[a-z][1-9]", ACTION=="remove", RUN+="/bin/umount -l /media/%k"
+KERNEL=="sd[a-z][1-9]", ACTION=="remove", RUN+="/bin/rm -rf /media/%k"

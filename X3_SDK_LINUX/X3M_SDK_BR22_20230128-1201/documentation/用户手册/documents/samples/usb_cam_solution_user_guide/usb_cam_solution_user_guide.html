@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>手势交互解决方案说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>手势交互解决方案说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>手势交互解决方案说明<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="id2">
+<h2>编译和部署<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>使用aiexpress源码包编译并生成x3部署包：bash build.sh x3 &amp;&amp; bash deploy.sh</p>
+</section>
+<section id="id3">
+<h2>解决方案的板端部署和功能说明<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<section id="id4">
+<h3>功能列表<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<ol class="simple">
+<li><p>web展示视频和智能结果的渲染</p></li>
+<li><p>pc上使用potplayer等软件展示视频（无智能结果的渲染）</p></li>
+<li><p>安卓APK启动X3并展示视频和智能结果的渲染</p></li>
+<li><p>hdmi展示视频和智能结果的渲染</p></li>
+<li><p>存储智能结果渲染的视频或存储原始视频（h264编码格式视频）</p></li>
+<li><p>通过回灌测评算法指标</p></li>
+<li><p>存储原图（pym第0层的nv12图）</p></li>
+<li><p>竖屏模式</p></li>
+<li><p>存储智能结果渲染的每帧图片（jpeg编码格式）</p></li>
+</ol>
+</section>
+<section id="id5">
+<h3>启动脚本说明<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<ul>
+<li><p>部署包的启动脚本是run_tv_uvc.sh</p></li>
+<li><p>运行脚本时可以带两个参数。</p></li>
+<li><p>第一个参数用于表示X3是否自启动，不带参数或者参数0表示自启动（sh run_tv_uvc.sh或sh run_tv_uvc.sh 0），1表示不自启动（sh run_tv_uvc.sh</p>
+<p>1，只有通过安卓APK启动X3需要设置为1，web和用potplayer等软件渲染都选择0）。</p>
+</li>
+<li><p>第二个参数表示是否为竖屏模式，不带参数表示横屏模式（如sh run_tv_uvc.sh或sh run_tv_uvc.sh 0），参数vertical表示开启竖屏模式（如sh run_tv_uvc.sh 0 vertical或sh run_tv_uvc.sh 1 vertical）。</p>
+<p><img alt="01b1a373a1d1910a1d3e50d4aba2eda5a98605" src="../../_images/01b1a373a1d1910a1d3e50d4aba2eda5a98605.png" /></p>
+</li>
+<li><p>交互界面上选择solution类型，gesture表示只运行手势交互功能，matting表示只运行人体分割功能，gesture &amp; matting表示同时运行手势交互和人体分割功能。</p></li>
+<li><p>交互界面上选择vio源，single camera表示使用一个单目sensor作为输入，feedback表示回灌输入。</p></li>
+<li><p>如果选择single camera，交互界面上再选择sensor类型(淘宝售卖选配摄像头为F37)，之后程序开始启动。</p></li>
+<li><p>如果选择feedback，交互界面上再选择回灌的分辨率1080_fb/2160_fb，以及回灌类型 cache/jpg/nv12/buffer。其中buffer会使用X3的硬件解码器解码，回灌速度快，要求回灌图片为1080p</p>
+<p>jpg格式。回灌图片列表为configs/vio_hg/name_jpg.list</p>
+</li>
+</ul>
+</section>
+<section id="id6">
+<h3>详细功能说明<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>1、web展示视频和智能结果的渲染</p></li>
+</ul>
+<p>（1）配置并启动X3，只能选择gesture模式（web端暂不支持matting渲染），（根据实际情况选择solution类型和输入源） <img alt="1fd944827a7cf893c4d6b2dcc14bff6db3a035" src="../../_images/1fd944827a7cf893c4d6b2dcc14bff6db3a035.png" /></p>
+<p>x3端运行成功会有如下log，其他渲染方式相同：</p>
+<p><img alt="2b281d9ee229cabe4cfbd8edb9788740982235" src="../../_images/2b281d9ee229cabe4cfbd8edb9788740982235.png" /></p>
+<p>（2）chrom浏览器上输入开发板ip地址展示人脸检测、人体骨骼关键点、手势识别等渲染视频</p>
+<p><img alt="3eadb206f6530f6ba21c970800c157de54b63a" src="../../_images/3eadb206f6530f6ba21c970800c157de54b63a.png" /></p>
+<p><img alt="56518d5f698e2381addc555159a02786b1ab35" src="../../_images/56518d5f698e2381addc555159a02786b1ab35.png" /></p>
+<ul>
+<li><p>2、pc上使用potplayer等软件展示视频（无智能结果的渲染）</p>
+<p>（1）配置并启动X3（根据实际情况选择solution类型和输入源）</p>
+</li>
+</ul>
+<p><img alt="424b2328001711f843c04a0858045e7d934138" src="../../_images/424b2328001711f843c04a0858045e7d934138.png" /></p>
+<p>（2）usb线（micro usb+usb2.0公头线或者usb3.0线，注意一些类似线没有数据传输功能，只能充电）连接X3开发板（靠近网口处）和pc后启动potplayer，Alt+D命令选择输入源为uvc并选择分辨率和编码方式后，打开设备即可展示X3输出的编码视频</p>
+<p><img alt="73e133ab4713c99df6fc880765e3e775764166" src="../../_images/73e133ab4713c99df6fc880765e3e775764166.png" /></p>
+<p><img alt="8bf33556a70fc70c0a6e9a30c381c34852f7ce" src="../../_images/8bf33556a70fc70c0a6e9a30c381c34852f7ce.png" /></p>
+<ul class="simple">
+<li><p>3、安卓APK启动X3并展示视频和智能结果的渲染（支持matting渲染）</p></li>
+</ul>
+<p>​    （1）配置并启动X3（根据实际情况选择solution类型和输入源，display_mode=2(UVC)）</p>
+<p><img alt="90192e3475caa821a4d93ac2b8f92e452c747a" src="../../_images/90192e3475caa821a4d93ac2b8f92e452c747a.png" /></p>
+<p>​    （2）usb线连接X3开发板和安卓开发板，启动app后展示智能渲染视频。APK下载和安装方法见本页面。</p>
+<ul>
+<li><p>4、hdmi展示视频和智能结果的渲染，只能选择gesture模式（HDMI不支持matting渲染）</p>
+<p>首先确认x3开发板是否配置为HDMI模式，详情见2.4.7. HDMI节；</p>
+</li>
+</ul>
+<p>​     （1）配置并启动X3（根据实际情况选择solution类型和输入源）</p>
+<p><img alt="9191dac36a0134e92977f8b1b593c36b27bb69" src="../../_images/9191dac36a0134e92977f8b1b593c36b27bb69.png" /></p>
+<p><img alt="925ea1bfaf77e11bf64e7e1e99eb607b7f3f7f" src="../../_images/925ea1bfaf77e11bf64e7e1e99eb607b7f3f7f.png" /></p>
+<p>​     （2）hdmi线连接X3开发板和显示器，展示智能渲染视频。</p>
+<p><img alt="93e8814a307a0bcdfccfcc8f054612f9aad8e8" src="../../_images/93e8814a307a0bcdfccfcc8f054612f9aad8e8.png" /></p>
+<ul class="simple">
+<li><p>5、存储智能结果渲染的视频或存储原始视频（h264编码格式视频）</p></li>
+</ul>
+<p>​     （1）配置并启动X3（根据实际情况选择solution类型和输入源）</p>
+<p>“encoder_input”: 0表示存储渲染视频，1表示存储非渲染的原始视频。</p>
+<p><img alt="974bb6a0f23e0a4278220048f5223c9dbe581c" src="../../_images/974bb6a0f23e0a4278220048f5223c9dbe581c.png" /></p>
+<p>（2）退出程序后，在运行程序路径下生成保存的渲染视频draw.h264文件，使用Potplayer、Elecard等工具可以直接播放draw.h264文件。</p>
+<ul class="simple">
+<li><p>6、通过回灌测评算法指标</p></li>
+</ul>
+<p>​     （1）使用回灌jpeg图片生成namelist：configs/vio_hg/name_jpg.list</p>
+<p>​    （2）更新配置参数</p>
+<p>​      运行脚本./configs/config_setting.sh更新配置，支持配置的设置和恢复。对于回灌测试指标，运行sh ./configs/config_setting.sh 0命令设置参数。</p>
+<p>​    （3）运行程序，选择回灌输入</p>
+<p><img alt="95f03bad7a7a72e8666ac3c47cb1c5d1d891a9" src="../../_images/95f03bad7a7a72e8666ac3c47cb1c5d1d891a9.png" /></p>
+<p>​    （4）回灌结束后，在运行程序路径下dump_json/路径保存的用于评测的文件，dump_drawing_img/路径存储智能结果渲染后的图片。</p>
+<p>“attributeNum” : 0,
+“bodyDistance” : -1,
+“bodyID” : 2,
+“faceID” : -1,
+“keyPoints” :
+[
+{
+“confidence” : 0.99803787469863892,
+“x” : 695.0830078125,
+“y” : 416.65863037109375,
+“z” : -1
+},
+{
+“confidence” : 0.9971650242805481,
+“x” : 718.87078857421875,
+“y” : 390.91305541992188,
+“z” : -1
+},
+{
+“confidence” : 0.99548786878585815,
+“x” : 671.46099853515625,
+“y” : 384.28005981445312,
+“z” : -1</p>
+<p>},</p>
+<p>……</p>
+<p><img alt="1080p.jpg" src="../../_images/1080p.jpg.jpg" /></p>
+<ul class="simple">
+<li><p>7、存储原图（pym第0层的nv12图）</p></li>
+</ul>
+<p>​    （1）配置并启动X3（根据实际情况选择solution类型和输入源）</p>
+<p><img alt="9681c4cb1009867c2a69d8d40fad615fcd12f9" src="../../_images/9681c4cb1009867c2a69d8d40fad615fcd12f9.png" /></p>
+<p>​    （2）退出程序后，在运行程序路径下dump_pym0_img/路径保存dump的原图</p>
+<p><img alt="be2031d2e4230e45454a7a41bd1fd9565f64" src="../../_images/be2031d2e4230e45454a7a41bd1fd9565f64.png" /></p>
+<ul class="simple">
+<li><p>8、竖屏模式</p></li>
+</ul>
+<p>​    （1）以安卓启动X3模式举例(configs/visualplugin_body.json中display_mode=2,关闭存储原图)</p>
+<p><img alt="ee1e0ed9afeb2af0b70d6fcbbb710b359b0601" src="../../_images/ee1e0ed9afeb2af0b70d6fcbbb710b359b0601.png" /></p>
+<p>​    （2）启动命令需要指定参数vertical，其他流程和横屏模式一致。</p>
+<ul class="simple">
+<li><p>9、存储智能结果渲染的图片（jpeg编码格式）</p></li>
+</ul>
+<p>​    （1）配置参数并启动脚本</p>
+<p><img alt="974bb6a0f23e0a4278220048f5223c9dbe581c" src="../../_images/974bb6a0f23e0a4278220048f5223c9dbe581c.png" /></p>
+<p>​    （2）运行过程中会将渲染图片存储在dump_drawing_img路径下。</p>
+<p><img alt="0d10a5054a4a9cbf9e1be10b246bdaa7cbfa9a" src="../../_images/0d10a5054a4a9cbf9e1be10b246bdaa7cbfa9a.png" /></p>
+</section>
+</section>
+<section id="id7">
+<h2>方案设计<a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<section id="id8">
+<h3>系统框图<a class="headerlink" href="#id8" title="永久链接至标题"></a></h3>
+<p><img alt="75bbb2a8f33921d9064b87a1758dadcf" src="../../_images/75bbb2a8f33921d9064b87a1758dadcf.png" /></p>
+<p>手势交互参考解决方案包括AP和X3侧两部分，一般使用安卓设备作为AP，实现控制X3的启动、退出，接收并渲染X3发送的智能和视频结果。X3侧的功能是处理输入的图像后做算法推理，输出智能和视频结果。</p>
+</section>
+<section id="x3">
+<h3>X3侧模块功能说明<a class="headerlink" href="#x3" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>uvcplugin</p>
+<ul>
+<li><p>直接和AP交互的模块。智能数据输出使用zmq协议，视频数据输出使用uvc协议。</p></li>
+<li><p>订阅vio plugin发布的vio msg，将cam采集的图片编码后通过uvc发送到AP。</p></li>
+<li><p>订阅smart plugin发布的smart msg，将智能检测结果通过zmq协议发送到AP。</p></li>
+<li><p>接收AP发送的配置数据，发送配置响应到AP。</p></li>
+</ul>
+</li>
+<li><p>mcplugin</p>
+<ul>
+<li><p>处理AP请求的启动、停止、参数查询/设置</p></li>
+<li><p>各个模块的管理</p></li>
+<li><p>iotvioplugin</p></li>
+<li><p>将来源于camera的实时视频或者本地回灌的图片处理成vio，发布到xproto总线，用于算法做推理。</p></li>
+</ul>
+</li>
+<li><p>smartplugin</p>
+<ul>
+<li><p>创建xstream实例。xstream中根据传入的workflow配置文件创建method实例，并加载模型。</p></li>
+<li><p>订阅vio msg，使用msg中的图像数据做推理。</p></li>
+<li><p>将推理结果（xstream输出）序列化输出，发布smart msg。</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="ap">
+<h3>AP侧模块功能说明<a class="headerlink" href="#ap" title="永久链接至标题"></a></h3>
+<p>AP侧包含两层，SDK Interface和Modules。</p>
+<ul class="simple">
+<li><p>Interface</p>
+<ul>
+<li><p>SDK API的功能实现</p></li>
+</ul>
+</li>
+<li><p>Modules</p>
+<ul>
+<li><p>transport模块</p>
+<ul>
+<li><p>实现和X3之间的数据收发。</p></li>
+<li><p>接收数据时根据数据类型转发到smart和config模块。</p></li>
+<li><p>如果接收的数据是视频数据，直接数据输出到Interface层。</p></li>
+<li><p>发送时接收smart和config模块的消息，通过相应的协议发送到X3。</p></li>
+</ul>
+</li>
+<li><p>smart模块</p>
+<ul>
+<li><p>实现智能数据的反序列化和解析</p></li>
+<li><p>数据输出到Interface层</p></li>
+</ul>
+</li>
+<li><p>config模块</p>
+<ul>
+<li><p>实现配置数据的序列化（AP-&gt;X3）和反序列化（X3-&gt;AP）</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="id9">
+<h2>X3侧主要功能代码逻辑<a class="headerlink" href="#id9" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li></li>
+</ul>
+<section id="id10">
+<h3>代码入口<a class="headerlink" href="#id10" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>文件路径：./source/solution_zoo/body/main.cpp</p></li>
+<li><p>main中创建uvcplugin、mcplugin、iotvioplugin和smartplugin实例</p></li>
+</ul>
+</section>
+<li></li>
+<section id="smartplugin">
+<h3>smartplugin<a class="headerlink" href="#smartplugin" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>文件路径：./source/solution_zoo/common/xproto_plugins/smartplugin/src/smartplugin/smartplugin.cpp</p></li>
+<li><p>创建smartplugin实例时会传入配置文件（配置中包含使用的workflow配置文件路径）并将路径存在config_file_</p></li>
+<li><p>smartplugin实例Init时使用workflow配置文件xstream_workflow_cfg_file_创建xstream实例sdk_，使用回调函数OnCallback注册xstream输出的回调（返回模型推理结果），使用回调函数Feed订阅vio msg。</p></li>
+<li><p>smartplugin的构造和Init函数主要功能如下：</p></li>
+</ul>
+</section>
+<section id="iotvioplugin">
+<h3>iotvioplugin<a class="headerlink" href="#iotvioplugin" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>文件路径：./source/solution_zoo/common/xproto_plugins/iotvioplugin/src/vioplugin/vioplugin.cpp</p></li>
+<li><p>创建iotvioplugin实例时会传入配置文件（配置中包含使用的输入源信息，如camera类型，或本地回灌feedback类型）</p></li>
+<li><p>iotvioplugin实例Init时使用配置文件创建vio pipeline（vio_handle），初始化底层camera配置。</p></li>
+<li><p>iotvioplugin的构造和Init函数主要功能如下：</p></li>
+</ul>
+</section>
+<section id="id11">
+<h3>图像处理的流程<a class="headerlink" href="#id11" title="永久链接至标题"></a></h3>
+<p>以camera输入为例，说明图像处理的流程，包括vioplugin中从camera拿到图像，到vio输出图像vio</p>
+<p>msg，smartplugin中使用vio msg做算法推理的处理整个流程。</p>
+<ul class="simple">
+<li><p>vioplugin中从camera拿到图像，输出图像vio msg</p>
+<ul>
+<li><p>代码实现件：./source/solution_zoo/common/xproto_plugins/iotvioplugin/src/vioplugin/vioproduce.cpp</p></li>
+<li><p>实现逻辑：</p>
+<ul>
+<li><p>vio_pipeline_-&gt;GetInfo接口从底层获取图像pvio_image</p></li>
+<li><p>给pvio_image分配时间戳。对于手势识别，时间戳类型是TSTYPE::RELATIVE_TIME</p></li>
+<li><p>判断当前是否有buffer可用，如果无，此帧图像当成drop帧发布，即图像只编码输出，不做算法推理。</p></li>
+<li><p>如果有buffer可用，创建vio msg（input），并将图像数据填充到msg中，调用push_data_cb_将msg发布到总线。</p></li>
+<li><p>buffer数量是在配置文件./source/solution_zoo/common/xproto_plugins/iotvioplugin/configs/vio_config.json.x3dev.cam的”max_vio_buffer”配置项中指定，默认是4。buffer数量决定了xstream中最多同时能处理多少帧图像数据。在一定范围内，增加buffer，单帧处理延迟会增加，总的智能fps能够提升，但是系统内存占用也会增加。</p></li>
+</ul>
+</li>
+<li><p>主要代码：</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>C++
+int VioCamera::Run() {
+  if (is_running_)
+    return kHorizonVioErrorAlreadyStart;
+  uint64_t frame_id = 0;
+  uint64_t last_timestamp = 0;
+  is_running_ = true;
+  int frame_count = 0;
+  std::vector&lt;int&gt; frame_time_v;
+  int frame_time = 33000;
+  while (is_running_) {
+    uint32_t img_num = 1;
+    if (cam_type_ == &quot;mono&quot;) {
+      auto *pvio_image = reinterpret_cast&lt;pym_buffer_t *&gt;(
+          std::calloc(1, sizeof(pym_buffer_t)));
+      if (nullptr == pvio_image) {
+        LOGF &lt;&lt; &quot;std::calloc failed&quot;;
+        continue;
+      }
+      auto res = vio_pipeline_-&gt;GetInfo(IOT_VIO_PYM_INFO, pvio_image);
+      if (res != 0) {
+        std::free(pvio_image);
+        std::lock_guard&lt;std::mutex&gt; lk(vio_buffer_mutex_);
+        LOGE &lt;&lt; &quot;iot_vio_get_info failed, ret=&quot; &lt;&lt; res &lt;&lt; &quot;, consumed_vio_buffers_= &quot; &lt;&lt; consumed_vio_buffers_ &lt;&lt; &quot;, dump MemAvailable to mem.log&quot;;
+        system(&quot;cat /proc/meminfo | grep MemAvailable &gt; mem.log&quot;);
+        continue;
+      }
+      uint64_t img_time = 0;
+      if (ts_type_ == TSTYPE::INPUT_CODED &amp;&amp; check_timestamp &amp;&amp; res == 0 &amp;&amp;
+          pvio_image != nullptr) {
+        // must chn6, online chn
+        read_time_stamp(reinterpret_cast&lt;uint8_t *&gt;(pvio_image-&gt;pym[0].addr[0]), &amp;img_time);
+        LOGD &lt;&lt; &quot;src img ts:  &quot; &lt;&lt; img_time;
+        if (pvio_image-&gt;pym_img_info.time_stamp !=
+            static_cast&lt;uint64_t&gt;(img_time)) {
+          LOGE &lt;&lt; &quot;timestamp is different!!! &quot; &lt;&lt; &quot;image info ts: &quot; &lt;&lt; pvio_image-&gt;pym_img_info.time_stamp;
+        }
+      } else if (ts_type_ == TSTYPE::FRAME_ID) {
+        pvio_image-&gt;pym_img_info.time_stamp = pvio_image-&gt;pym_img_info.frame_id;
+      } else if (ts_type_ == TSTYPE::INNER_FRAME_ID) {
+        pvio_image-&gt;pym_img_info.time_stamp = frame_id;
+      } else if (ts_type_ == TSTYPE::RELATIVE_TIME) {
+        pvio_image-&gt;pym_img_info.time_stamp =
+                std::chrono::duration_cast&lt;std::chrono::milliseconds&gt;(
+                std::chrono::system_clock::now().time_since_epoch()).count()
+                - recv_sync_ts_tp_ + sync_reference_ts_;
+      }
+      if (check_timestamp &amp;&amp;
+                       pvio_image-&gt;pym_img_info.time_stamp == last_timestamp) {
+        LOGD &lt;&lt; &quot;iot_vio_get_info: &quot; &lt;&lt; res;
+        vio_pipeline_-&gt;FreeInfo(IOT_VIO_PYM_INFO, pvio_image);
+        std::free(pvio_image);
+        pvio_image = nullptr;
+        continue;
+      }
+      if (check_timestamp &amp;&amp; last_timestamp != 0) {
+        HOBOT_CHECK(pvio_image-&gt;pym_img_info.time_stamp &gt; last_timestamp) &lt;&lt; pvio_image-&gt;pym_img_info.time_stamp &lt;&lt; &quot; &lt;= &quot; &lt;&lt; last_timestamp;
+      }
+      LOGD &lt;&lt; &quot;Vio TimeStamp: &quot; &lt;&lt; pvio_image-&gt;pym_img_info.time_stamp;
+      last_timestamp = pvio_image-&gt;pym_img_info.time_stamp;
+      if (enable_check_alloc) {
+        LOGW &lt;&lt; &quot;Vio TimeStamp: &quot; &lt;&lt; pvio_image-&gt;pym_img_info.time_stamp;
+      }
+      bool drop_flag = false;
+      if (!drop_flag &amp;&amp; AllocBuffer()) {
+        frame_count++;
+        if (enable_check_alloc) {
+          LOGW &lt;&lt; &quot;Alloc vio buffer succeed&quot;;
+        }
+        if (!is_running_) {
+          LOGD &lt;&lt; &quot;stop vio job&quot;;
+          vio_pipeline_-&gt;FreeInfo(IOT_VIO_PYM_INFO, pvio_image);
+          std::free(pvio_image);
+          FreeBuffer();
+          break;
+        }
+        auto pym_image_frame_ptr = std::make_shared&lt;PymImageFrame&gt;();
+        Convert(pvio_image, *pym_image_frame_ptr);
+        pym_image_frame_ptr-&gt;channel_id = pipe_id_;
+        pym_image_frame_ptr-&gt;frame_id = frame_id;
+        std::vector&lt;std::shared_ptr&lt;PymImageFrame&gt;&gt; pym_images;
+        pym_images.push_back(pym_image_frame_ptr);
+        std::shared_ptr&lt;VioMessage&gt; input(new ImageVioMessage(vio_pipeline_, pym_images, img_num),[&amp;](ImageVioMessage *p) {
+              if (p) {
+                LOGD &lt;&lt; &quot;begin delete ImageVioMessage&quot;;
+                p-&gt;FreeImage();
+                FreeBuffer();
+                delete (p);
+              }
+              p = nullptr;
+            });
+        if (enable_vio_profile) {
+          input-&gt;CreateProfile();
+        }
+        HOBOT_CHECK(push_data_cb_);
+        LOGD &lt;&lt; &quot;create image vio message, frame_id = &quot; &lt;&lt; frame_id;
+        if (push_data_cb_) {
+          push_data_cb_(input);
+          LOGD &lt;&lt; &quot;Push Image message!!!&quot;;
+        }
+      } else {
+        frame_count = 0;
+        LOGV &lt;&lt; &quot;NO VIO BUFFER &quot;;
+        if (enable_check_alloc) {
+          LOGW &lt;&lt; &quot;NO VIO BUFFER&quot;;
+        }
+        auto input = std::make_shared&lt;DropVioMessage&gt;(static_cast&lt;uint64_t&gt;(pvio_image-&gt;pym_img_info.time_stamp), frame_id);
+        if (push_data_cb_)
+          push_data_cb_(input);
+        LOGD &lt;&lt; &quot;create drop vio message, frame_id = &quot; &lt;&lt; frame_id;
+        // push drop image vio message
+        auto pym_image_frame_ptr = std::make_shared&lt;PymImageFrame&gt;();
+        Convert(pvio_image, *pym_image_frame_ptr);
+        pym_image_frame_ptr-&gt;channel_id = pipe_id_;
+        pym_image_frame_ptr-&gt;frame_id = frame_id;
+        std::vector&lt;std::shared_ptr&lt;PymImageFrame&gt;&gt; pym_images;
+        pym_images.push_back(pym_image_frame_ptr);
+        std::shared_ptr&lt;VioMessage&gt; drop_image_message(
+            new DropImageVioMessage(vio_pipeline_, pym_images, img_num), [&amp;](DropImageVioMessage *p) {
+              if (p) {
+                LOGD &lt;&lt; &quot;begin delete DropImageVioMessage&quot;;
+                p-&gt;FreeImage();
+                delete (p);
+              }
+              p = nullptr;
+            });
+        if (enable_vio_profile) {
+          drop_image_message-&gt;CreateProfile();
+        }
+        if (push_data_cb_) {
+          push_data_cb_(drop_image_message);
+          LOGD &lt;&lt; &quot;Push Drop Image message!!!&quot;;
+        }
+        LOGD &lt;&lt; &quot;Push Drop message!!!&quot;;
+      }
+    } else {
+      LOGF &lt;&lt; &quot;Don&#39;t support type: &quot; &lt;&lt; cam_type_;
+    }
+    ++frame_id;
+  }
+  return 0;
+}
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>smartplugin中订阅并处理图像数据vio msg</p>
+<ul>
+<li><p>代码实现文件：./source/solution_zoo/common/xproto_plugins/smartplugin/src/smartplugin/smartplugin.cp</p></li>
+<li><p>实现逻辑：</p>
+<ul>
+<li><p>Feed接口接收订阅的vio msg</p></li>
+<li><p>调用Convertor::ConvertInput接口处理vio msg，得到可用于xstream输入的xstream::InputDataPtr input数据。</p></li>
+<li><p>创建input_wrapper，并通过monitor_-&gt;PushFrame将其缓存。目的是xstream输入的input数据中的图像数据是smart pointer，模型推理使用的是图像数据在内存中的地址，并且在模型推理过程中smart pointer可能会release，导致图像数据失效，因此需要保证在推理完成前，图像数据在内存中的地址有效。</p></li>
+<li><p>调用xstream的AsyncPredict接口将图像数据输入做推理。</p></li>
+</ul>
+</li>
+<li><p>主要代码：</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>C++
+int SmartPlugin::Feed(XProtoMessagePtr msg) {
+  if (!run_flag_) {
+    return 0;
+  }
+  LOGI &lt;&lt; &quot;smart plugin got one msg&quot;;
+  auto valid_frame = std::static_pointer_cast&lt;VioMessage&gt;(msg);
+  xstream::InputDataPtr input =
+      Convertor::ConvertInput(valid_frame.get(), GetWorkflowInputImageName());
+  auto xstream_input_data =
+      std::static_pointer_cast&lt;xstream::XStreamData&lt;ImageFramePtr&gt;&gt;(
+          input-&gt;datas_[0]);
+  auto frame_id = xstream_input_data-&gt;value-&gt;frame_id;
+  SmartInput *input_wrapper = new SmartInput();
+  input_wrapper-&gt;frame_info = valid_frame;
+  input_wrapper-&gt;context = input_wrapper;
+  monitor_-&gt;PushFrame(input_wrapper);
+  if (sdk_-&gt;AsyncPredict(input) &lt; 0) {
+    auto intput_frame = monitor_-&gt;PopFrame(frame_id);
+    delete static_cast&lt;SmartInput *&gt;(intput_frame.context);
+    LOGW &lt;&lt; &quot;AsyncPredict failed, frame_id = &quot; &lt;&lt; frame_id;
+    return -1;
+  }
+  LOGI &lt;&lt; &quot;feed one task to xtream workflow&quot;;
+  return 0;
+}
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>smartplugin中释放图像数据</p>
+<ul>
+<li><p>代码实现文件：./source/solution_zoo/common/xproto_plugins/iotvioplugin/src/vioplugin/vioproduce.cpp</p></li>
+<li><p>实现逻辑:</p>
+<ul>
+<li><p>OnCallback接口处理xstream返回的算法推理结果</p></li>
+<li><p>首先解析出图像数据rgb_image，图像数据中包含时间戳和frame id，可以知道xstream返回的结果是是属于那一帧图像的。</p></li>
+<li><p>根据frame id，调用monitor_-&gt;PopFrame接口删除图像数据缓存，此时图像数据在内存中被释放</p></li>
+</ul>
+</li>
+<li><p>主要代码：</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">++</span>
+<span class="n">void</span> <span class="n">SmartPlugin</span><span class="p">::</span><span class="n">OnCallback</span><span class="p">(</span><span class="n">xstream</span><span class="p">::</span><span class="n">OutputDataPtr</span> <span class="n">xstream_out</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">XStreamImageFramePtr</span> <span class="o">*</span><span class="n">rgb_image</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">const</span> <span class="n">auto</span> <span class="o">&amp;</span><span class="n">output</span> <span class="p">:</span> <span class="n">xstream_out</span><span class="o">-&gt;</span><span class="n">datas_</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">LOGD</span> <span class="o">&lt;&lt;</span> <span class="n">output</span><span class="o">-&gt;</span><span class="n">name_</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;, type is &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">output</span><span class="o">-&gt;</span><span class="n">type_</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">output</span><span class="o">-&gt;</span><span class="n">name_</span> <span class="o">==</span> <span class="n">GetWorkflowInputImageName</span><span class="p">())</span> <span class="p">{</span>
+      <span class="n">rgb_image</span> <span class="o">=</span> <span class="n">dynamic_cast</span><span class="o">&lt;</span><span class="n">XStreamImageFramePtr</span> <span class="o">*&gt;</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">get</span><span class="p">());</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">auto</span> <span class="n">smart_msg</span> <span class="o">=</span> <span class="n">CreateSmartMessage</span><span class="p">(</span><span class="n">xstream_out</span><span class="p">);</span>
+  <span class="o">//</span> <span class="n">Set</span> <span class="n">origin</span> <span class="nb">input</span> <span class="n">named</span> <span class="s2">&quot;image&quot;</span> <span class="k">as</span> <span class="n">output</span> <span class="n">always</span><span class="o">.</span>
+  <span class="n">HOBOT_CHECK</span><span class="p">(</span><span class="n">rgb_image</span><span class="p">);</span>
+  <span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">channel_id</span> <span class="o">=</span> <span class="n">rgb_image</span><span class="o">-&gt;</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">channel_id</span><span class="p">;</span>
+  <span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">time_stamp</span> <span class="o">=</span> <span class="n">rgb_image</span><span class="o">-&gt;</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">time_stamp</span><span class="p">;</span>
+  <span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">frame_id</span> <span class="o">=</span> <span class="n">rgb_image</span><span class="o">-&gt;</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">frame_id</span><span class="p">;</span>
+  <span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">image_name</span> <span class="o">=</span> <span class="n">rgb_image</span><span class="o">-&gt;</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">image_name</span><span class="p">;</span>
+  <span class="n">LOGD</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;smart result image name = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">image_name</span><span class="p">;</span>
+  <span class="n">LOGI</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;smart result frame_id = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">frame_id</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="n">auto</span> <span class="nb">input</span> <span class="o">=</span> <span class="n">monitor_</span><span class="o">-&gt;</span><span class="n">PopFrame</span><span class="p">(</span><span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">frame_id</span><span class="p">);</span>
+  <span class="n">delete</span> <span class="n">static_cast</span><span class="o">&lt;</span><span class="n">SmartInput</span> <span class="o">*&gt;</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">context</span><span class="p">);</span>
+  <span class="n">PushMsg</span><span class="p">(</span><span class="n">smart_msg</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">++</span>
+<span class="n">SmartPlugin</span><span class="p">::</span><span class="n">SmartPlugin</span><span class="p">(</span><span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">config_file</span><span class="p">,</span> <span class="nb">int</span> <span class="n">frame_rate</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">config_file_</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">;</span>
+  <span class="n">LOGI</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;smart config file:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">config_file_</span><span class="p">;</span>
+  <span class="n">monitor_</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">new</span> <span class="n">RuntimeMonitor</span><span class="p">());</span>
+  <span class="n">Json</span><span class="p">::</span><span class="n">Value</span> <span class="n">cfg_jv</span><span class="p">;</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">ifstream</span> <span class="n">infile</span><span class="p">(</span><span class="n">config_file_</span><span class="p">);</span>
+  <span class="n">infile</span> <span class="o">&gt;&gt;</span> <span class="n">cfg_jv</span><span class="p">;</span>
+  <span class="n">config_</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">new</span> <span class="n">JsonConfigWrapper</span><span class="p">(</span><span class="n">cfg_jv</span><span class="p">));</span>
+  <span class="n">ParseConfig</span><span class="p">();</span>
+  <span class="n">frame_rate_</span> <span class="o">=</span> <span class="n">frame_rate</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nb">int</span> <span class="n">SmartPlugin</span><span class="p">::</span><span class="n">Init</span><span class="p">()</span> <span class="p">{</span>
+  <span class="o">//</span> <span class="n">init</span> <span class="k">for</span> <span class="n">xstream</span> <span class="n">sdk</span>
+  <span class="n">sdk_</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">xstream</span><span class="p">::</span><span class="n">XStreamSDK</span><span class="p">::</span><span class="n">CreateSDK</span><span class="p">());</span>
+  <span class="n">sdk_</span><span class="o">-&gt;</span><span class="n">SetConfig</span><span class="p">(</span><span class="s2">&quot;config_file&quot;</span><span class="p">,</span> <span class="n">xstream_workflow_cfg_file_</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">sdk_</span><span class="o">-&gt;</span><span class="n">Init</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">sdk_</span><span class="o">-&gt;</span><span class="n">SetCallback</span><span class="p">(</span><span class="n">std</span><span class="p">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">SmartPlugin</span><span class="p">::</span><span class="n">OnCallback</span><span class="p">,</span> <span class="n">this</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">placeholders</span><span class="p">::</span><span class="n">_1</span><span class="p">));</span>
+  <span class="n">RegisterMsg</span><span class="p">(</span><span class="n">TYPE_IMAGE_MESSAGE</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">SmartPlugin</span><span class="p">::</span><span class="n">Feed</span><span class="p">,</span> <span class="n">this</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">placeholders</span><span class="p">::</span><span class="n">_1</span><span class="p">));</span>
+  <span class="k">return</span> <span class="n">XPluginAsync</span><span class="p">::</span><span class="n">Init</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>smartplugin的OnCallback函数处理xstream回调的模型推理结果，并将结果封装成smart msg发布到总线。主要逻辑如下：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">++</span>
+<span class="n">void</span> <span class="n">SmartPlugin</span><span class="p">::</span><span class="n">OnCallback</span><span class="p">(</span><span class="n">xstream</span><span class="p">::</span><span class="n">OutputDataPtr</span> <span class="n">xstream_out</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">XStreamImageFramePtr</span> <span class="o">*</span><span class="n">rgb_image</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">const</span> <span class="n">auto</span> <span class="o">&amp;</span><span class="n">output</span> <span class="p">:</span> <span class="n">xstream_out</span><span class="o">-&gt;</span><span class="n">datas_</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">LOGD</span> <span class="o">&lt;&lt;</span> <span class="n">output</span><span class="o">-&gt;</span><span class="n">name_</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;, type is &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">output</span><span class="o">-&gt;</span><span class="n">type_</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">output</span><span class="o">-&gt;</span><span class="n">name_</span> <span class="o">==</span> <span class="n">GetWorkflowInputImageName</span><span class="p">())</span> <span class="p">{</span>
+      <span class="n">rgb_image</span> <span class="o">=</span> <span class="n">dynamic_cast</span><span class="o">&lt;</span><span class="n">XStreamImageFramePtr</span> <span class="o">*&gt;</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">get</span><span class="p">());</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">auto</span> <span class="n">smart_msg</span> <span class="o">=</span> <span class="n">CreateSmartMessage</span><span class="p">(</span><span class="n">xstream_out</span><span class="p">);</span>
+  <span class="o">//</span> <span class="n">Set</span> <span class="n">origin</span> <span class="nb">input</span> <span class="n">named</span> <span class="s2">&quot;image&quot;</span> <span class="k">as</span> <span class="n">output</span> <span class="n">always</span><span class="o">.</span>
+  <span class="n">HOBOT_CHECK</span><span class="p">(</span><span class="n">rgb_image</span><span class="p">);</span>
+  <span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">channel_id</span> <span class="o">=</span> <span class="n">rgb_image</span><span class="o">-&gt;</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">channel_id</span><span class="p">;</span>
+  <span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">time_stamp</span> <span class="o">=</span> <span class="n">rgb_image</span><span class="o">-&gt;</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">time_stamp</span><span class="p">;</span>
+  <span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">frame_id</span> <span class="o">=</span> <span class="n">rgb_image</span><span class="o">-&gt;</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">frame_id</span><span class="p">;</span>
+  <span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">image_name</span> <span class="o">=</span> <span class="n">rgb_image</span><span class="o">-&gt;</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">image_name</span><span class="p">;</span>
+  <span class="n">LOGD</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;smart result image name = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">image_name</span><span class="p">;</span>
+  <span class="n">LOGI</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;smart result frame_id = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">frame_id</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="n">auto</span> <span class="nb">input</span> <span class="o">=</span> <span class="n">monitor_</span><span class="o">-&gt;</span><span class="n">PopFrame</span><span class="p">(</span><span class="n">smart_msg</span><span class="o">-&gt;</span><span class="n">frame_id</span><span class="p">);</span>
+  <span class="n">delete</span> <span class="n">static_cast</span><span class="o">&lt;</span><span class="n">SmartInput</span> <span class="o">*&gt;</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">context</span><span class="p">);</span>
+  <span class="n">PushMsg</span><span class="p">(</span><span class="n">smart_msg</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>smartplugin的Serialize序列化函数的功能是解析xstream的输出结果smart_result，序列化成protobuf格式数据。主要逻辑如下：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">++</span>
+<span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">CustomSmartMessage</span><span class="p">::</span><span class="n">Serialize</span><span class="p">(</span><span class="nb">int</span> <span class="n">ori_w</span><span class="p">,</span> <span class="nb">int</span> <span class="n">ori_h</span><span class="p">,</span> <span class="nb">int</span> <span class="n">dst_w</span><span class="p">,</span> <span class="nb">int</span> <span class="n">dst_h</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">//</span> <span class="n">serialize</span> <span class="n">smart</span> <span class="n">message</span> <span class="n">using</span> <span class="n">defined</span> <span class="n">smart</span> <span class="n">protobuf</span><span class="o">.</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="n">proto_str</span><span class="p">;</span>
+  <span class="n">x3</span><span class="p">::</span><span class="n">FrameMessage</span> <span class="n">proto_frame_message</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">const</span> <span class="n">auto</span> <span class="o">&amp;</span><span class="n">output</span> <span class="p">:</span> <span class="n">smart_result</span><span class="o">-&gt;</span><span class="n">datas_</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">LOGD</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;output name: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">output</span><span class="o">-&gt;</span><span class="n">name_</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">output</span><span class="o">-&gt;</span><span class="n">name_</span> <span class="o">==</span> <span class="s2">&quot;face_bbox_list&quot;</span> <span class="o">||</span> <span class="n">output</span><span class="o">-&gt;</span><span class="n">name_</span> <span class="o">==</span> <span class="s2">&quot;head_box&quot;</span> <span class="o">||</span>
+        <span class="n">output</span><span class="o">-&gt;</span><span class="n">name_</span> <span class="o">==</span> <span class="s2">&quot;body_box&quot;</span> <span class="o">||</span> <span class="n">postfix</span> <span class="o">==</span> <span class="s2">&quot;box&quot;</span> <span class="o">||</span> <span class="n">output</span><span class="o">-&gt;</span><span class="n">name_</span> <span class="o">==</span> <span class="s2">&quot;face_bbox_list_after_pose&quot;</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">output</span><span class="o">-&gt;</span><span class="n">name_</span> <span class="o">==</span> <span class="s2">&quot;kps&quot;</span> <span class="o">||</span> <span class="n">output</span><span class="o">-&gt;</span><span class="n">name_</span> <span class="o">==</span> <span class="s2">&quot;lowpassfilter_body_kps&quot;</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">output</span><span class="o">-&gt;</span><span class="n">name_</span> <span class="o">==</span> <span class="s2">&quot;gesture&quot;</span><span class="p">)</span> <span class="p">{}</span>
+  <span class="p">}</span>
+  <span class="n">x3</span><span class="p">::</span><span class="n">MessagePack</span> <span class="n">pack</span><span class="p">;</span>
+  <span class="n">pack</span><span class="o">.</span><span class="n">set_flow_</span><span class="p">(</span><span class="n">x3</span><span class="p">::</span><span class="n">MessagePack_Flow</span><span class="p">::</span><span class="n">MessagePack_Flow_CP2AP</span><span class="p">);</span>
+  <span class="n">pack</span><span class="o">.</span><span class="n">set_type_</span><span class="p">(</span><span class="n">x3</span><span class="p">::</span><span class="n">MessagePack_Type</span><span class="p">::</span><span class="n">MessagePack_Type_kXPlugin</span><span class="p">);</span>
+  <span class="n">pack</span><span class="o">.</span><span class="n">set_content_</span><span class="p">(</span><span class="n">proto_frame_message</span><span class="o">.</span><span class="n">SerializeAsString</span><span class="p">());</span>
+  <span class="n">pack</span><span class="o">.</span><span class="n">SerializeToString</span><span class="p">(</span><span class="o">&amp;</span><span class="n">proto_str</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">proto_str</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="o">++</span>
+<span class="n">VioPlugin</span><span class="p">::</span><span class="n">VioPlugin</span><span class="p">(</span><span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">path</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">config_</span> <span class="o">=</span> <span class="n">GetConfigFromFile</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+  <span class="n">GetSubConfigs</span><span class="p">();</span>
+  <span class="n">HOBOT_CHECK</span><span class="p">(</span><span class="n">configs_</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nb">int</span> <span class="n">VioPlugin</span><span class="p">::</span><span class="n">Init</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">is_inited_</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">ClearAllQueue</span><span class="p">();</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">auto</span> <span class="n">config</span> <span class="p">:</span> <span class="n">configs_</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">auto</span> <span class="n">data_source_</span> <span class="o">=</span> <span class="n">config</span><span class="o">-&gt;</span><span class="n">GetValue</span><span class="p">(</span><span class="s2">&quot;data_source&quot;</span><span class="p">);</span>
+    <span class="n">auto</span> <span class="n">vio_handle</span> <span class="o">=</span> <span class="n">VioProduce</span><span class="p">::</span><span class="n">CreateVioProduce</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">data_source_</span><span class="p">);</span>
+    <span class="n">HOBOT_CHECK</span><span class="p">(</span><span class="n">vio_handle</span><span class="p">);</span>
+    <span class="n">vio_handle</span><span class="o">-&gt;</span><span class="n">SetConfig</span><span class="p">(</span><span class="n">config</span><span class="p">);</span>
+    <span class="n">vio_handle</span><span class="o">-&gt;</span><span class="n">SetVioConfigNum</span><span class="p">(</span><span class="n">vio_config_num_</span><span class="p">);</span>
+    <span class="n">vio_produce_handles_</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">vio_handle</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">XPluginAsync</span><span class="p">::</span><span class="n">Init</span><span class="p">();</span>
+  <span class="n">is_inited_</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>vio plugin的主处理逻辑文件路径为：./source/solution_zoo/common/xproto_plugins/iotvioplugin/src/vioplugin/vioproduce.cpp，在下一部分的图像处理的流程“”详细说明。</p></li>
+</ul>
+<section id="id12">
+<h2>常见问题分析<a class="headerlink" href="#id12" title="永久链接至标题"></a></h2>
+<p>不管是什么异常现象，都需要拿到X3的log进行分析！</p>
+<section id="id13">
+<h3>5.1 X3启动失败<a class="headerlink" href="#id13" title="永久链接至标题"></a></h3>
+<ul>
+<li><p>sensor异常</p>
+<ul class="simple">
+<li><p>sensor异常会导致程序crash退出，报错现象如下：</p></li>
+</ul>
+<p><img alt="12f95bf9a75fdaf0a152b07218dc5e02" src="../../_images/12f95bf9a75fdaf0a152b07218dc5e02.png" /></p>
+<ul class="simple">
+<li><p>排查过程包括sensor模组、mipi线、使用的插槽是否正确</p></li>
+<li><p>使用的插槽在configs/vio/x3dev/iot_vio_x3_*_1080p.json配置文件（*为具体的sensor名）的”host_index”配置项中指定，0表示靠近边缘的插槽，1表示靠近usb的插槽，具体如下：</p></li>
+</ul>
+<p><img alt="d21f8e1d7527e2a8b067cb5809ac23f2" src="../../_images/d21f8e1d7527e2a8b067cb5809ac23f2.png" /></p>
+<ul class="simple">
+<li><p>如果有备用sensor，可以直接换一个模组和mipi线进行验证</p></li>
+</ul>
+</li>
+<li><p>模型鉴权失败</p>
+<ul class="simple">
+<li><p>如果使用的模型带有加密授权信息，开发板没有烧录授权文件或者授权文件不匹配，启动加载模型将会鉴权失败导致程序退出，具体现象如下：</p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="d61b7e756ec3bd416e35b81610eda5a6" src="../../_images/d61b7e756ec3bd416e35b81610eda5a6.png" /></p>
+</section>
+<section id="app">
+<h3>5.2 安卓启动失败（app退出）<a class="headerlink" href="#app" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>先检查X3侧是否有异常，参考5.1节部分。</p></li>
+<li><p>X3和安卓启动后，安卓端是否能ping通X3：ping192.168.100.100。安卓端是否识别到video设备：查看/dev/中是否有新增的video设备符号</p></li>
+<li><p>使用ap sdk release包中的sample bin文件测试，验证接收X3侧的智能和视频数据是否正常。</p></li>
+</ul>
+</section>
+<section id="id14">
+<h3>5.3 X3和安卓启动成功，安卓获取图像失败<a class="headerlink" href="#id14" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>X3程序上一次异常退出，导致获取图像失败。解决方法：重启X3，具体现象为X3侧一直报vio错误。</p></li>
+</ul>
+</section>
+<section id="id15">
+<h3>5.4 安卓重复启停失败<a class="headerlink" href="#id15" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>安卓app第一次启动成功，之后app手动退出并再次启动存在启动失败的问题。</p>
+<ul>
+<li><p>APP和X3在正常连接过程中，ap sdk会定时1秒向X3发送心跳消息，用于表示AP存活状态。</p></li>
+<li><p>如果X3侧连续6秒收不到AP发送的心跳信号，认为APP已退出，开始启动模块退出流程。</p></li>
+<li><p>如果app是非正常方式退出（未调用ap sdk的退出接口进行退出），退出后在6秒内再次启动，即X3侧在关闭模块的过程中收到启动命令，导致启动时序紊乱，AP收到启动失败消息。</p></li>
+<li><p>解决方法：app退出时调用ap sdk的退出接口。如果是异常退出，间隔10秒以上再启动。</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

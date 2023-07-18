@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5.10.6. GDC 使用说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+    <link rel="next" title="5.10.7. 图像质量测评" href="../Image_Quality_Evaluation.html" />
+    <link rel="prev" title="5.10.5. 生成ISP效果库" href="../Generate_ISP_Lib.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">5. 多媒体开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../1-Overview_zh_CN.html">5.1. 系统概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../2-System_Control_zh_CN.html">5.2. 系统控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../3-Video_Input_zh_CN.html">5.3. 视频输入</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../4-Graphic_System_API_Reference_Manual.html">5.4. ISP图像系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../5-Video_Processing_zh_CN.html">5.5. 视频处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../6-Region_Processing_zh_CN.html">5.6. 区域处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../7-Video_Output_zh_CN.html">5.7. 视频输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../8-Video_Encode_zh_CN.html">5.8. 视频编码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../9-Video_Decode_zh_CN.html">5.9. 视频解码</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">5.10. 图像调试指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../ISP_Tuning_User_Guide.html">5.10.1. ISP图像调试指引</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Sensor_Bring_Up.html">5.10.2. X3 Camera点亮说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Control_Tool_Guide.html">5.10.3. ISP工具指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Camera_Tuning_Tool.html">5.10.4. Hobot player工具指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Generate_ISP_Lib.html">5.10.5. 生成ISP效果库</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">5.10.6. GDC 使用说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">5.10.6.1. 模块描述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">5.10.6.2. 软件接口</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hb-vio-gen-gdc-cfg-hb-vio-free-gdc-cfg">hb_vio_gen_gdc_cfg/ hb_vio_free_gdc_cfg</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hb-vio-set-gdc-cfg">hb_vio_set_gdc_cfg</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">5.10.6.3. 数据结构</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#frame-format-t">frame_format_t</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#resolution-t">resolution_t</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#param-t">param_t</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rect-t">rect_t</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#point-t">point_t</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#transformation-t">transformation_t</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#custom-tranformation-t">custom_tranformation_t</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#window-t">window_t</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">5.10.6.4. 各参数调试效果</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#pan">pan调试效果</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tile">tile调试效果</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#zoom">zoom调试效果</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">5.10.6.5. 调试说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#gdc-tool">启动gdc-tool</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#affine">affine</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#equisolid-panoramic">equisolid（Panoramic）</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#equisold-cylinder-stereographic">equisold(cylinder)（Stereographic）</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#equidistant-universal">equidistant（Universal）</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#custom">custom</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#keystone-dewarping-dewarp-keystone">keystone+dewarping（Dewarp_keystone）暂无验证</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">5.10.6.6. 示例</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id7">affine</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id8">equisolid（Panoramic）</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#equisolid-cylinder-stereographic">equisolid(cylinder) （Stereographic）</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id9">equidistant（Universal）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Image_Quality_Evaluation.html">5.10.7. 图像质量测评</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Expand_Content.html">5.10.8. ISP 调试视频教程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html">5.11. 查询多媒体模块调试信息</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../12-Media_Processing_Performance_Debug_Guide.html">5.12. 多媒体性能调试</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html"><span class="section-number">5. </span>多媒体开发指南</a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">5.10. </span>图像调试指南</a> &raquo;</li>
+      <li><span class="section-number">5.10.6. </span>GDC 使用说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../Generate_ISP_Lib.html" class="btn btn-neutral float-left" title="5.10.5. 生成ISP效果库" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../Image_Quality_Evaluation.html" class="btn btn-neutral float-right" title="5.10.7. 图像质量测评" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gdc">
+<h1><span class="section-number">5.10.6. </span>GDC 使用说明<a class="headerlink" href="#gdc" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">5.10.6.1. </span>模块描述<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>模式支持的输入图像尺寸参考值为3840*2160，2688*1944，1920*1080，1280*720，640*480，480*320。</p>
+<p><em>note 1: xj3 ecc mode 统一填写ecc is disable, XJ3不支持该功能。</em></p>
+<p><em>note2:当参数为小数时，保证精度为浮点运算以后8位小数及以上，否则可能生成的bin不一致。</em></p>
+<p><em>node3:用户填充数据结构或者json时填充的信息应该包含各种模式示例所有项。</em></p>
+</section>
+<section id="id2">
+<h2><span class="section-number">5.10.6.2. </span>软件接口<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<section id="hb-vio-gen-gdc-cfg-hb-vio-free-gdc-cfg">
+<h3>hb_vio_gen_gdc_cfg/ hb_vio_free_gdc_cfg<a class="headerlink" href="#hb-vio-gen-gdc-cfg-hb-vio-free-gdc-cfg" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>int hb_vio_gen_gdc_cfg(param_t*gdc_param, window_t *windows, uint32_t wnd_num, void **cfg_buf, uint64_t *cfg_size)；
+
+void hb_vio_free_gdc_cfg(uint32_t * cfg_buf);
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<p>设置/获取。</p>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>参数名称</th>
+<th>描述</th>
+<th>输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>param_t *gdc_param</td>
+<td>图像基本信息</td>
+<td></td>
+</tr>
+<tr>
+<td>window_t *windows</td>
+<td>图像处理参数信息</td>
+<td></td>
+</tr>
+<tr>
+<td>uint32_t wnd_num</td>
+<td>图像处理信息数量，若有1个window则填写1。</td>
+<td></td>
+</tr>
+<tr>
+<td>void **cfg_buf</td>
+<td>生成的bin buffer,buffer 由函数内部分配，使用完成后需要释放。</td>
+<td></td>
+</tr>
+<tr>
+<td>uint64_t *cfg_siz</td>
+<td>生成bin buffer 长度。</td>
+<td></td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>返回值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>非0</td>
+<td>失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<p>1. 生成gdc-bin buf 使用结束后需要释放，否则会造成内存泄漏。</p>
+<p>2. 不同模式下cfg.bin 生成需要填充的结构见各模式示例。</p>
+<p>【参考代码】</p>
+</section>
+<section id="hb-vio-set-gdc-cfg">
+<h3>hb_vio_set_gdc_cfg<a class="headerlink" href="#hb-vio-set-gdc-cfg" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">hb_vio_set_gdc_cfg</span><span class="p">(</span><span class="n">uint32_t</span> <span class="n">pipeline_id</span><span class="p">,</span> <span class="n">uint32_t</span><span class="o">*</span> <span class="n">cfg_buf</span><span class="p">,</span> <span class="n">uint64_t</span> <span class="n">cfg_size</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<p>设置/获取。</p>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>参数名称</th>
+<th>描述</th>
+<th>输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>uint32_t pipeline_id</td>
+<td>pipe_line 号</td>
+<td></td>
+</tr>
+<tr>
+<td>uint32_t* cfg_buf</td>
+<td>gdc-bin buf</td>
+<td></td>
+</tr>
+<tr>
+<td>uint64_t cfg_size</td>
+<td>gdc-bin buf 长度</td>
+<td></td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>返回值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>非0</td>
+<td>失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<p>调用顺序，调用hb_vio_gen_gdc_cfg生成gdc_bin_cfg文件，调用hb_vio_set_gdc_cfg设置gdc_bin于某个pipeline,接着调用hb_vio_free_gdc_cfg释放gdc_bin的buffer。</p>
+<p>【参考代码】</p>
+</section>
+</section>
+<section id="id3">
+<h2><span class="section-number">5.10.6.3. </span>数据结构<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<section id="frame-format-t">
+<h3>frame_format_t<a class="headerlink" href="#frame-format-t" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">enum</span> <span class="p">{</span>
+
+<span class="n">FMT_UNKNOWN</span><span class="p">,</span>
+
+<span class="n">FMT_LUMINANCE</span><span class="p">,</span>
+
+<span class="n">FMT_PLANAR_444</span><span class="p">,</span>
+
+<span class="n">FMT_PLANAR_420</span><span class="p">,</span>
+
+<span class="n">FMT_SEMIPLANAR_420</span>
+
+<span class="p">}</span> <span class="n">frame_format_t</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FMT_UNKNOWN</td>
+<td></td>
+</tr>
+<tr>
+<td>FMT_LUMINANCE</td>
+<td></td>
+</tr>
+<tr>
+<td>FMT_PLANAR_444</td>
+<td></td>
+</tr>
+<tr>
+<td>FMT_PLANAR_420</td>
+<td></td>
+</tr>
+<tr>
+<td>FMT_SEMIPLANAR_420</td>
+<td>nv12 使用该项</td>
+</tr>
+</tbody>
+</table><p><em>note 4: XJ3中使用FMT_SEMIPLANAR_420类型，若图像类型使用不当会造成输出异常。</em></p>
+</section>
+<section id="resolution-t">
+<h3>resolution_t<a class="headerlink" href="#resolution-t" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">struct</span> <span class="p">{</span>
+
+<span class="n">uint32_t</span> <span class="n">w</span><span class="p">;</span>
+
+<span class="n">uint32_t</span> <span class="n">h</span><span class="p">;</span>
+
+<span class="p">}</span> <span class="n">resolution_t</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>uint32_t w</td>
+<td>width in pixels</td>
+</tr>
+<tr>
+<td>uint32_t h</td>
+<td>height in pixels</td>
+</tr>
+</tbody>
+</table></section>
+<section id="param-t">
+<h3>param_t<a class="headerlink" href="#param-t" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">struct</span> <span class="p">{</span>
+
+<span class="n">frame_format_t</span> <span class="nb">format</span><span class="p">;</span>
+
+<span class="n">resolution_t</span> <span class="ow">in</span><span class="p">;</span>
+
+<span class="n">resolution_t</span> <span class="n">out</span><span class="p">;</span>
+
+<span class="n">int32_t</span> <span class="n">x_offset</span><span class="p">;</span>
+
+<span class="n">int32_t</span> <span class="n">y_offset</span><span class="p">;</span>
+
+<span class="n">int32_t</span> <span class="n">diameter</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">fov</span><span class="p">;</span>
+
+<span class="p">}</span> <span class="n">param_t</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>frame_format_t format</td>
+<td>处理图像格式</td>
+</tr>
+<tr>
+<td>resolution_t in</td>
+<td>实际输入图像尺寸</td>
+</tr>
+<tr>
+<td>resolution_t out</td>
+<td>实际输出图像尺寸</td>
+</tr>
+<tr>
+<td>int32_t x_offset</td>
+<td>输入区域沿X轴偏移的像素数。 建议：default 0</td>
+</tr>
+<tr>
+<td>int32_t y_offset</td>
+<td>输入区域沿Y轴偏移的像素数。 建议：default 0</td>
+</tr>
+<tr>
+<td>int32_t diameter</td>
+<td>定义矩形输入图像上包含实际鱼眼照片的输入圆形区域的像素直径。对于某些相机，此圆形图像区域的直径可以大于或小于矩形画布的尺寸（有时可能会被剪裁）。</td>
+</tr>
+<tr>
+<td>double fov</td>
+<td>视场定义输入图像的可视角度，影响源网格的曲率。视场越大，透视变形越大。</td>
+</tr>
+</tbody>
+</table><p><em>note 5: 一般情况下diameter应保持与input.height一致。</em></p>
+</section>
+<section id="rect-t">
+<h3>rect_t<a class="headerlink" href="#rect-t" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">struct</span> <span class="p">{</span>
+
+<span class="n">int32_t</span> <span class="n">x</span><span class="p">;</span>
+
+<span class="n">int32_t</span> <span class="n">y</span><span class="p">;</span>
+
+<span class="n">int32_t</span> <span class="n">w</span><span class="p">;</span>
+
+<span class="n">int32_t</span> <span class="n">h</span><span class="p">;</span>
+
+<span class="p">}</span> <span class="n">rect_t</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int32_t x</td>
+<td>Start x coordinate</td>
+</tr>
+<tr>
+<td>int32_t y</td>
+<td>Start y coordinate</td>
+</tr>
+<tr>
+<td>int32_t w</td>
+<td>width</td>
+</tr>
+<tr>
+<td>int32_t h</td>
+<td>height</td>
+</tr>
+</tbody>
+</table></section>
+<section id="point-t">
+<h3>point_t<a class="headerlink" href="#point-t" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">struct</span> <span class="p">{</span>
+
+<span class="n">double</span> <span class="n">x</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">y</span><span class="p">;</span>
+
+<span class="p">}</span> <span class="n">point_t</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>double x</td>
+<td>x coordinate</td>
+</tr>
+<tr>
+<td>double y</td>
+<td>y coordinate</td>
+</tr>
+</tbody>
+</table></section>
+<section id="transformation-t">
+<h3>transformation_t<a class="headerlink" href="#transformation-t" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">enum</span> <span class="p">{</span>
+
+<span class="n">PANORAMIC</span><span class="p">,</span>
+
+<span class="n">CYLINDRICAL</span><span class="p">,</span>
+
+<span class="n">STEREOGRAPHIC</span><span class="p">,</span>
+
+<span class="n">UNIVERSAL</span><span class="p">,</span>
+
+<span class="n">CUSTOM</span><span class="p">,</span>
+
+<span class="n">AFFINE</span><span class="p">,</span>
+
+<span class="n">DEWARP_KEYSTONE</span>
+
+<span class="p">}</span> <span class="n">transformation_t</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PANORAMIC</td>
+<td></td>
+</tr>
+<tr>
+<td>CYLINDRICAL</td>
+<td></td>
+</tr>
+<tr>
+<td>STEREOGRAPHIC</td>
+<td></td>
+</tr>
+<tr>
+<td>UNIVERSAL</td>
+<td></td>
+</tr>
+<tr>
+<td>CUSTOM</td>
+<td></td>
+</tr>
+<tr>
+<td>AFFINE</td>
+<td></td>
+</tr>
+<tr>
+<td>DEWARP_KEYSTONE</td>
+<td></td>
+</tr>
+</tbody>
+</table></section>
+<section id="custom-tranformation-t">
+<h3>custom_tranformation_t<a class="headerlink" href="#custom-tranformation-t" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">struct</span> <span class="p">{</span>
+
+<span class="n">uint8_t</span> <span class="n">full_tile_calc</span><span class="p">;</span>
+
+<span class="n">uint16_t</span> <span class="n">tile_incr_x</span><span class="p">;</span>
+
+<span class="n">uint16_t</span> <span class="n">tile_incr_y</span><span class="p">;</span>
+
+<span class="n">int32_t</span> <span class="n">w</span><span class="p">;</span>
+
+<span class="n">int32_t</span> <span class="n">h</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">centerx</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">centery</span><span class="p">;</span>
+
+<span class="n">point_t</span><span class="o">*</span> <span class="n">points</span><span class="p">;</span>
+
+<span class="p">}</span> <span class="n">custom_tranformation_t</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>uint8_t full_tile_calc</td>
+<td></td>
+</tr>
+<tr>
+<td>uint16_t tile_incr_x</td>
+<td></td>
+</tr>
+<tr>
+<td>uint16_t tile_incr_y</td>
+<td></td>
+</tr>
+<tr>
+<td>int32_t w</td>
+<td>自定义转换网格中水平方向上的数字或点</td>
+</tr>
+<tr>
+<td>int32_t h</td>
+<td>自定义转换网格中垂直方向的数字或点</td>
+</tr>
+<tr>
+<td>double centerx</td>
+<td>center along x axis</td>
+</tr>
+<tr>
+<td>double centery</td>
+<td>center along y axis</td>
+</tr>
+<tr>
+<td>point_t* points</td>
+<td>config.txt转换序列, 数量 = w*h</td>
+</tr>
+</tbody>
+</table></section>
+<section id="window-t">
+<h3>window_t<a class="headerlink" href="#window-t" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typedef</span> <span class="n">struct</span> <span class="p">{</span>
+
+<span class="n">rect_t</span> <span class="n">out_r</span><span class="p">;</span>
+
+<span class="n">transformation_t</span> <span class="n">transform</span><span class="p">;</span>
+
+<span class="n">rect_t</span> <span class="n">input_roi_r</span><span class="p">;</span>
+
+<span class="n">int32_t</span> <span class="n">pan</span><span class="p">;</span>
+
+<span class="n">int32_t</span> <span class="n">tilt</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">zoom</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">strength</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">strengthY</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">angle</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">elevation</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">azimuth</span><span class="p">;</span>
+
+<span class="n">int32_t</span> <span class="n">keep_ratio</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">FOV_h</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">FOV_w</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">cylindricity_y</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">cylindricity_x</span><span class="p">;</span>
+
+<span class="n">char</span> <span class="n">custom_file</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
+
+<span class="n">custom_tranformation_t</span> <span class="n">custom</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">trapezoid_left_angle</span><span class="p">;</span>
+
+<span class="n">double</span> <span class="n">trapezoid_right_angle</span><span class="p">;</span>
+
+<span class="p">}</span> <span class="n">window_t</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rect_t out_r</td>
+<td>Output window position and size</td>
+</tr>
+<tr>
+<td>transformation_t transform</td>
+<td>Used transformation</td>
+</tr>
+<tr>
+<td>rect_t input_roi_r</td>
+<td>roi 区域</td>
+</tr>
+<tr>
+<td>int32_t pan</td>
+<td>沿变换曲面沿水平方向以给定数量的像素偏移变换网格。</td>
+</tr>
+<tr>
+<td>int32_t tilt</td>
+<td>沿变换曲面沿垂直方向将变换网格偏移给定数量的像素。</td>
+</tr>
+<tr>
+<td>zoom</td>
+<td>按提供的因子缩放转换输出</td>
+</tr>
+<tr>
+<td>strength</td>
+<td>沿X轴的变换强度（无量纲非负参数）</td>
+</tr>
+<tr>
+<td>double strengthY</td>
+<td>沿Y轴的变换强度（无量纲非负参数）。</td>
+</tr>
+<tr>
+<td>double angle(rotation)</td>
+<td>区域将在其轴上旋转的角度</td>
+</tr>
+<tr>
+<td>double elevation</td>
+<td>指定主投影轴的角度（度）</td>
+</tr>
+<tr>
+<td>double azimuth</td>
+<td>指定主投影轴的角度，从北向（正向东）顺时针计数</td>
+</tr>
+<tr>
+<td>int32_t keep_ratio</td>
+<td>在水平和垂直方向上保持相同的拉伸强度（enable/disable）</td>
+</tr>
+<tr>
+<td>double FOV_h</td>
+<td>垂直尺寸输出视场的大小（度）</td>
+</tr>
+<tr>
+<td>double FOV_w</td>
+<td>水平尺寸输出视场的大小（度）</td>
+</tr>
+<tr>
+<td>double cylindricity_y</td>
+<td>垂直方向目标投影形状的圆柱度水平</td>
+</tr>
+<tr>
+<td>double cylindricity_x</td>
+<td>水平方向目标投影形状的圆柱度水平</td>
+</tr>
+<tr>
+<td>char custom_file[128]</td>
+<td>File name of the file containing custom transformation description</td>
+</tr>
+<tr>
+<td>custom_tranformation_t custom</td>
+<td>Parsed custom transformation structure</td>
+</tr>
+<tr>
+<td>double trapezoid_left_angle</td>
+<td>Left Acute angle in degrees between trapezoid base and leg</td>
+</tr>
+<tr>
+<td>double trapezoid_right_angle</td>
+<td>Right Acute angle in degrees between trapezoid base and leg</td>
+</tr>
+</tbody>
+</table></section>
+</section>
+<section id="id4">
+<h2><span class="section-number">5.10.6.4. </span>各参数调试效果<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<section id="pan">
+<h3>pan调试效果<a class="headerlink" href="#pan" title="永久链接至标题"></a></h3>
+<p><img alt="../../../_images/74e919d8fbf931e3c65cad33da93e93f.png" src="../../../_images/74e919d8fbf931e3c65cad33da93e93f.png" /></p>
+</section>
+<section id="tile">
+<h3>tile调试效果<a class="headerlink" href="#tile" title="永久链接至标题"></a></h3>
+<p><img alt="../../../_images/7aeeb1371c14d1bf6f7b78a2be21235e.png" src="../../../_images/7aeeb1371c14d1bf6f7b78a2be21235e.png" /></p>
+</section>
+<section id="zoom">
+<h3>zoom调试效果<a class="headerlink" href="#zoom" title="永久链接至标题"></a></h3>
+<p><img alt="../../../_images/53400d489cc006fcf159fc2b3f0a769c.png" src="../../../_images/53400d489cc006fcf159fc2b3f0a769c.png" /></p>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">5.10.6.5. </span>调试说明<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<p>若使用gdc-tool离线进行标定，需使用gdc-tool，相关工具在发布包software_tools\isp_tuning_tools目录下。准备jpg模式下图像，load
+到gdc-tool中进行离线校正，校正完成后可以直接保存config.bin文件用于硬件校正，也可用保存config.json文件在线生成config.bin进行硬件校正。</p>
+<section id="gdc-tool">
+<h3>启动gdc-tool<a class="headerlink" href="#gdc-tool" title="永久链接至标题"></a></h3>
+<p>1. window环境</p>
+<p>安装环境：参考<a class="reference external" href="https://www.cnblogs.com/gaosheng-221/p/6799458.html">https://www.cnblogs.com/gaosheng-221/p/6799458.html</a></p>
+<p>安装执行依赖：在gdc-tool-gui-0.23.68-windows文件目录下执行npm install express</p>
+<p>启动应用：在win 命令行工具内进入文件目录，执行node app.js，Chrome
+浏览器登陆<a class="reference external" href="http://localhost:3000/">http://localhost:3000/</a>。</p>
+<p>2. linux 环境</p>
+<p>安装环境：apt install nodejs-legacy</p>
+<p>安装执行依赖：在gdc-tool-gui-0.23.68-linux文件目录下执行npm install –production</p>
+<p>启动应用：执行node app.js，登陆<a class="reference external" href="http://localhost:3000/">http://localhost:3000/</a>。</p>
+</section>
+<section id="affine">
+<h3>affine<a class="headerlink" href="#affine" title="永久链接至标题"></a></h3>
+<p><img alt="../../../_images/48e23669e469b0a9173d099371842cf8.png" src="../../../_images/48e23669e469b0a9173d099371842cf8.png" /></p>
+<p>【功能描述】</p>
+<p>【必备成员】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int32_t pan</td>
+<td>default 0, 不修改</td>
+</tr>
+<tr>
+<td>int32_t tilt</td>
+<td>default 0, 不修改</td>
+</tr>
+<tr>
+<td>zoom</td>
+<td></td>
+</tr>
+<tr>
+<td>double angle(rotation)</td>
+<td>0/90/180/270</td>
+</tr>
+</tbody>
+</table><p><em>note 6: input size== output
+size，0°和180°输入输出尺寸保持一致，90°和270°输出尺寸的宽应保持16字节对齐。</em></p>
+</section>
+<section id="equisolid-panoramic">
+<h3>equisolid（Panoramic）<a class="headerlink" href="#equisolid-panoramic" title="永久链接至标题"></a></h3>
+<p>此转换提供等实体（全景panoramic）校正，并将结果显示为平面上的投影。</p>
+<p><img alt="../../../_images/db74cca93ce95819a1662930c4d56662.png" src="../../../_images/db74cca93ce95819a1662930c4d56662.png" /></p>
+<p>【功能描述】</p>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int32_t pan</td>
+<td>default 0, 不修改</td>
+</tr>
+<tr>
+<td>int32_t tilt</td>
+<td>default 0, 不修改</td>
+</tr>
+<tr>
+<td>zoom</td>
+<td></td>
+</tr>
+<tr>
+<td>strength</td>
+<td>沿X轴的变换强度（无量纲非负参数）</td>
+</tr>
+<tr>
+<td>double strengthY</td>
+<td>沿Y轴的变换强度（无量纲非负参数）</td>
+</tr>
+<tr>
+<td>double angle(rotation)</td>
+<td>0/90/180/270</td>
+</tr>
+</tbody>
+</table><p><em>note 7: input size== output
+size，0°和180°输入输出尺寸保持一致，90°和270°输出尺寸的宽应保持16字节对齐。</em></p>
+<p>strength x调试效果</p>
+<p><img alt="../../../_images/f0516a4cc8570572b438716ef52b20be.png" src="../../../_images/f0516a4cc8570572b438716ef52b20be.png" /></p>
+<p>strength y调试效果</p>
+<p><img alt="../../../_images/29552f2ed35bf27fec2bc8918385865f.png" src="../../../_images/29552f2ed35bf27fec2bc8918385865f.png" /></p>
+<p>ratation调试效果</p>
+<p><img alt="../../../_images/000292125e53628c87b21eb8f1c14973.png" src="../../../_images/000292125e53628c87b21eb8f1c14973.png" /></p>
+</section>
+<section id="equisold-cylinder-stereographic">
+<h3>equisold(cylinder)（Stereographic）<a class="headerlink" href="#equisold-cylinder-stereographic" title="永久链接至标题"></a></h3>
+<p>此变换为将结果图像投影到柱面全景图的完整鱼眼帧提供等实体校正。</p>
+<p><img alt="../../../_images/c4503e2a75aa20a171a768587531e090.png" src="../../../_images/c4503e2a75aa20a171a768587531e090.png" /></p>
+<p>【功能描述】</p>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int32_t pan</td>
+<td>default 0, 不修改</td>
+</tr>
+<tr>
+<td>int32_t tilt</td>
+<td>default 0, 不修改</td>
+</tr>
+<tr>
+<td>zoom</td>
+<td></td>
+</tr>
+<tr>
+<td>strength</td>
+<td>转换的强度（无量纲非负参数）转换的强度（无量纲非负参数）</td>
+</tr>
+<tr>
+<td>double angle(rotation)</td>
+<td>0/90/180/270</td>
+</tr>
+</tbody>
+</table><p><em>note 8: input size== output
+size，0°和180°输入输出尺寸保持一致，90°和270°输出尺寸的宽应保持16字节对齐。</em></p>
+<p>strength 调试效果</p>
+<p><img alt="../../../_images/9c2be9bfd39b9662b02d8689eb920fd5.png" src="../../../_images/9c2be9bfd39b9662b02d8689eb920fd5.png" /></p>
+<p>rotation 调试效果</p>
+<p><img alt="../../../_images/35bcf8a8a6a37ba6edb2c4d714388265.png" src="../../../_images/35bcf8a8a6a37ba6edb2c4d714388265.png" /></p>
+</section>
+<section id="equidistant-universal">
+<h3>equidistant（Universal）<a class="headerlink" href="#equidistant-universal" title="永久链接至标题"></a></h3>
+<p>等距变换包含许多参数，这些参数允许它为投影提供一系列不同的目标平面。这使您可以更自由地选择要变换的鱼眼帧的所需区域。</p>
+<p><img alt="../../../_images/8d0c00f5d8f3ea1bfafdc06788f4f769.png" src="../../../_images/8d0c00f5d8f3ea1bfafdc06788f4f769.png" /></p>
+<p>【功能描述】</p>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int32_t pan</td>
+<td>default 0, 不修改</td>
+</tr>
+<tr>
+<td>int32_t tilt</td>
+<td>default 0, 不修改</td>
+</tr>
+<tr>
+<td>zoom</td>
+<td></td>
+</tr>
+<tr>
+<td>double angle(rotation)</td>
+<td>0/90/180/270</td>
+</tr>
+<tr>
+<td>double elevation</td>
+<td>定义了投影轴的倾斜度</td>
+</tr>
+<tr>
+<td>double azimuth</td>
+<td>定义了投影轴的旋转角度。当此参数旋转轴而不是栅格时，如果“仰角”为0，则“方位角”将没有可见效果</td>
+</tr>
+<tr>
+<td>int32_t keep_ratio</td>
+<td>当“保持比率”参数打开时，FOV高度参数将被忽略，其值将自动计算，以在水平和垂直方向上保持相同的拉伸强度</td>
+</tr>
+<tr>
+<td>double FOV_h</td>
+<td>描述垂直维度中输出视图字段的大小（以度为单位）。有效值的范围是从0到180</td>
+</tr>
+<tr>
+<td>double FOV_w</td>
+<td>描述垂直维度中输出视图字段的大小（以度为单位）。有效值的范围是从0到180</td>
+</tr>
+<tr>
+<td>double cylindricity_y</td>
+<td>描述目标投影沿Y轴的球面度。此值从0到1，其中1是球形的。如果此值设置为1，而“圆柱度X”值设置为0，则投影将沿Y轴形成圆柱体</td>
+</tr>
+<tr>
+<td>double cylindricity_x</td>
+<td>描述目标投影沿X轴的球面度。此值从0到1，其中1是球形的。如果此值设置为1，并且“圆柱度Y”值设置为0，则投影将沿X轴形成圆柱体。</td>
+</tr>
+</tbody>
+</table><p><em>note 9: input size== output
+size，0°和180°输入输出尺寸保持一致，90°和270°输出尺寸的宽应保持16字节对齐。</em></p>
+<p><em>note10:
+正常的视力值大约是90度。对于圆柱度（见下文）等于“0”的变换，视场宽度和高度180的值将导致图像无限拉伸。</em></p>
+<p><em>note11:
+如果cylindricity_x和cylindricity_y圆柱度值都设置为1，则投影将是球形的。如果两者都是0，则变换将是矩形的</em></p>
+<p>elevation 调试效果</p>
+<p><img alt="../../../_images/0dd096475feb4560ed051d5a6a47c208.png" src="../../../_images/0dd096475feb4560ed051d5a6a47c208.png" /></p>
+<p>azimuth 调试效果</p>
+<p><img alt="../../../_images/76b5a1dfd993241f10a1ee4ac41c067e.png" src="../../../_images/76b5a1dfd993241f10a1ee4ac41c067e.png" /></p>
+<p>azimuth 调试效果</p>
+<p><img alt="../../../_images/cb7c8fb5a0a6aa86995afed08861be85.png" src="../../../_images/cb7c8fb5a0a6aa86995afed08861be85.png" /></p>
+<p>cylindricity x调试效果</p>
+<p><img alt="../../../_images/d8b09e5cd8faa34f237dfaae6cea10f1.png" src="../../../_images/d8b09e5cd8faa34f237dfaae6cea10f1.png" /></p>
+<p>cylindricity x调试效果</p>
+<p><img alt="../../../_images/3627435637a96b3ea048234e6e540522.png" src="../../../_images/3627435637a96b3ea048234e6e540522.png" /></p>
+</section>
+<section id="custom">
+<h3>custom<a class="headerlink" href="#custom" title="永久链接至标题"></a></h3>
+<p>它们用于创建任何提供的转换都无法描述的转换。为了纠正任意失真，必须向GDC工具提供一个特殊的校准文件</p>
+<p><img alt="../../../_images/3da29816977bed44655ec1eec2cff9de.png" src="../../../_images/3da29816977bed44655ec1eec2cff9de.png" /></p>
+<p>【功能描述】</p>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int32_t pan</td>
+<td></td>
+</tr>
+<tr>
+<td>int32_t tilt</td>
+<td></td>
+</tr>
+<tr>
+<td>zoom</td>
+<td></td>
+</tr>
+<tr>
+<td>char custom_file[128]</td>
+<td>config.txt文件名称</td>
+</tr>
+<tr>
+<td>custom_tranformation_t custom</td>
+<td>解析的自定义转换结构</td>
+</tr>
+</tbody>
+</table><p><em>config.txt 解释：</em></p>
+<p><em>Config file的规则大致需要注意一下几点：</em></p>
+<p><em>1. 第一行是垂直方向和水平方向标定点的个数，
+7指的是垂直方向有7个标定点，28指的是水平方向有28个标定点</em></p>
+<p><em>2. 第二行3 和 6.5是选中区域的中心点，通常是垂直方向标定点 (Y-1)/2
+和水平方向标定点(X-1)/2</em></p>
+<p><em>eg.下图是我截取的其中的一部分数据图片，第三行到第九行就是标定点在源图的坐标值，格式是Y:
+X。以上图为例， 一共有7x28个标志点。</em></p>
+<p><img alt="../../../_images/8f141f3ba2027b3c981c8359e81186b4.png" src="../../../_images/8f141f3ba2027b3c981c8359e81186b4.png" /></p>
+<p><em>3. 由于标定点必须是等距离的，这意味着输出图片的分辨率取决于标志点的点数。</em></p>
+<p><em>eg. 输出图片的Width = 1280， Height的计算如下：1280/Height = (28-1)/(7-1),
+height = 284</em></p>
+<section id="keystone-dewarping-dewarp-keystone">
+<h4>keystone+dewarping（Dewarp_keystone）暂无验证<a class="headerlink" href="#keystone-dewarping-dewarp-keystone" title="永久链接至标题"></a></h4>
+<p><img alt="../../../_images/0c13d5ea867453b7b2def0c554e71425.png" src="../../../_images/0c13d5ea867453b7b2def0c554e71425.png" /></p>
+<p>【功能描述】</p>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>成员</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int32_t pan</td>
+<td></td>
+</tr>
+<tr>
+<td>int32_t tilt</td>
+<td></td>
+</tr>
+<tr>
+<td>zoom</td>
+<td></td>
+</tr>
+<tr>
+<td>double angle(rotation)</td>
+<td></td>
+</tr>
+<tr>
+<td>double elevation</td>
+<td></td>
+</tr>
+<tr>
+<td>double azimuth</td>
+<td></td>
+</tr>
+<tr>
+<td>int32_t keep_ratio</td>
+<td></td>
+</tr>
+<tr>
+<td>double FOV_h</td>
+<td></td>
+</tr>
+<tr>
+<td>double FOV_w</td>
+<td></td>
+</tr>
+<tr>
+<td>double cylindricity_y</td>
+<td></td>
+</tr>
+<tr>
+<td>double cylindricity_x</td>
+<td></td>
+</tr>
+<tr>
+<td>double trapezoid_left_angle</td>
+<td></td>
+</tr>
+<tr>
+<td>double trapezoid_right_angle</td>
+<td></td>
+</tr>
+</tbody>
+</table></section>
+</section>
+</section>
+<section id="id6">
+<h2><span class="section-number">5.10.6.6. </span>示例<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>以1080p-1080p 为例，说明各种模式下配置的参数。</p>
+<section id="id7">
+<h3>affine<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<p><img alt="../../../_images/4b922919eeb4e3e973a2e036906901d5.png" src="../../../_images/4b922919eeb4e3e973a2e036906901d5.png" /></p>
+</section>
+<section id="id8">
+<h3>equisolid（Panoramic）<a class="headerlink" href="#id8" title="永久链接至标题"></a></h3>
+<p><img alt="../../../_images/955655f0249efa3d784d82ae994a987c.png" src="../../../_images/955655f0249efa3d784d82ae994a987c.png" /></p>
+</section>
+<section id="equisolid-cylinder-stereographic">
+<h3>equisolid(cylinder) （Stereographic）<a class="headerlink" href="#equisolid-cylinder-stereographic" title="永久链接至标题"></a></h3>
+<p><img alt="../../../_images/3e3578725b973491c45657ed732b1e27.png" src="../../../_images/3e3578725b973491c45657ed732b1e27.png" /></p>
+</section>
+<section id="id9">
+<h3>equidistant（Universal）<a class="headerlink" href="#id9" title="永久链接至标题"></a></h3>
+<p><img alt="../../../_images/2c179b0121338188b4c93dbc587287f9.png" src="../../../_images/2c179b0121338188b4c93dbc587287f9.png" /></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../Generate_ISP_Lib.html" class="btn btn-neutral float-left" title="5.10.5. 生成ISP效果库" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../Image_Quality_Evaluation.html" class="btn btn-neutral float-right" title="5.10.7. 图像质量测评" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

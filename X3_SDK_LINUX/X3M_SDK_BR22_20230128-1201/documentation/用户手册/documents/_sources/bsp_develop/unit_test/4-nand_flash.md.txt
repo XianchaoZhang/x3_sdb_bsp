@@ -1,0 +1,9 @@
+# NAND-Flash压力测试
+## 测试方法
+1. 使用开源工具`iozone`对`NAND Flash`进行压力测试。
+2. 进入到`test_tools/03_nand_flash`文件夹下，修改`nand_test.sh`脚本中`-s`参数来确定压测空间大小。
+3. 执行`sh nand_test.sh &`进行nand Flash进行读写测试。
+## 测试标准
+1. 高温：45°、低温：-10°、常温下，程序正常执行，不会出现重启挂死的情况。
+2. LOG中没有`fail`、`error`、`timeout`等异常打印。
+3. 能稳定运行48小时。

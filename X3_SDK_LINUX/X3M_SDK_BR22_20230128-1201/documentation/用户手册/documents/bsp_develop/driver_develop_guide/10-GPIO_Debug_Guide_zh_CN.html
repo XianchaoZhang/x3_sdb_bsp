@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.5. GPIO调试指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.3.6. Pinctrl调试指南" href="11-Pinctrl_Debug_Guide_zh_CN.html" />
+    <link rel="prev" title="4.3.4. I2C调试指南" href="9-I2C_Debug_Guide_zh_CN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.3.5. GPIO调试指南</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.3.5.1. 管脚查询</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id2">示例</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id3">GPIO帮助工具</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">4.3.5.2. 驱动代码</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id5">内核配置</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#dts">内核DTS配置</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">4.3.5.3. GPIO使用</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#kernel-space">Kernel Space</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id7">DTS配置</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id8">驱动代码接口</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#x3j3-gpio-irq">X3J3 GPIO IRQ</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#user-space">User Space</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id9">控制接口</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id10">调用接口</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id11">调用示例</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id12">调试接口</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.5. </span>GPIO调试指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="9-I2C_Debug_Guide_zh_CN.html" class="btn btn-neutral float-left" title="4.3.4. I2C调试指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="11-Pinctrl_Debug_Guide_zh_CN.html" class="btn btn-neutral float-right" title="4.3.6. Pinctrl调试指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gpio">
+<h1><span class="section-number">4.3.5. </span>GPIO调试指南<a class="headerlink" href="#gpio" title="永久链接至标题"></a></h1>
+<p>X3 芯片共有121个IO功能管脚，每个管脚都可以配置工作在gpio模式下，但是需要注意和其他功能管脚的复用关系。</p>
+<section id="id1">
+<h2><span class="section-number">4.3.5.1. </span>管脚查询<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>IO管脚的复用和配置可以查阅《PL-2500-3-X3 PIN SW Reg-V1.2.xls》 和《RM-2500-5-X3M Register Reference Manual-GPIO&amp;PIN-V1.1.pdf》。</p>
+<p>在 《PL-2500-3-X3 PIN SW Reg-V1.2.xls》可以比较直观的查询到管脚的上电默认状态、复用、驱动能力、上下拉、施密特触发配置。</p>
+<p>在 《RM-2500-5-X3M Register Reference Manual-GPIO&amp;PIN-V1.1.pdf》文档中查询对应管脚的gpio寄存器信息。</p>
+<section id="id2">
+<h3>示例<a class="headerlink" href="#id2" title="永久链接至标题"></a></h3>
+<p>以查询<code class="docutils literal notranslate"><span class="pre">gpio120</span></code>号管脚的复用、方向控制、数据寄存器地址为例进行说明：</p>
+<p><strong>功能复用寄存器说明：</strong></p>
+<ul class="simple">
+<li><p>打开 《PL-2500-3-X3 PIN SW Reg-V1.2.xls》，选择  <code class="docutils literal notranslate"><span class="pre">PIN</span> <span class="pre">SW</span> <span class="pre">Register</span></code> 的数据表。</p></li>
+<li><p>第一行会标明功能复用的基地为<code class="docutils literal notranslate"><span class="pre">0xA6004000</span></code>。</p></li>
+<li><p>在<code class="docutils literal notranslate"><span class="pre">GPIO</span></code>列找到 <code class="docutils literal notranslate"><span class="pre">GPIO[120]</span></code>，这一项对应的信息即是管脚 <code class="docutils literal notranslate"><span class="pre">120</span></code>的上电默认状态、复用、驱动能力、上下拉、施密特触发配置。如下图所示。</p></li>
+</ul>
+<p><img alt="image-20220529112804426" src="../../_images/image-20220529112804426.png" /></p>
+<ul class="simple">
+<li><p>找到以上配置项后，基地址加上偏移的值即该管家的复用控制寄存器，例如<code class="docutils literal notranslate"><span class="pre">GPIO120</span></code>的复用寄存器为 <code class="docutils literal notranslate"><span class="pre">0xA6004000</span> <span class="pre">+</span> <span class="pre">0x1E0</span> <span class="pre">=</span> <span class="pre">0xA600410E0</span></code>。</p></li>
+<li><p>配置功能复用寄存器时，建议先把该值先读出来，然后设置想要设置的对应bit后再写回。例如配置<code class="docutils literal notranslate"><span class="pre">GPIO120</span></code>为<code class="docutils literal notranslate"><span class="pre">GPIO</span></code>模式，则只设置 <code class="docutils literal notranslate"><span class="pre">0xA600410E0</span></code> 寄存器的低两位为<code class="docutils literal notranslate"><span class="pre">0x3</span></code>，保持其他启动强度、上下拉、斯密特触发配置不变，除非你明确知道你需要对它们也做修改。</p></li>
+</ul>
+<p><strong>GPIO控制和数据寄存器：</strong></p>
+<ul class="simple">
+<li><p>打开 《RM-2500-5-X3M Register Reference Manual-GPIO&amp;PIN-V1.1.pdf》，本文档分两个主要章节，<code class="docutils literal notranslate"><span class="pre">GPIO</span></code>章节是描述管脚的控制寄存器、输出数据寄存器、输入数据寄存器和管脚电压域配置寄存器（偏移为0x170 和 0x174的两个寄存器是管脚电压域配置寄存器）。<code class="docutils literal notranslate"><span class="pre">Pin</span> <span class="pre">Group</span></code>章节与寄存器复用《PL-2500-3-X3 PIN SW Reg-V1.2.xls》表内容一样。</p></li>
+<li><p>控制、数据寄存器的基地址在每页表格的第一行会显示，为<code class="docutils literal notranslate"><span class="pre">BASE_ADDR:0xA600_3000</span> </code>，查询到的偏移地址加上本基地址就是对应的完整寄存器地址。</p></li>
+<li><p>旭日X3M总共有<code class="docutils literal notranslate"><span class="pre">120</span></code>个可用的管脚，分成7个bank，每个bank最多16个管脚，控制和数据寄存器以一个bank为一个控制单元。例如<code class="docutils literal notranslate"><span class="pre">GPIO120</span></code>的bank为<code class="docutils literal notranslate"><span class="pre">120除以16后取整为7</span></code>，在bank中的管脚编号为<code class="docutils literal notranslate"><span class="pre">120对16取余数为8</span></code>。由此我们就可以找到对应的寄存器地址为如下图所示。<code class="docutils literal notranslate"><span class="pre">GPIO120</span></code>的寄存器即以下图中寄存器<code class="docutils literal notranslate"><span class="pre">GPIO7_xxx</span></code>中对应的<code class="docutils literal notranslate"><span class="pre">bit8</span></code>（从bit0开始计算）。</p></li>
+</ul>
+<p><img alt="image-20220529115057783" src="../../_images/image-20220529115057783.png" /></p>
+</section>
+<section id="id3">
+<h3>GPIO帮助工具<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>通过以上章节，相信你已经具备自主查询、设置各管脚的配置的能力。针对旭日X3M芯片，地平线还提供了一个小软件帮助用户快速完成以上寄存器的查询，并且提供管脚设置的帮助命令，可以从 <a class="reference external" href="https://pan.horizon.ai/index.php/s/JTitK4g8SLzSGa6/download?path=%2FGpio_tools&amp;files=%E5%9C%B0%E5%B9%B3%E7%BA%BFGPIO%E5%B8%AE%E5%8A%A9%E5%B7%A5%E5%85%B7v1.0.exe">地平线GPIO帮助工具</a>下载使用。</p>
+<p>工具的界面如下图所示，用户可以控制输入 <code class="docutils literal notranslate"><span class="pre">GPIO编号</span></code> 或者 <code class="docutils literal notranslate"><span class="pre">GPIO管脚</span> </code>来查询管脚的各种寄存器地址，并且生成gpio功能的帮助命令，命令说明请查看 <a class="reference external" href="#user-space">GPIO用户空间使用说明</a>了解详情。</p>
+<p><img alt="image-20220529120102028" src="../../_images/image-20220529120102028.png" /></p>
+</section>
+</section>
+<section id="id4">
+<h2><span class="section-number">4.3.5.2. </span>驱动代码<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>drivers/gpio/gpio-hobot-x3.c <span class="c1"># gpio驱动源文件</span>
+</pre></div>
+</div>
+<section id="id5">
+<h3>内核配置<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>CONFIG_GPIO_HOBOT_X3</p>
+<p><img alt="image-20220321232551078" src="../../_images/image-20220321232551078.png" /></p>
+</section>
+<section id="dts">
+<h3>内核DTS配置<a class="headerlink" href="#dts" title="永久链接至标题"></a></h3>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>/* arch/arm64/boot/dts/hobot/hobot-xj3.dtsi */
+gpios: gpio@0xA6003000 {
+    compatible = &quot;hobot,x3-gpio&quot;;
+    reg = &lt;0 0xA6003000 0 0x100&gt;;
+    gpio-controller;
+    #gpio-cells = &lt;2&gt;; 
+    gpio-ranges = &lt;&amp;pinctrl 0 0 121&gt;;
+    interrupts = &lt;0 54 4&gt;;
+    interrupt-parent = &lt;&amp;gic&gt;;
+    interrupt-controller;
+    #interrupt-cells = &lt;2&gt;; 
+};
+</pre></div>
+</div>
+<p><font color=red>备注：</font>
+hobot-xj3.dtsi中的节点主要声明一些寄存器、中断的resource，均为soc共有特性，和具体电路板无关，一般情况下不用修改。</p>
+</section>
+</section>
+<section id="id6">
+<h2><span class="section-number">4.3.5.3. </span>GPIO使用<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<section id="kernel-space">
+<h3>Kernel Space<a class="headerlink" href="#kernel-space" title="永久链接至标题"></a></h3>
+<section id="id7">
+<h4>DTS配置<a class="headerlink" href="#id7" title="永久链接至标题"></a></h4>
+<p>GPIO设备树节点的属性命名方式一般为names-gpios或names-gpio，举例如下：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* arch/arm64/boot/dts/hobot/hobot/hobot-x3-sdb.dtsi */</span><span class="w"></span>
+<span class="o">&amp;</span><span class="n">usb_id</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;okay&quot;</span><span class="p">;</span><span class="w">  </span>
+<span class="w">        </span><span class="n">id</span><span class="o">-</span><span class="n">gpio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;&amp;</span><span class="n">gpios</span><span class="w"> </span><span class="mi">65</span><span class="w"> </span><span class="n">GPIO_ACTIVE_HIGH</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">host</span><span class="o">-</span><span class="n">rst</span><span class="o">-</span><span class="n">gpio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;&amp;</span><span class="n">gpios</span><span class="w"> </span><span class="mi">115</span><span class="w"> </span><span class="n">GPIO_ACTIVE_HIGH</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">host</span><span class="o">-</span><span class="n">exrst</span><span class="o">-</span><span class="n">gpio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;&amp;</span><span class="n">gpios</span><span class="w"> </span><span class="mi">38</span><span class="w"> </span><span class="n">GPIO_ACTIVE_LOW</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h4>驱动代码接口<a class="headerlink" href="#id8" title="永久链接至标题"></a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* include/linux/gpio.h */</span><span class="w"></span>
+<span class="cm">/* 申请GPIO */</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">gpio_request</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="n">gpio</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">label</span><span class="p">);</span><span class="w"></span>
+<span class="cm">/* GPIO初始化为输出。并设置输出电平*/</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">gpio_direction_output</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="n">gpio</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w"></span>
+<span class="cm">/* GPIO初始化为输入 */</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">gpio_direction_input</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="n">gpio</span><span class="p">);</span><span class="w"></span>
+<span class="cm">/* 获取GPIO的电平 */</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">gpio_get_value</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">gpio</span><span class="p">);</span><span class="w"></span>
+<span class="cm">/* 设置GPIO的电平 */</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">gpio_set_value</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">gpio</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w"></span>
+<span class="cm">/* 释放GPIO */</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">gpio_free</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="n">gpio</span><span class="p">)</span><span class="w"></span>
+<span class="cm">/* 申请GPIO中断，返回的值可以传给request_irq和free_irq */</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">gpio_to_irq</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">gpio</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="x3j3-gpio-irq">
+<h4>X3J3 GPIO IRQ<a class="headerlink" href="#x3j3-gpio-irq" title="永久链接至标题"></a></h4>
+<p>X3 GPIO共有121个pin，硬件中断数量为4个，使用时通过GPIO模块寄存器的设置可以将121个pin中的最多4个pin映射到4个IRQ中断上，映射过程由GPIO驱动管理，通过gpio_to_irq申请GPIO IRQ号，4个irq都被申请完，后续申请都会失败，irq映射管理的代码如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/* drivers/gpio/gpio-hobot-x3.c */
+/* 初始化irq映射表 */
+void init_irqbank*struct x3_gpio *gpo<span class="o">)</span> <span class="o">{</span>
+    int <span class="nv">i</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="o">(</span><span class="nv">i</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span> i &lt; GPIO_IRQ_BANK_NUM<span class="p">;</span> i++<span class="o">)</span> <span class="o">{</span>
+        gpo-&gt;irqbind<span class="o">[</span>i<span class="o">]</span> <span class="o">=</span> GPIO_IRQ_NO_BIND<span class="p">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+/* request irq并更新映射表 */
+int request_irqbank<span class="o">(</span>struct x3_gpio *gpo, unsigned long gpio<span class="o">)</span> <span class="o">{</span>
+    int <span class="nv">i</span> <span class="o">=</span> <span class="m">0</span>, <span class="nv">index</span> <span class="o">=</span> GPIO_IRQ_NO_BIND<span class="p">;</span>
+    <span class="nv">index</span> <span class="o">=</span> find_irqbank<span class="o">(</span>gpo, gpio<span class="o">)</span><span class="p">;</span>
+    <span class="k">if</span><span class="o">(</span><span class="nv">index</span> <span class="o">==</span> GPIO_IRQ_NO_BIND<span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nv">i</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span> i &lt; GPIO_IRQ_BANK_NUM<span class="p">;</span> i++<span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span>gpo-&gt;irqbind<span class="o">[</span>i<span class="o">]</span> <span class="o">==</span> GPIO_IRQ_NO_BIND<span class="o">)</span> <span class="o">{</span>
+                gpo-&gt;irqbind<span class="o">[</span>i<span class="o">]</span> <span class="o">=</span> gpio<span class="p">;</span>
+                <span class="nv">index</span> <span class="o">=</span> i<span class="p">;</span>
+                break<span class="p">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        dev_err<span class="o">(</span>gpo-&gt;dev, <span class="s2">&quot;gpio(%ld) has be binded\n&quot;</span>, gpio<span class="o">)</span><span class="p">;</span>
+        <span class="k">return</span> GPIO_IRQ_NO_BIND<span class="p">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> index<span class="p">;</span>
+<span class="o">}</span>
+
+/* free gpio并更新映射表 */
+void release_irqbank<span class="o">(</span>struct x3_gpio *gpo, unsigned long gpio<span class="o">)</span> <span class="o">{</span>
+    int <span class="nv">index</span> <span class="o">=</span> GPIO_IRQ_NO_BIND<span class="p">;</span>
+    <span class="nv">index</span> <span class="o">=</span> find_irqbank<span class="o">(</span>gpo, gpio<span class="o">)</span><span class="p">;</span>
+    <span class="k">if</span><span class="o">(</span>index !<span class="o">=</span> GPIO_IRQ_NO_BIND<span class="o">)</span> <span class="o">{</span>
+        gpo-&gt;irqbind<span class="o">[</span>index<span class="o">]</span> <span class="o">=</span> GPIO_IRQ_NO_BIND<span class="p">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p><font color=red>备注：</font>
+X3 GPIO在Kernel Space的接口都是Linux的标准接口，更多使用方法请参考Documentation/gpio/consumer.txt。</p>
+</section>
+</section>
+<section id="user-space">
+<h3>User Space<a class="headerlink" href="#user-space" title="永久链接至标题"></a></h3>
+<section id="id9">
+<h4>控制接口<a class="headerlink" href="#id9" title="永久链接至标题"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/sys/class/gpio/export <span class="c1">#用户空间可以通过写入gpio号申请将gpio的控制权导出到用户空间，比如 echo 42 &gt; export</span>
+/sys/class/gpio/unexport <span class="c1"># 和export相反</span>
+/sys/class/gpio/gpiochip0 <span class="c1"># gpio控制器</span>
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h4>调用接口<a class="headerlink" href="#id10" title="永久链接至标题"></a></h4>
+<p>使用export导出gpio的控制权以后会有路径/sys/class/gpio/gpio42/，路径下有如下属性：</p>
+<ul class="simple">
+<li><p>direction：表示GPIO端口方向，读取为”in”或”out”，写入”in”或者”out”可以设置输入或输出</p></li>
+<li><p>value：表示GPIO的电平，0为低电平，1为高电平，如果GPIO配置为输出，则value值可写</p></li>
+<li><p>edge：表示中断触发方式，有”none” “rising” “falling” “both” 4种类型，”none”表示GPIO不为中断引脚，”rising”表示引脚为上升沿触发的中断，”falling”表示引脚为下降沿触发的中断，”both”表示引脚为边沿触发的中断。</p></li>
+</ul>
+</section>
+<section id="id11">
+<h4>调用示例<a class="headerlink" href="#id11" title="永久链接至标题"></a></h4>
+<p>以下示例演示导出  JTG_TRSTN 管脚，设置为输出模式，输出高电平，最后反导出。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">4</span> &gt; /sys/class/gpio/export
+<span class="nb">echo</span> out &gt; /sys/class/gpio/gpio4/direction
+<span class="nb">echo</span> <span class="m">1</span> &gt; /sys/class/gpio/gpio4/value
+<span class="c1"># echo 0 &gt; /sys/class/gpio/gpio4/value</span>
+<span class="nb">echo</span> <span class="m">4</span> &gt; /sys/class/gpio/unexport
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h4>调试接口<a class="headerlink" href="#id12" title="永久链接至标题"></a></h4>
+<p>如果在内核配置中打开了Linux Kernel的CONFIG_DEBUG_FS 选项，并且挂载了debugfs文件系统</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mount</span> <span class="o">-</span><span class="n">t</span> <span class="n">debugfs</span> <span class="n">none</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span>
+</pre></div>
+</div>
+<p>则可以通过如下节点查看GPIO的申请列表。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3dvbx3-hynix1G-2666:~# cat /sys/kernel/debug/gpio
+gpiochip0: GPIOs <span class="m">0</span>-120, parent: platform/a6003000.gpio:
+gpio-42  <span class="o">(</span>           <span class="p">|</span>sysfs     <span class="o">)</span> <span class="k">in</span> hi
+gpio-64  <span class="o">(</span>           <span class="p">|</span><span class="nb">cd</span>        <span class="o">)</span> <span class="k">in</span> lo IRQ
+gpio-65  <span class="o">(</span>           <span class="p">|</span>id        <span class="o">)</span> <span class="k">in</span> hi IRQ
+gpio-100 <span class="o">(</span>           <span class="p">|</span>?         <span class="o">)</span> out lo
+gpio-120 <span class="o">(</span>           <span class="p">|</span>?         <span class="o">)</span> out hi
+root@x3dvbx3-hynix1G-2666:~#
+</pre></div>
+</div>
+<p><font color=red> 备注： </font>
+X3 GPIO在User Space的接口都是Linux的标准接口，更多使用方法请参考Documentation/gpio/sysfs.txt</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="9-I2C_Debug_Guide_zh_CN.html" class="btn btn-neutral float-left" title="4.3.4. I2C调试指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="11-Pinctrl_Debug_Guide_zh_CN.html" class="btn btn-neutral float-right" title="4.3.6. Pinctrl调试指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

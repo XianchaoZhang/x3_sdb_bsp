@@ -1,0 +1,12 @@
+# Sensor 支持列表
+
+| Vendor            | Part Number | Resolution | Driver available | ISP setting available  (for reference only) |
+| ----------------- | ----------- | ---------- | ---------------- | ------------------------------------------- |
+| Sony              | IMX307      | 200W       | Y                | Y                                           |
+| Sony              | IMX327      | 200W       | Y                | Y                                           |
+| Sony              | IMX415      | 800W       | Y                | Y                                           |
+| Sony              | IMX586      | 1200W      | Y                | Y                                           |
+| Samsung           | S5KGM1      | 1200W      | Y                | Y                                           |
+| GalaxyCore        | GC4C33      | 400W       | Y                | Y                                           |
+| GalaxyCore        | GC4663      | 400W       | Y                | Y                                           |
+| Silicon Optronics | JXF37       | 200W       | Y                | Y                                           |

@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2.4. 接口使用说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="2.5. 调试工具说明" href="Toolset_On_Board.html" />
+    <link rel="prev" title="2.3. 镜像升级方法" href="Firmware_Update.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2. 快速入门</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="X3SDB_Setup.html">2.1. X3 SDB开发板说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Login_Method.html">2.2. 开发板登录方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Firmware_Update.html">2.3. 镜像升级方法</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.4. 接口使用说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">2.4.1. 接口总览</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">2.4.2. 电源接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">2.4.3. 调试串口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">2.4.4. 以太网</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usb">2.4.5. USB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">2.4.6. 摄像头</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hdmi">2.4.7. HDMI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#touchscreen">2.4.8. TouchScreen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wi-fi-bluetooth">2.4.9. Wi-Fi/Bluetooth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tf">2.4.10. TF卡</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pin">2.4.11. 40PIN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rtc">2.4.12. RTC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Toolset_On_Board.html">2.5. 调试工具说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="X3SDBv3_Setup.html">2.6. X3 SDB v3 开发板接口说明</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">2. </span>快速入门</a> &raquo;</li>
+      <li><span class="section-number">2.4. </span>接口使用说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="Firmware_Update.html" class="btn btn-neutral float-left" title="2.3. 镜像升级方法" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Toolset_On_Board.html" class="btn btn-neutral float-right" title="2.5. 调试工具说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">2.4. </span>接口使用说明<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="id2">
+<h2><span class="section-number">2.4.1. </span>接口总览<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>开发板外围提供了以太网、USB、MIPI CSI、LCD、HDMI、40PIN等外围接口，配合开发板配件中的摄像头、音频板、LCD板，方便用户进行图像多媒体、AI算法的评测和开发。开发板接口布局如下：</p>
+<p><img alt="image-X3SDB-Top" src="../_images/image-X3SDB-Top.png" /><img alt="image-X3SDB-Bottom" src="../_images/image-X3SDB-Bottom.png" /></p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>编号</strong></th>
+<th><strong>功能</strong></th>
+<th><strong>编号</strong></th>
+<th><strong>功能</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>DC电源接口</td>
+<td>9</td>
+<td>40PIN扩展口</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Micro USB 2.0</td>
+<td>10</td>
+<td>TP连接器</td>
+</tr>
+<tr>
+<td>3</td>
+<td>USB 3.0 Type A</td>
+<td>11</td>
+<td>MIPI DSI</td>
+</tr>
+<tr>
+<td>4</td>
+<td>USB 2.0 Type A</td>
+<td>12</td>
+<td>MIPI CSI 1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>RTC电池连接器</td>
+<td>13</td>
+<td>MIPI CSI 2</td>
+</tr>
+<tr>
+<td>6</td>
+<td>千兆网口</td>
+<td>14</td>
+<td>Debug串口(默认921600)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>HDMI</td>
+<td>15</td>
+<td>USB Type-C(只供电)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>X3SOM DIMM</td>
+<td>16</td>
+<td>TF卡槽</td>
+</tr>
+</tbody>
+</table></section>
+<section id="id3">
+<h2><span class="section-number">2.4.2. </span>电源接口<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p>开发板支持DC接口或者USB Type C接口两种供电方式，分别对应接口1、接口15。</p>
+<p>DC接口支持12V输入，推荐使用开发板配套的12V 2A电源适配器。</p>
+<p>Type C接口兼容PD快充协议，支持5V、9V、12V电压输入。推荐使用支持PD协议的电源适配器，或者至少搭配支持<strong>5V/2A</strong>的电源适配器使用。</p>
+</section>
+<section id="id4">
+<h2><span class="section-number">2.4.3. </span>调试串口<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>开发板提供一路调试串口，对应接口14，默认波特率为921600。硬件接口采用3.3V电平，定义如下：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>序号</th>
+<th>名称</th>
+<th>属性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>3.3V</td>
+<td>3.3V电源</td>
+</tr>
+<tr>
+<td>2</td>
+<td>UART RX</td>
+<td>开发板串口接收</td>
+</tr>
+<tr>
+<td>3</td>
+<td>UART TX</td>
+<td>开发板串口发送</td>
+</tr>
+<tr>
+<td>4</td>
+<td>GND</td>
+<td>数字地</td>
+</tr>
+</tbody>
+</table><p>开发板调试串口默认作为系统控制台的输入、输出，硬件上对应UART0。如需关闭串口调试、或者修改串口波特率，可以在uboot中修改环境变量<strong>console=ttyS0,921600</strong>字段。</p>
+<p>打开控制台输出：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>setenv bootargs earlycon <span class="nv">console</span><span class="o">=</span>ttyS0,921600 <span class="nv">kgdboc</span><span class="o">=</span>ttyS0  <span class="nv">root</span><span class="o">=</span>/dev/mmcblk0p9 <span class="nv">rootfstype</span><span class="o">=</span>ext4 ro rootwait <span class="nv">raid</span><span class="o">=</span>noautodetect hobotboot.reson<span class="o">=</span>WTD_RESET
+saveenv
+reset
+</pre></div>
+</div>
+<p>关闭控制台输出：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>setenv bootargs earlycon <span class="nv">kgdboc</span><span class="o">=</span>ttyS0  <span class="nv">root</span><span class="o">=</span>/dev/mmcblk0p9 <span class="nv">rootfstype</span><span class="o">=</span>ext4 ro rootwait <span class="nv">raid</span><span class="o">=</span>noautodetect hobotboot.reson<span class="o">=</span>WTD_RESET
+saveenv
+reset
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2><span class="section-number">2.4.4. </span>以太网<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<p>开发板提供一路千兆以太网接口，RJ45连接器对应接口6，支持1000BASE-T、100BASE-T和10BASE-T标准，系统默认ip为192.168.1.10。
+如需确认设备当前ip配置，可通过串口登录设备，并用ifconfig命令进行查询。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:/# ifconfig 
+eth0      Link encap:Ethernet  HWaddr <span class="m">00</span>:4c:08:57:ef:39  
+          inet addr:192.168.1.10  Bcast:192.168.1.255  Mask:255.255.255.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 <span class="o">(</span><span class="m">0</span>.0 B<span class="o">)</span>  TX bytes:0 <span class="o">(</span><span class="m">0</span>.0 B<span class="o">)</span>
+          Interrupt:39 Base address:0xc000 
+</pre></div>
+</div>
+<p>用户可通过<strong>hrut_ipfull</strong>命令在线修改开发板IP地址，修改完成<strong>需重启开发板后生效</strong>，断电可保存，命令格式如下：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>hrut_ipfull s IP MASK GATEWAY 
+<span class="c1"># e.g. hrut_ipfull s 192.168.1.10 255.255.255.0 192.168.1.255 </span>
+</pre></div>
+</div>
+</section>
+<section id="usb">
+<h2><span class="section-number">2.4.5. </span>USB<a class="headerlink" href="#usb" title="永久链接至标题"></a></h2>
+<p><strong>USB接口说明</strong></p>
+<p>开发板通过USB Hub、硬件开关电路扩展了多路USB接口，满足用户多路USB设备接入的需求。开发板USB接口描述如下：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>接口类型</th>
+<th>接口序号</th>
+<th>接口数量</th>
+<th>接口描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>USB 3.0 TYPE A</td>
+<td>接口3</td>
+<td>1路</td>
+<td>USB Host模式，用于接入USB 3.0外设</td>
+</tr>
+<tr>
+<td>USB 2.0 TYPE A</td>
+<td>接口4</td>
+<td>2路</td>
+<td>USB Host模式，用于接入USB 2.0外设</td>
+</tr>
+<tr>
+<td>Micro USB 2.0</td>
+<td>接口2</td>
+<td>1路</td>
+<td>USB Device模式，用于连接主机实现ADB、Fastboot、UVC等功能</td>
+</tr>
+</tbody>
+</table><p>由于X3芯片只提供一路USB接口，因此开发板通过硬件电路实现USB主从模式自动切换，用户无需关心USB主从模式，只需按照上表的逻辑连接设备即可。需要注意的是，<strong>开发板禁止同时使用USB Host、Device接口，否则可能造成硬件电路异常</strong>。</p>
+<p><strong>USB 3.0 Device使能</strong><br />对于需要使用USB 3.0 Device模式的情形，需要用户通过命令禁用硬件主从切换逻辑，并将USB模式强制指定为Device，命令如下：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> device &gt; /sys/devices/platform/soc/b2000000.usb/role
+<span class="nb">echo</span> soc:usb-id &gt; /sys/bus/platform/drivers/extcon-usb-gpio/unbind
+</pre></div>
+</div>
+<p>此时开发板会强制指定USB 3.0 TYPE A为Device模式，同时禁用USB 2.0 TYPE A接口，此外用户还需要准备一条<strong>双公头USB 3.0 Type A数据线</strong>用于开发板和主机的连接。</p>
+</section>
+<section id="id6">
+<h2><span class="section-number">2.4.6. </span>摄像头<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>开发板提供两路MIPI CSI接口，可同时接入两路摄像头。目前开发板配件提供了几种不同规格的摄像头模组，以满足不同用户的功能评测要求。模组规格如下：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>序号</th>
+<th>Sensor</th>
+<th>分辨率</th>
+<th>FOV</th>
+<th>I2C ID</th>
+<th>MIPI CSI接口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>IMX415</td>
+<td>800W</td>
+<td>H:80  V:51 D:88</td>
+<td>0x1a</td>
+<td>接口13</td>
+</tr>
+<tr>
+<td>2</td>
+<td>GC4663</td>
+<td>400W</td>
+<td>H:104 V:70 D:113</td>
+<td>0x29</td>
+<td>接口12</td>
+</tr>
+<tr>
+<td>3</td>
+<td>JXF37</td>
+<td>200W</td>
+<td>H:62  V:37 D:68</td>
+<td>0x40</td>
+<td>接口12</td>
+</tr>
+</tbody>
+</table><p>安装方式上，摄像头模组通过FPC排线跟开发板MIPI CSI接口相连，如下图：<br /><img alt="image-imx415-f37" src="../_images/image-imx415-f37.png" /></p>
+<p>安装完成后，用户可以通过命令确认模组I2C地址能否正常检测到。如检测不到，用户需要检查FPC排线连接是否正常。</p>
+<p>I2C地址查询命令(接口13)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">118</span> &gt; /sys/class/gpio/export
+<span class="nb">echo</span> out &gt; /sys/class/gpio/gpio118/direction
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/class/gpio/gpio118/value
+sleep <span class="m">0</span>.2
+<span class="nb">echo</span> <span class="m">1</span> &gt; /sys/class/gpio/gpio118/value
+<span class="nb">echo</span> <span class="m">1</span> &gt; /sys/class/vps/mipi_host1/param/snrclk_en
+<span class="nb">echo</span> <span class="m">24000000</span> &gt; /sys/class/vps/mipi_host1/param/snrclk_freq
+i2cdetect -y -r <span class="m">2</span>
+</pre></div>
+</div>
+<p>I2C地址查询命令(接口12)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="m">119</span> &gt; /sys/class/gpio/export
+<span class="nb">echo</span> out &gt; /sys/class/gpio/gpio119/direction
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/class/gpio/gpio119/value
+sleep <span class="m">0</span>.2
+<span class="nb">echo</span> <span class="m">1</span> &gt; /sys/class/gpio/gpio119/value
+<span class="nb">echo</span> <span class="m">1</span> &gt; /sys/class/vps/mipi_host0/param/snrclk_en
+<span class="nb">echo</span> <span class="m">24000000</span> &gt; /sys/class/vps/mipi_host0/param/snrclk_freq
+i2cdetect -y -r <span class="m">2</span>
+</pre></div>
+</div>
+<p>成功探测到I2C地址时，log打印如下所示：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:~# i2cdetect -y -r <span class="m">2</span>
+     <span class="m">0</span>  <span class="m">1</span>  <span class="m">2</span>  <span class="m">3</span>  <span class="m">4</span>  <span class="m">5</span>  <span class="m">6</span>  <span class="m">7</span>  <span class="m">8</span>  <span class="m">9</span>  a  b  c  d  e  f
+<span class="m">00</span>:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
+<span class="m">10</span>: -- -- -- -- -- -- -- -- -- -- 1a -- -- -- -- -- 
+<span class="m">20</span>: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+<span class="m">30</span>: -- -- -- -- -- -- -- -- -- -- -- 3b -- -- -- -- 
+<span class="m">40</span>: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+<span class="m">50</span>: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+<span class="m">60</span>: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+</pre></div>
+</div>
+</section>
+<section id="hdmi">
+<h2><span class="section-number">2.4.7. </span>HDMI<a class="headerlink" href="#hdmi" title="永久链接至标题"></a></h2>
+<p>开发板提供一路HDMI接口，默认输出格式为1080p&#64;30。由于X3系统不支持图形桌面，开发板上电后HDMI默认输出地平线logo。用户如需替换logo图标，可通过替换原始logo文件并重新编译、替换IAR驱动的方式完成，logo文件路径<strong>kernel/drivers/soc/hobot/iar/bootlogo.bmp</strong>。</p>
+<p>除显示开机画面外，开发板HDMI接口还支持实时显示摄像头、网络流画面功能。交付包sample示例中已包含相关示例，具体方法可以参考sample章节。</p>
+<p>如开发板上电后HDMI没有显示，处于黑屏状态，可按如下步骤进行排查：</p>
+<ol>
+<li><p>确认HDMI驱动是否加载，查询命令：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> root@x3sdbx3-samsung2G-3200:/# lsmod <span class="p">|</span> grep hobot_hdmi_lt8618
+ hobot_hdmi_lt8618 <span class="m">20480</span> <span class="m">0</span> - Live 0xffffff8000ce5000
+ iar <span class="m">208896</span> <span class="m">4</span> hobot_hdmi_lt8618,iar_mmap,iar_cdev,hobot_fb, Live 0xffffff80007ec000
+</pre></div>
+</div>
+</li>
+<li><p>如果驱动加载，需要确认显示器是否不支持1080p&#64;30格式</p></li>
+<li><p>如果驱动没有加载，确认kernel命令行参数是否包含HDMI参数，查询命令：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dmesg <span class="p">|</span> grep <span class="nv">video</span><span class="o">=</span>hobot:x3sdb-hdmi 
+<span class="o">[</span>    <span class="m">0</span>.000000<span class="o">]</span> Kernel <span class="nb">command</span> line: earlycon <span class="nv">loglevel</span><span class="o">=</span><span class="m">8</span> <span class="nv">kgdboc</span><span class="o">=</span>ttyS0 <span class="nv">video</span><span class="o">=</span>hobot:x3sdb-hdmi  <span class="nv">console</span><span class="o">=</span>ttyS0,921600 <span class="nv">raid</span><span class="o">=</span>noautodetect hobotboot.reson<span class="o">=</span>WTD_RESET <span class="nv">rootfstype</span><span class="o">=</span>ext4 ro rootwait <span class="nv">root</span><span class="o">=</span>/dev/mmcblk0p8
+</pre></div>
+</div>
+</li>
+<li><p>如果命令行未包含HDMI参数，则增加uboot环境变量<strong>video=hobot:x3sdb-hdmi</strong>参数，重启后可开启HDMI显示：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>setenv extra_bootargs <span class="nv">video</span><span class="o">=</span>hobot:x3sdb-hdmi
+saveenv
+reset
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="touchscreen">
+<h2><span class="section-number">2.4.8. </span>TouchScreen<a class="headerlink" href="#touchscreen" title="永久链接至标题"></a></h2>
+<p>开发板上预留有触摸屏接口（10号接口）：3.3的供电，I2C2通信接口，Reset和中断管脚，位置如下所示。</p>
+<p><img alt="image-20220404202035669" src="../_images/image-20220404202035669.png" /></p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>序号</th>
+<th>名称</th>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6</td>
+<td>I2C0_SDA</td>
+<td>3.3V单端信号</td>
+<td>I2C主机数据线</td>
+</tr>
+<tr>
+<td>5</td>
+<td>I2C0_SCL</td>
+<td>3.3V单端信号</td>
+<td>I2C主机时钟线</td>
+</tr>
+<tr>
+<td>4</td>
+<td>TP_RESET</td>
+<td>1.8V单端输出</td>
+<td>主板对模块进行复位，低有效</td>
+</tr>
+<tr>
+<td>3</td>
+<td>TP_INT</td>
+<td>1.8V单端输入</td>
+<td>模块中断输入到主板，低有效</td>
+</tr>
+<tr>
+<td>2</td>
+<td>VDD33</td>
+<td>电源输出，3.3V，200mA</td>
+<td>对外供电</td>
+</tr>
+<tr>
+<td>1</td>
+<td>GND</td>
+<td>信号电源参考地</td>
+<td>地</td>
+</tr>
+</tbody>
+</table><p><strong>注意事项：</strong></p>
+<p>TouchScreen和bt1120转hdmi的lt8618芯片的共用Reset管脚，当前开发板默认使能hdmi功能，所以需要使用TouchScreen时，需要首先卸载hobot_hdmi_lt8618驱动：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rmmod hobot_hdmi_lt8618
+</pre></div>
+</div>
+<p><strong>驱动加载：</strong></p>
+<p>加载gt9xx.ko驱动，使能触摸屏功能</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># insmod /lib/modules/4.14.87/gt9xx.ko</span>
+
+<span class="o">[</span> <span class="m">8275</span>.800257<span class="o">]</span> <span class="s">&lt;&lt;-GTP-INFO-&gt;&gt; GTP</span> driver installing....
+<span class="o">[</span> <span class="m">8275</span>.802305<span class="o">]</span> <span class="s">&lt;&lt;-GTP-INFO-&gt;&gt; i2c_register_board_info, ret=0</span>
+<span class="s">[ 8275.802305] </span>
+<span class="s">[ 8275.803619] &lt;&lt;-GTP</span>-INFO-&gt;&gt; GTP Driver Version: V2.4.0.1&lt;<span class="m">2016</span>/10/26&gt;
+<span class="o">[</span> <span class="m">8275</span>.805284<span class="o">]</span> <span class="s">&lt;&lt;-GTP-INFO-&gt;&gt; GTP</span> I2C Address: 0x14
+<span class="o">[</span> <span class="m">8275</span>.805888<span class="o">]</span> <span class="s">&lt;&lt;-GTP-INFO-&gt;&gt; GTP</span> Get OF
+<span class="o">[</span> <span class="m">8275</span>.806442<span class="o">]</span> <span class="s">&lt;&lt;-GTP-INFO-&gt;&gt; GTP</span> get gpio <span class="m">26</span> <span class="m">64</span>
+<span class="o">[</span> <span class="m">8275</span>.806442<span class="o">]</span> 
+<span class="o">[</span> <span class="m">8275</span>.837350<span class="o">]</span> <span class="s">&lt;&lt;-GTP-INFO-&gt;&gt; Guitar reset</span>
+<span class="s">[ 8276.013869] &lt;&lt;-GTP</span>-INFO-&gt;&gt; IC Version: 911_1060
+<span class="o">[</span> <span class="m">8276</span>.015174<span class="o">]</span> <span class="s">&lt;&lt;-GTP-INFO-&gt;&gt; Sensor_ID: 0</span>
+<span class="s">[ 8276.015703] &lt;&lt;-GTP</span>-ERROR-&gt;&gt; Failed to parse config data form device tree.
+<span class="o">[</span> <span class="m">8276</span>.016616<span class="o">]</span> <span class="s">&lt;&lt;-GTP-INFO-&gt;&gt; Config group0 used,length: 186</span>
+<span class="s">[ 8276.018017] &lt;&lt;-GTP</span>-INFO-&gt;&gt; Driver send config.
+<span class="o">[</span> <span class="m">8276</span>.024608<span class="o">]</span> <span class="s">&lt;&lt;-GTP-INFO-&gt;&gt; X_MAX: 720, Y_MAX: 1280, TRIGGER: 0x01</span>
+<span class="s">[ 8276.045218] &lt;&lt;-GTP</span>-INFO-&gt;&gt; Esd started
+<span class="o">[</span> <span class="m">8276</span>.045931<span class="o">]</span> input: goodix-ts as /devices/virtual/input/input0
+<span class="o">[</span> <span class="m">8276</span>.046933<span class="o">]</span> <span class="s">&lt;&lt;-GTP-INFO-&gt;&gt; GTP</span> works <span class="k">in</span> interrupt mode.
+<span class="o">[</span> <span class="m">8276</span>.047758<span class="o">]</span> &lt;&lt;-GTP-INFO-&gt;&gt; i2c_add_driver, <span class="nv">ret</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<p><strong>测试使用：</strong></p>
+<p>使用tc_test程序测试触摸屏功能，当用对触摸屏做点击操作时，可以获取事件、类型、状态码和对应的坐标。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># ./tc_test</span>
+
+begin handle_event0...
+event<span class="o">(</span><span class="m">0</span><span class="o">)</span>:type:3<span class="p">;</span> code: <span class="m">57</span><span class="p">;</span> value:  <span class="m">0</span><span class="p">;</span> realx:  <span class="m">0</span><span class="p">;</span> realy:  <span class="m">0</span>
+event<span class="o">(</span><span class="m">1</span><span class="o">)</span>:type:3<span class="p">;</span> code: <span class="m">58</span><span class="p">;</span> value: <span class="m">33</span><span class="p">;</span> realx:  <span class="m">0</span><span class="p">;</span> realy:  <span class="m">0</span>
+event<span class="o">(</span><span class="m">2</span><span class="o">)</span>:type:3<span class="p">;</span> code: <span class="m">53</span><span class="p">;</span> value:322<span class="p">;</span> realx:322<span class="p">;</span> realy:  <span class="m">0</span>
+event<span class="o">(</span><span class="m">3</span><span class="o">)</span>:type:3<span class="p">;</span> code: <span class="m">54</span><span class="p">;</span> value:420<span class="p">;</span> realx:322<span class="p">;</span> realy:420
+event<span class="o">(</span><span class="m">4</span><span class="o">)</span>:type:3<span class="p">;</span> code: <span class="m">48</span><span class="p">;</span> value: <span class="m">33</span><span class="p">;</span> realx:322<span class="p">;</span> realy:420
+event<span class="o">(</span><span class="m">5</span><span class="o">)</span>:type:3<span class="p">;</span> code: <span class="m">50</span><span class="p">;</span> value: <span class="m">33</span><span class="p">;</span> realx:322<span class="p">;</span> realy:420
+event<span class="o">(</span><span class="m">6</span><span class="o">)</span>:type:0<span class="p">;</span> code:  <span class="m">0</span><span class="p">;</span> value:  <span class="m">0</span><span class="p">;</span> realx:322<span class="p">;</span> realy:420
+end handle_event0...
+begin handle_event0...
+event<span class="o">(</span><span class="m">0</span><span class="o">)</span>:type:3<span class="p">;</span> code: <span class="m">57</span><span class="p">;</span> value: -1<span class="p">;</span> realx:  <span class="m">0</span><span class="p">;</span> realy:  <span class="m">0</span>
+event<span class="o">(</span><span class="m">1</span><span class="o">)</span>:type:0<span class="p">;</span> code:  <span class="m">0</span><span class="p">;</span> value:  <span class="m">0</span><span class="p">;</span> realx:  <span class="m">0</span><span class="p">;</span> realy:  <span class="m">0</span>
+end handle_event0...
+begin handle_event0...
+</pre></div>
+</div>
+<p><strong>测试代码：</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/input.h&gt;</span><span class="cp"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">event0_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="k">struct</span> <span class="nc">input_event</span><span class="w"> </span><span class="n">ev0</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">handle_event0</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">button</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">realx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">realy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">rd</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">rd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">event0_fd</span><span class="p">,</span><span class="w"> </span><span class="n">ev0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="nc">input_event</span><span class="p">)</span><span class="o">*</span><span class="w"> </span><span class="mi">64</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">rd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="nc">input_event</span><span class="p">))</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">rd</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="nc">input_event</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="k">if</span><span class="p">(</span><span class="n">EV_ABS</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ev0</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">type</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="p">{</span><span class="w"></span>
+<span class="w">                        </span><span class="k">if</span><span class="p">(</span><span class="n">ev0</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">code</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">53</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                                </span><span class="n">realx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ev0</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+<span class="w">                        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">ev0</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">code</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">54</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                                </span><span class="n">realy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ev0</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">;</span><span class="w"></span>
+<span class="w">                        </span><span class="p">}</span><span class="w"></span>
+<span class="w">                </span><span class="p">}</span><span class="w"></span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;event(%d):type:%d; code:%3d; value:%3d; realx:%3d; realy:%3d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">ev0</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">type</span><span class="p">,</span><span class="n">ev0</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">code</span><span class="p">,</span><span class="n">ev0</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">,</span><span class="n">realx</span><span class="p">,</span><span class="n">realy</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">done</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">event0_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">&quot;/dev/input/event0&quot;</span><span class="p">,</span><span class="mo">02</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">event0_fd</span><span class="w"> </span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;open input device error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">done</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;begin handle_event0...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">                </span><span class="n">done</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">handle_event0</span><span class="p">();</span><span class="w"></span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;end handle_event0...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">event0_fd</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="n">close</span><span class="p">(</span><span class="n">event0_fd</span><span class="p">);</span><span class="w"></span>
+<span class="w">                </span><span class="n">event0_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="wi-fi-bluetooth">
+<h2><span class="section-number">2.4.9. </span>Wi-Fi/Bluetooth<a class="headerlink" href="#wi-fi-bluetooth" title="永久链接至标题"></a></h2>
+<p>开发板集成了AP6212 2.4G Wi-Fi模组，支持802.11 b/g/n、Bluetooth 4.1功能，Wi-Fi驱动默认自动加载。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:/# ifconfig wlan0
+wlan0     Link encap:Ethernet  HWaddr <span class="m">08</span>:e9:f6:af:08:46  
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 <span class="o">(</span><span class="m">0</span>.0 B<span class="o">)</span>  TX bytes:0 <span class="o">(</span><span class="m">0</span>.0 B<span class="o">)</span>
+</pre></div>
+</div>
+<p>用户需要通过修改配置文件的方式，手动配置热点名和获取ip地址，方法如下：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># 配置热点名和密码</span>
+mount -o rw,remount /
+rm -rf /etc/wpa_supplicant.conf
+wpa_passphrase <span class="s2">&quot;WIFI_SSID&quot;</span> <span class="s2">&quot;WIFI_PASSWD&quot;</span>  &gt;&gt; /etc/wpa_supplicant.conf
+<span class="c1"># add dns config</span>
+<span class="nb">echo</span> <span class="s2">&quot;nameserver 114.114.114.114&quot;</span> &gt;&gt; /etc/resolv.conf
+<span class="nb">echo</span> <span class="s2">&quot;nameserver 8.8.8.8&quot;</span> &gt;&gt; /etc/resolv.conf
+
+sleep <span class="m">3</span>
+wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf -B
+sleep <span class="m">1</span>
+chmod +x /usr/share/udhcpc/default.script
+udhcpc -i wlan0 -s /usr/share/udhcpc/default.script
+
+<span class="c1"># wifi wlan0的路由优先级是600，非常低，所以要保证通过连接外网正常，可以删掉 eth0 的路由，让系统默认使用wlan0</span>
+ip route show table all
+ip route del default via <span class="m">192</span>.168.1.1 dev eth0 onlink
+<span class="c1"># 当以太网和Wi-Fi同时使用时，需要避免以太网和Wi-Fi处于同一网段，否则会可能出现AP侧显示物理连接成功，但是设备间无法ping通的问题</span>
+</pre></div>
+</div>
+<p>配置完成后，可使用<strong>ping 8.8.8.8</strong>命令确认网络是否正常，如下图：<br /><img alt="image-wifi-config" src="../_images/image-Wi-Fi-Config.png" /></p>
+</section>
+<section id="tf">
+<h2><span class="section-number">2.4.10. </span>TF卡<a class="headerlink" href="#tf" title="永久链接至标题"></a></h2>
+<p>开发板有一路TF接口（16号接口），支持HSSDHC模式，最高50MHz时钟。默认支持FAT32（VFAT）、ext2、ext3、ext4文件系统格式的自动挂载。</p>
+<p>插上TF卡后，内核有如下日志，说明正确识别：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">9809.931894</span><span class="p">]</span> <span class="n">mmc2</span><span class="p">:</span> <span class="n">new</span> <span class="n">HSSDHC</span> <span class="n">card</span> <span class="n">at</span> <span class="n">address</span> <span class="mi">1234</span>
+<span class="p">[</span> <span class="mf">9809.933740</span><span class="p">]</span> <span class="n">mmcblk2</span><span class="p">:</span> <span class="n">mmc2</span><span class="p">:</span><span class="mi">1234</span> <span class="n">SA16G</span> <span class="mf">14.5</span> <span class="n">GiB</span> 
+<span class="p">[</span> <span class="mf">9809.940060</span><span class="p">]</span>  <span class="n">mmcblk2</span><span class="p">:</span> <span class="n">p1</span>
+</pre></div>
+</div>
+<p>执行 mount 命令查看是否自动挂载：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># mount</span>
+... ...
+/dev/mmcblk2p1 on /media/sdcard1 <span class="nb">type</span> vfat <span class="o">(</span>rw,relatime,fmask<span class="o">=</span><span class="m">0022</span>,dmask<span class="o">=</span><span class="m">0022</span>,codepage<span class="o">=</span><span class="m">437</span>,iocharset<span class="o">=</span>iso8859-1,shortname<span class="o">=</span>mixed,errors<span class="o">=</span>remount-ro<span class="o">)</span>
+</pre></div>
+</div>
+<p>未自动挂载的可能原因：</p>
+<p>1、TF卡的文件系统格式不是FAT32（VFAT）、ext2、ext3、ext4</p>
+<p>可以在设备上通过以下命令对TF卡进行格式化：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 格式为FAT32(VFAT)格式</span>
+mkfs.vfat /dev/mmcblk2p1
+<span class="c1"># 格式为 ext4 格式</span>
+mkfs.ext4 /dev/mmcblk2p1
+<span class="c1"># 格式为 ext3 格式</span>
+mkfs.ext3 /dev/mmcblk2p1
+<span class="c1"># 格式为 ext2 格式</span>
+mkfs.ext2 /dev/mmcblk2p1
+</pre></div>
+</div>
+</section>
+<section id="pin">
+<h2><span class="section-number">2.4.11. </span>40PIN<a class="headerlink" href="#pin" title="永久链接至标题"></a></h2>
+<p>开发板提供一路40PIN接口，方便用户扩展外围接口，接口定义如下（更多功能复用情况请查阅 documentation/开发板硬件接口/40pin_functions_list.xlsx）：</p>
+<p><img alt="image-20220501225348353" src="../_images/image-20220501225348353.png" /></p>
+<p><img alt="image-20220502122654788" src="../_images/image-20220502122654788.png" /></p>
+<p>各管脚更多的电压域信息如下：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>序号</th>
+<th>名称</th>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>VDD3V3</td>
+<td>电源3.3V输出</td>
+<td>3.3V输出</td>
+</tr>
+<tr>
+<td>2</td>
+<td>VDD5V</td>
+<td>电源5V输出</td>
+<td>5V输出</td>
+</tr>
+<tr>
+<td>3</td>
+<td>I2C1_SDA</td>
+<td>3.3V单端信号</td>
+<td>I2C主机数据线</td>
+</tr>
+<tr>
+<td>4</td>
+<td>VDD5V</td>
+<td>电源5V输出</td>
+<td>5V输出</td>
+</tr>
+<tr>
+<td>5</td>
+<td>I2C1_SCL</td>
+<td>3.3V单端信号</td>
+<td>I2C主机时钟线</td>
+</tr>
+<tr>
+<td>6</td>
+<td>GND</td>
+<td>信号电源参考地</td>
+<td>地</td>
+</tr>
+<tr>
+<td>7</td>
+<td>I2S0_MCLK</td>
+<td>3.3V单端信号</td>
+<td>I2S主机主时钟线</td>
+</tr>
+<tr>
+<td>8</td>
+<td>UART3_TXD</td>
+<td>3.3V单端信号</td>
+<td>UART主机数据发送线</td>
+</tr>
+<tr>
+<td>9</td>
+<td>GND</td>
+<td>信号电源参考地</td>
+<td>地</td>
+</tr>
+<tr>
+<td>10</td>
+<td>UART3_RXD</td>
+<td>3.3V单端信号</td>
+<td>UART主机数据接收线</td>
+</tr>
+<tr>
+<td>11</td>
+<td>GPIO0</td>
+<td>3.3V单端信号</td>
+<td>GPIO信号线</td>
+</tr>
+<tr>
+<td>12</td>
+<td>I2S0_BCLK</td>
+<td>3.3V单端信号</td>
+<td>I2S0主机位时钟线</td>
+</tr>
+<tr>
+<td>13</td>
+<td>GPIO1</td>
+<td>3.3V单端信号</td>
+<td>GPIO信号线</td>
+</tr>
+<tr>
+<td>14</td>
+<td>GND</td>
+<td>信号电源参考地</td>
+<td>地</td>
+</tr>
+<tr>
+<td>15</td>
+<td>GPIO2</td>
+<td>3.3V单端信号</td>
+<td>GPIO信号线</td>
+</tr>
+<tr>
+<td>16</td>
+<td>GPIO3</td>
+<td>3.3V单端信号</td>
+<td>GPIO信号线</td>
+</tr>
+<tr>
+<td>17</td>
+<td>VDD3V3</td>
+<td>电源3.3V输出</td>
+<td>3.3V输出</td>
+</tr>
+<tr>
+<td>18</td>
+<td>GPIO4</td>
+<td>3.3V单端信号</td>
+<td>GPIO信号线</td>
+</tr>
+<tr>
+<td>19</td>
+<td>SPI0_MOSI</td>
+<td>3.3V单端信号</td>
+<td>主机SPI0数据主发从收线</td>
+</tr>
+<tr>
+<td>20</td>
+<td>GND</td>
+<td>信号电源参考地</td>
+<td>地</td>
+</tr>
+<tr>
+<td>21</td>
+<td>SPI0_MISO</td>
+<td>3.3V单端信号</td>
+<td>主机SPI0数据主收从发线</td>
+</tr>
+<tr>
+<td>22</td>
+<td>GPIO5</td>
+<td>3.3V单端信号</td>
+<td>GPIO信号线</td>
+</tr>
+<tr>
+<td>23</td>
+<td>SPI0_SCLK</td>
+<td>3.3V单端信号</td>
+<td>主机SPI0时钟线</td>
+</tr>
+<tr>
+<td>24</td>
+<td>SPI0_CSN</td>
+<td>3.3V单端信号</td>
+<td>主机SPI0片选信号</td>
+</tr>
+<tr>
+<td>25</td>
+<td>GND</td>
+<td>信号电源参考地</td>
+<td>地</td>
+</tr>
+<tr>
+<td>26</td>
+<td>SPI0_CSN1</td>
+<td>3.3V单端信号</td>
+<td>主机SPI0片选信号</td>
+</tr>
+<tr>
+<td>27</td>
+<td>I2S1_BCLK</td>
+<td>3.3V单端信号</td>
+<td>I2S1主机位时钟线</td>
+</tr>
+<tr>
+<td>28</td>
+<td>I2S1_LRCLK</td>
+<td>3.3V单端信号</td>
+<td>I2S1主机帧时钟线</td>
+</tr>
+<tr>
+<td>29</td>
+<td>GPIO6</td>
+<td>3.3V单端信号</td>
+<td>GPIO信号线</td>
+</tr>
+<tr>
+<td>30</td>
+<td>GND</td>
+<td>信号电源参考地</td>
+<td>地</td>
+</tr>
+<tr>
+<td>31</td>
+<td>GPIO7</td>
+<td>3.3V单端信号</td>
+<td>GPIO信号线</td>
+</tr>
+<tr>
+<td>32</td>
+<td>PWM4</td>
+<td>3.3V单端信号</td>
+<td>PWM4输出</td>
+</tr>
+<tr>
+<td>33</td>
+<td>PWM0</td>
+<td>3.3V单端信号</td>
+<td>PWM0输出</td>
+</tr>
+<tr>
+<td>34</td>
+<td>GND</td>
+<td>信号电源参考地</td>
+<td>地</td>
+</tr>
+<tr>
+<td>35</td>
+<td>I2S0_LRCLK</td>
+<td>3.3V单端信号</td>
+<td>I2S0主机帧时钟线</td>
+</tr>
+<tr>
+<td>36</td>
+<td>GPIO8</td>
+<td>3.3V单端信号</td>
+<td>GPIO信号线</td>
+</tr>
+<tr>
+<td>37</td>
+<td>GPIO9</td>
+<td>3.3V单端信号</td>
+<td>GPIO信号线</td>
+</tr>
+<tr>
+<td>38</td>
+<td>I2S0_SDIO</td>
+<td>3.3V单端信号</td>
+<td>I2S0主机数据线</td>
+</tr>
+<tr>
+<td>39</td>
+<td>GND</td>
+<td>信号电源参考地</td>
+<td>地</td>
+</tr>
+<tr>
+<td>40</td>
+<td>I2S1_SDIO</td>
+<td>3.3V单端信号</td>
+<td>I2S1主机数据线</td>
+</tr>
+</tbody>
+</table><p>开发板40PIN接口位置也提供了丝印网表，方便用户对照操作。</p>
+</section>
+<section id="rtc">
+<h2><span class="section-number">2.4.12. </span>RTC<a class="headerlink" href="#rtc" title="永久链接至标题"></a></h2>
+<p>开发板通过外部RTC电路及外接电池，可实现断电后系统时间保持功能。其中RTC电池接口(接口5)定义如下：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>序号</th>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>GND</td>
+<td>电池负极，参考地</td>
+</tr>
+<tr>
+<td>1</td>
+<td>BAT_3V</td>
+<td>电池正极，3V或3.3V</td>
+</tr>
+</tbody>
+</table><p>RTC默认为关闭状态，如需使能可以按如下方法操作：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 确认是否存在/dev/rtc1设备，如果不存在，需要先加载rtc-pcf8563.ko</span>
+ls /dev/rtc *
+
+<span class="c1"># 建立 /dev/rtc1 到 /dev/rtc1 的软连接</span>
+rm /dev/rtc
+ln -s /dev/rtc1 /dev/rtc
+
+<span class="c1"># 测试方法：</span>
+date -s <span class="m">2022</span>.01.21-21:24:00   	<span class="c1"># 设置系统时间</span>
+hwclock -w       				<span class="c1"># 将系统时间写入RTC</span>
+hwclock -r       				<span class="c1"># 读取RTC时间，确认时间是否写入成功</span>
+hwclock -s       				<span class="c1"># 如果rtc电池存在，断电后，再上电，将RTC时间更新到系统时间</span>
+date             				<span class="c1"># 读取系统时间</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Firmware_Update.html" class="btn btn-neutral float-left" title="2.3. 镜像升级方法" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Toolset_On_Board.html" class="btn btn-neutral float-right" title="2.5. 调试工具说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.20. Wi-Fi 驱动调试指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.3.21. 蓝牙驱动调试指南" href="34-Bluetooth_Driver_Debug_Guide.html" />
+    <link rel="prev" title="4.3.19. X3 mipi 屏适配说明" href="31-Mipi_Screen_Driver_Debug_Guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.3.20. Wi-Fi 驱动调试指南</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.3.20.1. 驱动配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">4.3.20.2. Wi-Fi使用</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id3">状态确认</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">联网使用</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id5">切换Wi-Fi的工作模式</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#wifi">4.3.20.3. 其他方式使用wifi</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id6">驱动下载</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id7">Wi-Fi使用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.20. </span>Wi-Fi 驱动调试指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="31-Mipi_Screen_Driver_Debug_Guide.html" class="btn btn-neutral float-left" title="4.3.19. X3 mipi 屏适配说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="34-Bluetooth_Driver_Debug_Guide.html" class="btn btn-neutral float-right" title="4.3.21. 蓝牙驱动调试指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="wi-fi">
+<h1><span class="section-number">4.3.20. </span>Wi-Fi 驱动调试指南<a class="headerlink" href="#wi-fi" title="永久链接至标题"></a></h1>
+<p>旭日X3M开发板上的Wi-Fi模块型号为 AP6212 模组，支持2.4G频段。</p>
+<section id="id1">
+<h2><span class="section-number">4.3.20.1. </span>驱动配置<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>CONFIG_BRCMFMAC</p>
+<p><img alt="image-20220322111907628" src="../../_images/image-20220322111907628.png" /></p>
+<p>CONFIG_BRCMUTIL    （选中CONFIG_BRCMFMAC时本项会自动选择）</p>
+<p><img alt="image-20220322111827947" src="../../_images/image-20220322111827947.png" /></p>
+<p>CONFIG_CFG80211</p>
+<p><img alt="image-20220322111759594" src="../../_images/image-20220322111759594.png" /></p>
+<p>CONFIG_RFKILL</p>
+<p><img alt="image-20220322153943168" src="../../_images/image-20220322153943168.png" /></p>
+</section>
+<section id="id2">
+<h2><span class="section-number">4.3.20.2. </span>Wi-Fi使用<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<section id="id3">
+<h3>状态确认<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>开发板上电默认工作在<code class="docutils literal notranslate"><span class="pre">STATION</span></code>模式下，可以通过 <code class="docutils literal notranslate"><span class="pre">ifconfig</span> <span class="pre">-a</span></code> 命令查看到 <code class="docutils literal notranslate"><span class="pre">wlan0</span></code> 的网络节点：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:~# ifconfig -a
+wlan0     Link encap:Ethernet  HWaddr <span class="m">70</span>:4a:0e:13:69:aa  
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 <span class="o">(</span><span class="m">0</span>.0 B<span class="o">)</span>  TX bytes:0 <span class="o">(</span><span class="m">0</span>.0 B<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>联网使用<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>运行 <code class="docutils literal notranslate"><span class="pre">wifi_connect</span> <span class="pre">[ssid]</span> <span class="pre">[password]</span></code> 连接热点联网。运行结果如下所示。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:~# wifi_connect <span class="s2">&quot;WiFi-Test&quot;</span> <span class="s2">&quot;12345678&quot;</span>
+udhcpc: started, v1.31.0
+udhcpc: sending discover
+udhcpc: sending <span class="k">select</span> <span class="k">for</span> <span class="m">192</span>.168.137.26
+udhcpc: lease of <span class="m">192</span>.168.137.26 obtained, lease <span class="nb">time</span> <span class="m">604800</span>
+/userdata/udhcpc.d/50default: Adding DNS <span class="m">192</span>.168.137.1
+
+root@x3sdbx3-samsung2G-3200:~#  ping www.horizon.ai
+PING www.horizon.ai <span class="o">(</span><span class="m">47</span>.92.42.221<span class="o">)</span>: <span class="m">56</span> data bytes
+<span class="m">64</span> bytes from <span class="m">47</span>.92.42.221: <span class="nv">seq</span><span class="o">=</span><span class="m">0</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">88</span> <span class="nv">time</span><span class="o">=</span><span class="m">204</span>.797 ms
+<span class="m">64</span> bytes from <span class="m">47</span>.92.42.221: <span class="nv">seq</span><span class="o">=</span><span class="m">1</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">88</span> <span class="nv">time</span><span class="o">=</span><span class="m">126</span>.666 ms
+<span class="m">64</span> bytes from <span class="m">47</span>.92.42.221: <span class="nv">seq</span><span class="o">=</span><span class="m">4</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">88</span> <span class="nv">time</span><span class="o">=</span><span class="m">197</span>.004 ms
+<span class="m">64</span> bytes from <span class="m">47</span>.92.42.221: <span class="nv">seq</span><span class="o">=</span><span class="m">5</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">88</span> <span class="nv">time</span><span class="o">=</span><span class="m">118</span>.345 ms
+^C
+--- www.horizon.ai ping statistics ---
+<span class="m">6</span> packets transmitted, <span class="m">4</span> packets received, <span class="m">33</span>% packet loss
+round-trip min/avg/max <span class="o">=</span> <span class="m">118</span>.345/161.703/204.797 ms
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>切换Wi-Fi的工作模式<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">AP6212</span></code>支持<code class="docutils literal notranslate"><span class="pre">AP</span></code>和<code class="docutils literal notranslate"><span class="pre">STATION</span></code>两种模式，开发板上电默认工作在<code class="docutils literal notranslate"><span class="pre">STATION</span></code>模式下。在sdk中提供<code class="docutils literal notranslate"><span class="pre">wifi_init</span></code>程序来对wifi的工作模式进行切换。</p>
+<ul class="simple">
+<li><p>设置<code class="docutils literal notranslate"><span class="pre">AP6212</span></code>工作在<code class="docutils literal notranslate"><span class="pre">AP</span></code>模式，请执行<code class="docutils literal notranslate"><span class="pre">wifi_init</span> <span class="pre">ap</span></code>命令设置模式，运行过程如下所示，在结束时出现<code class="docutils literal notranslate"><span class="pre">wlan0:</span> <span class="pre">AP-ENABLED</span></code>说明设置成功，生成的热点名为 <code class="docutils literal notranslate"><span class="pre">sunrise</span></code>，没有设置密码：</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:~# wifi_init ap
+Initialize wlan0 to ap mode
+<span class="o">[</span>   <span class="m">81</span>.631181<span class="o">]</span> x3sdbx3-samsung2G-3200:unkown: Untracked pid <span class="m">1949</span> killed by signal <span class="m">9</span>
+<span class="o">[</span>   <span class="m">81</span>.672070<span class="o">]</span> x3sdbx3-samsung2G-3200:unkown: Untracked pid <span class="m">1913</span> killed by signal <span class="m">9</span>
+<span class="o">[</span>   <span class="m">83</span>.672208<span class="o">]</span> IPv6: ADDRCONF<span class="o">(</span>NETDEV_UP<span class="o">)</span>: wlan0: link is not ready
+Configuration file: /etc/hostapd.conf
+Failed to create interface mon.wlan0: -95 <span class="o">(</span>Operation not supported<span class="o">)</span>
+wlan0: Could not connect to kernel driver
+Using interface wlan0 with hwaddr <span class="m">08</span>:e9:f6:af:18:26 and ssid <span class="s2">&quot;sunrise&quot;</span>
+<span class="o">[</span>   <span class="m">83</span>.800766<span class="o">]</span> IPv6: ADDRCONF<span class="o">(</span>NETDEV_CHANGE<span class="o">)</span>: wlan0: link becomes ready
+wlan0: interface state UNINITIALIZED-&gt;ENABLED
+wlan0: AP-ENABLED 
+Finish initialize wlan0 to ap mode
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>设置<code class="docutils literal notranslate"><span class="pre">AP6212</span></code>工作在<code class="docutils literal notranslate"><span class="pre">STATION</span></code>模式，请执行 <code class="docutils literal notranslate"><span class="pre">wifi_init</span> <span class="pre">sta</span></code> 命令设置模式，运行过程如下所示，可以通过<code class="docutils literal notranslate"><span class="pre">ps</span></code>命令查看 <code class="docutils literal notranslate"><span class="pre">wpa_supplicant</span></code> 和 <code class="docutils literal notranslate"><span class="pre">udhcpc</span></code>是否在运行来确定切换是否成功，并进行联网测试。</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:~# wifi_init sta
+Initialize wlan0 to station mode
+<span class="o">[</span>  <span class="m">115</span>.605035<span class="o">]</span> x3sdbx3-samsung2G-3200:unkown: Untracked pid <span class="m">1972</span> killed by signal <span class="m">9</span>
+<span class="o">[</span>  <span class="m">115</span>.652050<span class="o">]</span> x3sdbx3-samsung2G-3200:unkown: Untracked pid <span class="m">1974</span> killed by signal <span class="m">9</span>
+<span class="o">[</span>  <span class="m">118</span>.104320<span class="o">]</span> IPv6: ADDRCONF<span class="o">(</span>NETDEV_UP<span class="o">)</span>: wlan0: link is not ready
+Finish initialize wlan0 to station mode
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:~# ps
+... ...
+ <span class="m">2150</span> root        <span class="m">20</span>     <span class="m">0</span> <span class="m">10248</span> S    wpa_supplicant -D nl80211 -i wlan0 -c /tmp/wpa_supplicant.conf -B
+ <span class="m">2179</span> root        <span class="m">20</span>     <span class="m">0</span>  <span class="m">3252</span> S    udhcpc -i wlan0 -s /usr/share/udhcpc/default.script
+... ...
+</pre></div>
+</div>
+<p>当前配置的热点是没有设置密码的，如果需要添加密码，请修改 <code class="docutils literal notranslate"><span class="pre">/etc/hostapd.conf</span></code> 为如下内容后，重新执行 <code class="docutils literal notranslate"><span class="pre">wifi_init</span> <span class="pre">ap</span></code>。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">interface</span><span class="o">=</span><span class="n">wlan0</span>
+<span class="n">driver</span><span class="o">=</span><span class="n">nl80211</span>
+<span class="n">ctrl_interface</span><span class="o">=/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">hostapd</span>
+<span class="n">ssid</span><span class="o">=</span><span class="n">Sunrise</span>
+<span class="n">channel</span><span class="o">=</span><span class="mi">6</span>
+<span class="n">ieee80211n</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">hw_mode</span><span class="o">=</span><span class="n">g</span>
+<span class="n">ignore_broadcast_ssid</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">wpa</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">wpa_key_mgmt</span><span class="o">=</span><span class="n">WPA</span><span class="o">-</span><span class="n">PSK</span>
+<span class="n">rsn_pairwise</span><span class="o">=</span><span class="n">CCMP</span>
+<span class="n">wpa_passphrase</span><span class="o">=</span><span class="mi">12345678</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="wifi">
+<h2><span class="section-number">4.3.20.3. </span>其他方式使用wifi<a class="headerlink" href="#wifi" title="永久链接至标题"></a></h2>
+<p>针对地平线发布的<code class="docutils literal notranslate"><span class="pre">V0508</span></code> 和<code class="docutils literal notranslate"><span class="pre">V0807</span></code>等版本的SDK，使Wi-Fi的方式有一点区别，请按照以下方式操作。</p>
+<section id="id6">
+<h3>驱动下载<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<p><font color=red>备注：</font>仅V0508和V0807版本SDK需要额外下载驱动</p>
+<p>从  <a class="reference external" href="https://pan.horizon.ai/index.php/s/JTitK4g8SLzSGa6">X3M附加工具包</a>  的 AP6212 目录下，下载Wi-Fi的驱动（wifi_drivers）和AP6212固件文件（brcm.zip）</p>
+<p>安装固件：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mount</span> <span class="o">-</span><span class="n">o</span> <span class="n">rw</span><span class="p">,</span><span class="n">remount</span> <span class="o">/</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">xvf</span> <span class="n">brcm</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">cp</span> <span class="n">brcm</span> <span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">firmware</span><span class="o">/</span> <span class="o">-</span><span class="n">rf</span>
+</pre></div>
+</div>
+<p>加载Wi-Fi驱动（注意版本对应）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">wifi_drivers</span><span class="o">/</span><span class="n">V0508</span>
+<span class="n">insmod</span> <span class="n">rfkill</span><span class="o">.</span><span class="n">ko</span>
+<span class="n">insmod</span> <span class="n">cfg80211</span><span class="o">.</span><span class="n">ko</span>
+<span class="n">insmod</span> <span class="n">brcmutil</span><span class="o">.</span><span class="n">ko</span>
+<span class="n">insmod</span> <span class="n">brcmfmac</span><span class="o">.</span><span class="n">ko</span>
+</pre></div>
+</div>
+<p>查看wlan0：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ifconfig -a
+
+wlan0     Link encap:Ethernet  HWaddr b0:02:47:a6:02:ff  
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 <span class="o">(</span><span class="m">0</span>.0 B<span class="o">)</span>  TX bytes:0 <span class="o">(</span><span class="m">0</span>.0 B<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h3>Wi-Fi使用<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<p>根据自己所处环境修改以下脚本中的Wi-Fi热点名 WIFI_AP_NAME 和 wifi密码 WIFI_AP_PASSWD。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1"># remount the file system readable and writable</span>
+mount -o rw,remount /
+
+<span class="nv">WIFI_AP_NAME</span><span class="o">=</span><span class="s2">&quot;WIFI_HOTSPOT&quot;</span>
+<span class="nv">WIFI_AP_PASSWD</span><span class="o">=</span><span class="s2">&quot;PASSWORD&quot;</span>
+
+rm -rf /etc/wpa_supplicant.conf
+
+wpa_passphrase <span class="si">${</span><span class="nv">WIFI_AP_NAME</span><span class="si">}</span> <span class="si">${</span><span class="nv">WIFI_AP_PASSWD</span><span class="si">}</span> &gt;&gt; /etc/wpa_supplicant.conf
+
+<span class="c1"># add dns config</span>
+<span class="nb">echo</span> <span class="s2">&quot;nameserver 114.114.114.114&quot;</span> &gt;&gt; /etc/resolv.conf
+<span class="nb">echo</span> <span class="s2">&quot;nameserver 8.8.8.8&quot;</span> &gt;&gt; /etc/resolv.conf
+
+sleep <span class="m">3</span>
+wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf -B
+sleep <span class="m">1</span>
+chmod +x /usr/share/udhcpc/default.script
+udhcpc -i wlan0 -s /usr/share/udhcpc/default.script
+
+<span class="c1"># wifi wlan0的路由优先级是600，非常低，所以要保证通过连接外网正常，可以删掉 eth0 的路由，让系统默认使用wlan0</span>
+ip route show table all
+ip route del default via <span class="m">192</span>.168.1.1 dev eth0 onlink
+<span class="c1"># 当以太网和Wi-Fi同时使用时，需要避免以太网和Wi-Fi处于同一网段，否则会可能出现AP侧显示物理连接成功，但是设备间无法ping通的问题</span>
+
+<span class="c1"># testing</span>
+ping cn.horizon.ai
+PING cn.horizon.ai <span class="o">(</span><span class="m">47</span>.92.42.221<span class="o">)</span>: <span class="m">56</span> data bytes
+<span class="m">64</span> bytes from <span class="m">47</span>.92.42.221: <span class="nv">seq</span><span class="o">=</span><span class="m">0</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">88</span> <span class="nv">time</span><span class="o">=</span><span class="m">204</span>.219 ms
+</pre></div>
+</div>
+<p><font color=red>备注：</font></p>
+<p>udhcpc 连接Wi-Fi时，如果设备没有天线，信号强度不好的情况下，需要花费比较长时间scan Wi-Fi热点和连接Wi-Fi。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="31-Mipi_Screen_Driver_Debug_Guide.html" class="btn btn-neutral float-left" title="4.3.19. X3 mipi 屏适配说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="34-Bluetooth_Driver_Debug_Guide.html" class="btn btn-neutral float-right" title="4.3.21. 蓝牙驱动调试指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

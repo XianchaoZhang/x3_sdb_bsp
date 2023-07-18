@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.5.4. crash分析ramdump &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.6. 安全启动使用说明" href="../Secure_Boot_Manual.html" />
+    <link rel="prev" title="4.5.3. swinfo操作说明(mem-dump功能指导)" href="21-swinfo_Manual_mem_dump_function_synopsis_zh_CN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../driver_develop_guide/index.html">4.3. 驱动开发指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.5. 内核调试指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="19-Using_kgdb_to_debug_kernel_zh_CN.html">4.5.1. 使用kgdb调试内核</a></li>
+<li class="toctree-l3"><a class="reference internal" href="20-Memory_dump_Function_Manual_zh_CN.html">4.5.2. 内存dump功能使用指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="21-swinfo_Manual_mem_dump_function_synopsis_zh_CN.html">4.5.3. swinfo操作说明(mem-dump功能指导)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.5.4. crash分析ramdump</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.5.4.1. 准备工作</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#crash">4.5.4.2. crash介绍</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">4.5.4.3. crash使用方法</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">4.5.4.4. crash中的命令使用</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#ps">ps</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#bt-pid">bt &lt;pid&gt;</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#whatis-o">whatis -o &lt;结构体&gt;</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rd">rd &lt;虚拟地址&gt;</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#struct">struct &lt;结构体&gt; &lt;该结构体的虚拟地址&gt;</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">struct &lt;结构体&gt;.成员，成员&lt;结构体的虚拟地址&gt;</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sym">sym</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#task-r-member-member-pid">task [ -R member][,member] [pid]</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#timer">timer</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#kmem-i">kmem -i</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#l">l *虚拟地址</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">4.5.4.5. 附：crash中常用的命令</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.5. </span>内核调试指南</a> &raquo;</li>
+      <li><span class="section-number">4.5.4. </span>crash分析ramdump</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="21-swinfo_Manual_mem_dump_function_synopsis_zh_CN.html" class="btn btn-neutral float-left" title="4.5.3. swinfo操作说明(mem-dump功能指导)" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../Secure_Boot_Manual.html" class="btn btn-neutral float-right" title="4.6. 安全启动使用说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="crashramdump">
+<h1><span class="section-number">4.5.4. </span>crash分析ramdump<a class="headerlink" href="#crashramdump" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">4.5.4.1. </span>准备工作<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>我们需要在PC机上运行crash,从源码来编译,</p>
+<p>可以从Redhat社区下载源码。</p>
+<p>解压后，进入目录后使用一下命令：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make <span class="nv">target</span><span class="o">=</span>arm64
+make install
+</pre></div>
+</div>
+<p>这样就安装好了crash了。</p>
+</section>
+<section id="crash">
+<h2><span class="section-number">4.5.4.2. </span>crash介绍<a class="headerlink" href="#crash" title="永久链接至标题"></a></h2>
+<p>crash主要是用来离线分析linux内核内存转存文件，它整合了gdb工具，具有很强的功能，可以查看堆栈，dmesg日志，内核数据结构，反汇编等等．其支持多种工具生成的内存转储文件格式，包括：</p>
+<ul class="simple">
+<li><p>Live linux系统</p></li>
+<li><p>kdump产生的正常的和压缩的内存转储文件</p></li>
+<li><p>由makedumpfile命令生成的压缩的内存转储文件</p></li>
+<li><p>由netdump生成的内存转储文件</p></li>
+<li><p>由diskdump生成的内存转储文件.</p></li>
+<li><p>由kdump生成的Xen的内存转储文件</p></li>
+<li><p>LKCD生成的内存转储文件</p></li>
+<li><p>Mcore生成的内存转储文件</p></li>
+<li><p>ramdump格式的raw内存转储文件</p></li>
+</ul>
+</section>
+<section id="id2">
+<h2><span class="section-number">4.5.4.3. </span>crash使用方法<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>本文主要使用crash来分析ramdump文件．ramdump文件几乎是对整个内存的镜像，除了一些security类型的memory抓不出来之外，几乎所有的DRAM都被抓下来．有些问题的复现概率低，而且有些问题是由于踩内存导致的，这种问题靠log往往是无法分析出来的，所以如果可以在问题发生时候把内存镜像保存下来，就可以分析了．</p>
+<p>在命令行下使用如下命令，在”&#64;”后面跟的是DRAM的物理内存开始的物理地址：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#crash &lt;vmlinux&gt; &lt;ram_dump_img@dram_addr_phy_start&gt;</span>
+</pre></div>
+</div>
+<p>这里的vmlinux是和ram dump上的内核要一致，而且是需要打开内核的debug选项.</p>
+<p><img alt="C:\47dd747a2d530d3bfffd497b6c6633a3" src="../../_images/a2a904ec50afc02e7fc9cc3326d31b39.png" /></p>
+<p>Crash成功启动后，会出现如下的信息：</p>
+<p><img alt="C:\dc382d3d0fdc1797555e1c31eabb88a9" src="../../_images/8bce073e82c8755072fb84f538f7d23a.png" /></p>
+<p>这里就可以看到关于一些系统的信息等等；接下来我们可以在”crash&gt;”输入命令来分析了。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">4.5.4.4. </span>crash中的命令使用<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<section id="ps">
+<h3>ps<a class="headerlink" href="#ps" title="永久链接至标题"></a></h3>
+<p>该命令可以输出进程信息</p>
+<p><img alt="C:\43461eb25fa7d8bc7ecec4045e9510f5" src="../../_images/f94cc21adc532833728950d0b89f1827.png" /></p>
+<p>这里的进程状态标志：</p>
+<ul class="simple">
+<li><p>RU：即Ｒ状态，进程处于TASK_RUNNING.</p></li>
+<li><p>IN：S状态，进程处于TASK_INTERRUPTIBLE.</p></li>
+<li><p>UN：D状态，进程处于TASK_UNINTERRUPTIBLE.</p></li>
+</ul>
+</section>
+<section id="bt-pid">
+<h3>bt &lt;pid&gt;<a class="headerlink" href="#bt-pid" title="永久链接至标题"></a></h3>
+<p>用于查看某个线程或进程的调用栈</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bt -a：以任务为单位，显示每个任务的堆栈信息.
+
+bt -t：显示当前任务的堆栈中的所有文本标志付
+
+bt -f：显示当前任务的所有堆栈数据，通常用来检查每个函数的参数传递.
+</pre></div>
+</div>
+<p>#&#64;# dis &lt;函数名&gt;</p>
+<p>用于反汇编某个函数.</p>
+<p><img alt="C:\b90861fb78ca11ee4f23f1c790b30478" src="../../_images/6687196355654a0329005ac34f7cc0bf.png" /></p>
+<p>dis后面还可以跟着的参数有：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>-l <span class="p">|</span> -u <span class="p">|</span> -b num <span class="p">|</span> address<span class="p">|</span> symbol<span class="p">|</span> expression<span class="p">|</span> count
+</pre></div>
+</div>
+</section>
+<section id="whatis-o">
+<h3>whatis -o &lt;结构体&gt;<a class="headerlink" href="#whatis-o" title="永久链接至标题"></a></h3>
+<p>用于查看结构体．这后面还可以跟联合体，宏的名称或者内核的符号.
+<img alt="C:\87c1ca6d248aeccdde9e0087ea0c7b72" src="../../_images/60ce42cf4741a297d0ee3d953267f978.png" /></p>
+</section>
+<section id="rd">
+<h3>rd &lt;虚拟地址&gt;<a class="headerlink" href="#rd" title="永久链接至标题"></a></h3>
+<p>用于查看虚拟地址的值.其后面可以跟的参数还有：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>-dDsSupxmf <span class="p">|</span> -8 <span class="p">|</span> -16<span class="p">|</span> -32<span class="p">|</span> -64<span class="p">|</span> -o offset<span class="p">|</span> -e addr<span class="p">|</span> address<span class="p">|</span> symbol <span class="p">|</span>count
+</pre></div>
+</div>
+</section>
+<section id="struct">
+<h3>struct &lt;结构体&gt; &lt;该结构体的虚拟地址&gt;<a class="headerlink" href="#struct" title="永久链接至标题"></a></h3>
+<p>用于查看该虚拟地址处，该结构体的值，使用这个可以查看某个进程在所拥有的某个结构体的值</p>
+<p><img alt="C:\0f427a42d887fe704bc94fea6d1b7fce" src="../../_images/98265d0466f3736b49a9a89aea3c0f94.png" /></p>
+</section>
+<section id="id4">
+<h3>struct &lt;结构体&gt;.成员，成员&lt;结构体的虚拟地址&gt;<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>用于查看该结构体的内部成员的值.</p>
+</section>
+<section id="sym">
+<h3>sym<a class="headerlink" href="#sym" title="永久链接至标题"></a></h3>
+<p>用于把一个标志符转换到它所对应的虚拟地址，或者把虚拟地址转换为它所对应的标志符。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sym -l：列出所有的标志符以及虚拟地址.
+
+sym -M：列出模块标志符的集合．
+
+sym -m module &lt;name&gt;：列出模块name的虚拟地址
+
+sym vaddr：显示虚拟地址vaddr所代表的标志．
+
+sym -q &lt;string&gt;：搜索所有包含string的标志以及虚拟地址.
+</pre></div>
+</div>
+<p><img alt="C:\cd9f3ad147fc69bbea964fb72e933d82" src="../../_images/31f528e80813e0905937777e8a9b8eef.png" /></p>
+</section>
+<section id="task-r-member-member-pid">
+<h3>task [ -R member][,member] [pid]<a class="headerlink" href="#task-r-member-member-pid" title="永久链接至标题"></a></h3>
+<p>用于显示指定进程的task_struct的内容.</p>
+</section>
+<section id="timer">
+<h3>timer<a class="headerlink" href="#timer" title="永久链接至标题"></a></h3>
+<p>用于显示timer相关信息.</p>
+</section>
+<section id="kmem-i">
+<h3>kmem -i<a class="headerlink" href="#kmem-i" title="永久链接至标题"></a></h3>
+<p>用于查看内存使用信息.</p>
+</section>
+<section id="l">
+<h3>l *虚拟地址<a class="headerlink" href="#l" title="永久链接至标题"></a></h3>
+<p>用于查看指定地址对应的代码行.</p>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">4.5.4.5. </span>附：crash中常用的命令<a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td>指针的快捷方式，用于代替struct/union</td>
+<td>*page 0xc02943c0：显示0xc02943c0地址的page结构体</td>
+</tr>
+<tr>
+<td>files</td>
+<td>显示已打开的所有文件的信息</td>
+<td>files 462：显示进程462的已打开文件信息</td>
+</tr>
+<tr>
+<td>mach</td>
+<td>显示与机器相关的参数信息</td>
+<td>mach：显示CPU型号，核数，内存大小等</td>
+</tr>
+<tr>
+<td>sys</td>
+<td>显示特殊系统的数据 s</td>
+<td>ys config：显示CONFIG_xxx配置宏状态</td>
+</tr>
+<tr>
+<td>timer</td>
+<td>无参数。按时间的先后顺序显示定时器队列的数据</td>
+<td>timer：显示详细信息</td>
+</tr>
+<tr>
+<td>mod</td>
+<td>显示已加载module的详细信息</td>
+<td>mod：列出所有已加载module信息</td>
+</tr>
+<tr>
+<td>runq</td>
+<td>显示runqueue信息</td>
+<td>runq：显示所有runqueue里的task</td>
+</tr>
+<tr>
+<td>tree</td>
+<td>显示基数树/红黑树结构</td>
+<td>tree -t rbtree -o vmap_area.rb_node vmap_area_root：显示所有红黑树vmap_area.rb_node节点地址</td>
+</tr>
+<tr>
+<td>fuser</td>
+<td>显示哪些task使用了指定的文件/socket</td>
+<td>fuser /usr/lib/libkfm.so.2.0.0：显示使用了该文件的所有进程</td>
+</tr>
+<tr>
+<td>mount</td>
+<td>显示已挂载的文件系统信息</td>
+<td>mount：当前已挂载的文件系统信息</td>
+</tr>
+<tr>
+<td>ipcs</td>
+<td>显示System V IPC信息</td>
+<td>ipcs：显示系统中System V IPC信息</td>
+</tr>
+<tr>
+<td>ps</td>
+<td>显示进程状态</td>
+<td>注意：类似ps命令</td>
+</tr>
+<tr>
+<td>struct</td>
+<td>显示结构体的具体内容</td>
+<td>struct vm_area_struct c1e44f10：显示c1e44f10结构</td>
+</tr>
+<tr>
+<td>union</td>
+<td>显示联合体的具体内容，用法与struct一致</td>
+<td>union bdflush_param：显示bdflush_param结构</td>
+</tr>
+<tr>
+<td>waitq</td>
+<td>列出在等待队列中的所有task。参数可以指定队列的名称、内存地址等</td>
+<td>waitq buffer_wait：显示buffer_wait等待队列信息</td>
+</tr>
+<tr>
+<td>irq</td>
+<td>显示中断编号的所有信息</td>
+<td>irq 18：显示中断18的信息</td>
+</tr>
+<tr>
+<td>list</td>
+<td>显示链表的内容</td>
+<td>list task_struct.p_pptr c169a000：显示c169a000地址所指task里p_pptr链表</td>
+</tr>
+<tr>
+<td>log</td>
+<td>显示内核的日志，以时间的先后顺序排列</td>
+<td>log -m：显示kernel log</td>
+</tr>
+<tr>
+<td>dev</td>
+<td>显示数据关联着的块设备分配，包括端口使用、内存使用及PCI设备数据</td>
+<td>dev：显示字符/块设备相关信息</td>
+</tr>
+<tr>
+<td>sig</td>
+<td>显示一个或者多个task的signal-handling数据</td>
+<td>sig 8970：显示进程8970的信号处理相关信息</td>
+</tr>
+<tr>
+<td>task</td>
+<td>显示指定内容或者进程的task_struct的内容</td>
+<td>task -x：显示当前进程task_struct等内容</td>
+</tr>
+<tr>
+<td>swap</td>
+<td>无参数。显示已配置好的交换设备信息</td>
+<td>swap：交换设备信息</td>
+</tr>
+<tr>
+<td>search</td>
+<td>在给定范围的用户、内核虚拟内存或者物理内存搜索值</td>
+<td>search -u deadbeef：在用户内存搜索0xdeadbeef</td>
+</tr>
+<tr>
+<td>bt</td>
+<td>显示调用栈信息</td>
+<td>bt：显示当前调用栈</td>
+</tr>
+<tr>
+<td>net</td>
+<td>显示各种网络相关的数据</td>
+<td>net：显示网络设备列表</td>
+</tr>
+<tr>
+<td>vm</td>
+<td>显示task的基本虚拟内存信息</td>
+<td>vm：类似于/proc/self/maps</td>
+</tr>
+<tr>
+<td>btop</td>
+<td>把一个16进制地址转换成它的分页号</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>ptob</td>
+<td>该命令与btop相反，是把一个分页号转换成地址</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>vtop</td>
+<td>显示用户或内核虚拟内存所对应的物理内存</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>ptov</td>
+<td>该命令与vtop相反。把物理内存转换成虚拟内存</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>pte</td>
+<td>16进制页表项转换为物理页地址和页的位设置</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>alias</td>
+<td>显示或建立一个命令的别名</td>
+<td>alias kp kmem -p：以后用kp命令相当于kmem -p</td>
+</tr>
+<tr>
+<td>foreach</td>
+<td>用指定的命令枚举</td>
+<td>foreach bt：显示所有进程的调用栈</td>
+</tr>
+<tr>
+<td>repeat</td>
+<td>循环执行指定命令</td>
+<td>repeat -1 p jiffies：每个1s执行p jiffies</td>
+</tr>
+<tr>
+<td>ascii</td>
+<td>把16进制表示的字符串转化成ascii表示的字符串</td>
+<td>ascii 62696c2f7273752f：结果为/usr/lib</td>
+</tr>
+<tr>
+<td>set</td>
+<td>设置要显示的内容，内容一般以进程为单位，也可以设置当前crash的内部变量</td>
+<td>set -p：切换到崩溃进程的上下文环境</td>
+</tr>
+<tr>
+<td>p</td>
+<td>print的缩写，打印表达式的值。表达式可以为变量，也可以为结构体</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>dis</td>
+<td>disassemble的缩写。把一个命令或者函数分解成汇编代码</td>
+<td>dis sys_signal：反汇编sys_signal函数</td>
+</tr>
+<tr>
+<td>whatis</td>
+<td>搜索数据或者类型的信息</td>
+<td>whatis linux_binfmt：显示linux_binfmt结构体</td>
+</tr>
+<tr>
+<td>eval</td>
+<td>计算表达式的值，及把计算结果或者值显示为16、10、8和2进制</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>kmem</td>
+<td>显示当前kernel使用内存状况</td>
+<td>kmem -i：显示kernel使用内存状况</td>
+</tr>
+<tr>
+<td>sym</td>
+<td>显示符号所在的虚拟地址，或虚拟地址对应的符号</td>
+<td>sym jiffies：显示jiffies地址</td>
+</tr>
+<tr>
+<td>rd</td>
+<td>显示指定内存的内容。缺少的输出格式是十六进制输出</td>
+<td>rd -a linux_banner：显示linux_banner内容</td>
+</tr>
+<tr>
+<td>wr</td>
+<td>根据参数指定的写内存。在定位系统出错的地方时，一般不使用该命令 wr</td>
+<td>my_debug_flag 1：修改my_debug_flag值为1</td>
+</tr>
+<tr>
+<td>gdb</td>
+<td>执行GDB原生命令</td>
+<td>gdb help：执行gdb的help命令</td>
+</tr>
+<tr>
+<td>extend</td>
+<td>动态装载或卸载crash额外的动态链接库</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>q</td>
+<td>退出</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>同q，退出</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>help</td>
+<td>帮助命令</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="21-swinfo_Manual_mem_dump_function_synopsis_zh_CN.html" class="btn btn-neutral float-left" title="4.5.3. swinfo操作说明(mem-dump功能指导)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../Secure_Boot_Manual.html" class="btn btn-neutral float-right" title="4.6. 安全启动使用说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+
+ifeq ($(MSOURCEC), TRUE)
+
+CFLAGS  := -O2
+#CROSS_COMPILE=aarch64-linux-gnu-
+CSOURCE = linear_calibration.c
+LIB_OBJECT = liblinear.so
+#.PRECIOUS: %.c
+
+LDFLAGS = -lpthread -lm -fPIC -shared
+
+OBJS = $(subst .c,.o,$(CSOURCE))
+
+.PHONY: all all_32 clean
+all all_32:$(LIB_OBJECT)
+	#tar -zcf $(shell date +%Y%m%d_%H%M)_lib.tar.gz *
+
+%.c:
+	./j2cf -d "./dynamic-calibrations.json" -s "./static-calibrations.json" -n "linear"
+
+%.o:%.c
+	$(CROSS_COMPILE)gcc $(CFLAGS) -g -o $@ -fpic -c $<
+
+$(LIB_OBJECT):$(OBJS)
+	$(CROSS_COMPILE)gcc $(LDFLAGS) -o $@ $<
+#rm $(subst .so,_calibration.o,$(subst lib,, $@))
+
+clean:
+	rm -rf $(LIB_OBJECT) $(OBJS)
+
+else
+
+DIRS = $(shell dirname `find . -maxdepth 5 -type f -name  *.json` |uniq)
+LIB_OBJECT = $(DIRS)
+CLEAN_LIB_OBJECT = $(addsuffix -clean,$(DIRS))
+
+.PHONY: all clean $(LIB_OBJECT) $(CLEAN_LIB_OBJECT)
+all:$(LIB_OBJECT)
+
+$(LIB_OBJECT):
+	cp acamera_command_define.h $@
+	cp j2cf $@
+	make -C $@ -f ../../Makefile MSOURCEC=TRUE
+	rm $@/acamera_command_define.h
+	rm $@/j2cf
+
+clean:$(CLEAN_LIB_OBJECT)
+
+$(CLEAN_LIB_OBJECT):
+	make -C $(subst -clean,,$@) -f ../../Makefile clean MSOURCEC=TRUE
+
+endif

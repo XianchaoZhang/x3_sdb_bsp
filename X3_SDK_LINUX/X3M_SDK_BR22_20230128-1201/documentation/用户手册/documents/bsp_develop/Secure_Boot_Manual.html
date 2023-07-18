@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.6. 安全启动使用说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="4.7. OTA实现原理和使用方法" href="System_OTA_Manual.html" />
+    <link rel="prev" title="4.5.4. crash分析ramdump" href="kernel_debug_guide/22-Using_crash_to_Analysis_ramdump_zh_CN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2"><a class="reference internal" href="driver_develop_guide/index.html">4.3. 驱动开发指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.6. 安全启动使用说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">4.6.1. 引言</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uboot">4.6.2. uboot签名过程</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#header">4.6.2.1. header格式布局</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">4.6.2.2. 加密和签名工具</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#uboot-image">4.6.2.3. uboot image签名</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#uboot-header">4.6.2.4. uboot header签名</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">4.6.2.5. 密钥管理</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#bpu">4.6.3. BPU模型文件的保护</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bpu-image">4.6.3.1. bpu image的布局</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">4.6.3.2. bpu image的签名</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">4.6.3.3. bpu image的打包</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">4.6.3.4. 运行时的保护</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#efuse">4.6.4. EFUSE的烧写</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id8">4.6.4.1. efuse的基本介绍</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">4.6.4.2. efuse的配置文件</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">4.6.4.3. 配置范例</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#avbdm-verity">4.6.5. AVB和dm-verity</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#buildavbdm-verity">4.6.5.1. Build系统添加AVB以及DM-Verity校验</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ubootlinux">4.6.5.2. UBoot校验Linux内核</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#linuxdm-verity">4.6.5.3. Linux内核使用DM-verity校验根文件系统</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.6. </span>安全启动使用说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="kernel_debug_guide/22-Using_crash_to_Analysis_ramdump_zh_CN.html" class="btn btn-neutral float-left" title="4.5.4. crash分析ramdump" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="System_OTA_Manual.html" class="btn btn-neutral float-right" title="4.7. OTA实现原理和使用方法" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">4.6. </span>安全启动使用说明<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="id2">
+<h2><span class="section-number">4.6.1. </span>引言<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>该文档主要是对于XJ3芯片方案中关于安全启动与加密的使用说明。</p>
+</section>
+<section id="uboot">
+<h2><span class="section-number">4.6.2. </span>uboot签名过程<a class="headerlink" href="#uboot" title="永久链接至标题"></a></h2>
+<section id="header">
+<h3><span class="section-number">4.6.2.1. </span>header格式布局<a class="headerlink" href="#header" title="永久链接至标题"></a></h3>
+<p>bl31和uboot的header格式如下：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="p">{</span><span class="w">   </span>
+<span class="w">	</span><span class="kt">uint8_t</span><span class="w">     </span><span class="n">signature_h</span><span class="p">[</span><span class="n">RSA_SIGN_SIZE</span><span class="p">];</span><span class="w">   </span>
+<span class="w">	</span><span class="kt">uint8_t</span><span class="w">     </span><span class="n">signature_i</span><span class="p">[</span><span class="n">RSA_SIGN_SIZE</span><span class="p">];</span><span class="w">   </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">    </span><span class="n">magic</span><span class="p">;</span><span class="w"> </span><span class="cm">/* HBOT */</span><span class="w">   </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">    </span><span class="n">image_load_addr</span><span class="p">;</span><span class="w">   </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">    </span><span class="n">image_len</span><span class="p">;</span><span class="w">   </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">    </span><span class="n">product_id</span><span class="p">;</span><span class="w"> </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">    </span><span class="n">customer_id</span><span class="p">;</span><span class="w"> </span>
+<span class="w">	</span><span class="kt">uint8_t</span><span class="w">     </span><span class="n">reserve</span><span class="p">[</span><span class="n">HB_HEAD_SIZE</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">RSA_SIGN_SIZE</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">20</span><span class="p">];</span><span class="w"> </span>
+<span class="p">}</span><span class="w"> </span><span class="n">hb_img_header</span><span class="p">;</span><span class="w"> </span>
+</pre></div>
+</div>
+<ul>
+<li><p>signature_h: header中除了本部分外，对其他内容的签名</p></li>
+<li><p>signature_i： 该image的签名</p></li>
+<li><p>magic： 幻数，HBOT</p></li>
+<li><p>image_load_addr: image验证过后被load到ddr的地址</p></li>
+<li><p>image_len: image len</p></li>
+<li><p>customer_id:customer id，预留给客户使用，要与efuse中烧写的customer
+id保持一致</p></li>
+<li><p>product_id:预留给客户自定义的product id，与efuse中烧写的product id要一致</p></li>
+<li><p>reserve： 保留</p>
+<p>在编译镜像时，会将header添加到uboot.img之前，在安全启动时
+spl根据header中信息对uboot镜像验证。</p>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h3><span class="section-number">4.6.2.2. </span>加密和签名工具<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>在build/tools/下，有一个key_management_toolkits，这个文件夹下便是用来对各个image进行打包的工具，其中util_auth.sh是对文件加密和签名的脚本，对其他image的打包会经常用到这个脚本。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="nb">getopts</span> <span class="s2">&quot;ei:o:k:v:p:shr&quot;</span> opt<span class="p">;</span> <span class="k">do</span>
+  <span class="k">case</span> <span class="nv">$opt</span> <span class="k">in</span>
+       r<span class="o">)</span>  <span class="c1"># get key from kms with real rom key</span>
+           <span class="nv">get_rom_key</span><span class="o">=</span><span class="m">1</span>
+           <span class="nv">fallback_key</span><span class="o">=</span><span class="m">0</span>
+           <span class="p">;;</span>
+       i<span class="o">)</span>
+           <span class="nv">input</span><span class="o">=</span><span class="nv">$OPTARG</span>
+           <span class="p">;;</span>
+       o<span class="o">)</span>
+           <span class="nv">output</span><span class="o">=</span><span class="nv">$OPTARG</span>
+           <span class="p">;;</span>
+       k<span class="o">)</span>
+           <span class="nv">key</span><span class="o">=</span><span class="nv">$OPTARG</span>
+           <span class="p">;;</span>
+       v<span class="o">)</span>
+           <span class="nv">iv</span><span class="o">=</span><span class="nv">$OPTARG</span>
+           <span class="p">;;</span>
+       p<span class="o">)</span>
+           <span class="nv">pad_size</span><span class="o">=</span><span class="nv">$OPTARG</span>
+           <span class="p">;;</span>
+       e<span class="o">)</span>
+           pad_image <span class="nv">$input</span> <span class="nv">$pad_size</span>
+           encrypt_image <span class="nv">$key</span> <span class="nv">$iv</span> <span class="nv">$input</span>.pad
+           <span class="nb">exit</span>
+           <span class="p">;;</span>
+       h<span class="o">)</span>
+           hash_image <span class="nv">$output</span> <span class="nv">$input</span>
+           <span class="nb">exit</span>
+           <span class="p">;;</span>
+       s<span class="o">)</span>
+           sign_image <span class="nv">$key</span> <span class="nv">$input</span> <span class="nv">$output</span>
+           <span class="nb">exit</span>
+           <span class="p">;;</span>
+      <span class="se">\?</span><span class="o">)</span>
+      <span class="nb">echo</span> <span class="s2">&quot;Invalid option: -</span><span class="nv">$OPTARG</span><span class="s2">&quot;</span> &gt;<span class="p">&amp;</span><span class="m">2</span>
+      <span class="p">;;</span>
+  <span class="k">esac</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>r: 表示使用真正的key， 需要从服务器上拿到key（该服务器需要客户自己搭建，当前代码中的示例为地平线内部服务器）</p></li>
+<li><p>i: 输入</p></li>
+<li><p>o: 输出</p></li>
+<li><p>k: key</p></li>
+<li><p>v: init vector</p></li>
+<li><p>p: padding size</p></li>
+<li><p>e: 执行加密过程</p></li>
+<li><p>h：执行hash过程</p></li>
+<li><p>s: 执行签名过程</p></li>
+</ul>
+<p><strong>util_auth.sh 代码中关键function介绍：</strong></p>
+<ul class="simple">
+<li><p>encrypt_image:  对image进行加密</p></li>
+<li><p>hash image：对image进行hash计算</p></li>
+<li><p>sign_image: 对image进行签名,本地测试的key存放在了tools/key_management_toolkits/allback_key_sets路径下。<strong>用户在使用自己的key时，对应替换掉这个文件夹下对应的key</strong></p></li>
+</ul>
+<p>打包uboot的工具为pack_uboot_tool.sh，位于build目录下，打包的过程如下：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> pack_uboot<span class="o">()</span>
+<span class="o">{</span>
+    <span class="nb">local</span> <span class="nv">uboot_sign_image</span><span class="o">=</span><span class="s2">&quot;uboot.img.bin&quot;</span>
+
+    <span class="c1"># get uboot keys</span>
+    get_key
+
+    <span class="c1"># sign uboot Image</span>
+    cp <span class="s2">&quot;</span><span class="si">${</span><span class="nv">UBOOT_SRC_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">uboot_image</span><span class="si">}</span><span class="s2">&quot;</span> ./
+    enc_and_sign_uboot
+    rm <span class="si">${</span><span class="nv">uboot_image</span><span class="si">}</span>
+
+    <span class="c1"># sign Header</span>
+    sign_header
+
+    <span class="c1"># cat image / header together</span>
+    cat uboot_header_with_sign        &gt;&gt; <span class="nv">$uboot_sign_image</span>
+
+    <span class="k">if</span> <span class="o">[</span> x<span class="s2">&quot;</span><span class="nv">$ENCRYPT_FLAG</span><span class="s2">&quot;</span> <span class="o">=</span> x<span class="s2">&quot;true&quot;</span> <span class="o">]</span><span class="p">;</span><span class="k">then</span>
+        cat <span class="si">${</span><span class="nv">uboot_image</span><span class="si">}</span>.pad.enc            &gt;&gt; <span class="nv">$uboot_sign_image</span>
+    <span class="k">else</span>
+        cat <span class="si">${</span><span class="nv">uboot_image</span><span class="si">}</span>.pad            &gt;&gt; <span class="nv">$uboot_sign_image</span>
+    <span class="k">fi</span>
+
+    <span class="c1"># move all key to $key_set_loc</span>
+    mv <span class="nv">$uboot_rsa_pub</span> <span class="nv">$uboot_rsa_priv</span> <span class="nv">$key_set_loc</span>
+    mv <span class="nv">$uboot_aes_key</span> <span class="nv">$uboot_aes_iv</span> <span class="nv">$key_set_loc</span>
+
+    <span class="c1"># move debug image to $debug_loc</span>
+    mv <span class="si">${</span><span class="nv">uboot_image</span><span class="si">}</span>* <span class="nv">$debug_loc</span>
+    mv uboot_header_tmp uboot_header_tmp.pad <span class="nv">$debug_loc</span>
+    mv uboot_image_load_addr.bin uboot_image_size.bin <span class="nv">$debug_loc</span>
+    mv uboot_header_tmp* uboot_header_with_sign <span class="nv">$debug_loc</span>
+    <span class="c1"># mv uboot_magic.bin $output_loc</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>get_key 获取uboot的key</p></li>
+<li><p>enc_and_sign_uboot 对uboot image进行签名</p></li>
+<li><p>sign_header 对uboot的header进行签名</p></li>
+<li><p>打包uboot header和uboot image</p></li>
+</ol>
+</section>
+<section id="uboot-image">
+<h3><span class="section-number">4.6.2.3. </span>uboot image签名<a class="headerlink" href="#uboot-image" title="永久链接至标题"></a></h3>
+<p>enc_and_sign_uboot 函数对uboot.bin镜像签名，uboot签名的过程比较简单（加密作为备选，并未用到）</p>
+<ol class="simple">
+<li><p>对uboot image计算hash</p></li>
+<li><p>对hash进行签名，目前uboot签名使用本地的key，客户在使用时将$uboot_rsa_iv对应的私钥文件替换即可，公钥用于在spl阶段对uboot镜像验证。</p></li>
+</ol>
+</section>
+<section id="uboot-header">
+<h3><span class="section-number">4.6.2.4. </span>uboot header签名<a class="headerlink" href="#uboot-header" title="永久链接至标题"></a></h3>
+<p>sign_header 对uboot header签名。</p>
+<ol class="simple">
+<li><p>首先按照header的布局，填充header内容</p></li>
+<li><p>对header计算hash，并签名，header和image的签名使用同一把key</p></li>
+<li><p>最终将header的签名填充到header中，USER_PRODUCT_ID/USER_CUSTOMER_ID即header格式中product_id/customer_id,客户可自行进行修改，但要与烧到efuse中product_id/customer_id一致（efuse相关内容见本文后续章节），然后生成最终的header</p></li>
+</ol>
+</section>
+<section id="id4">
+<h3><span class="section-number">4.6.2.5. </span>密钥管理<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>签名校验算法使用的是RSA2048，私钥使用标准的PEM PKCS#1格式，客户将公钥和私钥覆盖build/tools/key_management_toolkits/fallback_key_sets下的spl_rsa_uboot_img_priv.pem和spl_rsa_uboot_img_pub.pem文件，在编译时，便会对uboot进行签名。通过openssl生成公钥和私钥方法如下：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> build/tools/key_management_toolkits/fallback_key_sets
+openssl genrsa -out spl_rsa_uboot_img_priv.pem <span class="m">2048</span> <span class="c1"># 生成私钥</span>
+openssl rsa -in spl_rsa_uboot_img_priv.pem -pubout -out spl_rsa_uboot_img_pub.pem <span class="c1"># 根据私钥生成公钥</span>
+</pre></div>
+</div>
+<p>spl需要使用公钥进行验证，spl有两种方式获取公钥。</p>
+<p>第一种方式，需要客户将公钥交于地平线，地平线将公钥打包到spl的keybank中，地平线将会对keybank镜像加密和签名，以确保keybank的安全性。</p>
+<p>第二种方式，客户可将公钥打包到image中，并需要将其hash烧写到efuse中，spl将会计算镜像中的hash，与efuse中烧写的hash进行比对。</p>
+<p>默认情况下编译时，已经将公钥打包到了镜像中，客户只需要将uboot的公钥替换为自己的即可。在build/tools/key_management_toolkits下，pack_keyset_tool.sh脚本用于打包公钥并计算hash值，执行该脚本后，将在ddr的输出目录产生efuse_hash_data文件，文件中存放了公钥的hash。需要将hash烧写到efuse中。</p>
+<p><img alt="image-20220312165608916" src="../_images/image-20220312165608916.png" /></p>
+<p>注：</p>
+<ol class="simple">
+<li><p>烧写efuse的方法参见章节“EFUSE的烧写”</p></li>
+<li><p>公钥的hash并不是对xxxx-pub.pem文件直接计算hash，而是对公钥256字节的元数据计算hash，请使用pack_keyset_tool.sh生成hash</p></li>
+</ol>
+</section>
+</section>
+<section id="bpu">
+<h2><span class="section-number">4.6.3. </span>BPU模型文件的保护<a class="headerlink" href="#bpu" title="永久链接至标题"></a></h2>
+<p>BPU模型文件的保护可以分为两个部分：</p>
+<p>一是防止模型文件被离线修改，也就是对模型文件的源文件进行保护。在PC上进行加密和签名，在SPL中可以进行签名验证和解密，对BPU模型源文件实现保护。</p>
+<p>二是防止模型文件被在线修改，也就是在运行过程中，模型文件区域被踩踏或恶意修改。通过MPU硬件对模型区域进行保护，只允许BPU可以访问模型区域</p>
+<section id="bpu-image">
+<h3><span class="section-number">4.6.3.1. </span>bpu image的布局<a class="headerlink" href="#bpu-image" title="永久链接至标题"></a></h3>
+<p>模型文件在PC端是先进行加密，然后再签名，在SPL中则是先验证签名再解密。</p>
+<p>bpu image的header格式如下</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="p">{</span><span class="w">  </span>
+<span class="w">	</span><span class="n">hbm_info_t</span><span class="w">	</span><span class="n">hbm</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">  	</span><span class="n">image_len</span><span class="p">;</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">  	</span><span class="n">bpu_range_start</span><span class="p">;</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">  	</span><span class="n">bpu_range_sz</span><span class="p">;</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">  	</span><span class="n">bpu_all_fetch_only_sz</span><span class="p">;</span><span class="w">  </span>
+<span class="p">}</span><span class="w"> </span><span class="n">bpu_img_header</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<ul>
+<li><p>hbm: 模型文件信息，最多可以放4个模型文件</p></li>
+<li><p>image_len:image的长度</p></li>
+<li><p>bpu_range_start: bpu模型地址的起始</p></li>
+<li><p>bpu_range_sz：所有bpu模型的大小</p></li>
+<li><p>bpu_all_fetch_only_sz: 所有bpu模型中指令数据的大小</p>
+<p>每个模型文件header的格式如下</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">hbm_info</span><span class="w"> </span><span class="p">{</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">char</span><span class="w"> </span><span class="n">name</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">hbm_size</span><span class="p">;</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">inst_load_addr</span><span class="p">;</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">inst_load_size</span><span class="p">;</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">par_load_addr</span><span class="p">;</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">par_load_size</span><span class="p">;</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">inst_data_offset</span><span class="p">;</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">par_data_offset</span><span class="p">;</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">signature_offset</span><span class="p">;</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">hbm_start_offset</span><span class="p">;</span><span class="w">  </span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">sig_flag</span><span class="p">;</span><span class="w">  </span>
+<span class="p">}</span><span class="w"> </span><span class="n">hbm_info_t</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>name: 模型的名称</p></li>
+<li><p>hbm_size: 模型文件的大小</p></li>
+<li><p>inst_load_addr: 指令数据load到内存的地址</p></li>
+<li><p>inst_load_size: 指令数据大小</p></li>
+<li><p>par_load_addr: 参数数据load到内存的地址</p></li>
+<li><p>part_load_size: 参数数据大小</p></li>
+<li><p>inst_data_offset: 指令数据的偏移</p></li>
+<li><p>par_data_offset: 参数数据的偏移</p></li>
+<li><p>hbm_start_offset: 模型文件的偏移</p></li>
+<li><p>sig_flag: 签名flag，0表示地平线签名，1表示客户签名</p></li>
+</ul>
+<p>bpu image的布局如图所示：</p>
+<p><img alt="image-20220312165411034" src="../_images/image-20220312165411034.png" /></p>
+</section>
+<section id="id5">
+<h3><span class="section-number">4.6.3.2. </span>bpu image的签名<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>加密过程由编译器同时提供的HBDK完成，加密完成后，将生成一份加密后的模型文件和一份模型文件信息的json文件。</p>
+<p>json文件的形式如下：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{  
+    &quot;inst&quot;: {  
+        &quot;bpu_inst_offset&quot;: &quot;0x10000&quot;,        //指令数据的偏移  
+        &quot;bpu_inst_size&quot;: 65536               //指令数据的大小  
+    },  
+    &quot;param&quot;: {  
+        &quot;bpu_param_offset&quot;: &quot;0x20000&quot;,       //参数数据的偏移  
+        &quot;bpu_param_size&quot;: 65536              //参数数据的大小  
+    },  
+    &quot;summary&quot;: {  
+        &quot;aes_iv_crc32&quot;: &quot;0xf97160f3&quot;,  
+        &quot;aes_key_crc32&quot;: &quot;0xcc58ebb9&quot;,  
+        &quot;cipher&quot;: &quot;aes-128-cbc&quot;,  
+        &quot;file_name&quot;: &quot;test3_enc.hbm&quot;,         //模型文件的名称  
+        &quot;file_size&quot;: 262144,                  //模型文件的大小  
+        &quot;inst_ciphertxt_crc32&quot;: &quot;0x789593ac&quot;,  
+        &quot;param_ciphertxt_crc32&quot;: &quot;0x231c332e&quot;  
+    }  
+}
+</pre></div>
+</div>
+<p>签名由客户完成，使用摘要算法是sha256，签名算法是RSA2048，产生256字节的签名信息附在原模型文件的后面即可。</p>
+<p>在keymangement_tools中提供了一个可参考的签名脚本bpu_only_sig.sh，支持多对个HBM文件进行签名</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./bpu_only_sig.sh –b –i utils/fallback_key_sets –j test3_enc.hbm.json,test4_enc_hbm.json
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>-b -i表示是使用了本地的key</p></li>
+<li><p>-j 表示模型信息json文件，可添加多个模型文件，以逗号间隔</p></li>
+</ul>
+<p>执行后，源文件不变，会生成xxxx-with-sign文件，表示添加了签名信息的模型文件</p>
+<p>./bpu_only_sig.sh中使用的地平线的公钥私钥信息，若客户使用自己的私钥签名，需将RSA公钥交于地平线打包进SPL中。</p>
+<p>下面是bpu_only_sig.sh中对bpu
+image签名的函数，同uboot/bl31的签名过程类似，使用util_auth.sh脚本对image计算hash，然后进行签名，这里也使用的本地的key</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pack_mul_hbm<span class="o">()</span>  
+<span class="o">{</span> 
+	<span class="nv">name</span><span class="o">=</span><span class="k">$(</span>cat <span class="nv">$1</span> <span class="p">|</span> <span class="si">${</span><span class="nv">JQ_EXEC</span><span class="si">}</span> .summary.file_name <span class="p">|</span> sed <span class="s1">&#39;s/\&quot;//g&#39;</span><span class="k">)</span>  
+	<span class="k">if</span> <span class="o">[</span> <span class="nv">$name</span> !<span class="o">=</span> <span class="s2">&quot;null&quot;</span> <span class="o">]&amp;&amp;</span> <span class="o">[</span> <span class="nv">$name</span> !<span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>  
+		<span class="c1">#encrypt bpu image, shall be delete in future  #1  </span>
+		pad_image <span class="nv">$name</span> <span class="m">64</span>  
+		util_auth.sh -i <span class="nv">$name</span>.pad -o <span class="nv">$name</span>.tmp -h  
+
+		<span class="c1"># sign bpu image hash  </span>
+		util_auth.sh -i <span class="nv">$name</span>.tmp_hash.bin -k spl_rsa_bpu_img_priv.pem -o <span class="nv">$name</span>.tmp.sign -s  
+		rm <span class="nv">$name</span>.tmp_*  
+		cat <span class="nv">$name</span>.pad &gt; <span class="nv">$name</span>-with_sign  
+		cat <span class="nv">$name</span>.tmp.sign &gt;&gt; <span class="nv">$name</span>-with_sign  
+	<span class="k">fi</span>  
+<span class="o">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3><span class="section-number">4.6.3.3. </span>bpu image的打包<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<p>模型文件签名之后，需要对模型文件增加头信息，有两种方法：</p>
+<p>PC端在keymangement_tools中提供了打包bpu image的工具pack_bpu_img.py。</p>
+<p>注意：此时要打包的文件是附带了签名的HBM文件。例如使用bpu_only_sig.sh生成了带签名的HBM文件xxx-with-sign文件，应将此文件覆盖原来的HBM文件。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">pack_bpu_img</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">j</span> <span class="n">test3_enc</span><span class="o">.</span><span class="n">hbm</span><span class="o">.</span><span class="n">json</span><span class="p">,</span><span class="n">test4_enc</span><span class="o">.</span><span class="n">hbm</span><span class="o">.</span><span class="n">json</span> <span class="o">-</span><span class="n">s</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span> <span class="o">-</span><span class="n">a</span> <span class="mh">0x2c940000</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>-j 模型信息json文件，可同时打包多个模型文件，json文件以逗号间隔，最多可打包4份模型文件</p></li>
+<li><p>-s 签名标志位，0—表示由地平线签名，1—表示外部客户签名。有多份HBM文件时以逗号间隔，并与json文件一一对应。外部客户对模型文件签名后，需将公钥交于地平线，打包入SPL中。</p></li>
+<li><p>-a 模型文件load地址</p></li>
+</ul>
+<p>由于模型文件被load到指定地址后，MPU会将这块区域进行保护，只有BPU可以访问这块区域，所以这块区域需要提前预留。</p>
+<p>默认DTS中为ion预留了一块区域，使用的是CMA。起始地址为0x4000000，大小为0x2A000000，为了节省DDR，并未专门给BPU模型预留区域，因此这块区域可能被多个驱动模块使用。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ion_reserved</span><span class="p">:</span> <span class="n">ion_reserved</span><span class="o">@</span><span class="mh">0x4000000</span> <span class="p">{</span>  
+   <span class="n">compatible</span> <span class="o">=</span> <span class="s2">&quot;ion-pool&quot;</span><span class="p">;</span>  
+   <span class="n">reg</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mh">0x0</span> <span class="mh">0x4000000</span> <span class="mh">0x0</span> <span class="mh">0x2A000000</span><span class="o">&gt;</span><span class="p">;</span>  
+   <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;disabled&quot;</span><span class="p">;</span>  
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>BPU尝试预留内存时，由于CMA的对齐为4M，这可能出现DDR资源的浪费。因此需要使用ion_reserved区域。ion_reserved默认处于未被使能的状态，我们首先把CMA区域替换成ion_reserved，然后再借用ion_reserved的部分区域作为BPU预留区域。</p>
+<p>通过UBoot命令行的方式从ion中末尾处截取一段区域作为BPU模型的区域：</p>
+<p>UBoot命令设置BPU模型区域，10表示设置模型区域大小为10M，最大为64M</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">setenv</span> <span class="n">ion_cma</span> <span class="mi">0</span>
+<span class="n">setenv</span> <span class="n">model_reserved_size</span> <span class="mi">10</span>  
+<span class="n">saveenv</span> 
+</pre></div>
+</div>
+<p>在执行完上述UBoot命令后，模型区域的起始地址是0x4000000 + 0x2A000000 - 0xA00000 = 0x2D600000，大小为0xA00000</p>
+<p>在板子上，提供了hrut_hbm工具也可以进行添加hbm文件的动作</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hrut_hbm</span> <span class="o">-</span><span class="n">j</span> <span class="n">test3_enc</span><span class="o">.</span><span class="n">hbm</span><span class="o">.</span><span class="n">json</span> <span class="o">-</span><span class="n">s</span> <span class="mi">0</span> <span class="o">-</span><span class="n">a</span> <span class="mh">0x2c940000</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>-j: 模型文件的json文件</p></li>
+<li><p>-s: 签名的标志</p></li>
+<li><p>-a: load bpu模型的地址，如果emmc或flash已经有了bpu模型，该参数可以不指定</p></li>
+</ul>
+</section>
+<section id="id7">
+<h3><span class="section-number">4.6.3.4. </span>运行时的保护<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<p>模型包括指令和参数两部分，两部分数据被load到内存保留的地址后，MPU会将这两部分数据设置为BPU只读，其他模块不可读不可写。所以在UBoot中要设置DTS为BPU模型预留一块区域，以免出现MPU设置为BPU只读的区域被其他模块申请的情况。</p>
+</section>
+</section>
+<section id="efuse">
+<h2><span class="section-number">4.6.4. </span>EFUSE的烧写<a class="headerlink" href="#efuse" title="永久链接至标题"></a></h2>
+<section id="id8">
+<h3><span class="section-number">4.6.4.1. </span>efuse的基本介绍<a class="headerlink" href="#id8" title="永久链接至标题"></a></h3>
+<p>eFUSE中共有31bank，每个bank有32bits，bank31的每个bit对应某个bank的lock标志，置1表示此bank将不能被烧写。bank7-bank11的全部32bit，以及bank21[0:23]和bank22[0:5]可供用户烧写。Bank21可供用户烧写customer id和product id。bank21的结构如下</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>比特位</th>
+<th>[0:15]</th>
+<th>[16:23]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>含义</td>
+<td>CUSTOMER ID</td>
+<td>PRODUCT ID</td>
+</tr>
+</tbody>
+</table><p>Bank22的结构如下</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>比特位</th>
+<th>[0]</th>
+<th>[1]</th>
+<th>[2]</th>
+<th>[3]</th>
+<th>[4]</th>
+<th>[5]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>含义</td>
+<td>disable jtag</td>
+<td>disable bif sd</td>
+<td>disable bif spi</td>
+<td>verify uboot</td>
+<td>verify bpu model</td>
+<td>select key</td>
+</tr>
+</tbody>
+</table></section>
+<section id="id9">
+<h3><span class="section-number">4.6.4.2. </span>efuse的配置文件<a class="headerlink" href="#id9" title="永久链接至标题"></a></h3>
+<p>在miniboot/ddr/efuse下提供了efuse_cfg_outside.json文件，可供用户修改efuse的值</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+        <span class="nt">&quot;outside&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;bypass&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+                <span class="nt">&quot;setlock&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                <span class="nt">&quot;disjtag&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                <span class="nt">&quot;disbifsd&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                <span class="nt">&quot;disbifspi&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                <span class="nt">&quot;veri_uboot&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                <span class="nt">&quot;veri_bpu&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                <span class="nt">&quot;sel_key&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                <span class="nt">&quot;debug_lock&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                <span class="nt">&quot;customerid&quot;</span><span class="p">:</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;productid&quot;</span><span class="p">:</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;id_lock&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+                <span class="nt">&quot;normalbank&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">&quot;bank7&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">],</span>
+                        <span class="nt">&quot;bank8&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">],</span>
+                        <span class="nt">&quot;bank9&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">],</span>
+                        <span class="nt">&quot;bank10&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">],</span>
+                        <span class="nt">&quot;bank11&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">]</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;securebank&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="nt">&quot;hash0&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">],</span>
+                        <span class="nt">&quot;hash1&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">],</span>
+                        <span class="nt">&quot;hash2&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">],</span>
+                        <span class="nt">&quot;hash3&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">],</span>
+                        <span class="nt">&quot;hash4&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">],</span>
+                        <span class="nt">&quot;hash5&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">],</span>
+                        <span class="nt">&quot;hash6&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">],</span>
+                        <span class="nt">&quot;hash7&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">]</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;socid&quot;</span><span class="p">:[</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span><span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">,</span> <span class="s2">&quot;0x0&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>bypass: 1表示eFUSE烧写不执行，0表示执行此次eFUSE烧写，若要烧写eFUSE，应置为0。</p></li>
+<li><p>setlock：1表示写数据后上锁，0表示不上锁</p></li>
+<li><p>disjtag: disable jtag， 1表示disable。0表示enable</p></li>
+<li><p>disbifsd: disable bif sd， 1表示disable。0表示enalbe</p></li>
+<li><p>disbifspi: disable bifspi，1表示disable。0表示enable</p></li>
+<li><p>veri_uboot: 设置为1表示上电时校验uboot，设置为0，表示上电不校验uboot</p></li>
+<li><p>veri_bpu: 如果bpu模型放到了镜像中，设置为1表示上电时校验bpu模型，设置为0，表示不校验bpu模型</p></li>
+<li><p>sel_key: key选择标志位，0表示使用外部key，1表示使用keybank中的key</p></li>
+<li><p>debug_lock: 1表示更新bank22后上锁，0表示不上锁</p></li>
+<li><p>customerid: 供用户烧写customer id，最大65535</p></li>
+<li><p>productid：供用户烧写productid，最大255</p></li>
+<li><p>id_lock:写入customer id/productid后是否上锁，上锁后customer id和product id不能再写入</p></li>
+<li><p>normalbank: bank7-bank11的值</p></li>
+<li><p>securebank: uboot public key的hash值</p></li>
+<li><p>socid：soc id白名单，每一颗soc都有个unique id，若id在这个白名单中，bif/bifspi/jtag则会打开。</p></li>
+</ul>
+<p>注：</p>
+<ol>
+<li><p>jtag/bif sd/bif spi在spl中默认会打开，soc id白名单优先级最高，在白名单中则会打开，若不在，根据efuse bank22判断，若被置1，则关闭相应功能。</p></li>
+<li><p>bif sd和bif spi不能单独关闭，可以单独打开，jtag功能不能单独打开，可以单独关闭。即若打开jtag功能，三个功能就都使能。若关闭jtag功能，可以单独打开bif sd或bif spi</p></li>
+<li><p>setlock标志是针对normal bank数组和secure bank数组的整体开关，设置为1时，若normal bank/secure bank的某个bank不为0，烧写efuse后会上锁；bank值为0不会上锁。为了灵活性，每个bank也可以单独设置是否上锁，只需在bank值后加上”lock” “unlock”字样即可,并且这种方式的优先级更高，也就是只要满足任意一个条件就会上锁：（1）”<em>setlock</em>”设置为1，bank值不为0；（2）bank后添加”lock”关键字。如下所示，normal bank7设置为0，并上锁，normal bank8设置为0x2，但不上锁， normal bank9/10/11都将上锁。secure bank值都为0，且不上锁。</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>....  
+        &quot;setlock&quot;: 1,
+  		&quot;normalbank&quot;: {
+                &quot;bank7&quot;:[&quot;0x0&quot;, &quot;lock&quot;],
+                &quot;bank8&quot;:[&quot;0x2&quot;, &quot;unlock&quot;],
+                &quot;bank9&quot;:[&quot;0x3&quot;],
+                &quot;bank10&quot;:[&quot;0x4&quot;],
+                &quot;bank11&quot;:[&quot;0x5&quot;]
+        },
+        &quot;securebank&quot;: {
+                &quot;hash0&quot;:[&quot;0x0&quot;],
+                &quot;hash1&quot;:[&quot;0x0&quot;],
+                &quot;hash2&quot;:[&quot;0x0&quot;],
+                &quot;hash3&quot;:[&quot;0x0&quot;],
+                &quot;hash4&quot;:[&quot;0x0&quot;],
+                &quot;hash5&quot;:[&quot;0x0&quot;],
+                &quot;hash6&quot;:[&quot;0x0&quot;],
+                &quot;hash7&quot;:[&quot;0x0&quot;]
+        },
+.....
+</pre></div>
+</div>
+</li>
+<li><p>bank21包含customer id和product id两个字段，id_lock表示更新后是否lock，lock后就不能再次写入，所以customer id和product id建议一次配置完成</p></li>
+<li><p>bank22包含disable jtag/disable bifsd/disable bifspi/verify uboot/verify bpu/select key共计6个字段，debug_lock表示设置后是否lock bank22，lock后不能再烧写bank22，建议上述6个字段一次更新完成。</p></li>
+<li><p>验证uboot还可以通过pin的方式进行调试，GPIO92作为输入置1时，也将校验uboot，用户在设置efuse之前，可以使用该pin作为测试方法</p></li>
+</ol>
+<p>烧写完成后，可以在UBoot中查看eFUSE的烧写情况, 且只能查看normal bank。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">efuse</span> <span class="n">dump</span>
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h3><span class="section-number">4.6.4.3. </span>配置范例<a class="headerlink" href="#id10" title="永久链接至标题"></a></h3>
+<p>客户若需要校验uboot，并使用外部key的方式，需要将公钥的hash烧写到eFUSE中</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{
+        &quot;outside&quot;: {
+                &quot;bypass&quot;:0,
+                &quot;setlock&quot;:1,
+                &quot;disjtag&quot;:0,
+                &quot;disbifsd&quot;:0,
+                &quot;disbifspi&quot;:0,
+                &quot;veri_uboot&quot;:1,
+                &quot;veri_bpu&quot;:0,
+                &quot;sel_key&quot;:0,
+                &quot;debug_lock&quot;:1,
+                &quot;customerid&quot;:&quot;0x0&quot;,
+                &quot;productid&quot;:&quot;0x0&quot;,
+                &quot;id_lock&quot;:0,
+  ......
+                &quot;securebank&quot;: {
+                        &quot;hash0&quot;:[&quot;0x1234&quot;],
+                        &quot;hash1&quot;:[&quot;0x5678&quot;],
+                        &quot;hash2&quot;:[&quot;0xabcd&quot;],
+                        &quot;hash3&quot;:[&quot;0x1234&quot;],
+                        &quot;hash4&quot;:[&quot;0x5678&quot;],
+                        &quot;hash5&quot;:[&quot;0xabcd&quot;],
+                        &quot;hash6&quot;:[&quot;0x1234&quot;],
+                        &quot;hash7&quot;:[&quot;0x5678&quot;]
+                },
+......
+}
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>bypass置0，表示将烧写efuse</p></li>
+<li><p>set_lock置1，表示对应的烧写hash后，将会lock</p></li>
+<li><p>verify_uboot:置1，表示spl将校验uboot</p></li>
+<li><p>sel_key：置0，表示使用外部key。</p></li>
+<li><p>debug_lock:置1，表示bank22将会被lock，也就是下次disjtag/disbifsd/disbifspi/verify_boot/verify_bpu/sel_key将不能再次配置</p></li>
+<li><p>hash0–hash7：公钥对应的hash，产生公钥hash参见3.5章节</p></li>
+</ol>
+<p>客户若使用keybank中的key校验uboot，可参考如下配置</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{
+        &quot;outside&quot;: {
+                &quot;bypass&quot;:0,
+                &quot;setlock&quot;:0,
+                &quot;disjtag&quot;:0,
+                &quot;disbifsd&quot;:0,
+                &quot;disbifspi&quot;:0,
+                &quot;veri_uboot&quot;:1,
+                &quot;veri_bpu&quot;:0,
+                &quot;sel_key&quot;:1,
+                &quot;debug_lock&quot;:1,
+                &quot;customerid&quot;:&quot;0x0&quot;,
+                &quot;productid&quot;:&quot;0x0&quot;,
+                &quot;id_lock&quot;:0,
+...
+}
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>bypass置0，表示将烧写efuse</p></li>
+<li><p>verify_uboot:置1，表示spl将校验uboot</p></li>
+<li><p>sel_key：置1，表示使用keybank中的key；公钥还需要交于地平线打包到spl中</p></li>
+</ol>
+</section>
+</section>
+<section id="avbdm-verity">
+<h2><span class="section-number">4.6.5. </span>AVB和dm-verity<a class="headerlink" href="#avbdm-verity" title="永久链接至标题"></a></h2>
+<p>本章节主要介绍X3J3平台安全启动的校验流程开源部分。开源部分分为两步：</p>
+<p>1、UBoot校验Linux内核，基于Android Verified Boot（AVB）移植并实现；</p>
+<p>2、Linux内核使用dm-verity校验根文件系统，基于Linux内核的Device Mapper及DM-verity（DM指代Device Mapper）模块实现。</p>
+<section id="buildavbdm-verity">
+<h3><span class="section-number">4.6.5.1. </span>Build系统添加AVB以及DM-Verity校验<a class="headerlink" href="#buildavbdm-verity" title="永久链接至标题"></a></h3>
+<p>在编译系统中，当Secure镜像被选择时自动调用对应脚本给boot.img以及system.img添加校验信息。boot.img以及system.img的校验元数据均储存在vbmeta.img中，在启动后显示为vbmeta分区。涉及脚本如下均位于下方路径：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">build</span><span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">avbtools</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>当前参考示例脚本支持boot和system两个分区的校验，分别在执行mk_boot.sh、mk_system.sh中使用。</p>
+<p>如果有额外分区需要使用dm-verity进行验证，也可参照”build_boot_vbmeta.sh”或者”build_system_vbmeta.sh”进行分区镜像制作，并修改”mk_vbmeta.sh”和build_vbmeta.sh将对应分区校验信息添加至vbmeta.img中。</p>
+<p>mk_system.sh 脚本执行过程中会自动生成avb镜像制作所需配置文件，内容如下：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> create_config_file<span class="o">()</span>
+<span class="o">{</span>
+    <span class="nb">local</span> <span class="nv">file</span><span class="o">=</span><span class="nv">$1</span>
+
+    <span class="nb">echo</span> <span class="s2">&quot;mount_point=</span><span class="nv">$partition_name</span><span class="s2">&quot;</span> &gt; <span class="nv">$file</span>
+    <span class="nb">echo</span> <span class="s2">&quot;fs_type=</span><span class="nv">$fs_type</span><span class="s2">&quot;</span> &gt;&gt; <span class="nv">$file</span>
+    <span class="nb">echo</span> <span class="s2">&quot;partition_size=</span><span class="nv">$partition_align_size</span><span class="s2">&quot;</span> &gt;&gt; <span class="nv">$file</span>
+    <span class="nb">echo</span> <span class="s2">&quot;partition_name=</span><span class="nv">$partition_name</span><span class="s2">&quot;</span> &gt;&gt; <span class="nv">$file</span>
+    <span class="nb">echo</span> <span class="s2">&quot;uuid=da594c53-9beb-f85c-85c5-cedf76546f7a&quot;</span> &gt;&gt; <span class="nv">$file</span>
+    <span class="nb">echo</span> <span class="s2">&quot;verity=true&quot;</span> &gt;&gt; <span class="nv">$file</span>
+    <span class="k">if</span> <span class="o">[[</span> <span class="s2">&quot;</span><span class="nv">$fs_type</span><span class="s2">&quot;</span> <span class="o">=</span> *<span class="s2">&quot;ext&quot;</span>* <span class="o">]]</span><span class="p">;</span><span class="k">then</span>
+        <span class="nb">echo</span> <span class="s2">&quot;ext_mkuserimg=make_ext4fs&quot;</span> &gt;&gt; <span class="nv">$file</span>
+    <span class="k">elif</span> <span class="o">[[</span> <span class="s2">&quot;</span><span class="nv">$fs_type</span><span class="s2">&quot;</span> <span class="o">=</span> *<span class="s2">&quot;squash&quot;</span>* <span class="o">]]</span><span class="p">;</span><span class="k">then</span>
+        <span class="c1"># avialable options: block_size, noI, noD, noF, noX, core_num - processors</span>
+        <span class="nb">echo</span> <span class="s2">&quot;squash_mkuserimg=mksquashfs&quot;</span> &gt;&gt; <span class="nv">$file</span>
+        <span class="nb">echo</span> <span class="s2">&quot;comp_type=gzip&quot;</span> &gt;&gt; <span class="nv">$file</span>
+        <span class="nb">echo</span> <span class="s2">&quot;all_root=y&quot;</span> &gt;&gt; <span class="nv">$file</span>
+    <span class="k">fi</span>
+
+    <span class="nb">local</span> <span class="nv">avb_tool_path</span><span class="o">=</span><span class="si">${</span><span class="nv">HR_AVB_TOOLS_PATH</span><span class="si">}</span>
+    <span class="nb">echo</span> <span class="s2">&quot;avb_avbtool=</span><span class="nv">$avb_tool_path</span><span class="s2">/avbtool&quot;</span> &gt;&gt; <span class="nv">$file</span>
+    <span class="nb">echo</span> <span class="s2">&quot;verity_key=</span><span class="nv">$avb_tool_path</span><span class="s2">/keys/shared.priv.pem&quot;</span> &gt;&gt; <span class="nv">$file</span>
+    <span class="nb">echo</span> <span class="s2">&quot;verity_block_device=/dev/mmcblk0p</span><span class="nv">$system_id</span><span class="s2">&quot;</span> &gt;&gt; <span class="nv">$file</span>
+    <span class="nb">echo</span> <span class="s2">&quot;skip_fsck=true&quot;</span> &gt;&gt; <span class="nv">$file</span>
+    <span class="nb">echo</span> <span class="s2">&quot;verity_signer_cmd=verity/verity_signer&quot;</span> &gt;&gt; <span class="nv">$file</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>校验加密所使用的密钥，目前储存于上方”verify_key”变量中，请根据项目需求，自行替换密钥文件或者修改密钥所处路径。</p>
+<p>签名校验算法使用的是RSA2048，生成私钥后，替换原有的私有文件build/tools/avbtools/keys/shared.priv.pem，生成私钥可使用openssl工具</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">openssl</span> <span class="n">genrsa</span> <span class="o">-</span><span class="n">out</span> <span class="n">test_kernel_priv</span><span class="o">.</span><span class="n">pem</span> <span class="mi">2048</span>  <span class="c1">#生成私钥</span>
+</pre></div>
+</div>
+<p>生成私钥后，还需将公钥放置在uboot源码中，公钥需按照avb的格式生成，这里提供一个工具可以方便的生成avb格式的公钥。</p>
+<p>key2array.py 脚本用于生成avb私钥对应的公钥数组，使用方法</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python2</span> <span class="n">key2array</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">i</span> <span class="n">keys</span><span class="o">/</span><span class="n">shared</span><span class="o">.</span><span class="n">priv</span><span class="o">.</span><span class="n">pem</span> <span class="o">-</span><span class="n">o</span> <span class="n">avb_root</span><span class="o">.</span><span class="n">c</span>
+</pre></div>
+</div>
+<p>-i: avb私钥文件</p>
+<p>-o: 对应生成的公钥数组文件</p>
+<p>然后将avb_root.c中数据替换uboot中common/avb_verify.c中的avb_root_pub[520]数组即可。</p>
+<p>具体AVB以及DM-Verity介绍，请参考安卓以及Linux内核官方文档。</p>
+</section>
+<section id="ubootlinux">
+<h3><span class="section-number">4.6.5.2. </span>UBoot校验Linux内核<a class="headerlink" href="#ubootlinux" title="永久链接至标题"></a></h3>
+<p>在安全启动流程中，Linux内核文件（包括dtb.img – 目前包含所有可用dtb文件）会由UBoot做整体校验。涉及文件：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uboot</span><span class="o">/</span><span class="n">cmd</span><span class="o">/</span><span class="n">avb</span><span class="o">.</span><span class="n">c</span>
+<span class="n">uboot</span><span class="o">/</span><span class="n">common</span><span class="o">/</span><span class="n">avb_verify</span><span class="o">.</span><span class="n">c</span>
+<span class="n">uboot</span><span class="o">/</span><span class="n">common</span><span class="o">/</span><span class="n">bootm</span><span class="o">.</span><span class="n">c</span>
+<span class="n">uboot</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">libavb</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>UBoot命令中的”avb_verify”封装了”avb init”以及”avb verify”。”avb init”会初始化并寻找AVB所需镜像所处的储存介质。”avb verify”则负责将”vbmeta”以及”boot”分区内容读取出来并校验，具体实现请参考上述文件。</p>
+<p>目前DM-verity仅在eMMC上实现，Flash(nand或者nor)均没有通过mtd-block虚拟层制作DM，没有实现DM-verity。在eMMC启动流程中，如果开启了AVB以及DM-verify，则UBoot会在校验成功后，向bootargs添加DM-verity所需元数据以供Kernel初始化DM-verity使用。</p>
+</section>
+<section id="linuxdm-verity">
+<h3><span class="section-number">4.6.5.3. </span>Linux内核使用DM-verity校验根文件系统<a class="headerlink" href="#linuxdm-verity" title="永久链接至标题"></a></h3>
+<p>在UBoot校验Linux内核成功并向Linux内核提供DM-verity初始化所需元数据后，Linux内核会初始化DM-verity并在使用根文件系统过程中对每一个读取出来的擦写块进行校验。有区别与普通启动，Secure启动使能DM-verity后，根文件系统不再直接从mmcblk分区挂载，改为从DM设备(一般为/dev/dm-0)挂载。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="kernel_debug_guide/22-Using_crash_to_Analysis_ramdump_zh_CN.html" class="btn btn-neutral float-left" title="4.5.4. crash分析ramdump" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="System_OTA_Manual.html" class="btn btn-neutral float-right" title="4.7. OTA实现原理和使用方法" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

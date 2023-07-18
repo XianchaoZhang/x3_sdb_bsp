@@ -1,0 +1,122 @@
+# 内存dump功能使用指南
+
+更多功能说明可参考：[**swinfo操作说明(mem-dump功能指导)**](./21-swinfo_Manual_mem_dump_function_synopsis_zh_CN.md)
+
+dump出的img镜像文件使用参考：[**crash分析ramdump**](./22-Using_crash_to_Analysis_ramdump_zh_CN.md)
+
+## 准备工作
+
+根据场景需要选择不同的dump方式，需求进行不同的准备工作。
+
+### TFTP网络
+
+PC网口连接待dump设备(记下该PC网口IP，如192.168.1.1)，并配置好tftp服务。
+
+
+### TF/SD卡
+
+对TF/SD卡进行gpt分区并格式化为FAT文件系统(格式化一次即可)：可在PC上完成，若要在X3J3上完成，需要使用parted及mkfs.fat工具。以下例子假设TF/SD卡被挂载为"mmcblk1"：
+```bash
+parted /dev/mmcblk1 mktable gpt
+parted /dev/mmcblk1 mkpart primary fat32 1Mib 100%
+mkfs.fat /dev/mmcblk1p1
+```
+### EMMC
+
+获取userdata分区的分区编号：
+
+```
+fdisk -l | grep userdata
+    12         1094950        30597086 14.0G userdata
+# 如命令结果，为12 
+```
+
+进入Recovery模式后使用以下命令:
+
+```bash
+umount /userdata
+mkfs.ext4 -O 64bit -L userdata -F /dev/mmcblk0p12
+mount -t ext4 /dev/mmcblk0p12 /userdata
+```
+在内核内，可以通过以下命令进入Recovery模式：
+```bash
+hrut_resetreason recovery
+reboot
+```
+### U盘
+
+需要将U盘格式化为FAT32文件系统。
+
+## 手动dump
+
+linux下提供系统重启后必停在uboot命令行等待的方法，可配合手动dump使用：
+```bash
+echo 4 > /sys/kernel/hobot-swinfo/boot
+```
+<font color=red>注意：</font>此时可通过uboot命令清除该等待配置标志：swinfo boot 0，
+上述操作非必须，在任何方式进入到uboot命令行，都可通过命令可完成3种不同方式的手动dump：
+
+### TFTP网络
+
+配置本地IP及服务器(上述PC网口)IP后，使用tftp命令dump内存到TFTP服务器根目录，以下0x200000到0x3f200000为1G内存大小非保护区域(请根据实际情况设置)：
+```bash
+setenv ipaddr 192.168.1.10;setenv serverip 192.168.1.1;tput 0x200000 0x3fe00000 dump_ddr_40000000.img
+```
+### TF/SD卡
+
+使用fatwrite命令dump内存到TF/SD卡根目录，以下0x200000到0x3f200000为1G内存大小非保护区域(请根据实际情况设置)：
+```bash
+mmc rescan; part list mmc 1; fatwrite mmc 1:1 0x200000 /dump_ddr_40000000.img 0x3fe00000
+```
+### EMMC
+
+使用ext4write命令dump内存到EMMC的userdate分区根目录，0x200000到0x3f200000为1G内存大小非保护区域(请根据实际情况设置)：
+```bash
+mmc rescan; part list mmc 0; ext4write mmc 0:c 0x200000 /dump_ddr_40000000.img 0x3fe00000
+```
+如系统报“hash tree directory Error ext4fs_write()”则需往userdata内的文件夹dump，例如/userdata/log：
+```bash
+ext4write mmc 0:c 0x200000 /log/dump_ddr_40000000.img 0x3fe00000
+```
+## 自动dump
+
+linux下提供系统重启后自动进入uboot完成dump的配置，同样有3种方法：（配置完成后系统测试运行，待crash发生并重启后，将自动dump出dump_ddr_xxx.img内存镜像以便分析）
+
+### TFTP网络
+
+配置重启后自动使用TFTP进行dump，服务器IP为192.168.1.64：
+```bash
+echo 192.168.1.64 > /sys/kernel/hobot-swinfo/dump
+```
+上述命令直接操作了标志，下次重启必会进uboot进行dump，若只想在panic时才dump，可使用预配置：
+```bash
+echo dump=192.168.1.64 > /sys/kernel/hobot-swinfo/panic
+```
+### TF/SD卡
+
+配置重启后自动使用TF/SD卡进行dump：
+```bash
+echo 5 > /sys/kernel/hobot-swinfo/boot
+```
+上述命令直接操作了标志，下次重启必会进uboot进行dump，若只想在panic时才dump，可使用预配置：
+```bash
+echo boot=5 > /sys/kernel/hobot-swinfo/panic
+```
+### EMMC
+
+配置重启后自动使用EMMC的userdata区进行dump：
+```bash
+echo 6 > /sys/kernel/hobot-swinfo/boot
+```
+上述命令直接操作了标志，下次重启必会进uboot进行dump，若只想在panic时才dump，可使用预配置：
+```bash
+echo boot=6 > /sys/kernel/hobot-swinfo/panic
+```
+<font color=red>注意：</font>上述自动dump配置完成后，在系统重启(或panic重启)时，都将进入到uboot并自动执行相应dump命令，不管成功与否都将停在uboot命令行内。若dump失败(TFTP方式易失败)，可使用自动dump生成的命令再次进行：
+```bash
+run dumpcmd
+```
+更多功能说明可参考：[**swinfo操作说明(mem-dump功能指导)**](./21-swinfo_Manual_mem_dump_function_synopsis_zh_CN.md)
+
+dump出的img镜像文件分析请参考：[**crash分析ramdump**](./22-Using_crash_to_Analysis_ramdump_zh_CN.md)
+

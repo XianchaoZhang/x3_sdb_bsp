@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.18.1. USB开发指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+    <link rel="next" title="4.3.18.2. USB3.0 TX 电气特性测试" href="20-01-USB3-Tx-Eye_pattern_test.html" />
+    <link rel="prev" title="4.3.18. USB开发调试指南" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">4.3.18. USB开发调试指南</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">4.3.18.1. USB开发指南</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id1">引言</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id2">概述</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#id3">特性</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id4">硬件</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id5">供电</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#vbus">vbus</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#usb-id">usb id管脚</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#id6">内核配置相关</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#usb-class">usb控制器, class驱动等</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#usb-gadget-function">usb gadget, function驱动等</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#otg">otg功能相关</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#id7">设备树配置相关</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id8">USB驱动开发</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#linux-usb">Linux USB驱动框架</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id9">USB Class驱动</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#id10">USB常用调试方法</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id11">常用的USB调试仪器和软件工具</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#id13">USB信号测量</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id14">USB常见问题</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="20-01-USB3-Tx-Eye_pattern_test.html">4.3.18.2. USB3.0 TX 电气特性测试</a></li>
+<li class="toctree-l4"><a class="reference internal" href="20-02-USB-Eye_pattern_test.html">4.3.18.3. USB眼图测试</a></li>
+<li class="toctree-l4"><a class="reference internal" href="21-USB_Phy_Tunning_Guide.html">4.3.18.4. USB Phy常见参数调试</a></li>
+<li class="toctree-l4"><a class="reference internal" href="22-USB_Gadget_User_Guide.html">4.3.18.5. USB端口调试使用指南</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../34-Bluetooth_Driver_Debug_Guide.html">4.3.21. 蓝牙驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3.18. </span>USB开发调试指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.18.1. </span>USB开发指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="4.3.18. USB开发调试指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="20-01-USB3-Tx-Eye_pattern_test.html" class="btn btn-neutral float-right" title="4.3.18.2. USB3.0 TX 电气特性测试" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usb">
+<h1><span class="section-number">4.3.18.1. </span>USB开发指南<a class="headerlink" href="#usb" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2>引言<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<section id="id2">
+<h3>概述<a class="headerlink" href="#id2" title="永久链接至标题"></a></h3>
+<p>本文主要介绍x3m, x3e, j3等芯片usb2.0/3.0控制器和物理层的特性, USB硬件电路,
+Linux平台驱动开发和调试方法, 以及其他一些参考信息等。</p>
+</section>
+</section>
+<section id="id3">
+<h2>特性<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>1个usb控制器, 选用新思科技的dwc3控制器和phy, 控制器为dwc3 3.30b版本。</p></li>
+<li><p>支持usb2.0(480Mbps), usb3.0(5Gbps)等速率。</p></li>
+<li><p>支持作为host, device或者drd静态双角色装置。</p></li>
+<li><p>主机兼容xhci标准。</p></li>
+<li><p>可通过指定gpio管脚(65:
+sd0_wrp)实现otg功能。即可通过id_pin电平来自动切换主从模式。(*
+相当于otg-like装置, 可自动切换主从模式, 但不支持HNP, SRP等otg的标准协议。)</p></li>
+<li><p>bootrom支持U盘启动功能。</p></li>
+<li><p>支持Link Power Management(LPM)协议, 在传输过程中可以进入U1, U2等状态省电。</p></li>
+<li><p>作为设备, 总共有9个端点(包括ep0), 其中7个可以作为对应function的端点。</p></li>
+<li><p>支持内部DMA, 并且支持scatter/gather功能。</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>硬件<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>参考板硬件主要有DVB(参考大板)， SDB(生态小板)等形态。</p>
+<ul class="simple">
+<li><p><strong>DVB开发板</strong>:</p></li>
+</ul>
+<p><img alt="Generated" src="../../../_images/d1a703788dcadd110b519afb59c39c07.png" /></p>
+<ul class="simple">
+<li><p><strong>SDB生态板</strong>:</p></li>
+</ul>
+<p><img alt="Generated" src="../../../_images/07b4ad2708e7b0fcd2039626abdf837b.png" /></p>
+<p>硬件设计主要涉及供电, vbus, id pin, 数据线, hub, switch等模块。</p>
+<p>以下主要以DVB做为例子, 做一些描述, 供参考。</p>
+<section id="id5">
+<h3>供电<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p><img alt="Generated" src="../../../_images/ac2db470637b3e1f500e1699f539a2d3.png" /></p>
+<p>芯片内usb控制器和phy主要是3路供电,</p>
+<p>VDD_USB - 0.8v 数字部分</p>
+<p>VDD_USB_VP - 0.8v 数字部分</p>
+<p>VDD_USB_VPH - 3.3v 模拟部分(如phy)</p>
+<p>*注1, dvb开发板目前仅0.8v供电可通过pmic可控制掉电, 3.3v无法掉电.</p>
+<p>客户实际板子可分别控制,
+针对休眠唤醒功能可以省更多电。(3.3v电掉电的休眠唤醒方案得调试.)</p>
+<p>*注2, DVB开发板使用的是PMIC芯片进行对应管脚的控制,
+驱动需要使用对应的regulator驱动进行控制。 故客户如果采用的不是和DVB一样的方案,
+如如果采用其他PMIC, 其他管脚, 或者DCDC接插件等, 需要在设备树中正确配置。
+否则会遇到usb无法使用的情况, 最常见的是-110各种超时错误。</p>
+<p>该类问题会在后续的FAQ文档中涉及。</p>
+</section>
+<section id="vbus">
+<h3>vbus<a class="headerlink" href="#vbus" title="永久链接至标题"></a></h3>
+<ol>
+<li><p>作为主机</p>
+<p>vbus是向外给接入的设备供电, dvb开发板直接由外围电路直接控制.</p>
+<p>例如,</p>
+<p>micro-ab口的vbus和usb id管脚相关联, 即usb_id管脚拉低, 是一根otg线材时, &gt; &gt; 就会开启vbus供电。</p>
+<p><img alt="Generated" src="../../../_images/846b79e37d968628d586500ab498996c.png" /></p>
+<p>而对于另一路通过hub扩展出来的2个type-a口, 则是通过拨码开关, 控制选择该通道后,
+使能该通道的vbus供电。</p>
+<p><img alt="Generated" src="../../../_images/8c2156207b0361f6049dc97a565b6b60.png" /></p>
+<p><img alt="Generated" src="../../../_images/4ffd4aa6687aef226db63184ee5a3a45.png" /></p>
+<p><img alt="Generated" src="../../../_images/de1cbee2f3734fbc357c49391216f915.png" /></p>
+<p><img alt="Generated" src="../../../_images/665ac9a2999d2b2a14d6015dab820f7f.png" /></p>
+<p>总之, 作为主机, vbus供电可以由外围电路设计完成, 芯片可以添加一些管脚控制,
+也可以完全由外围电路控制。</p>
+<p>具体设计取决于客户自己的硬件设计。</p>
+</li>
+<li><p>作为设备</p>
+<p>x3可以作为自供电, vbus供电或者混合/电池供电的设备。但vbus还是需要接近芯片内部,
+作为热插拔行为的判断。</p>
+<p>由于芯片改动usb phy的vbus管脚不出球了， 故需要根据硬件勘误手册描述,
+将vbus接入x3一根gpio管脚, 作为热插拔行为的识别。</p>
+<p>具体参考硬件文档的:</p>
+<p>软件patch可参考:</p>
+<p><img alt="Generated" src="../../../_images/e00aee344ded8e614fea2fe8c4da830b.png" /></p>
+</li>
+</ol>
+</section>
+<section id="usb-id">
+<h3>usb id管脚<a class="headerlink" href="#usb-id" title="永久链接至标题"></a></h3>
+<p>x3系列芯片, 选用的dwc3控制器是一个drd (dual role device), 即静态双角色的控制器,</p>
+<p>并非真正的otg控制器。故x3系列芯片能实现的是otg-like的功能, 即可以通过usb
+id管脚的电平高低, 软件/驱动来做控制器的角色切换。简单来说, 即</p>
+<p>usb_id 低电平 - 主机模式</p>
+<p>usb_id 高电平 - 设备模式</p>
+<p><img alt="Generated" src="../../../_images/d9e11dae50a318c8bd0937e026b85a45.png" /></p>
+<p>驱动: 使用的extcon-usb-gpio驱动, 源码请参考drivers/extcon/extcon-usb-gpio.c</p>
+</section>
+</section>
+<section id="id6">
+<h2>内核配置相关<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>Linux为4.14.** 长期支持版本,
+但其中usb部分已经更新到了5.12.**版本之后(截至2022年1月)。其中原因主要是为了解决usb
+isoc传输失败的问题。例如如下补丁:</p>
+<p><a class="reference external" href="https://patchwork.kernel.org/project/linux-usb/cover/cover.1541648784.git.thinhn&#64;synopsys.com/">[v5,0/3] usb: dwc3: Workaround isoc start_transfer failure - Patchwork
+(kernel.org)</a></p>
+<p>usb的内核相关配置和标准的Linux内核配置方式一样,
+都是采用menuconfig等界面进行配置。比如,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 导入环境变量</span>
+<span class="nb">source</span> build/envsetup.sh
+lunch <span class="m">6</span>     <span class="c1"># xj3 debug版本</span>
+
+<span class="c1"># debug版本</span>
+make <span class="nv">CROSS_COMPILE</span><span class="o">=</span>aarch64-linux-gnu- <span class="nv">ARCH</span><span class="o">=</span>arm64 xj3_debug_defconfig
+make <span class="nv">CROSS_COMPILE</span><span class="o">=</span>aarch64-linux-gnu- <span class="nv">ARCH</span><span class="o">=</span>arm64 menuconfig
+
+<span class="c1"># release版本</span>
+make <span class="nv">CROSS_COMPILE</span><span class="o">=</span>aarch64-linux-gnu- <span class="nv">ARCH</span><span class="o">=</span>arm64 xj3_perf_defconfig
+make <span class="nv">CROSS_COMPILE</span><span class="o">=</span>aarch64-linux-gnu- <span class="nv">ARCH</span><span class="o">=</span>arm64 menuconfig
+</pre></div>
+</div>
+<p>也可以使用内核中的mk_kernel.sh脚本来进行更简便的配置</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 导入环境变量</span>
+<span class="nb">source</span> build/envsetup.sh
+lunch <span class="m">6</span>     <span class="c1"># xj3 debug版本</span>
+
+<span class="c1"># debug版本</span>
+./mk_kernel.sh -M
+
+<span class="c1"># release版本</span>
+./mk_kernel.sh -P
+
+<span class="c1"># 根据需要修改相应配置项后可保存后, 并拷贝.config文件到arch/arm64/configs目录下对应的defconfig文件</span>
+</pre></div>
+</div>
+<p>主要配置项及常用开启的项目 大致如下: (高亮的是一些常见主要的配置项)</p>
+<section id="usb-class">
+<h3>usb控制器, class驱动等<a class="headerlink" href="#usb-class" title="永久链接至标题"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>--- USB support
+&lt;*&gt;   Support <span class="k">for</span> Host-side USB
+<span class="o">[</span> <span class="o">]</span>   USB announce new devices
+      *** Miscellaneous USB options ***
+<span class="o">[</span>*<span class="o">]</span>   Enable USB persist by default
+<span class="o">[</span> <span class="o">]</span>   Limit USB device initialization to only a few retries
+<span class="o">[</span> <span class="o">]</span>   Dynamic USB minor allocation
+<span class="o">[</span>*<span class="o">]</span>   OTG support
+<span class="o">(</span><span class="m">2</span><span class="o">)</span>   Default autosuspend delay
+&lt; &gt;   USB Monitor
+      *** USB Host Controller Drivers ***
+&lt; &gt;   Cypress C67x00 HCD support
+&lt;*&gt;   xHCI HCD <span class="o">(</span>USB <span class="m">3</span>.0<span class="o">)</span> support
+<span class="o">[</span> <span class="o">]</span>     xHCI support <span class="k">for</span> debug capability
+&lt; &gt;     Support <span class="k">for</span> additional Renesas xHCI controller with firmware
+-*-     Generic xHCI driver <span class="k">for</span> a platform device
+......
+<span class="o">[</span> <span class="o">]</span>   HCD <span class="nb">test</span> mode support
+      *** USB Device Class drivers ***
+&lt; &gt;   USB Modem <span class="o">(</span>CDC ACM<span class="o">)</span> support
+&lt; &gt;   USB Printer support
+&lt; &gt;   USB Wireless Device Management support
+&lt; &gt;   USB Test and Measurement Class support
+      *** NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may ***
+      *** also be needed<span class="p">;</span> see USB_STORAGE Help <span class="k">for</span> more info ***
+&lt;*&gt;   USB Mass Storage support
+<span class="o">[</span> <span class="o">]</span>     USB Mass Storage verbose debug
+......
+&lt;*&gt;     USB Attached SCSI
+......
+&lt;*&gt;   DesignWare USB3 DRD Core Support
+        DWC3 Mode Selection <span class="o">(</span>Dual Role mode<span class="o">)</span>  ---&gt;
+        *** Platform Glue Driver Support ***
+&lt;*&gt;     Generic OF Simple Glue Layer
+&lt;M&gt;     Hobot DWC3 Extcon Vbus GPIO Detect Freature
+&lt; &gt;   DesignWare USB2 DRD Core Support
+&lt; &gt;   ChipIdea Highspeed Dual Role Controller
+&lt; &gt;   NXP ISP <span class="m">1760</span>/1761 support
+      *** USB port drivers ***
+&lt; &gt;   USB Serial Converter support  ----
+      *** USB Miscellaneous drivers ***
+&lt; &gt;   USB testing driver
+&lt; &gt;   USB EHSET Test Fixture driver
+&lt; &gt;   USB Link Layer Test drive
+      USB Physical Layer drivers  ---&gt;
+&lt;*&gt;   USB Gadget Support  ---&gt;
+</pre></div>
+</div>
+</section>
+<section id="usb-gadget-function">
+<h3>usb gadget, function驱动等<a class="headerlink" href="#usb-gadget-function" title="永久链接至标题"></a></h3>
+<p>作为设备, 传统的legacy驱动方式都较长时间不更新，大部分只能作为参考(如g_audio.ko,
+g_webcam.ko)</p>
+<p>而比较常用的都是采用configfs/functionfs进行单一/复合设备的配置。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>--- USB Gadget Support
+<span class="o">[</span> <span class="o">]</span>   Debugging messages <span class="o">(</span>DEVELOPMENT<span class="o">)</span>
+<span class="o">[</span> <span class="o">]</span>   Debugging information files <span class="o">(</span>DEVELOPMENT<span class="o">)</span>
+<span class="o">[</span> <span class="o">]</span>   Debugging information files <span class="k">in</span> debugfs <span class="o">(</span>DEVELOPMENT<span class="o">)</span>
+<span class="o">(</span><span class="m">2</span><span class="o">)</span>   Maximum VBUS Power usage <span class="o">(</span><span class="m">2</span>-500 mA<span class="o">)</span>
+<span class="o">(</span><span class="m">8</span><span class="o">)</span>   Number of storage pipeline buffers
+<span class="o">[</span> <span class="o">]</span>   Serial gadget console support
+USB Peripheral Controller  ---&gt;
+<span class="o">[</span>*<span class="o">]</span>   Support Customer Specific Extension Unit Request
+&lt;M&gt;   USB Gadget functions configurable through configfs
+<span class="o">[</span>*<span class="o">]</span>     Generic serial bulk <span class="k">in</span>/out
+<span class="o">[</span>*<span class="o">]</span>     Abstract Control Model <span class="o">(</span>CDC ACM<span class="o">)</span>
+<span class="o">[</span> <span class="o">]</span>     Object Exchange Model <span class="o">(</span>CDC OBEX<span class="o">)</span>
+<span class="o">[</span> <span class="o">]</span>     Network Control Model <span class="o">(</span>CDC NCM<span class="o">)</span>
+<span class="o">[</span> <span class="o">]</span>     Ethernet Control Model <span class="o">(</span>CDC ECM<span class="o">)</span>
+<span class="o">[</span> <span class="o">]</span>     Ethernet Control Model <span class="o">(</span>CDC ECM<span class="o">)</span> subset
+<span class="o">[</span> <span class="o">]</span>     RNDIS
+<span class="o">[</span> <span class="o">]</span>     Ethernet Emulation Model <span class="o">(</span>EEM<span class="o">)</span>
+<span class="o">[</span>*<span class="o">]</span>     Mass storage
+<span class="o">[</span>*<span class="o">]</span>     Loopback and sourcesink <span class="k">function</span> <span class="o">(</span><span class="k">for</span> testing<span class="o">)</span>
+<span class="o">[</span>*<span class="o">]</span>     Function filesystem <span class="o">(</span>FunctionFS<span class="o">)</span>
+<span class="o">[</span>*<span class="o">]</span>     Audio Class <span class="m">1</span>.0
+<span class="o">[</span> <span class="o">]</span>     Audio Class <span class="m">1</span>.0 <span class="o">(</span>legacy implementation<span class="o">)</span>
+<span class="o">[</span>*<span class="o">]</span>     Audio Class <span class="m">2</span>.0
+<span class="o">[</span> <span class="o">]</span>     MIDI <span class="k">function</span>
+<span class="o">[</span>*<span class="o">]</span>     HID <span class="k">function</span>
+<span class="o">[</span>*<span class="o">]</span>     USB Webcam <span class="k">function</span>
+<span class="o">[</span> <span class="o">]</span>     Printer <span class="k">function</span>
+USB Gadget precomposed configurations  ---&gt;
+    &lt;M&gt; Gadget Zero <span class="o">(</span>DEVELOPMENT<span class="o">)</span>
+    <span class="o">[</span> <span class="o">]</span>   HNP Test Device
+    &lt;M&gt; Audio Gadget
+    <span class="o">[</span> <span class="o">]</span>   UAC <span class="m">1</span>.0
+    &lt;M&gt; Ethernet Gadget <span class="o">(</span>with CDC Ethernet support<span class="o">)</span>
+    <span class="o">[</span>*<span class="o">]</span>   RNDIS support
+    <span class="o">[</span> <span class="o">]</span>   Ethernet Emulation Model <span class="o">(</span>EEM<span class="o">)</span> support
+    &lt; &gt; Network Control Model <span class="o">(</span>NCM<span class="o">)</span> support
+    &lt;M&gt; Gadget Filesystem
+    &lt;M&gt; Function Filesystem
+    <span class="o">[</span>*<span class="o">]</span>   Include configuration with CDC ECM <span class="o">(</span>Ethernet<span class="o">)</span>
+    <span class="o">[</span>*<span class="o">]</span>   Include configuration with RNDIS <span class="o">(</span>Ethernet<span class="o">)</span>
+    <span class="o">[</span> <span class="o">]</span>   Include <span class="s1">&#39;pure&#39;</span> configuration
+    &lt;M&gt; Mass Storage Gadget
+    &lt;M&gt; Serial Gadget <span class="o">(</span>with CDC ACM and CDC OBEX support<span class="o">)</span>
+    &lt; &gt; MIDI Gadget
+    &lt; &gt; Printer Gadget
+    &lt;M&gt; CDC Composite Device <span class="o">(</span>Ethernet and ACM<span class="o">)</span>
+    &lt;M&gt; CDC Composite Device <span class="o">(</span>ACM and mass storage<span class="o">)</span>
+    &lt;M&gt; Multifunction Composite Gadget
+    <span class="o">[</span>*<span class="o">]</span>   RNDIS + CDC Serial + Storage configuration
+    <span class="o">[</span>*<span class="o">]</span>   CDC Ethernet + CDC Serial + Storage configuration
+    &lt;M&gt; HID Gadget
+    &lt; &gt; EHCI Debug Device Gadget
+    &lt;M&gt; USB Webcam Gadget
+    &lt;M&gt; Horbot bulk channel transfer support
+    &lt; &gt; USB Raw Gadget
+</pre></div>
+</div>
+</section>
+<section id="otg">
+<h3>otg功能相关<a class="headerlink" href="#otg" title="永久链接至标题"></a></h3>
+<p>x3系列芯片采用的是dwc3 drd双角色控制器,
+并不是标准的otg控制器。故实现的otg-like的主从角色切换驱动,
+是基于gpio中断的驱动代码。</p>
+<p>代码路径为: drivers/extcon/extcon-usb-gpio.c</p>
+<p>内核配置路径为</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Device Drivers  ---&gt;
+      &lt;*&gt; External Connector Class <span class="o">(</span>extcon<span class="o">)</span> support  ---&gt;
+            &lt;*&gt;   USB GPIO extcon support
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id7">
+<h2>设备树配置相关<a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<p>和usb相关的配置主要集中在hobot-xj3.dtsi等文件中。</p>
+<p>包括驱动, 寄存器, 管脚, 时钟, 中断, 及各种属性等，详细见下图。</p>
+<p><img alt="Generated" src="../../../_images/6bed88b8d84907b920c14d3582b4d859.png" /></p>
+<p>其他特定板机相关的配置在对应的dts文件中, 比如:</p>
+<ul class="simple">
+<li><p><strong>dvb开发板 (hobot-xj3-xvb.dtsi, hobot-x3-dvb.dts)</strong></p></li>
+</ul>
+<p><img alt="Generated" src="../../../_images/ba10596cfb30d2b0d7b89d26712b2ea0.png" /></p>
+<p><img alt="Generated" src="../../../_images/10391593aa5434e151b22c544b025316.png" /></p>
+<ul class="simple">
+<li><p><strong>sdb开发板 (hobot-xj3-xvb.dtsi, hobot-x3-sdb.dts)</strong></p></li>
+</ul>
+<p><img alt="Generated" src="../../../_images/f2378e259b590ff3d4fd663a1050bffd.png" /></p>
+<p>总之, 通用部分在共用的dtsi中, 板级相关的在对应的dts文件中。</p>
+<p>开发者需要根据实际板子的设计进行相应配置。</p>
+<p>其余usb相关的各种属性(如很多qurik属性) 需根据实际情况配置。</p>
+<p>*注1, x3系列芯片目前usb phy的配置未整理和纳入设备树/代码管理, 即usb
+phy目前用的是芯片上电后的默认参数。</p>
+<p>*注2,
+dwc3设备树属性等配置可参考文档Documentation/devicetree/bindings/usb/dwc3.txt</p>
+</section>
+<section id="id8">
+<h2>USB驱动开发<a class="headerlink" href="#id8" title="永久链接至标题"></a></h2>
+<section id="linux-usb">
+<h3>Linux USB驱动框架<a class="headerlink" href="#linux-usb" title="永久链接至标题"></a></h3>
+<p>usb驱动框架包含主机端和设备端两部分,</p>
+<p>左侧为主机侧的软件/硬件栈, 从上到下依次包括应用程序, 文件系统, class驱动
+(如存储, hid, 网络等), usb核心层, 控制器驱动(xhci, dwc3), 控制器硬件。</p>
+<p>右侧为设备端的软件/硬件栈, 从上到下一次包括应用程序, 文件系统,
+function驱动(包括legacy, configfs, functionfs等形式), udc/gadget核心层,
+dwc3控制器驱动, 控制器硬件。</p>
+<p><img alt="Generated" src="../../../_images/3d62b80737419977e1ff02aa79799c3e.jpg" /></p>
+<p><strong>USB驱动代码</strong></p>
+<p>如上图所示, usb驱动代码包括dwc3控制器驱动代码, usb core, udc core,
+主机class驱动, 设备function驱动等。</p>
+<p>代码在kernel/drivers/usb目录下, 相关目录如下</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>usb
+├── class                     <span class="c1"># 一部分class驱动, 如cdc-acm等</span>
+├── common                    <span class="c1"># usb一些通用，帮助代码及函数</span>
+├── core                      <span class="c1"># 主机侧usb core核心层代码, 如hub.c, usb.c, devio.c等</span>
+├── dwc3                      <span class="c1"># dwc3控制器代码</span>
+├── gadget                    <span class="c1"># 设备端装置代码, 包括udc, function, legacy等代码</span>
+│   ├── <span class="k">function</span>
+│   ├── legacy
+│   └── udc                   <span class="c1"># 包含udc/core.c等公用代码及其他的usb控制器的代码</span>
+├── host                      <span class="c1"># 主机控制器代码, 如ehci, ohci, uhci, xhci等等</span>
+├── Kconfig
+├── Makefile
+├── misc                      <span class="c1"># 一些杂项主机侧class驱动, 如usbtest及其他特殊驱动等</span>
+├── mon                       <span class="c1"># usb monitor模块代码, 可用于调试和监测usb主从传输信息</span>
+├── phy                       <span class="c1"># 通用及各类phy的代码(里面无synopsys phy的代码)</span>
+├── README
+├── serial                    <span class="c1"># 各类串口转usb驱动, 如ch341, cp210x等</span>
+├── storage                   <span class="c1"># 存储类通用及专用代码</span>
+├── usb-skeleton.c            <span class="c1"># usb class驱动skeleton例子</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>synopsys dwc3 控制器源码
+dwc3/
+├── core.c                   <span class="c1"># dwc3核心源码</span>
+├── core.h
+├── debugfs.c                <span class="c1"># 调试文件系统源码</span>
+├── debug.h
+├── drd.c                    <span class="c1"># drd双角色控制方面代码</span>
+├── dwc3-exynos.c
+├── dwc3-haps.c
+├── dwc3-imx8mp.c
+├── dwc3-keystone.c
+├── dwc3-meson-g12a.c
+├── dwc3-of-simple.c         <span class="c1"># &quot;Generic OF Simple Glue Layer&quot;控制器通用封装胶水代码</span>
+├── dwc3-omap.c
+├── dwc3-pci.c
+├── dwc3-powersave.c         <span class="c1"># dwc3 hobot低功耗相关</span>
+├── dwc3-qcom.c
+├── dwc3-st.c
+├── dwc3-xilinx.c
+├── ep0.c                    <span class="c1"># ep0控制端点相关</span>
+├── extcon-vbus-gpio.c       <span class="c1"># vbus接gpio控制设备装置热插拔行为</span>
+├── gadget.c                 <span class="c1"># dwc3控制器做设备核心代码</span>
+├── gadget.h
+├── host.c                   <span class="c1"># dwc3控制器做主机核心代码</span>
+├── io.h
+├── Kconfig
+├── Makefile
+├── trace.c                  <span class="c1"># ftrace调试跟踪方面</span>
+├── trace.h
+└── ulpi.c
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>usb gadget比较多, 包括通用的composite, config, configfs, epautoconfig等代码, 也包括udc, <span class="k">function</span>, legacy gadget等代码。 大致列了些如下,
+
+gadget/
+├── composite.c              <span class="c1"># 复合设备抽象层代码</span>
+├── config.c                 <span class="c1"># usb描述符相关一些帮助函数</span>
+├── configfs.c               <span class="c1"># configfs文件系统主要代码</span>
+├── epautoconf.c             <span class="c1"># usb端点分配及操作, 抽象层代码</span>
+├── functions.c              <span class="c1"># function通用操作部分代码, 如注册销毁等</span>
+├── <span class="k">function</span>                 <span class="c1"># 具体的功能实现</span>
+│   ├── f_acm.c
+│   ├── f_ecm.c
+│   ├── f_eem.c
+│   ├── f_fs.c               <span class="c1"># functionfs 抽象层代码, 实现用户态对该文件系统的操作</span>
+│   ├── f_hid.c
+│   ├── f_loopback.c         <span class="c1"># 回环测试等功能, 如g_zero(usbtest)功能会用到</span>
+│   ├── f_mass_storage.c     <span class="c1"># 虚拟存储装置function层代码</span>
+│   ├── f_midi.c
+│   ├── f_ncm.c
+│   ├── f_obex.c
+│   ├── f_phonet.c
+│   ├── f_printer.c
+│   ├── f_rndis.c            <span class="c1"># rndis虚拟网卡功能驱动</span>
+│   ├── f_serial.c
+│   ├── f_sourcesink.c
+│   ├── f_subset.c           <span class="c1"># &quot;CDC Subset&quot;虚拟以太网驱动</span>
+│   ├── f_tcm.c
+│   ├── f_uac1.c             <span class="c1"># uac1版本function驱动</span>
+│   ├── f_uac1_legacy.c
+│   ├── f_uac2.c             <span class="c1"># uac2版本function驱动</span>
+│   ├── f_uvc.c              <span class="c1"># uvc function驱动</span>
+│   ├── rndis.c              <span class="c1"># rndis协议层主要实现</span>
+│   ├── storage_common.c     <span class="c1"># 存储部分通用实现</span>
+│   ├── u_audio.c            <span class="c1"># uac一些帮助工具代码</span>
+│   ├── u_ether.c            <span class="c1"># 虚拟网卡的帮助和工具类代码</span>
+│   ├── u_serial.c
+│   ├── uvc_configfs.c       <span class="c1"># uvc configfs配置相关比分代码, 如各种分辨率,帧率,格式等</span>
+│   ├── uvc_queue.c          <span class="c1"># uvc queue即队列管理代码(配合vb2_queue, v4l2_buffer等)</span>
+│   ├── uvc_v4l2.c           <span class="c1"># uvc v4l2操作相关代码实现(如open, poll, mmap, qbuf等)</span>
+│   ├── uvc_video.c          <span class="c1"># uvc视频处理方面核心代码, 如数据编码, 数据传输等</span>
+├── legacy                   <span class="c1"># legacy 一些传统的gadget装置实现源码目录</span>
+│   ├── audio.c
+│   ├── ether.c
+│   ├── hid.c
+│   ├── mass_storage.c
+│   ├── serial.c
+│   ├── webcam.c             <span class="c1"># uvc相机实现</span>
+│   └── zero.c               <span class="c1"># 配合主机侧usbtest实现测试验证功能</span>
+├── udc
+│   ├── core.c               <span class="c1"># udc 核心层的一些代码和实现, 各种gadget, udc, ep操作等</span>
+│   ├── dummy_hcd.c          <span class="c1"># 空的/模拟的控制器驱动, 纯软件,虚假的</span>
+│   ├── trace.c              <span class="c1"># udc ftrace相关</span>
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h3>USB Class驱动<a class="headerlink" href="#id9" title="永久链接至标题"></a></h3>
+<p>默认xj3_debug_defconfig默认已开启常用Hub, Mass Storage, HID, UVC, UAC等驱动，
+以及特定的</p>
+<p>USB Serial和USB Network Adapter等设备。</p>
+<p>开发者如需支持特定设备, 可自行开启/开发对应的class驱动。</p>
+<section id="usb-gadget">
+<h4>USB Gadget驱动<a class="headerlink" href="#usb-gadget" title="永久链接至标题"></a></h4>
+<p>目前usb gadget设备有两种形态,</p>
+<ul class="simple">
+<li><p>legacy设备, 如g_webcam, g_audio, g_mass_storage, g_zero等</p></li>
+<li><p>configfs配置的复合设备</p></li>
+</ul>
+<p>legacy设备是以前传统的gadget驱动方式,
+相对简单和陈旧。不如最新的configfs系统方便, 故目前不太常用, 常见一些例子如:</p>
+</section>
+<section id="adb">
+<h4>adb设备<a class="headerlink" href="#adb" title="永久链接至标题"></a></h4>
+<p>目前x3系列芯片开机自启动为adb模式. 用户可参考init.rc启动脚本. 如需修改,
+可移除对应命令.</p>
+<p>用户也可以利用service命令进行adb服务的控制.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service adbd stop         <span class="c1"># adbd服务停止</span>
+
+service adbd start        <span class="c1"># adbd服务开启</span>
+
+service adbd restart      <span class="c1"># adbd服务重启</span>
+</pre></div>
+</div>
+</section>
+<section id="g-mass-storage">
+<h4>虚拟磁盘(g_mass_storage)<a class="headerlink" href="#g-mass-storage" title="永久链接至标题"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service adbd stop         <span class="c1"># 开机默认会起adb设备, 需关闭</span>
+
+dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>/userdata/mass_storage.img <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span><span class="m">128</span>
+sync
+losetup -f /userdata/mass_storage.img
+losetup -a         <span class="c1"># 查看匹配的是哪个/dev/loop设备</span>
+
+modprobe g_mass_storage <span class="nv">file</span><span class="o">=</span>/dev/loop0 <span class="nv">removable</span><span class="o">=</span><span class="m">1</span>     <span class="c1"># 加载驱动, 启动虚拟磁盘设备</span>
+</pre></div>
+</div>
+</section>
+<section id="g-ether">
+<h4>虚拟网络(g_ether)<a class="headerlink" href="#g-ether" title="永久链接至标题"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>开发板端:
+service adbd stop         <span class="c1"># 开机默认会起adb设备, 需关闭</span>
+
+modprobe g_ether
+ifconfig usb0 <span class="m">192</span>.168.100.100
+
+PC端:
+ubuntu电脑及虚拟机可以直接配置ip使用
+
+win10电脑目前需加载特定驱动识别. <span class="o">(</span>故推荐使用configfs进行配置, configfs的rndis无需特定驱动, win10可直接识别<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="configfs">
+<h4>configfs配置复合设备<a class="headerlink" href="#configfs" title="永久链接至标题"></a></h4>
+<p>目前更常见的方法是使用configfs文件系统进行复合设备的配置， x3
+sdk包里面有制作了现成的脚本usb-gadget.sh, 客户可以直接使用,
+或基于此继续开发。详细脚本可以查看help信息。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3dvbx3-samsung2G-2666:~# /etc/init.d/usb-gadget.sh -h
+Detecting platform:
+ board : Hobot X3 SOC MP DVB
+ udc   :
+Usage: /etc/init.d/usb-gadget.sh <span class="o">{</span>start<span class="p">|</span>stop<span class="p">|</span>restart<span class="o">}</span> <span class="o">[</span>options<span class="o">]</span>
+ options:
+ detail gadget-composite config, using .usb/.default-config <span class="k">in</span> default
+      adb                         launch adbd
+      msd                         run as gadget mass storage device
+      hid                         run as hid gadget
+      rndis                       run as rndis gadget
+      ecm                         run as cdc ether gadget
+      uvc                         run as uvc gadget
+      uac1                        usb audio class specification <span class="m">1</span>
+      uac2                        usb audio class specification <span class="m">2</span>
+      uvc-hid                     uvc + hid composite gadget
+      uvc-uac1                    uvc + uac1 composite gadget
+      uvc-uac2                    uvc + uac2 composite gadget
+      uvc-hid-uac1                uvc + hid + uac1 composite gadget
+      uvc-hid-uac2                uvc + hid + uac2 composite gadget
+      uvc-rndis                   uvc + rndis composite gadget
+      uvc-ecm                     uvc + cdc ether composite gadget
+      uvc-acm                     uvc + acm<span class="o">(</span>serial<span class="o">)</span> composite gadget
+      uvc-rndis-uac1              uvc + rndis + uac1 composite gadget
+      uvc-rndis-uac2              uvc + rndis + uac2 composite gadget
+      uvc-ecm-uac1                uvc + ecm + uac1 composite gadget
+      uvc-ecm-uac2                uvc + ecm + uac2 composite gadget
+      rndis-hid                   rndis + hid composite gadget
+      rndis-uac1                  rndis + uac1 composite gadget
+      msd-uac1                    msd + uac1 composite gadget
+      hid-uac1                    hid + uac1 composite gadget
+</pre></div>
+</div>
+<p>常见例子</p>
+<ol>
+<li><p><strong>虚拟磁盘</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service adbd stop
+
+/etc/init.d/usb-gadget.sh start msd
+</pre></div>
+</div>
+<p>注: 脚本默认创建的是一个128MB的磁盘文件, 格式化成了vfat格式,
+故接上PC即可看到该虚拟磁盘。</p>
+<p>另外有一个关于虚拟磁盘关于x3和PC间的同步的问题。</p>
+<ul class="simple">
+<li><p>x3更新文件到PC</p></li>
+</ul>
+<p>更新完文件需热插拔下usb线, PC才能识别最新的文件.</p>
+<ul class="simple">
+<li><p>PC更新文件到x3</p></li>
+</ul>
+<p>x3侧需重新挂载文件系统才行.</p>
+<p>即usb虚拟磁盘设备, 无法做到两边系统互相更新并同步, 仅支持一个系统的操作。</p>
+</li>
+<li><p><strong>虚拟网卡</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># rndis驱动, 建议win10主机(自带驱动, 无需安装驱动)</span>
+service adbd stop
+
+/etc/init.d/usb-gadget.sh start rndis
+ifconig usb0 <span class="m">192</span>.168.100.100
+
+
+<span class="c1"># win10/ubuntu 配置好同网段ip后, 互相既能ping通.</span>
+
+<span class="c1"># ecm驱动,  建议ubuntu主机</span>
+service adbd stop
+
+/etc/init.d/usb-gadget.sh start ecm
+ifconig usb0 <span class="m">192</span>.168.100.100
+</pre></div>
+</div>
+</li>
+<li><p><strong>UAC虚拟声卡</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service adbd stop
+
+/etc/init.d/usb-gadget.sh start uac2
+
+aplay -l     <span class="c1"># 查看playback声卡(默认usb-gadget.sh脚本仅做了playback一路声卡, 没有做采集)</span>
+card <span class="m">0</span>: UAC2Gadget <span class="o">[</span>UAC2_Gadget<span class="o">]</span>, device <span class="m">0</span>: UAC2 PCM <span class="o">[</span>UAC2 PCM<span class="o">]</span>
+  Subdevices: <span class="m">1</span>/1
+  Subdevice <span class="c1">#0: subdevice #0</span>
+
+aplay -Dhw:0,0 /userdata/hero_48khz.wav        <span class="c1"># 播放一个本地48khz音频文件.</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>USB Webcam</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service adbd stop
+
+/etc/init.d/usb-gadget.sh start uvc         <span class="c1"># bulk模式, uvc-gadget</span>
+
+usb_webcam -e <span class="m">2</span> -t <span class="m">9</span> -b                     <span class="c1"># pattern bulk模式 (兼容usb2.0, usb3.0[burst 9]). -e 为实际sensor/pattern选项, 参考help信息</span>
+
+--------------------------------------------------------
+service adbd stop
+
+/etc/init.d/usb-gadget.sh start uvc isoc    <span class="c1"># isoc模式</span>
+
+usb_webcam -e <span class="m">2</span> -m <span class="m">2</span> -t <span class="m">10</span>                  <span class="c1"># pattern usb2.0 isoc模式 (最新版本命令行兼容usb2.0, usb3.0[burst 10])</span>
+</pre></div>
+</div>
+<p>主机侧可以使用win10自带相机, Potplayer, 飞书, 企业微信等播放器,
+视频聊天软件播放。(推荐使用Potplayer进行开发验证, 可选择格式分辨率等.)</p>
+</li>
+<li><p><strong>复合设备</strong></p>
+<p>具体可参考usb-gadget.sh的help打印, 以下介绍一些常见复合设备方式。</p>
+<ul class="simple">
+<li><p><strong>uvc-rndis和uvc-ecm</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>service adbd stop
+
+/etc/init.d/usb-gadget.sh start uvc-rndis isoc
+
+ifconfig usb0 <span class="m">192</span>.168.100.100
+
+usb_webcam -e <span class="m">2</span> -m <span class="m">2</span>         <span class="c1"># usb2.0 isoc模式</span>
+
+<span class="c1"># win10主机可识别到虚拟网卡和uvc相机两个设备, 并可独立操作.</span>
+-------------------------------------------------------
+service adbd stop
+
+/etc/init.d/usb-gadget.sh start uvc-ecm isoc
+
+ifconfig usb0 <span class="m">192</span>.168.100.100
+
+usb_webcam -e <span class="m">2</span> -m <span class="m">2</span>         <span class="c1"># usb2.0 isoc模式</span>
+
+<span class="c1"># ubuntu/android等Linux主机可识别到虚拟网卡和uvc相机两个设备, 并独立操作.</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>uvc-uac2-rndis</strong></p></li>
+</ul>
+<p>可直接参考运行uvc-uac2-rndis.sh脚本. 可作为参考.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+
+<span class="c1"># insmod alsa driver</span>
+modprobe ac108_driver
+modprobe ac101
+modprobe hobot-i2s-dma
+modprobe hobot-cpudai <span class="nv">i2s_ms</span><span class="o">=</span><span class="m">1</span>
+modprobe hobot-snd-96 <span class="nv">snd_card</span><span class="o">=</span><span class="m">0</span>
+
+<span class="c1"># launch uvc + uac2 + rndis driver in isoc mode</span>
+service adbd stop
+/etc/init.d/usb-gadget.sh start uvc-rndis-uac2 isoc
+
+<span class="c1"># config usb0 ip address</span>
+ifconfig usb0 <span class="m">192</span>.168.100.100
+
+<span class="c1"># audio application</span>
+uac-gadget --only-uac-micphone <span class="p">&amp;</span>
+
+<span class="c1"># only usb2.0 mode (3.0 isoc need below command)</span>
+<span class="c1"># usb_webcam -e 3 -t 10</span>
+usb_webcam -e <span class="m">3</span> -m <span class="m">2</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+</section>
+<section id="id10">
+<h2>USB常用调试方法<a class="headerlink" href="#id10" title="永久链接至标题"></a></h2>
+<section id="id11">
+<h3>常用的USB调试仪器和软件工具<a class="headerlink" href="#id11" title="永久链接至标题"></a></h3>
+<ul class="simple">
+<li><p>万用表: 用于简单的电压测试, 如: USB VBUS, OTG ID Pin,
+usb控制器/phy的0v8和3v3供电等.</p></li>
+<li><p>高带宽的示波器: 用于测量USB眼图信号质量等.</p></li>
+<li><p>USB协议分析仪 (如cat-c): 分析USB通信协议流程, 定位协议方面/逻辑方面问题.</p></li>
+<li><p>Windows工具: 如BusHound, wireshark等抓取usb总线数据包;
+UsbView软件用于查看USB设备详细描述符信息.</p></li>
+<li><p>Linux工具: usbmon用于抓取USB总线数据包;
+vusb-analyzer图形化工具用于解析usbmon所抓取的数据;
+lsusb命令查看USB设备的详细描述符信息; usbtop等命令查看usb host端的带宽信息.</p></li>
+</ul>
+<section id="id12">
+<h4>常见的内核USB调试接口<a class="headerlink" href="#id12" title="永久链接至标题"></a></h4>
+<ul class="simple">
+<li><p>Sysfs文件系统(主机侧): /sys/bus/usb/* (查看系统已支持的USB设备和驱动)</p></li>
+<li><p>Debugfs调试文件系统(主机侧):</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/sys/kernel/debug/usb/devices                 <span class="c1"># 查看usb总线上的所有usb设备信息</span>
+/sys/kernel/debug/xhci/xhci-hcd.0.auto        <span class="c1"># xhci调试系统</span>
+/sys/kernel/debug/usb/b2000000.dwc3           <span class="c1"># dwc3控制器调试系统</span>
+/sys/kernel/debug/usb/usbmon                  <span class="c1"># USBMon抓包工具</span>
+/sys/kernel/debug/usb/uvcvideo                <span class="c1"># UVC设备调试系统</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Debugfs调试文件系统(设备侧):</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="n">b2000000</span><span class="o">.</span><span class="n">dwc3</span>           <span class="c1"># dwc3控制器调试系统</span>
+<span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">udc</span><span class="o">/</span><span class="n">b2000000</span><span class="o">.</span><span class="n">dwc3</span><span class="o">/</span>                 <span class="c1"># dwc3控制器目录, 可查看挺多信息</span>
+<span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">usb_gadget</span><span class="o">/</span><span class="n">g1</span>              <span class="c1"># gadget configfs目录</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Trace系统</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">tracing</span><span class="o">/</span><span class="n">events</span><span class="o">/</span><span class="n">gadget</span>       <span class="c1"># gadget层可trace的函数和信息</span>
+<span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">tracing</span><span class="o">/</span><span class="n">events</span><span class="o">/</span><span class="n">dwc3</span>         <span class="c1"># trace dwc3控制器相关流程</span>
+<span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">tracing</span><span class="o">/</span><span class="n">events</span><span class="o">/</span><span class="n">xhci</span><span class="o">-</span><span class="n">hcd</span>     <span class="c1"># trace xhci控制器相关流程</span>
+
+<span class="n">例子</span><span class="p">,</span> <span class="n">常见如开启dwc3重要trace日志如下</span><span class="p">:</span>
+<span class="n">echo</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">tracing</span><span class="o">/</span><span class="n">events</span><span class="o">/</span><span class="n">dwc3</span><span class="o">/</span><span class="n">enable</span>
+<span class="n">echo</span> <span class="mi">0</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">tracing</span><span class="o">/</span><span class="n">events</span><span class="o">/</span><span class="n">dwc3</span><span class="o">/</span><span class="n">dwc3_writel</span><span class="o">/</span><span class="n">enable</span>
+<span class="n">echo</span> <span class="mi">0</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">tracing</span><span class="o">/</span><span class="n">events</span><span class="o">/</span><span class="n">dwc3</span><span class="o">/</span><span class="n">dwc3_readl</span><span class="o">/</span><span class="n">enable</span>
+
+<span class="c1"># 可复现问题后查看trace日志, 也可以cat trace_pipe日志到终端或文件.</span>
+<span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">tracing</span><span class="o">/</span><span class="n">trace</span>
+<span class="n">或者</span>
+<span class="n">cat</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">kernel</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">tracing</span><span class="o">/</span><span class="n">trace_pipe</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="id13">
+<h2>USB信号测量<a class="headerlink" href="#id13" title="永久链接至标题"></a></h2>
+<p>请参阅以下文档</p>
+<p><a class="reference internal" href="20-02-USB-Eye_pattern_test.html"><span class="doc">USB眼图测试</span></a></p>
+<p><a class="reference internal" href="20-01-USB3-Tx-Eye_pattern_test.html"><span class="doc">USB3.0 TX 电气特性测试</span></a></p>
+</section>
+<section id="id14">
+<h2>USB常见问题<a class="headerlink" href="#id14" title="永久链接至标题"></a></h2>
+<p>请参阅以下方面文档</p>
+<p><a class="reference internal" href="../../../FAQs/usb_faqs/USB_COMMON_FAQs.html"><span class="doc">USB常见问题(FAQ)</span></a></p>
+<p><a class="reference internal" href="../../../FAQs/usb_faqs/USB_WEBCAM_FAQs.html"><span class="doc">USB Webcam常见问题(FAQ)</span></a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="4.3.18. USB开发调试指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="20-01-USB3-Tx-Eye_pattern_test.html" class="btn btn-neutral float-right" title="4.3.18.2. USB3.0 TX 电气特性测试" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

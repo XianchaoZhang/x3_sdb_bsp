@@ -1,0 +1,26 @@
+{
+	"config_number":1,
+	"board_name":"x3dev",
+	"config_0":{
+		"interface_type": "mipi",
+		"port_number":1,
+		"port_0":{
+			"bus_type":0,
+			"bus_num":2,
+			"entry_num":0,
+			"sensor_addr":"0x29",
+			"sensor_name":"gc4c33",
+			"reg_width":16,
+			"sensor_mode":0,
+			"fps":30,
+			"config_index":0,
+			"resolution":1440,
+			"gpio_pin":[118],
+			"gpio_level":[0],
+			"power_mode":1,
+			"deserial_index":0,
+			"deserial_port":0,
+			"config_path":"hb_mipi_gc4c33_raw10_%dfps_%dP.json"
+		}
+	}
+}

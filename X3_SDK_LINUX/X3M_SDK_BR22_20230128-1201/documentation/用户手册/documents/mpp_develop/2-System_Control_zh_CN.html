@@ -1,0 +1,2320 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5.2. 系统控制 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="5.3. 视频输入" href="3-Video_Input_zh_CN.html" />
+    <link rel="prev" title="5.1. 系统概述" href="1-Overview_zh_CN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">5. 多媒体开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1-Overview_zh_CN.html">5.1. 系统概述</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.2. 系统控制</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">5.2.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">5.2.2. 功能描述</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">5.2.2.1. 视频缓冲池</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">5.2.2.2. 绑定关系</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">5.2.2.3. 工作模式</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#api">5.2.3. API参考</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-init">5.2.3.1. HB_SYS_Init</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-exit">5.2.3.2. HB_SYS_Exit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-bind">5.2.3.3. HB_SYS_Bind</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-unbind">5.2.3.4. HB_SYS_UnBind</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-setvinvpsmode">5.2.3.5. HB_SYS_SetVINVPSMode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-getvinvpsmode">5.2.3.6. HB_SYS_GetVINVPSMode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-setconfig">5.2.3.7. HB_VP_SetConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-getconfig">5.2.3.8. HB_VP_GetConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-init">5.2.3.9. HB_VP_Init</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-exit">5.2.3.10. HB_VP_Exit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-createpool">5.2.3.11. HB_VP_CreatePool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-destroypool">5.2.3.12. HB_VP_DestroyPool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-getblock">5.2.3.13. HB_VP_GetBlock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-releaseblock">5.2.3.14. HB_VP_ReleaseBlock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-physaddr2block">5.2.3.15. HB_VP_PhysAddr2Block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-block2physaddr">5.2.3.16. HB_VP_Block2PhysAddr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-block2poolid">5.2.3.17. HB_VP_Block2PoolId</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-mmappool">5.2.3.18. HB_VP_MmapPool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-munmappool">5.2.3.19. HB_VP_MunmapPool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-getblockviraddr">5.2.3.20. HB_VP_GetBlockVirAddr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-inquireusercnt">5.2.3.21. HB_VP_InquireUserCnt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-setauxiliaryconfig">5.2.3.22. HB_VP_SetAuxiliaryConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-alloc">5.2.3.23. HB_SYS_Alloc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-alloccached">5.2.3.24. HB_SYS_AllocCached</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-free">5.2.3.25. HB_SYS_Free</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-cacheinvalidate">5.2.3.26. HB_SYS_CacheInvalidate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-cacheflush">5.2.3.27. HB_SYS_CacheFlush</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-dmacopy">5.2.3.28. HB_VP_DmaCopy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">5.2.4. 数据类型</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-mod-id-e">5.2.4.1. HB_SYS_MOD_ID_E</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-mod-s">5.2.4.2. HB_SYS_MOD_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-sys-vin-vps-mode-e">5.2.4.3. HB_SYS_VIN_VPS_MODE_E</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-pool-config-s">5.2.4.4. HB_VP_POOL_CONFIG_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-config-s">5.2.4.5. HB_VP_CONFIG_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vp-auxiliary-config-s">5.2.4.6. HB_VP_AUXILIARY_CONFIG_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vio-buffer-t">5.2.4.7. hb_vio_buffer_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pym-buffer-t">5.2.4.8. pym_buffer_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#image-info-t">5.2.4.9. image_info_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#address-info-t">5.2.4.10. address_info_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">5.2.5. 错误码</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="3-Video_Input_zh_CN.html">5.3. 视频输入</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html">5.4. ISP图像系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5-Video_Processing_zh_CN.html">5.5. 视频处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6-Region_Processing_zh_CN.html">5.6. 区域处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7-Video_Output_zh_CN.html">5.7. 视频输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8-Video_Encode_zh_CN.html">5.8. 视频编码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9-Video_Decode_zh_CN.html">5.9. 视频解码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/index.html">5.10. 图像调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html">5.11. 查询多媒体模块调试信息</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html">5.12. 多媒体性能调试</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">5. </span>多媒体开发指南</a> &raquo;</li>
+      <li><span class="section-number">5.2. </span>系统控制</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="1-Overview_zh_CN.html" class="btn btn-neutral float-left" title="5.1. 系统概述" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="3-Video_Input_zh_CN.html" class="btn btn-neutral float-right" title="5.3. 视频输入" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">5.2. </span>系统控制<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="id2">
+<h2><span class="section-number">5.2.1. </span>概述<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>系统控制用来初始化和去初始化整个媒体系统，通过绑定接口建立各模块间的关系。提供大块物理内存分配管理的VP（Video Pool）模块。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">5.2.2. </span>功能描述<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<section id="id4">
+<h3><span class="section-number">5.2.2.1. </span>视频缓冲池<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>VP（Video Pool）视频缓冲池提供大块物理内存及管理功能，负责内存的分配和回收。
+视频缓冲池由一组物理地址连续，大小相同的缓冲块组成，在使用前需要配置及初始化，可根据使用需要，配置不同数量的缓冲池和调整缓冲块的大小。</p>
+</section>
+<section id="id5">
+<h3><span class="section-number">5.2.2.2. </span>绑定关系<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p><img alt="image-20220329183230983" src="../_images/image-20220329183230983.png" /></p>
+<p>注：通过HB_SYS_Bind接口可以在模块间建立绑定关系，绑定后数据源处理完成的数据会自动发送给数据端。</p>
+</section>
+<section id="id6">
+<h3><span class="section-number">5.2.2.3. </span>工作模式<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<p><strong>在线模式：</strong> 模块间的数据通过内部总线直接从上一模块传输给下一模块，不需要读写DDR，可以降低延时，节省DDR带宽</p>
+<p><strong>离线模式：</strong> 上一模块的数据先写入DDR，下一模块再从DDR中读取数据，多于一路sensor接入时，所有接入sensor都按离线处理。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">模式</th>
+<th align="center">VIN_SIF和VIN_ISP</th>
+<th align="center">VIN_ISP和VPS</th>
+<th align="center">VIN_SIF和VPS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">在线</td>
+<td align="center">SIF(RAW) --&gt; ISP</td>
+<td align="center">ISP(YUV) --&gt; VPS</td>
+<td align="center">SIF(YUV) --&gt; VPS</td>
+</tr>
+<tr>
+<td align="center">离线</td>
+<td align="center">SIF(RAW) --&gt; DDR --&gt; ISP</td>
+<td align="center">ISP(YUV) --&gt; DDR  --&gt; VPS</td>
+<td align="center">SIF(YUV) --&gt; DDR --&gt; ISP</td>
+</tr>
+</tbody>
+</table><p>注：HB_SYS_SetVINVPSMode接口用来设定VIN和VPS间的工作模式。</p>
+</section>
+</section>
+<section id="api">
+<h2><span class="section-number">5.2.3. </span>API参考<a class="headerlink" href="#api" title="永久链接至标题"></a></h2>
+<ul class="simple">
+<li><p>HB_SYS_Init : 初始化媒体系统（预留）。</p></li>
+<li><p>HB_SYS_Exit : 初始化媒体系统（预留）。</p></li>
+<li><p>HB_SYS_Bind : 数据源到数据接收者绑定。</p></li>
+<li><p>HB_SYS_UnBind : 数据源到数据接收者解绑定。</p></li>
+<li><p>HB_SYS_SetVINVPSMode : 设置VIN，VPS模块间的工作模式。</p></li>
+<li><p>HB_SYS_GetVINVPSMode : 获取指定pipeid的VIN，VPS模块间工作模式。</p></li>
+<li><p>HB_VP_SetConfig :  设置Video Pool视频缓冲池属性。</p></li>
+<li><p>HB_VP_GetConfig  :  获取Video Pool视频缓冲池属性。</p></li>
+<li><p>HB_VP_Init :  初始化Video Pool视频缓冲池。</p></li>
+<li><p>HB_VP_Exit :  去初始化Video Pool视频缓冲池。</p></li>
+<li><p>HB_VP_CreatePool :  创建一个视频缓冲池。</p></li>
+<li><p>HB_VP_DestroyPool :  销毁一个视频缓存池。</p></li>
+<li><p>HB_VP_GetBlock :  获取一个缓存块。</p></li>
+<li><p>HB_VP_ReleaseBlock :  释放一个已经获取的缓存块。</p></li>
+<li><p>HB_VP_PhysAddr2Block :  通过缓冲块物理地址获取缓冲块id</p></li>
+<li><p>HB_VP_Block2PhysAddr :  获取一个缓冲块的物理地址</p></li>
+<li><p>HB_VP_Block2PoolId :  获取一个缓存块所在缓存池的 ID 。</p></li>
+<li><p>HB_VP_MmapPool :  为一个视频缓存池映射用户态虚拟地址。</p></li>
+<li><p>HB_VP_MunmapPool :  为一个视频缓存池解除用户态映射。</p></li>
+<li><p>HB_VP_GetBlockVirAddr :  获取一个视频缓存池中的缓存块的用户态虚拟地址。</p></li>
+<li><p>HB_VP_InquireUserCnt :  查询缓冲块是否使用。</p></li>
+<li><p>HB_VP_SetAuxiliaryConfig  :  设置视频缓冲池的附加信息。</p></li>
+<li><p>HB_SYS_Alloc :  在用户态分配内存。</p></li>
+<li><p>HB_SYS_Free :  释放内存块。</p></li>
+<li><p>HB_SYS_AllocCached :  在用户态分配带cache内存。</p></li>
+<li><p>HB_SYS_CacheInvalidate :  设置该带cache的内存cache无效。</p></li>
+<li><p>HB_SYS_CacheFlush :  刷新该带cache的内存cache。</p></li>
+<li><p>HB_VP_DmaCopy :  通过DMA拷贝物理内存。</p></li>
+</ul>
+<section id="hb-sys-init">
+<h3><span class="section-number">5.2.3.1. </span>HB_SYS_Init<a class="headerlink" href="#hb-sys-init" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_SYS_Init</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>预留接口，目前无作用。</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-sys-exit">
+<h3><span class="section-number">5.2.3.2. </span>HB_SYS_Exit<a class="headerlink" href="#hb-sys-exit" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_SYS_Exit</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>预留接口，目前无作用。</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-sys-bind">
+<h3><span class="section-number">5.2.3.3. </span>HB_SYS_Bind<a class="headerlink" href="#hb-sys-bind" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_SYS_Bind</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">SYS_MOD_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstSrcMod</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">SYS_MOD_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstDstMod</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>在VIN管道，通道，VPS组/通道，VO通道，VENC通道之间建立绑定关系。</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pstSrcMod</td>
+<td align="center">源模块指针</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">pstDstMod</td>
+<td align="center">目的模块指针</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-sys-unbind">
+<h3><span class="section-number">5.2.3.4. </span>HB_SYS_UnBind<a class="headerlink" href="#hb-sys-unbind" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_SYS_UnBind</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">SYS_MOD_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstSrcMod</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">SYS_MOD_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstDstMod</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>在VIN管道，通道，VPS组/通道，VO通道，VENC通道之间解除绑定关系。</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pstSrcMod</td>
+<td align="center">源模块指针</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">pstDstMod</td>
+<td align="center">目的模块指针</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-sys-setvinvpsmode">
+<h3><span class="section-number">5.2.3.5. </span>HB_SYS_SetVINVPSMode<a class="headerlink" href="#hb-sys-setvinvpsmode" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_SYS_SetVINVPSMode</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">pipeId</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">SYS_VIN_VPS_MODE_E</span><span class="w"> </span><span class="n">mode</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置VIN，VPS模块间的工作模式。</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pipeId</td>
+<td align="center">Pipe号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">mode</td>
+<td align="center">VIN，VPS工作模式</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-sys-getvinvpsmode">
+<h3><span class="section-number">5.2.3.6. </span>HB_SYS_GetVINVPSMode<a class="headerlink" href="#hb-sys-getvinvpsmode" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_SYS_GetVINVPSMode</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">pipeId</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取指定pipeid的VIN，VPS模块间工作模式。</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pipeId</td>
+<td align="center">Pipe号</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">&gt;=0</td>
+<td align="center">SYS_VIN_VPS_MODE_E</td>
+</tr>
+<tr>
+<td align="center">&lt;0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>视频缓存池</p>
+</section>
+<section id="hb-vp-setconfig">
+<h3><span class="section-number">5.2.3.7. </span>HB_VP_SetConfig<a class="headerlink" href="#hb-vp-setconfig" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VP_SetConfig</span><span class="p">(</span><span class="n">VP_CONFIG_S</span><span class="w"> </span><span class="o">*</span><span class="n">VpConfig</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置Video Pool视频缓冲池属性</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">vpConfig</td>
+<td align="center">视频缓冲池属性指针</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VideoPool参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-getconfig">
+<h3><span class="section-number">5.2.3.8. </span>HB_VP_GetConfig<a class="headerlink" href="#hb-vp-getconfig" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VP_GetConfig</span><span class="w"> </span><span class="p">(</span><span class="n">VP_CONFIG_S</span><span class="w"> </span><span class="o">*</span><span class="n">VpConfig</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取Video Pool视频缓冲池属性</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">vpConfig</td>
+<td align="center">视频缓冲池属性指针</td>
+<td align="center">输出</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-init">
+<h3><span class="section-number">5.2.3.9. </span>HB_VP_Init<a class="headerlink" href="#hb-vp-init" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VP_Init</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>初始化视频缓冲池</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>必须先调用 HB_VP_SetConfig 配置缓存池属性，再初始化缓存池，否则会失败。</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VideoPool参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-exit">
+<h3><span class="section-number">5.2.3.10. </span>HB_VP_Exit<a class="headerlink" href="#hb-vp-exit" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VP_Exit</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>去初始化视频缓冲池</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VideoPool参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-createpool">
+<h3><span class="section-number">5.2.3.11. </span>HB_VP_CreatePool<a class="headerlink" href="#hb-vp-createpool" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">HB_VP_CreatePool</span><span class="p">(</span><span class="n">VP_POOL_CONFIG_S</span><span class="w"> </span><span class="o">*</span><span class="n">VpPoolCfg</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>创建一个视频缓冲池</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpPoolCfg</td>
+<td align="center">缓冲池配置属性参数指针</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">非VP_INVALID_POOLID</td>
+<td align="center">有效的缓冲池ID号</td>
+</tr>
+<tr>
+<td align="center">VP_INVALID_POOLID</td>
+<td align="center">创建缓冲池失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VideoPool参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-destroypool">
+<h3><span class="section-number">5.2.3.12. </span>HB_VP_DestroyPool<a class="headerlink" href="#hb-vp-destroypool" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VP_DestroyPool</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Pool</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>销毁一个视频缓冲池</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Pool</td>
+<td align="center">缓冲池的id号</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VideoPool参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-getblock">
+<h3><span class="section-number">5.2.3.13. </span>HB_VP_GetBlock<a class="headerlink" href="#hb-vp-getblock" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">HB_VP_GetBlock</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Pool</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">u64BlkSize</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取一个缓冲块</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Pool</td>
+<td align="center">缓冲池id号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">u64BlkSize</td>
+<td align="center">缓冲块大小</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">非VP_INVALID_HANDLE</td>
+<td align="center">有效的缓冲块id</td>
+</tr>
+<tr>
+<td align="center">VP_INVALID_HANDLE</td>
+<td align="center">获取缓冲块失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>u64BlkSize 须小于或等于创建该缓存池时指定的缓存块大小</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VideoPool参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-releaseblock">
+<h3><span class="section-number">5.2.3.14. </span>HB_VP_ReleaseBlock<a class="headerlink" href="#hb-vp-releaseblock" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VP_ReleaseBlock</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Block</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>释放一个已经获取的缓冲块</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Block</td>
+<td align="center">缓冲块id</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VideoPool参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-physaddr2block">
+<h3><span class="section-number">5.2.3.15. </span>HB_VP_PhysAddr2Block<a class="headerlink" href="#hb-vp-physaddr2block" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">HB_VP_PhysAddr2Block</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">u64PhyAddr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>通过缓冲块物理地址获取缓冲块id</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">u64PhyAddr</td>
+<td align="center">缓冲块物理地址</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VideoPool参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-block2physaddr">
+<h3><span class="section-number">5.2.3.16. </span>HB_VP_Block2PhysAddr<a class="headerlink" href="#hb-vp-block2physaddr" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">uint64_t</span><span class="w"> </span><span class="nf">HB_VP_Block2PhysAddr</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Block</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取一个缓冲块的物理地址</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Block</td>
+<td align="center">缓冲块id</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">无效返回值</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">有效物理地址</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VideoPool参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-block2poolid">
+<h3><span class="section-number">5.2.3.17. </span>HB_VP_Block2PoolId<a class="headerlink" href="#hb-vp-block2poolid" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">HB_VP_Block2PoolId</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Block</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>通过缓冲块id获取缓冲池id</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Block</td>
+<td align="center">缓冲块id</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">非负数</td>
+<td align="center">有效的缓冲池id</td>
+</tr>
+<tr>
+<td align="center">负数</td>
+<td align="center">无效的缓冲池id</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VideoPool参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-mmappool">
+<h3><span class="section-number">5.2.3.18. </span>HB_VP_MmapPool<a class="headerlink" href="#hb-vp-mmappool" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VP_MmapPool</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Pool</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>为一个缓冲池映射用户态虚拟地址</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Pool</td>
+<td align="center">缓冲池id号</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VideoPool参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-munmappool">
+<h3><span class="section-number">5.2.3.19. </span>HB_VP_MunmapPool<a class="headerlink" href="#hb-vp-munmappool" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VP_MunmapPool</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Pool</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>为一个缓冲池去除用户态映射</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Pool</td>
+<td align="center">缓冲池id号</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VideoPool参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-getblockviraddr">
+<h3><span class="section-number">5.2.3.20. </span>HB_VP_GetBlockVirAddr<a class="headerlink" href="#hb-vp-getblockviraddr" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VP_GetBlockVirAddr</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Pool</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">u64PhyAddr</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">**</span><span class="n">ppVirAddr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取一个视频缓存池中的缓存块的用户态虚拟地址</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Pool</td>
+<td align="center">缓冲池id号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">u64PhyAddr</td>
+<td align="center">缓冲池物理地址</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">ppVirAddr</td>
+<td align="center">缓冲池虚拟地址</td>
+<td align="center">输出</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VideoPool参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-inquireusercnt">
+<h3><span class="section-number">5.2.3.21. </span>HB_VP_InquireUserCnt<a class="headerlink" href="#hb-vp-inquireusercnt" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VP_InquireUserCnt</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">Block</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>查询缓冲块是否使用</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Block</td>
+<td align="center">缓冲块id</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VP_INVALID_HANDLE</td>
+<td align="center">查询失败</td>
+</tr>
+<tr>
+<td align="center">非VP_INVALID_HANDLE</td>
+<td align="center">引用计数</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-setauxiliaryconfig">
+<h3><span class="section-number">5.2.3.22. </span>HB_VP_SetAuxiliaryConfig<a class="headerlink" href="#hb-vp-setauxiliaryconfig" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VP_SetAuxiliaryConfig</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">VP_AUXILIARY_CONFIG_S</span><span class="w"> </span><span class="o">*</span><span class="n">pstAuxiliaryConfig</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置视频缓冲池的附加信息</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pstAuxiliaryConfig</td>
+<td align="center">视频缓冲池附加信息配置结构体</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-sys-alloc">
+<h3><span class="section-number">5.2.3.23. </span>HB_SYS_Alloc<a class="headerlink" href="#hb-sys-alloc" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_SYS_Alloc</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">pu64PhyAddr</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">**</span><span class="n">ppVirAddr</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Len</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>在用户态分配内存</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pu64PhyAddr</td>
+<td align="center">物理地址指针</td>
+<td align="center">输出</td>
+</tr>
+<tr>
+<td align="center">ppVirAddr</td>
+<td align="center">指向虚拟地址的指针</td>
+<td align="center">输出</td>
+</tr>
+<tr>
+<td align="center">u32Len</td>
+<td align="center">申请内存的大小</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>需要调用HB_VP_Init初始化视频缓冲池</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_SYS_Alloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">paddr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vaddr</span><span class="p">,</span><span class="w"> </span><span class="mh">0x1000</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Alloc paddr = 0x%x, vaddr = 0x%x</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">paddr</span><span class="p">,</span><span class="w"> </span><span class="n">vaddr</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_SYS_Free</span><span class="p">(</span><span class="n">paddr</span><span class="p">,</span><span class="w"> </span><span class="n">vaddr</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Free ok</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="hb-sys-alloccached">
+<h3><span class="section-number">5.2.3.24. </span>HB_SYS_AllocCached<a class="headerlink" href="#hb-sys-alloccached" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_SYS_AllocCached</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">pu64PhyAddr</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">**</span><span class="n">ppVirAddr</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Len</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>在用户态分配带cache内存</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pu64PhyAddr</td>
+<td align="center">物理地址指针</td>
+<td align="center">输出</td>
+</tr>
+<tr>
+<td align="center">ppVirAddr</td>
+<td align="center">指向虚拟地址的指针</td>
+<td align="center">输出</td>
+</tr>
+<tr>
+<td align="center">u32Len</td>
+<td align="center">申请内存的大小</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>需要调用HB_VP_Init初始化视频缓冲池</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-sys-free">
+<h3><span class="section-number">5.2.3.25. </span>HB_SYS_Free<a class="headerlink" href="#hb-sys-free" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_SYS_Free</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">u64PhyAddr</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pVirAddr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>释放内存块</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">u64PhyAddr</td>
+<td align="center">物理地址</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">pVirAddr</td>
+<td align="center">虚拟地址指针</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>参考HB_SYS_Alloc</p>
+</div></blockquote>
+</section>
+<section id="hb-sys-cacheinvalidate">
+<h3><span class="section-number">5.2.3.26. </span>HB_SYS_CacheInvalidate<a class="headerlink" href="#hb-sys-cacheinvalidate" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_SYS_CacheInvalidate</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">pu64PhyAddr</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pVirAddr</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Len</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置该带cache的内存cache无效。</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pu64PhyAddr</td>
+<td align="center">物理地址</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">pVirAddr</td>
+<td align="center">虚拟地址指针</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">u32Len</td>
+<td align="center">长度</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-sys-cacheflush">
+<h3><span class="section-number">5.2.3.27. </span>HB_SYS_CacheFlush<a class="headerlink" href="#hb-sys-cacheflush" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_SYS_CacheFlush</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">pu64PhyAddr</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pVirAddr</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Len</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>刷新该带cache的内存cache。</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">p</td>
+<td align="center">u64PhyAddr</td>
+<td align="center">物理地址</td>
+</tr>
+<tr>
+<td align="center">pVirAddr</td>
+<td align="center">虚拟地址指针</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">u32Len</td>
+<td align="center">长度</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vp-dmacopy">
+<h3><span class="section-number">5.2.3.28. </span>HB_VP_DmaCopy<a class="headerlink" href="#hb-vp-dmacopy" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VP_DmaCopy</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">dstPaddr</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">srcPaddr</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>通过DMA拷贝物理内存。</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">dstPaddr</td>
+<td align="center">目的物理地址</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">srcPaddr</td>
+<td align="center">源物理地址</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">len</td>
+<td align="center">长度</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="center">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>dstPaddr、srcPaddr需要是连续的物理地址</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+</section>
+<section id="id7">
+<h2><span class="section-number">5.2.4. </span>数据类型<a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<section id="hb-sys-mod-id-e">
+<h3><span class="section-number">5.2.4.1. </span>HB_SYS_MOD_ID_E<a class="headerlink" href="#hb-sys-mod-id-e" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">HB_SYS_MOD_ID_E</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_ID_SYS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_ID_VIN</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_ID_VOT</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_ID_VPS</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_ID_RGN</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_ID_AIN</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_ID_AOT</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_ID_VENC</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_ID_VDEC</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_ID_AENC</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_ID_ADEC</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">HB_ID_MAX</span><span class="p">,</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">SYS_MOD_ID_E</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>模块的ID号。</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<blockquote>
+<div><p>无。</p>
+</div></blockquote>
+</section>
+<section id="hb-sys-mod-s">
+<h3><span class="section-number">5.2.4.2. </span>HB_SYS_MOD_S<a class="headerlink" href="#hb-sys-mod-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_SYS_MOD_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">SYS_MOD_ID_E</span><span class="w"> </span><span class="n">enModId</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">s32DevId</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">s32ChnId</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">SYS_MOD_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>该结构体是各模块索引的一种抽象。</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">enModId</td>
+<td align="left">模块ID号</td>
+</tr>
+<tr>
+<td align="center">s32DevId</td>
+<td align="left">多路时各模块pipeline的抽象，如在VIN中表示第几个pipe，在VPS中表示第几个group</td>
+</tr>
+<tr>
+<td align="center">s32ChnId</td>
+<td align="left">通道索引号</td>
+</tr>
+</tbody>
+</table></section>
+<section id="hb-sys-vin-vps-mode-e">
+<h3><span class="section-number">5.2.4.3. </span>HB_SYS_VIN_VPS_MODE_E<a class="headerlink" href="#hb-sys-vin-vps-mode-e" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">HB_SYS_VIN_VPS_MODE_E</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">VIN_ONLINE_VPS_ONLINE</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">VIN_ONLINE_VPS_OFFLINE</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">VIN_OFFLINE_VPS_ONLINE</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">VIN_OFFLINE_VPS_OFFINE</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">VIN_SIF_VPS_ONLINE</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">VIN_SIF_OFFLINE_ISP_OFFLINE_VPS_ONLINE</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">VIN_SIF_ONLINE_DDR_ISP_DDR_VPS_ONLINE</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">VIN_SIF_ONLINE_DDR_ISP_ONLINE_VPS_ONLINE</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">VIN_FEEDBACK_ISP_ONLINE_VPS_ONLINE</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">VIN_SIF_OFFLINE_VPS_OFFLINE</span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="n">VIN_SIF_OFFLINE</span><span class="p">,</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">SYS_VIN_VPS_MODE_E</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>表示VIN和VPS的在线与离线模式和VIN内部的工作模式。</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="left">成员</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">VIN_ONLINE_VPS_ONLINE</td>
+<td align="left">VIN_SIF和VIN_ISP在线，VIN_ISP和VPS在线</td>
+</tr>
+<tr>
+<td align="left">VIN_ONLINE_VPS_OFFLINE</td>
+<td align="left">VIN_SIF和VIN_ISP在线，VIN_ISP和VPS离线</td>
+</tr>
+<tr>
+<td align="left">VIN_OFFLINE_VPS_ONLINE</td>
+<td align="left">VIN_SIF和VIN_ISP离线，VIN_ISP和VPS在线</td>
+</tr>
+<tr>
+<td align="left">VIN_OFFLINE_VPS_OFFINE</td>
+<td align="left">VIN_SIF和VIN_ISP离线，VIN_ISP和VPS离线</td>
+</tr>
+<tr>
+<td align="left">VIN_SIF_VPS_ONLINE</td>
+<td align="left">VIN_SIF直接在线发送数据到VPS</td>
+</tr>
+<tr>
+<td align="left">VIN_SIF_OFFLINE_ISP_OFFLINE _VPS_ONLINE</td>
+<td align="left">VIN_SIF和VIN_ISP离线，VIN_ISP和VPS在线，同时VIN_ISP到DDR,一般用来dump VIN_ISP的图</td>
+</tr>
+<tr>
+<td align="left">VIN_SIF_ONLINE_DDR_ISP_DDR _VPS_ONLINE</td>
+<td align="left">VIN_SIF和VIN_ISP在线，同时VIN_SIF到DDR，VIN_ISP和VPS离线</td>
+</tr>
+<tr>
+<td align="left">VIN_SIF_ONLINE_DDR_ISP_ONL INE_VPS_ONLINE</td>
+<td align="left">VIN_SIF和VIN_ISP在线，VIN_ISP和VPS在线，同时VIN_SIF到DDR，一般用来dump VIN_SIF出来的图</td>
+</tr>
+<tr>
+<td align="left">VIN_FEEDBACK_ISP_ONLINE _VPS_ONLINE</td>
+<td align="left">VIN_SIF回灌raw模式</td>
+</tr>
+<tr>
+<td align="left">VIN_SIF_OFFLINE_VPS_OFFLINE</td>
+<td align="left">VIN_SIF和VPS离线，一般是YUV到IPU</td>
+</tr>
+<tr>
+<td align="left">VIN_SIF_OFFLINE</td>
+<td align="left">VIN_SIF直接到DDR</td>
+</tr>
+</tbody>
+</table></section>
+<section id="hb-vp-pool-config-s">
+<h3><span class="section-number">5.2.4.4. </span>HB_VP_POOL_CONFIG_S<a class="headerlink" href="#hb-vp-pool-config-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_VP_POOL_CONFIG_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">u64BlkSize</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32BlkCnt</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">cacheEnable</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">VP_POOL_CONFIG_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>视频缓冲池配置结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">u64BlkSize</td>
+<td align="left">缓冲块大小</td>
+</tr>
+<tr>
+<td align="center">u32BlkCnt</td>
+<td align="left">每个缓冲池的缓冲块个数</td>
+</tr>
+<tr>
+<td align="center">cacheEnable</td>
+<td align="left">缓冲池是否使能cache</td>
+</tr>
+</tbody>
+</table></section>
+<section id="hb-vp-config-s">
+<h3><span class="section-number">5.2.4.5. </span>HB_VP_CONFIG_S<a class="headerlink" href="#hb-vp-config-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nc">HB_VP_CONFIG_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32MaxPoolCnt</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">VP_POOL_CONFIG_S</span><span class="w"> </span><span class="n">pubPool</span><span class="p">[</span><span class="n">VP_MAX_PUB_POOLS</span><span class="p">];</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">VP_CONFIG_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>视频缓冲池属性结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">u32MaxPoolCnt</td>
+<td align="left">整个系统中可以容纳缓冲池的个数</td>
+</tr>
+<tr>
+<td align="center">pubPool</td>
+<td align="left">公共缓冲池属性结构体</td>
+</tr>
+</tbody>
+</table></section>
+<section id="hb-vp-auxiliary-config-s">
+<h3><span class="section-number">5.2.4.6. </span>HB_VP_AUXILIARY_CONFIG_S<a class="headerlink" href="#hb-vp-auxiliary-config-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_VP_AUXILIARY_CONFIG_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">u32AuxiliaryConfig</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">VP_AUXILIARY_CONFIG_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>视频缓冲池附加信息的配置结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">AuxiliaryConfig</td>
+<td align="left">附加信息类型</td>
+</tr>
+</tbody>
+</table></section>
+<section id="hb-vio-buffer-t">
+<h3><span class="section-number">5.2.4.7. </span>hb_vio_buffer_t<a class="headerlink" href="#hb-vio-buffer-t" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">hb_vio_buffer_s</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">image_info_t</span><span class="w"> </span><span class="n">img_info</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">address_info_t</span><span class="w"> </span><span class="n">img_addr</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">hb_vio_buffer_t</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>普通buf信息结构体，一个结构体表示一帧图像</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">img_info</td>
+<td align="left">图像数据信息</td>
+</tr>
+<tr>
+<td align="center">img_addr</td>
+<td align="left">图像地址信息</td>
+</tr>
+</tbody>
+</table></section>
+<section id="pym-buffer-t">
+<h3><span class="section-number">5.2.4.8. </span>pym_buffer_t<a class="headerlink" href="#pym-buffer-t" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">pym_buffer_s</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">image_info_t</span><span class="w"> </span><span class="n">pym_img_info</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">address_info_t</span><span class="w"> </span><span class="n">pym</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">address_info_t</span><span class="w"> </span><span class="n">pym_roi</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="mi">3</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="n">address_info_t</span><span class="w"> </span><span class="n">us</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">addr_whole</span><span class="p">[</span><span class="n">HB_VIO_BUFFER_MAX_PLANES</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">paddr_whole</span><span class="p">[</span><span class="n">HB_VIO_BUFFER_MAX_PLANES</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">layer_size</span><span class="p">[</span><span class="mi">30</span><span class="p">][</span><span class="n">HB_VIO_BUFFER_MAX_PLANES</span><span class="p">];</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">pym_buffer_t</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>金字塔buf结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">pym_img _info</td>
+<td align="left">金字塔数据信息</td>
+</tr>
+<tr>
+<td align="center">pym</td>
+<td align="left">金字塔基础层数据地址，对应s0 s4 s8 s16 s20 s24</td>
+</tr>
+<tr>
+<td align="center">pym_roi</td>
+<td align="left">金字塔基础层关联的roi层数据地址信息pym_roi[0][0]对应s0下的s1 pym_roi[0][1]对应s0下的s2, pym_roi[0][2]对应s0下的s3</td>
+</tr>
+<tr>
+<td align="center">us</td>
+<td align="left">金字塔6个us通道输出数据地址信息</td>
+</tr>
+<tr>
+<td align="center">addr_whole</td>
+<td align="left">金字塔整块buf虚拟地址首地址</td>
+</tr>
+<tr>
+<td align="center">paddr_whole</td>
+<td align="left">金字塔整块buf物理地址首地址</td>
+</tr>
+<tr>
+<td align="center">layer_size</td>
+<td align="left">每一层的数据大小</td>
+</tr>
+</tbody>
+</table></section>
+<section id="image-info-t">
+<h3><span class="section-number">5.2.4.9. </span>image_info_t<a class="headerlink" href="#image-info-t" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">image_info_s</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">sensor_id</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">pipeline_id</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">frame_id</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">time_stamp</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span> <span class="nc">timeval</span><span class="w"> </span><span class="n">tv</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">buf_index</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">img_format</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">[</span><span class="n">HB_VIO_BUFFER_MAX_PLANES</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">[</span><span class="n">HB_VIO_BUFFER_MAX_PLANES</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">planeCount</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">dynamic_flag</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">water_mark_line</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">VIO_DATA_TYPE_E</span><span class="w"> </span><span class="n">data_type</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">buffer_state_e</span><span class="w"> </span><span class="n">state</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">image_info_t</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>图像信息结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">sensor_id</td>
+<td align="left">Sensor id</td>
+</tr>
+<tr>
+<td align="center">pipeline_id</td>
+<td align="left">对应数据通道号</td>
+</tr>
+<tr>
+<td align="center">frame_id</td>
+<td align="left">数据帧号</td>
+</tr>
+<tr>
+<td align="center">time_stamp</td>
+<td align="left">HW time stamp，sif内部硬件时间，每次FS的时候更新，和系统时间没关系，一般用来同步</td>
+</tr>
+<tr>
+<td align="center">tv</td>
+<td align="left">system time of hal get buf，sif在framestart打的系统时间</td>
+</tr>
+<tr>
+<td align="center">buf_index</td>
+<td align="left">获取到的Buffer索引</td>
+</tr>
+<tr>
+<td align="center">img_format</td>
+<td align="left">图像格式</td>
+</tr>
+<tr>
+<td align="center">fd</td>
+<td align="left">ion buf fd</td>
+</tr>
+<tr>
+<td align="center">size</td>
+<td align="left">对应plane的size</td>
+</tr>
+<tr>
+<td align="center">planeCount</td>
+<td align="left">image 含有的plane 数目</td>
+</tr>
+<tr>
+<td align="center">dynamic_flag</td>
+<td align="left">动态改变size标记</td>
+</tr>
+<tr>
+<td align="center">water_mark_line</td>
+<td align="left">提前水位信息，XJ3不支持</td>
+</tr>
+<tr>
+<td align="center">data_type</td>
+<td align="left">image的数据类型</td>
+</tr>
+<tr>
+<td align="center">state</td>
+<td align="left">buf的状态，在用户层则是user状态</td>
+</tr>
+</tbody>
+</table></section>
+<section id="address-info-t">
+<h3><span class="section-number">5.2.4.10. </span>address_info_t<a class="headerlink" href="#address-info-t" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">address_info_s</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">width</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">height</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">stride_size</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">addr</span><span class="p">[</span><span class="n">HB_VIO_BUFFER_MAX_PLANES</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">paddr</span><span class="p">[</span><span class="n">HB_VIO_BUFFER_MAX_PLANES</span><span class="p">];</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">address_info_t</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>图像地址信息结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">width</td>
+<td align="left">图像数据宽度</td>
+</tr>
+<tr>
+<td align="center">height</td>
+<td align="left">图像数据高度</td>
+</tr>
+<tr>
+<td align="center">stride_size</td>
+<td align="left">图像数据内存stride(实际内存存储的一行宽度)</td>
+</tr>
+<tr>
+<td align="center">addr</td>
+<td align="left">虚拟地址，按照yuv plane数存放</td>
+</tr>
+<tr>
+<td align="center">paddr</td>
+<td align="left">物理地址，按照yuv plane数存放</td>
+</tr>
+</tbody>
+</table></section>
+</section>
+<section id="id8">
+<h2><span class="section-number">5.2.5. </span>错误码<a class="headerlink" href="#id8" title="永久链接至标题"></a></h2>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">错误码</th>
+<th align="center">宏定义</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">-268500032</td>
+<td align="center">VP_INVALID_BLOCKID</td>
+<td align="center">无效缓冲块</td>
+</tr>
+<tr>
+<td align="center">-268500033</td>
+<td align="center">VP_INVALID_POOLID</td>
+<td align="center">无效缓冲池</td>
+</tr>
+<tr>
+<td align="center">-268500034</td>
+<td align="center">HB_ERR_VP_NOT_PERM</td>
+<td align="center">操作不允许</td>
+</tr>
+<tr>
+<td align="center">-268500035</td>
+<td align="center">HB_ERR_VP_UNEXIST</td>
+<td align="center">视频缓冲池不存在</td>
+</tr>
+<tr>
+<td align="center">-268500036</td>
+<td align="center">HB_ERR_VP_BUSY</td>
+<td align="center">缓冲池忙</td>
+</tr>
+<tr>
+<td align="center">-268500037</td>
+<td align="center">HB_ERR_SYS_BUSY</td>
+<td align="center">系统忙</td>
+</tr>
+<tr>
+<td align="center">-268500038</td>
+<td align="center">HB_ERR_SYS_ILLEGAL_PARAM</td>
+<td align="center">系统接口参数非法</td>
+</tr>
+<tr>
+<td align="center">-268500039</td>
+<td align="center">HB_ERR_SYS_NOMEM</td>
+<td align="center">系统接口分配内存失败</td>
+</tr>
+<tr>
+<td align="center">-268500040</td>
+<td align="center">HB_ERR_VP_ILLEGAL_PARAM</td>
+<td align="center">缓冲池接口参数设置无效</td>
+</tr>
+</tbody>
+</table></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="1-Overview_zh_CN.html" class="btn btn-neutral float-left" title="5.1. 系统概述" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="3-Video_Input_zh_CN.html" class="btn btn-neutral float-right" title="5.3. 视频输入" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

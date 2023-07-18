@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5.10.3. ISP工具指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="5.10.4. Hobot player工具指南" href="Camera_Tuning_Tool.html" />
+    <link rel="prev" title="5.10.2. X3 Camera点亮说明" href="Sensor_Bring_Up.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">5. 多媒体开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../1-Overview_zh_CN.html">5.1. 系统概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../2-System_Control_zh_CN.html">5.2. 系统控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../3-Video_Input_zh_CN.html">5.3. 视频输入</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../4-Graphic_System_API_Reference_Manual.html">5.4. ISP图像系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../5-Video_Processing_zh_CN.html">5.5. 视频处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../6-Region_Processing_zh_CN.html">5.6. 区域处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../7-Video_Output_zh_CN.html">5.7. 视频输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../8-Video_Encode_zh_CN.html">5.8. 视频编码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../9-Video_Decode_zh_CN.html">5.9. 视频解码</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">5.10. 图像调试指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ISP_Tuning_User_Guide.html">5.10.1. ISP图像调试指引</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sensor_Bring_Up.html">5.10.2. X3 Camera点亮说明</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">5.10.3. ISP工具指南</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#control-tool">5.10.3.1. Control tool 功能说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">5.10.3.2. Control tool 操作说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#calibration-tool">5.10.3.3. Calibration tool 使用说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#calibration-tool-installation">5.10.3.4. Calibration tool-Installation</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#installation-procedure">Installation procedure</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#isp-calibration-tool-home-window">5.10.3.5. ISP calibration tool Home window</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#home-window">Home window</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#menu-buttons">Menu buttons</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#getting-started">Getting started</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#calibration-tool-image-format">5.10.3.6. Calibration tool – Image format</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#image-format-window">Image format window</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#window-features">Window features</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#file-types-supported">File types supported</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#output-formats">Output formats</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Camera_Tuning_Tool.html">5.10.4. Hobot player工具指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Generate_ISP_Lib.html">5.10.5. 生成ISP效果库</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html">5.10.6. GDC 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Image_Quality_Evaluation.html">5.10.7. 图像质量测评</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Expand_Content.html">5.10.8. ISP 调试视频教程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html">5.11. 查询多媒体模块调试信息</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../12-Media_Processing_Performance_Debug_Guide.html">5.12. 多媒体性能调试</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">5. </span>多媒体开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">5.10. </span>图像调试指南</a> &raquo;</li>
+      <li><span class="section-number">5.10.3. </span>ISP工具指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="Sensor_Bring_Up.html" class="btn btn-neutral float-left" title="5.10.2. X3 Camera点亮说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Camera_Tuning_Tool.html" class="btn btn-neutral float-right" title="5.10.4. Hobot player工具指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="isp">
+<h1><span class="section-number">5.10.3. </span>ISP工具指南<a class="headerlink" href="#isp" title="永久链接至标题"></a></h1>
+<section id="control-tool">
+<h2><span class="section-number">5.10.3.1. </span>Control tool 功能说明<a class="headerlink" href="#control-tool" title="永久链接至标题"></a></h2>
+<p>Control tool 是isp-tuning 时tuning
+ISP参数的图形界面工具，其界面示意如图1所示。tuning 人员借助该工具可以查看ISP
+状态信息及调整相关模块的参数。</p>
+<p><img alt="C:\Users\YONGYO~1.DUA\AppData\Local\Temp\企业微信截图_15847785693169.png" src="../../_images/4379cfc04234ba1a6795e68725cd0f02.png" /></p>
+<p><em>Figure 1: Control tool界面示意图.</em></p>
+<p>图1中主要有calibrations, API等多个模块，各模块说明如表1所示。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>标号</th>
+<th>名称</th>
+<th>说明</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>calibration信息</td>
+<td>有dynamic calibrations / static calibrations 两大类，Save Dynamic calibrations保存动态json，Save Static calibrations保存静态json</td>
+<td>tuning 相关参数</td>
+</tr>
+<tr>
+<td>2</td>
+<td>hardware信息</td>
+<td>通过Save All HW Registers可以保存下来setting.json</td>
+<td>ISP硬件寄存器参数</td>
+</tr>
+<tr>
+<td>3</td>
+<td>api 页面</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>api 相关选项</td>
+<td>具有若个子项，具体使用方法详见tuning guide 说明</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>功能搜索选项</td>
+<td>快速查找相关功能项位置</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>状态控制选项</td>
+<td>辅助功能，eg. 将*.json 文件转为*.c 文件用于编译</td>
+<td></td>
+</tr>
+</tbody>
+</table><p><em>Table 1: Control tool界面功能说明表.</em></p>
+</section>
+<section id="id1">
+<h2><span class="section-number">5.10.3.2. </span>Control tool 操作说明<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>1. 确保X3与PC 网络连接正常，可从PC端ping X3检查网络连接是否正常。</p>
+<p>2. 使用串口(或SSH) 登陆X3，将开发包中X3M_SDK/board_support_package/platform_source_code/hbre/sensors目录下对应某个sensor的isp tuning相关的配置文件和启动脚本拷贝到开发板上，以f37 sensor为例，执行sh start_f37.sh脚本启动tuning tool及Control tool server后即可用hobot player预览图像，通过浏览器调试isp参数。</p>
+<p>启动命令：./act-server –http-port=8214 –fw-acc=stream –fw-channel=chardev
+--fw-dev=/dev/ac_isp –hw-acc=stream –hw-buf-size=1024 –hw-channel=devmem
+--hw-dev=/dev/mem –hw-mem-offset=0xb3000000 –hw-mem-size=0x400000</p>
+<p>参数说明如表2所示，需要调整的参数分为firmware,
+hardware(ISP硬件寄存器)两类，其中firmware使用chardev与驱动交互数据，hardware使用devmem读写ISP寄存器参数。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>序号</th>
+<th>参数名</th>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>--http-port</td>
+<td>8214</td>
+<td>网络端口号</td>
+</tr>
+<tr>
+<td>firmware</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>--fw-channel</td>
+<td>chardev</td>
+<td>通过chardev 与驱动建立连接</td>
+</tr>
+<tr>
+<td>3</td>
+<td>--fw-dev</td>
+<td>/dev/ac_isp</td>
+<td>设备名称</td>
+</tr>
+<tr>
+<td>4</td>
+<td>--hw-buf-size</td>
+<td>1024</td>
+<td>buffer大小</td>
+</tr>
+<tr>
+<td>5</td>
+<td>--fw-acc ( firmware access type )</td>
+<td>stream</td>
+<td>通过/dev/ac_isp 使用stream 方式</td>
+</tr>
+<tr>
+<td>hardware</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>--hw-channel</td>
+<td>devmem</td>
+<td>使用devmem 获取相关寄存器信息</td>
+</tr>
+<tr>
+<td>7</td>
+<td>--hw-dev</td>
+<td>/dev/mem</td>
+<td>设备名称</td>
+</tr>
+<tr>
+<td>8</td>
+<td>--fw-acc ( hardware access type )</td>
+<td>stream</td>
+<td>hardware access type</td>
+</tr>
+<tr>
+<td>9</td>
+<td>--hw-mem-offset</td>
+<td>0xb3000000</td>
+<td>偏移地址</td>
+</tr>
+<tr>
+<td>10</td>
+<td>--hw-mem-size</td>
+<td>0x400000</td>
+<td>参数长度</td>
+</tr>
+</tbody>
+</table><p><em>Table 2: Control tool server启动参数说明</em></p>
+<p><img alt="C:\Users\YONGYO~1.DUA\AppData\Local\Temp\企业微信截图_15847861391015.png" src="../../_images/9104bb3bd72f83ce71b5e684bde1ec91.png" /></p>
+<p><em>Figure 2: Control tool server成功启动示意图.</em></p>
+<p>3. 使用firefox (或chrome )浏览器访问相应的地址。</p>
+<p><em>note:</em></p>
+<p><em>(1) 例如X3 IP 地址为10.96.32.14，端口号设置8214，
+则访问</em><a class="reference external" href="http://10.96.32.14:8214/"><em>http://10.96.32.14:8214/</em></a><em>，该访问地址可查阅log获取</em></p>
+<p><em>(2) 若需更新界面选项可点击upload New XML File选项load
+“IV009-HW-Control.xml”档案建立hardware页面信息；点击upload New Software
+API选项load “command.json” 建立api
+页面。“IV009-HW-Control.xml”和“command.json”档案同工具一起发布。</em></p>
+<p><em>(3)
+control-tool不支持根据不同sensor动态适配界面，故设置参数后需读取一次确定设置值是否超过限制，若超过限制则实际设置限制的最大值。</em></p>
+<p><em>(4)建议使用firefox浏览器，chrome请使用70.0.3538.110版本。</em></p>
+<p>4.多路sensor接入的时候，通过control-tool解码的API-&gt;TGENERAL-&gt;ACTIVE_CONTEXT,可以选择num对应查看这一路sensor信息。</p>
+<p><img alt="../../_images/image-20220803112834137.png" src="../../_images/image-20220803112834137.png" /></p>
+</section>
+<section id="calibration-tool">
+<h2><span class="section-number">5.10.3.3. </span>Calibration tool 使用说明<a class="headerlink" href="#calibration-tool" title="永久链接至标题"></a></h2>
+</section>
+<section id="calibration-tool-installation">
+<h2><span class="section-number">5.10.3.4. </span>Calibration tool-Installation<a class="headerlink" href="#calibration-tool-installation" title="永久链接至标题"></a></h2>
+<section id="installation-procedure">
+<h3>Installation procedure<a class="headerlink" href="#installation-procedure" title="永久链接至标题"></a></h3>
+<p>1. 运行可执行文件“ ISP_Calibration_Tool_Install”。</p>
+<p><img alt="../../_images/20220330-194232.png" src="../../_images/20220330-194232.png" /></p>
+<p><em>Figure 8: Executable file.</em></p>
+<p>2. 出现如figure 9所示的窗口，单击“Next”。</p>
+<p><img alt="../../_images/6f0b4e20ba8682d20e3d8f21b53ba7bb.png" src="../../_images/6f0b4e20ba8682d20e3d8f21b53ba7bb.png" /></p>
+<p><em>Figure 9: First installation window.</em></p>
+<p>3. 将会出现如figure
+10所示的窗口。选择安装文件夹，如果要添加桌面快捷键，请单击“Add a shortcut to the
+desktop”的选项。</p>
+<p><img alt="../../_images/2ee63ab13600a651fdfe736a8747f44b.png" src="../../_images/2ee63ab13600a651fdfe736a8747f44b.png" /></p>
+<p><em>Figure 10: Second installation window.</em></p>
+<p>4. 安装中软件将检测是否已经安装了最新的MATLAB
+Runtime。如果已安装，将出现一个确认窗口显示状态，然后选择“Next”并继续执行步骤6。否则，将出现Figure
+11窗口，选择安装文件夹，然后选择“Next”。</p>
+<p><img alt="../../_images/35be2f605d59a3297a5ec4b1e003cbd8.png" src="../../_images/35be2f605d59a3297a5ec4b1e003cbd8.png" /></p>
+<p><em>Figure 11: Third installation window.</em></p>
+<p>5. 出现许可协议界面，先选择“Yes” 然后单击“Next”。</p>
+<p><img alt="../../_images/0d96b24491e1bec783d20ad0bad9373b.png" src="../../_images/0d96b24491e1bec783d20ad0bad9373b.png" /></p>
+<p><em>Figure 12: License Agreement window.</em></p>
+<p>6. 将出现一个类似于Figure 13的窗口，选择“Install” 按钮继续安装。</p>
+<p><img alt="../../_images/77ac825690f48400ef9e5930a1a129a3.png" src="../../_images/77ac825690f48400ef9e5930a1a129a3.png" /></p>
+<p><em>Figure 13: Fourth installation window.</em></p>
+<p>7. 等待安装，完成后请单击“Finish” 按钮，Calibration tool工具安装完成。</p>
+</section>
+</section>
+<section id="isp-calibration-tool-home-window">
+<h2><span class="section-number">5.10.3.5. </span>ISP calibration tool Home window<a class="headerlink" href="#isp-calibration-tool-home-window" title="永久链接至标题"></a></h2>
+<section id="home-window">
+<h3>Home window<a class="headerlink" href="#home-window" title="永久链接至标题"></a></h3>
+<p>运行Calibration Tool，显示 Home窗口如图Figure 14所示。</p>
+<p><img alt="../../_images/2d0eefc8fc595f5d2c89e6bf78e5cdf1.png" src="../../_images/2d0eefc8fc595f5d2c89e6bf78e5cdf1.png" /></p>
+<p><em>Figure 14: Home window</em></p>
+<p>Calibration
+tool会根据输入图像和数据生成调试后的寄存器值和查找表（LUT），这些参数会保存在static_calibrations.c文件中（或自定义名称）。</p>
+</section>
+<section id="menu-buttons">
+<h3>Menu buttons<a class="headerlink" href="#menu-buttons" title="永久链接至标题"></a></h3>
+<p>Table 6列出了Calibration Tool中各个菜单按钮的功能。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Icon</th>
+<th>Name</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img alt="" src="_static/_images/Control_tool_Guide/75f79c27c7daf85fe022b0568b531e3d.png" /></td>
+<td>Information panel</td>
+<td>Shows current tuning progress (home window only)</td>
+</tr>
+<tr>
+<td><img alt="" src="_static/_images/Control_tool_Guide/3e0544383924cfe3b95dd5e5186c4497.png" /></td>
+<td>Save / Export</td>
+<td>Save module data to global data (module windows) Export global data to file (home window)</td>
+</tr>
+<tr>
+<td><img alt="" src="_static/_images/Control_tool_Guide/ab78d772be233e2e86c42e064ed31fb1.png" /></td>
+<td>Open</td>
+<td>Load a calibration file you have exported previously</td>
+</tr>
+<tr>
+<td><img alt="" src="_static/_images/Control_tool_Guide/96c5338e45e80c9110323642a8a8f26f.png" /></td>
+<td>Information</td>
+<td>Open the information document (PDF file) for this window</td>
+</tr>
+<tr>
+<td><img alt="" src="_static/_images/Control_tool_Guide/763f6500f4b23fff4f24397c945d5172.png" /></td>
+<td>Clear</td>
+<td>Reset tuning data for this window</td>
+</tr>
+<tr>
+<td><img alt="" src="_static/_images/Control_tool_Guide/50fc167206140147849a8fbc466e8808.png" /></td>
+<td>Image format</td>
+<td>Set the basic sensor properties, such as resolution and bit depth</td>
+</tr>
+<tr>
+<td><img alt="" src="_static/_images/Control_tool_Guide/c193ad26ed52d59784d25fc828e1a300.png" /></td>
+<td>Home</td>
+<td>Close the module window and return to the home window (module windows only)</td>
+</tr>
+</tbody>
+</table><p><em>Table 6: List of all menu bar buttons in the main window and module windows</em></p>
+</section>
+<section id="getting-started">
+<h3>Getting started<a class="headerlink" href="#getting-started" title="永久链接至标题"></a></h3>
+<p>1. 单击<img alt="../../_images/50fc167206140147849a8fbc466e8808.png" src="../../_images/50fc167206140147849a8fbc466e8808.png" />图标，将打开图像格式窗口。按照文中3.1的介绍正确的设置图像格式参数。</p>
+<p>2. 在主页面中的‘Select an ISP mode’下拉菜单中选择ISP mode。ISP
+modes是ISP不同模式的简略缩写，建议先在线性模式下进行校准。表7是具体的模式选项，ISP只支持表格中列出的模式。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Mode name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear ISP</td>
+<td>ISP receives <strong>linear</strong> data from the sensor. Gamma FE and frame stitch blocks are bypassed.</td>
+</tr>
+<tr>
+<td>FS-Lin ISP</td>
+<td>ISP receives linear data with alternating exposures from the sensor. Gamma FE is bypassed. Frame stitch block combines alternate exposures into an HDR image.</td>
+</tr>
+<tr>
+<td>FS-HDR ISP</td>
+<td>ISP receives linear data with alternating exposures from the sensor. Gamma FE converts data into <strong>square root companded.</strong> Frame stitch block combines alternate exposures into an HDR image in square root domain.</td>
+</tr>
+<tr>
+<td>Native-WDR-Lin ISP</td>
+<td>ISP receives <strong>companded</strong> HDR data (e.g. <strong>piecewise linear</strong>) from the sensor. Gamma FE converts data into linear. Frame stitch block is usually disabled.</td>
+</tr>
+<tr>
+<td>Native-WDR ISP</td>
+<td>ISP receives companded HDR data (e.g. piecewise linear) from the sensor. Gamma FE converts data into square root companded. Frame stitch block is usually disabled.</td>
+</tr>
+</tbody>
+</table><p><em>Table 7: List modes of isp</em></p>
+<p>模式中关键词的解释</p>
+<p><strong>Linear</strong>表示在忽略sensor errors 和 black
+level影响条件下，像素亮度值与照度成正比。例如像素检测到的光子数量增加了2倍，则像素亮度值也将增加2倍。</p>
+<p><strong>Companded</strong>表示像素亮度值与照度不成线性关系，因为sensor内部会把像素亮度值根据设定的函数进行压缩。</p>
+<p><strong>Piecewise
+linear</strong>是传感器中使用的压扩函数，该函数使用拐点方式对数字像素值的范围进行划分，每个拐点之间的斜率恒定。</p>
+<p><strong>Square
+root</strong>是ISP中使用的压扩函数。利用数学平方根，对输入和输出数据的位深进行缩放，作用在Black
+level模块后。</p>
+<p>3. 首先校准Black
+Level，然后按照主界面中箭头指示的顺序进行依次操作。箭头显示了各个模块间依赖性。</p>
+<p>4. 例如，CCM取决于Gamma和Tone，因此应在CCM之前校准Gamma和Tone。如果以后更改Gamma和Tone校准，则需要重新校准CCM以及其他相关模块。</p>
+<p>5. 没有箭头连接的模块完全独立于其他模块。变灰的模块意味着无法使用，带有绿色环的模块表示已经进行了校准。</p>
+<p>6. 通过单击ISP模块图标来校准每个模块。</p>
+<p><em>注：工具中模块的重新校准将影响“dynamic
+calibrations”。关闭工具前，请务必在主窗口中单击Export (floppy disk)
+icon，否则所有进度将丢失。</em></p>
+</section>
+</section>
+<section id="calibration-tool-image-format">
+<h2><span class="section-number">5.10.3.6. </span>Calibration tool – Image format<a class="headerlink" href="#calibration-tool-image-format" title="永久链接至标题"></a></h2>
+<section id="image-format-window">
+<h3>Image format window<a class="headerlink" href="#image-format-window" title="永久链接至标题"></a></h3>
+<p>在任意一个窗口，当点击image format button
+(<img alt="../../_images/39d9cc603ea3efdf927cf1e22a25fbb8.png" src="../../_images/39d9cc603ea3efdf927cf1e22a25fbb8.png" />icon)，将会出现如Figure
+15的页面。</p>
+<p><img alt="../../_images/437a36aecac1276cffce4b0eff2a566f.png" src="../../_images/437a36aecac1276cffce4b0eff2a566f.png" /></p>
+<p><em>Figure 15: Image format window</em></p>
+</section>
+<section id="window-features">
+<h3>Window features<a class="headerlink" href="#window-features" title="永久链接至标题"></a></h3>
+<p>Table
+7列出了设置的参数及其含义，这些参数用于配置加载的sensor图像，因此在调试任何模块之前必须首先设置它。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Region</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sensor name</td>
+<td>Enter text describing the sensor. This will be used in exported filenames.</td>
+</tr>
+<tr>
+<td>Image width</td>
+<td>Enter the horizontal resolution of the sensor raw files (in pixels)</td>
+</tr>
+<tr>
+<td>Image height</td>
+<td>Enter the vertical resolution of the raw files (in pixels)</td>
+</tr>
+<tr>
+<td>Header size (bytes)</td>
+<td>Enter the length of the raw file header. This is the gap from the start of the file until the first image data and may be 0.</td>
+</tr>
+<tr>
+<td>Raw bit-depth</td>
+<td>Enter the bit-depth of the sensor (typically 10 or 12)</td>
+</tr>
+<tr>
+<td>Data format (.raw only)</td>
+<td>Enter the type of data formatting used by the raw files. This does not apply to .rgb, .ppm or .pgm files.</td>
+</tr>
+<tr>
+<td>Data alignment</td>
+<td>In most data formats, the number of bits used for each pixel is more than the sensor bit depth, so the data is aligned to the MSB (most significant bit) or the LSB (least significant bit). Choose this here.</td>
+</tr>
+<tr>
+<td>R position</td>
+<td>Select the position of the R channel in the file</td>
+</tr>
+<tr>
+<td>Endianness</td>
+<td>Byte order of data within each 16 or 32-bit word (usually “ieee-le”)</td>
+</tr>
+<tr>
+<td>Workplace – Set path</td>
+<td>Set the directory for loading &amp; saving data files</td>
+</tr>
+<tr>
+<td>Verify settings</td>
+<td>Check your settings by loading an image file. Raw images will be converted to color images for display. It is advisable to choose an image with strong colors, to check that “R position” is set correctly.</td>
+</tr>
+</tbody>
+</table><p><em>Table 7: List of all settings and their meanings in the image format GUI</em></p>
+<p><em>注：在使用calibration tool中的任何模块之前，请先使用“Verify
+settings”按钮来检查图像是否正确。 如果正确，请单击“save”按钮。</em></p>
+</section>
+<section id="file-types-supported">
+<h3>File types supported<a class="headerlink" href="#file-types-supported" title="永久链接至标题"></a></h3>
+<p>Calibration
+tool可以使用标准Netpbm格式PPM（扩展名.ppm）和PGM（扩展名.pgm）导入raw（Bayer
+array)）图像。</p>
+<p>Calibration
+Tool工具可以按照标准JPEG和PNG插值方式进行demosaic处理并生成后缀为.rgb的文件，仅有2个模块CCM和Gamma＆tone会使用到后缀为.rgb的图像。</p>
+</section>
+<section id="output-formats">
+<h3>Output formats<a class="headerlink" href="#output-formats" title="永久链接至标题"></a></h3>
+<p>所有支持的格式都使用行优先顺序，图像数据是按从左到右然后从上到下的顺序存储。</p>
+<p>Table 8列出了raw 和 rgb 输出格式。星号显示calibration tool支持的格式。“Base
+mode” 和 “Plane
+select”列是在ISP中产生此格式的设置。该表假定数据以32-bit字的形式written/read。</p>
+<p><img alt="../../_images/9b53523448149b309157ab4d21ae343b.png" src="../../_images/9b53523448149b309157ab4d21ae343b.png" /></p>
+<p><em>Table 8: ARM output formats</em></p>
+<p><strong>RAW8/16/32</strong></p>
+<p>这是一种通用数据格式，可以使用某些第三方工具查看它的二进制格式，每个像素可能占用1,2或4个字节，具体取决于sensor位深。在RAW16中，数据通常在16bit内以MSB对齐（如Table
+3所示），因此请将“Data alignment”设置为“MSB”。</p>
+<p><strong>GEN32</strong></p>
+<p>在这种格式下，像素数据位最多为32-bit字的12bit。最重要的部分是字的第26至31bit。最低有效部分是字的第10到15bit。对于12bit
+sensor，“Data alignment”设置无效。</p>
+<p><strong>RAW12</strong></p>
+<p>这种格式，位深最大为12bit，以8个像素为一组被打包为12个bytes（3个32bit words）。
+对于12-bit sensor，“Data alignment”设置无效。</p>
+<p><strong>A2R10G10B10</strong></p>
+<p>扩展名为.rgb的图像文件必须采用这种格式。每个像素存储在一个32bit字中，其中蓝色通道位0-9，绿色通道位10-19，红色通道位20-29。</p>
+<p>如果遇到未知其格式信息的RAW文件，可以先使用第三方工具按十六进制打开，会看到具有ASCII码，如Figure
+16所示，这样就能获知其像素及分辨率信息。</p>
+<blockquote>
+<div><p><img alt="../../_images/0eadab1119cf4438d6ca37e421c59e59.png" src="../../_images/0eadab1119cf4438d6ca37e421c59e59.png" /></p>
+</div></blockquote>
+<blockquote>
+<div><p><em>Figure 16: RAW image header</em></p>
+</div></blockquote>
+<p>在Figure16例子中获知信息如下:</p>
+<p>• 设置图像宽度 3264</p>
+<p>• 设置图像高度 2448</p>
+<p>• 设置 raw bit-depth 为10 (最大像素值为1023)</p>
+<p>通过反复试验找到其他设置。例如：</p>
+<p>•如果图像太亮或太暗，请尝试更改“Data alignment”。</p>
+<p>•如果通道出现互换，请尝试更改“R position”。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Sensor_Bring_Up.html" class="btn btn-neutral float-left" title="5.10.2. X3 Camera点亮说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Camera_Tuning_Tool.html" class="btn btn-neutral float-right" title="5.10.4. Hobot player工具指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

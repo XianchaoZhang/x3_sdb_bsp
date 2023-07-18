@@ -1,0 +1,45 @@
+# sample_vps 使用说明
+
+## 程序功能
+
+`sample_vps` 程序使用一个 `vps grp` 的多个不同通道，对 `YUV` 图像进行裁剪，旋转，缩放等操作，展示 `vps` 的基本用法。更多丰富的 `vps` 图像处理使用请参考[视频处理](../../mpp_develop/5-Video_Processing_zh_CN.html)章节。
+
+## 功能使用
+
+### 程序部署
+
+把 `sample/sample_vps/sample_vps` 和 `19201080.yuv` 文件上传到开发板后，给程序赋予可执行权限 `chmod a+x sample_vps`, 然后执行程序 `./sample_vps`。
+
+### 运行效果说明
+`YUV` 图片通过回灌方式，利用 `vps` 进行裁剪，旋转，缩放等功能，保存对应处理后的 `YUV` 图像。
+* `grp_0_chn_1_out_1280_720.yuv` 为原图裁剪到 `1280x720` 分辨率；
+* `grp_0_chn_2_out_1088_1920.yuv` 为原图旋转90度的图像；
+* `grp_0_chn_3_out_960_540.yuv` 为原图缩小到 `960x540` 分辨率；
+* `grp_0_chn_5_out_2880_1620.yuv` 为原图放大到 `2880x1620` 分辨率；
+
+## 程序开发
+
+### 源码结构
+```
+.
+|-- 19201080.yuv      # 回灌使用NV12格式文件 
+|-- main.c            # 主程序
+`-- Makefile          # 编译makefile
+```
+
+### 编译
+
+当前代码通过一个Makefile文件配置编译
+
+依赖的多媒体头文件和库文件分别在BSP SDK的appsdk目录和system/rootfs_yocto/root目录下，编译时需要注意这两个依赖目录位置是否存在
+
+安装交叉编译工具链后，执行 make 命令直接可以编译生成 sample_vps 程序：
+```
+cd sample/sample_vps
+$ make clean # 清理源码，保持干净的代码环境
+$ make
+... ... # 一大段编译打印
+$ ls
+19201080.yuv  main.c  main.o  Makefile  sample_vps
+$ make install # 把产出物安装到 out 目录下
+```

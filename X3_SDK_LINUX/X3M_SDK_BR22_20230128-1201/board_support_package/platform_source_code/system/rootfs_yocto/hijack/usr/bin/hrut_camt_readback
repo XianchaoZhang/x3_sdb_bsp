@@ -1,0 +1,31 @@
+#! /bin/sh
+
+print_usage()
+{
+        echo "Usage:"
+        echo "hrut_camt_readback camindex [0|1]"
+        echo "camindex 1/2/3/4: for compatibility this is must but no use"
+        echo "0:exposure mode"
+        echo "1:auto exposure value"
+        echo "2:manual exposure value"
+        echo "3: ISP gain mode"
+        echo "4: ISP gain value"
+        echo "5: analog gain value"
+        echo "6: fps value"
+        echo "-----------------------------------"
+}
+
+CAMTYPE=`hrut_390camtype`
+case $CAMTYPE in
+    0)
+        hrut_camt_readback_type0 $@
+    ;;
+    1)
+        hrut_camt_readback_type1 $@
+    ;;
+    *)
+        hrut_camt_readback_type0 $@
+    ;;
+esac
+
+

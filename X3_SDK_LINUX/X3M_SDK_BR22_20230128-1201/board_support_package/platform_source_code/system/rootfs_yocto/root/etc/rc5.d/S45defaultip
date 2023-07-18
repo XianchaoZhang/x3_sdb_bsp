@@ -1,0 +1,4 @@
+#!/bin/sh
+
+/usr/bin/defaultip.sh
+setprop defaultip.ready 1

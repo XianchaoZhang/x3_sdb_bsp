@@ -1,0 +1,226 @@
+aircable.ko: usbserial.ko
+r8723bs.ko: cfg80211.ko rfkill.ko
+v4l2-tpg.ko:
+g_mass_storage.ko: usb_f_mass_storage.ko libcomposite.ko
+hobot_gdc.ko: hobot_dwe.ko hobot_isp_log.ko videobuf2-dma-contig.ko videobuf2-memops.ko videobuf2-v4l2.ko videobuf2-core.ko
+snd-soc-adau1977.ko:
+mxuport.ko: usbserial.ko
+ac108_driver.ko:
+ipaq.ko: usbserial.ko
+usb_f_ss_lb.ko: libcomposite.ko
+mct_u232.ko: usbserial.ko
+usb_f_uvc.ko: videobuf2-vmalloc.ko videobuf2-dma-sg.ko videobuf2-memops.ko videobuf2-v4l2.ko videobuf2-core.ko libcomposite.ko
+hobot-snd-101.ko:
+g_audio.ko: libcomposite.ko
+int51x1.ko: usbnet.ko
+elprsa.ko: elppdu.ko
+sierra_net.ko: usbnet.ko
+u_ether.ko:
+u_hbusb.ko:
+gl620a.ko: usbnet.ko
+bpu_governor.ko: bpu_framework.ko
+usb_wwan.ko: usbserial.ko
+hobot_spidev.ko:
+usbserial.ko:
+ch341.ko: usbserial.ko
+hobot_isp_log.ko:
+g_cdc.ko: u_ether.ko libcomposite.ko
+keyspan.ko: ezusb.ko usbserial.ko
+hobot-snd-96.ko:
+bif_sio.ko: bifbase.ko
+libcomposite.ko:
+bifbase.ko:
+microchip.ko:
+ftdi_sio.ko: usbserial.ko
+cdc_ncm.ko: usbnet.ko
+extcon-vbus-gpio.ko:
+xsens_mt.ko: usbserial.ko
+usb_f_acm.ko: u_serial.ko libcomposite.ko
+hobot_dwe.ko: hobot_isp_log.ko videobuf2-dma-contig.ko videobuf2-memops.ko videobuf2-v4l2.ko videobuf2-core.ko
+usb_f_mass_storage.ko: libcomposite.ko
+uvcvideo.ko: videobuf2-vmalloc.ko videobuf2-memops.ko videobuf2-v4l2.ko videobuf2-core.ko
+hbipc_lite.ko: bif_lite.ko bif_platform.ko bifbase.ko
+snd-soc-adau1977-i2c.ko: snd-soc-adau1977.ko
+vivid.ko: v4l2-tpg.ko videobuf2-vmalloc.ko videobuf2-dma-contig.ko videobuf2-memops.ko videobuf2-v4l2.ko videobuf2-core.ko
+usb_debug.ko: usbserial.ko
+hobot_osd.ko:
+videobuf2-memops.ko:
+navman.ko: usbserial.ko
+hobot_pym.ko:
+bif_platform.ko:
+ir-usb.ko: usbserial.ko
+kaweth.ko:
+videobuf-core.ko:
+cdc_subset.ko: usbnet.ko
+elpclp800.ko: elppdu.ko
+usb_f_rndis.ko: u_ether.ko libcomposite.ko
+rtl8150.ko:
+hobot_ipu.ko: hobot_isp.ko hobot_sns_bridge.ko hobot_sensor.ko hobot_sif.ko videobuf2-vmalloc.ko hobot_dwe.ko hobot_isp_log.ko videobuf2-dma-contig.ko videobuf2-memops.ko videobuf2-v4l2.ko videobuf2-core.ko
+usb_f_serial.ko: u_serial.ko libcomposite.ko
+mos7840.ko: usbserial.ko
+u_serial.ko:
+crypto_engine.ko:
+option.ko: usb_wwan.ko usbserial.ko
+ipw.ko: usb_wwan.ko usbserial.ko
+kobil_sct.ko: usbserial.ko
+qcaux.ko: usbserial.ko
+hobot_jpu.ko:
+g_ether.ko: usb_f_rndis.ko u_ether.ko libcomposite.ko
+usb-serial-simple.ko: usbserial.ko
+r8152.ko:
+es8156.ko:
+elpspaccdev.ko: elpspacc.ko elppdu.ko
+keyspan_pda.ko: ezusb.ko usbserial.ko
+qmi_wwan.ko: cdc-wdm.ko usbnet.ko
+net1080.ko: usbnet.ko
+bluetooth.ko: ecdh_generic.ko rfkill.ko
+remoteproc.ko: virtio_ring.ko virtio.ko
+lg-vl600.ko: cdc_ether.ko usbnet.ko
+ecdh_generic.ko:
+hobot_iq.ko: hobot_isp_log.ko
+ti_usb_3410_5052.ko: usbserial.ko
+cdc-wdm.ko:
+metro-usb.ko: usbserial.ko
+g_hbusb.ko: usb_f_hbusb.ko u_hbusb.ko libcomposite.ko
+hobot_rpmsg_char.ko: rpmsg_core.ko
+sr9800.ko: usbnet.ko
+asix.ko: usbnet.ko
+wishbone-serial.ko: usbserial.ko
+safe_serial.ko: usbserial.ko
+pl2303.ko: usbserial.ko
+elpspacccrypto.ko: elpspacc.ko elppdu.ko
+rfkill.ko:
+iuu_phoenix.ko: usbserial.ko
+virtio_rpmsg_bus.ko: virtio_ring.ko virtio.ko rpmsg_core.ko
+ssu100.ko: usbserial.ko
+v4l2_avb.ko: videobuf2-dma-contig.ko videobuf2-memops.ko videobuf2-v4l2.ko videobuf2-core.ko
+huawei_cdc_ncm.ko: cdc_ncm.ko cdc-wdm.ko usbnet.ko
+hobot-snd-7210.ko:
+iar_cdev.ko: iar.ko
+hobot-snd-dummy.ko:
+omninet.ko: usbserial.ko
+hobot_sif.ko:
+plusb.ko: usbnet.ko
+hobot_efuse.ko:
+g_webcam.ko: libcomposite.ko
+belkin_sa.ko: usbserial.ko
+virtio_ring.ko:
+sd8xxx.ko: mlan.ko cfg80211.ko rfkill.ko
+catc.ko:
+dummy-cpudai.ko:
+bpu_cores.ko: bpu_framework.ko
+r8189fs.ko: cfg80211.ko rfkill.ko
+brcmfmac.ko: brcmutil.ko cfg80211.ko rfkill.ko
+u_audio.ko: libcomposite.ko
+f81534.ko: usbserial.ko
+usb_f_obex.ko: u_serial.ko libcomposite.ko
+hobot_lens.ko: hobot_sensor.ko hobot_sif.ko hobot_isp_log.ko
+elppdu.ko:
+bpu_framework.ko:
+cdc_eem.ko: usbnet.ko
+ch9200.ko: usbnet.ko
+usb_f_uac1.ko: u_audio.ko libcomposite.ko
+cx82310_eth.ko: usbnet.ko
+hobot_vpu.ko:
+gt9xx.ko:
+videobuf2-dma-contig.ko: videobuf2-memops.ko
+hobot_bifsd.ko:
+usb_f_ecm.ko: u_ether.ko libcomposite.ko
+cdc_ether.ko: usbnet.ko
+snd-usb-audio.ko: snd-hwdep.ko snd-usbmidi-lib.ko snd-rawmidi.ko
+usbnet.ko:
+g_serial.ko: libcomposite.ko
+es7210.ko:
+hobot_sns_bridge.ko: hobot_isp_log.ko
+hobot_cnn_host_total.ko:
+spaccexample.ko: elpspacc.ko elppdu.ko
+sierra.ko: usbserial.ko
+mcs7830.ko: usbnet.ko
+hobot_bifspi.ko:
+hci_uart.ko: bluetooth.ko ecdh_generic.ko rfkill.ko
+mos7720.ko: usbserial.ko
+cyberjack.ko: usbserial.ko
+pegasus.ko:
+virtio_crypto.ko: crypto_engine.ko virtio_ring.ko virtio.ko
+usb_f_ecm_subset.ko: u_ether.ko libcomposite.ko
+nfs_layout_flexfiles.ko:
+rpmsg_core.ko:
+hobot_goodix.ko:
+hobot_sensor.ko: hobot_sif.ko
+hobot-i2s-dma.ko:
+smsc75xx.ko: usbnet.ko
+symbolserial.ko: usbserial.ko
+hobot_sched_logger.ko:
+ipheth.ko:
+f81232.ko: usbserial.ko
+cfg80211.ko: rfkill.ko
+hobot-snd-102.ko:
+usb_f_fs.ko: libcomposite.ko
+hobot_sscg.ko:
+snd-rawmidi.ko:
+sr9700.ko: usbnet.ko
+videobuf2-core.ko:
+io_edgeport.ko: usbserial.ko
+smsc95xx.ko: usbnet.ko
+elpspacc.ko: elppdu.ko
+io_ti.ko: usbserial.ko
+btbcm.ko: bluetooth.ko ecdh_generic.ko rfkill.ko
+bif_lite.ko: bif_platform.ko bifbase.ko
+dm9601.ko: usbnet.ko
+opticon.ko: usbserial.ko
+upd78f0730.ko: usbserial.ko
+hobot-cpudai.ko:
+usb_f_hbusb.ko: u_hbusb.ko libcomposite.ko
+g_hid.ko: libcomposite.ko
+g_zero.ko: libcomposite.ko
+videobuf2-vmalloc.ko: videobuf2-memops.ko
+videobuf2-dma-sg.ko: videobuf2-memops.ko
+usbtest.ko:
+hobot_isp.ko: hobot_sns_bridge.ko hobot_sensor.ko hobot_sif.ko videobuf2-vmalloc.ko hobot_dwe.ko hobot_isp_log.ko videobuf2-dma-contig.ko videobuf2-memops.ko videobuf2-v4l2.ko videobuf2-core.ko
+usb_f_hid.ko: libcomposite.ko
+usb_f_uac2.ko: u_audio.ko libcomposite.ko
+videobuf2-v4l2.ko: videobuf2-core.ko
+zaurus.ko: cdc_ether.ko usbnet.ko
+gadgetfs.ko:
+cdc_mbim.ko: cdc_ncm.ko cdc-wdm.ko usbnet.ko
+qcserial.ko: usb_wwan.ko usbserial.ko
+ac101.ko:
+hobot_codec.ko:
+ax88179_178a.ko: usbnet.ko
+cypress_m8.ko: usbserial.ko
+snd-soc-ac102.ko:
+brcmutil.ko:
+cmac.ko:
+lan78xx.ko:
+hobot_hdmi_lt8618.ko: iar_cdev.ko iar.ko
+hobot_remoteproc.ko: remoteproc.ko virtio_ring.ko virtio.ko
+g_ffs.ko: usb_f_fs.ko usb_f_rndis.ko u_ether.ko libcomposite.ko
+digi_acceleport.ko: usbserial.ko
+bif_dev_sd.ko: hobot_bifspi.ko hbipc_lite.ko bif_lite.ko bif_platform.ko bifbase.ko
+empeg.ko: usbserial.ko
+virtio.ko:
+quatech2.ko: usbserial.ko
+elpmem.ko: elppdu.ko
+snd-hwdep.ko:
+bif_dev_spi.ko: hobot_bifspi.ko hbipc_lite.ko bif_lite.ko bif_platform.ko bifbase.ko
+oti6858.ko: usbserial.ko
+cp210x.ko: usbserial.ko
+garmin_gps.ko: usbserial.ko
+kalmia.ko: usbnet.ko
+iar.ko:
+g_acm_ms.ko: usb_f_mass_storage.ko libcomposite.ko
+spcp8x5.ko: usbserial.ko
+rndis_host.ko: cdc_ether.ko usbnet.ko
+g_multi.ko: usb_f_rndis.ko u_ether.ko usb_f_mass_storage.ko libcomposite.ko
+hobot-snd-1977.ko:
+ark3116.ko: usbserial.ko
+whiteheat.ko: ezusb.ko usbserial.ko
+kl5kusb105.ko: usbserial.ko
+ezusb.ko:
+hobot_hdmi.ko: iar_cdev.ko iar.ko
+hobot-fb.ko: iar.ko
+mac80211.ko: cfg80211.ko rfkill.ko
+snd-usbmidi-lib.ko: snd-rawmidi.ko
+visor.ko: usbserial.ko
+mlan.ko:
+iar_mmap.ko: iar.ko

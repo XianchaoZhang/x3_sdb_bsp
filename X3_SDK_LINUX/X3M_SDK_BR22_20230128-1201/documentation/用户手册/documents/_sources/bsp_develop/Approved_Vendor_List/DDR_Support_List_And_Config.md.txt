@@ -1,0 +1,404 @@
+# X3 DDR支持列表和板级配置
+
+X3 当前支持的ddr芯片列表如下
+
+| Type   | Vendor  | Model                   | Part  Number | Freq on  X3 (Mbps) | Size    | Temperature |
+| ------ | ------- | ----------------------- | ------------ | ------------------ | ------- | ----------- |
+| LPDDR4 | Samsung | K4F8E304HB-MGCJ         | 0x0108       | 3200               | 8Gbit   | -25 ~ 85℃   |
+| LPDDR4 | Samsung | K4F8E304HB-MGCJ         | 0x0108       | 2666               | 8Gbit   | -25 ~ 85℃   |
+| LPDDR4 | Nanya   | NT6AN256T32AV-J2        |              | 2666               | 8Gbit   | -30 ~ 105℃  |
+| LPDDR4 | Micron  | MT53E1G32D2FW-046AUT:A  | 0xff20       | 3200               | 32Gbit  | -40 ~ 90℃   |
+| LPDDR4 | Samsung | K4F6E3S4HM-MGCJ         | 0x110        | 3200               | 16Gbit  | -25 ~ 85℃   |
+| LPDDR4 | Hynix   | H9HCNNNBKUMLXR-NEE      | 0x0610       | 3200               | 16Gbit  | -25 ~ 85℃   |
+| LPDDR4 | Nanya   | NT6AN512T32AV-J1        |              | 3200               | 16Gbit  | -30 ~ 105℃  |
+| LPDDR4 | Micron  | MT53D1024M32D4DT-046AAT | 0xff10       | 2666               | 32Gbit  | -40 ~ 105℃  |
+| LPDDR4 | Samsung | K4FBE3D4HM-MGCJ         | 0x1010       | 3200               | 32Gbit  | -25 ~ 85℃   |
+| LPDDR4 | Hynix   | H9HCNNN8KUMLHR-NME      | 0x608        | 2666               | 8Gbit   | -25 ~ 85℃   |
+| DDR4   | Micron  | MT40A256M16LY-062E  AIT | 0xAAAA       | 3200               | 4Gbit*2 | -40 ~  95℃  |
+| DDR4   | Samsung | K4A4G165WF              | 0xff30       | 2640               | 4Gbit*2 | -10 ~ 70℃   |
+| DDR4   | Samsung | K4A8G165WC-BCTD         | 0xBBBB       | 2666               | 8Gbit*2 | 0 ~ 95℃     |
+
+## K4F8E304HB-MGCJ
+
+### 3200Mbps
+
+**板级配置**
+
+```c
+# DDR参数配置
+# 频率可选参数 "667" "1600" "2133" "2666" "3200" "3600" "3733" "4266"
+export HR_DDR_FREQ="3200"
+# 厂家可选参数 "hynix" "micron" "samsung"
+export HR_DDR_MANUFACTURE="samsung"
+# ddr类型可选 "LPDDR4" "LPDDR4X" "DDR4" "DDR3L"
+export HR_DDR_TYPR='LPDDR4'
+# ddr容量大小 "1" "2" "4",可不配置，支持自动识别
+export HR_DDR_CAPACITY="0"
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+```
+
+**miniboot/ddr对应代码**
+
+```c
+lpddr4_write_para_data(file, DDR_FREQC_3200, index, K4F8E304HBMGCJ, 0);
+```
+
+### 2666Mbps
+
+**板级配置**
+
+```c
+# DDR参数配置
+# 频率可选参数 "667" "1600" "2133" "2666" "3200" "3600" "3733" "4266"
+export HR_DDR_FREQ="2666"
+# 厂家可选参数 "hynix" "micron" "samsung"
+export HR_DDR_MANUFACTURE="samsung"
+# ddr类型可选 "LPDDR4" "LPDDR4X" "DDR4" "DDR3L"
+export HR_DDR_TYPR='LPDDR4'
+# ddr容量大小 "1" "2" "4",可不配置，支持自动识别
+export HR_DDR_CAPACITY="0"
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+```
+
+**miniboot/ddr对应代码**
+
+```c
+lpddr4_write_para_data(file, DDR_FREQC_2666, index, K4F8E304HBMGCJ, 0);
+```
+
+### 备注
+
+兼容K4F8E3S4HDMGCJ这颗ddr，仅生产工艺不同
+
+K4F8E304HBMGCJ是20nm工艺
+
+K4F8E3S4HDMGCJ是18nm工艺
+
+两种ddr共用参数
+
+## NT6AN256T32AV-J2
+
+**参数特殊说明**
+
+参数兼容 K4F8E304HB-MGCJ
+
+**板级配置**
+
+```c
+# DDR参数配置
+# 频率可选参数 "667" "1600" "2133" "2666" "3200" "3600" "3733" "4266"
+export HR_DDR_FREQ="2666"
+# 厂家可选参数 "hynix" "micron" "samsung"
+export HR_DDR_MANUFACTURE="samsung"
+# ddr类型可选 "LPDDR4" "LPDDR4X" "DDR4" "DDR3L"
+export HR_DDR_TYPR='LPDDR4'
+# ddr容量大小 "1" "2" "4",可不配置，支持自动识别
+export HR_DDR_CAPACITY="0"
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+```
+
+**miniboot/ddr对应代码**
+
+```c
+lpddr4_write_para_data(file, DDR_FREQC_2666, index, K4F8E304HBMGCJ, 0);
+```
+
+## MT53E1G32D2FW-046AUT:A
+
+**参数特殊说明**
+
+代码里面的part_number是0xff20
+
+在程序运行时实际读出来的应该是 0xff18
+
+get_ddr_mr_info:cs_num=2, mr5=0xff, mr8=0x18
+
+**板级配置**
+
+```c
+# DDR参数配置
+# 频率可选参数 "667" "1600" "2133" "2666" "3200" "3600" "3733" "4266"
+export HR_DDR_FREQ="3200"
+# 厂家可选参数 "hynix" "micron" "samsung"
+export HR_DDR_MANUFACTURE="micron"
+# ddr类型可选 "LPDDR4" "LPDDR4X" "DDR4" "DDR3L"
+export HR_DDR_TYPR='LPDDR4'
+# ddr容量大小 "1" "2" "4",可不配置，支持自动识别
+export HR_DDR_CAPACITY="0"
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+```
+
+**miniboot/ddr对应代码**
+
+```c
+lpddr4_write_para_data(file, DDR_FREQC_3200, index, MT53E1G32D2FW_046AUTA, 0);
+```
+
+## K4F6E3S4HM-MGCJ
+
+**参数特殊说明**
+
+HR_DDR_ALTERNATIVE=2
+
+**板级配置**
+
+```c
+# DDR参数配置
+# 频率可选参数 "667" "1600" "2133" "2666" "3200" "3600" "3733" "4266"
+export HR_DDR_FREQ="3200"
+# 厂家可选参数 "hynix" "micron" "samsung"
+export HR_DDR_MANUFACTURE="samsung"
+# ddr类型可选 "LPDDR4" "LPDDR4X" "DDR4" "DDR3L"
+export HR_DDR_TYPR='LPDDR4'
+# ddr容量大小 "1" "2" "4",可不配置，支持自动识别
+export HR_DDR_CAPACITY="0"
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=2
+```
+
+**miniboot/ddr对应代码**
+
+```c
+lpddr4_write_para_data(file, DDR_FREQC_3200, index, K4F6E3S4HMMGCJ, 0);
+```
+
+## H9HCNNNBKUMLXR-NEE
+
+**参数特殊说明**
+
+与K4F6E3S4HM-MGCJ参数兼容
+
+**板级配置**
+
+```c
+# DDR参数配置
+# 频率可选参数 "667" "1600" "2133" "2666" "3200" "3600" "3733" "4266"
+export HR_DDR_FREQ="3200"
+# 厂家可选参数 "hynix" "micron" "samsung"
+export HR_DDR_MANUFACTURE="samsung"
+# ddr类型可选 "LPDDR4" "LPDDR4X" "DDR4" "DDR3L"
+export HR_DDR_TYPR='LPDDR4'
+# ddr容量大小 "1" "2" "4",可不配置，支持自动识别
+export HR_DDR_CAPACITY="0"
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=2
+```
+
+**miniboot/ddr对应代码**
+
+```c
+lpddr4_write_para_data(file, DDR_FREQC_3200, index, K4F6E3S4HMMGCJ, 0);
+```
+
+## NT6AN512T32AV-J1
+
+**参数特殊说明**
+
+与K4F6E3S4HM-MGCJ参数兼容
+
+**板级配置**
+
+```c
+# DDR参数配置
+# 频率可选参数 "667" "1600" "2133" "2666" "3200" "3600" "3733" "4266"
+export HR_DDR_FREQ="3200"
+# 厂家可选参数 "hynix" "micron" "samsung"
+export HR_DDR_MANUFACTURE="samsung"
+# ddr类型可选 "LPDDR4" "LPDDR4X" "DDR4" "DDR3L"
+export HR_DDR_TYPR='LPDDR4'
+# ddr容量大小 "1" "2" "4",可不配置，支持自动识别
+export HR_DDR_CAPACITY="0"
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=2
+```
+
+**miniboot/ddr对应代码**
+
+```c
+lpddr4_write_para_data(file, DDR_FREQC_3200, index, K4F6E3S4HMMGCJ, 0);
+```
+
+## MT53D1024M32D4DT-046AAT
+
+**参数特殊说明**
+
+无
+
+**板级配置**
+
+```c
+# DDR参数配置
+# 频率可选参数 "667" "1600" "2133" "2666" "3200" "3600" "3733" "4266"
+export HR_DDR_FREQ="2666"
+# 厂家可选参数 "hynix" "micron" "samsung"
+export HR_DDR_MANUFACTURE="micron"
+# ddr类型可选 "LPDDR4" "LPDDR4X" "DDR4" "DDR3L"
+export HR_DDR_TYPR='LPDDR4'
+# ddr容量大小 "1" "2" "4",可不配置，支持自动识别
+export HR_DDR_CAPACITY="0"
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+```
+
+**miniboot/ddr对应代码**
+
+```c
+lpddr4_write_para_data(file, DDR_FREQC_2666, index, MT53D1024M32D4DT, 0);
+```
+
+## K4FBE3D4HM-MGCJ
+
+**参数特殊说明**
+
+HR_DDR_ALTERNATIVE=3
+
+**part_number:**
+
+代码里面的part_number是0x1010
+
+在程序运行时实际读出来的应该是 0x110
+
+get_ddr_mr_info:cs_num=1, mr5=0x1, mr8=0x10
+
+这么处理是为了和三星 K4F6E3S4HM-MGCJ 2GB 芯片做区分
+
+**板级配置**
+
+```c
+# DDR参数配置
+# 频率可选参数 "667" "1600" "2133" "2666" "3200" "3600" "3733" "4266"
+export HR_DDR_FREQ="3200"
+# 厂家可选参数 "hynix" "micron" "samsung"
+export HR_DDR_MANUFACTURE="samsung"
+# ddr类型可选 "LPDDR4" "LPDDR4X" "DDR4" "DDR3L"
+export HR_DDR_TYPR='LPDDR4'
+# ddr容量大小 "1" "2" "4",可不配置，支持自动识别
+export HR_DDR_CAPACITY="0"
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=3
+```
+
+**miniboot/ddr对应代码**
+
+```c
+ lpddr4_write_para_data(file, DDR_FREQC_3200, index, K4FBE3D4HM_THCL, 0);
+```
+
+## H9HCNNN8KUMLHR-NME
+
+**参数特殊说明**
+
+容量会识别成1152M
+
+total_sz = 1152
+
+**板级配置**
+
+```c
+# DDR参数配置
+# 频率可选参数 "667" "1600" "2133" "2666" "3200" "3600" "3733" "4266"
+export HR_DDR_FREQ="2666"
+# 厂家可选参数 "hynix" "micron" "samsung"
+export HR_DDR_MANUFACTURE="hynix"
+# ddr类型可选 "LPDDR4" "LPDDR4X" "DDR4" "DDR3L"
+export HR_DDR_TYPR='LPDDR4'
+# ddr容量大小 "1" "2" "4",可不配置，支持自动识别
+export HR_DDR_CAPACITY="0"
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+```
+
+**miniboot/ddr对应代码**
+
+```c
+lpddr4_write_para_data(file, DDR_FREQC_2666, index, H9HCNNN8KUMLHR, 0);
+```
+
+## MT40A256M16LY-062E
+
+**参数特殊说明**
+
+无
+
+**板级配置**
+
+```c
+# DDR参数配置
+# 频率可选参数 "667" "1600" "2133" "2666" "3200" "3600" "3733" "4266"
+export HR_DDR_FREQ="3200"
+# 厂家可选参数 "hynix" "micron" "samsung"
+export HR_DDR_MANUFACTURE="micron"
+# ddr类型可选 "LPDDR4" "LPDDR4X" "DDR4" "DDR3L"
+export HR_DDR_TYPR='DDR4'
+# ddr容量大小 "1" "2" "4",可不配置，支持自动识别
+export HR_DDR_CAPACITY="0"
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+```
+
+**miniboot/ddr对应代码**
+
+```c
+ddr4_write_para_data(file, DDR_FREQC_3200, index, MT40A256M16LY);
+```
+
+## K4A4G165WF
+
+**参数特殊说明**
+
+无
+
+**板级配置**
+
+```c
+# DDR参数配置
+# 频率可选参数 "667" "1600" "2133" "2666" "3200" "3600" "3733" "4266"
+export HR_DDR_FREQ="2640"
+# 厂家可选参数 "hynix" "micron" "samsung"
+export HR_DDR_MANUFACTURE="samsung"
+# ddr类型可选 "LPDDR4" "LPDDR4X" "DDR4" "DDR3L"
+export HR_DDR_TYPR='DDR4'
+# ddr容量大小 "1" "2" "4",可不配置，支持自动识别
+export HR_DDR_CAPACITY="0"
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+```
+
+**miniboot/ddr对应代码**
+
+```c
+ddr4_write_para_data(file, DDR_FREQC_2640, index, K4A4G165WF_BCTD);
+```
+
+## K4A8G165WC-BCTD
+
+**参数特殊说明**
+
+无
+
+**板级配置**
+
+```c
+# DDR参数配置
+# 频率可选参数 "667" "1600" "2133" "2666" "3200" "3600" "3733" "4266"
+export HR_DDR_FREQ="2666"
+# 厂家可选参数 "hynix" "micron" "samsung"
+export HR_DDR_MANUFACTURE="samsung"
+# ddr类型可选 "LPDDR4" "LPDDR4X" "DDR4" "DDR3L"
+export HR_DDR_TYPR='DDR4'
+# ddr容量大小 "1" "2" "4",可不配置，支持自动识别
+export HR_DDR_CAPACITY="0"
+# 当相同ddr厂家、类型、频率时有多组ddr参数时，通过这个配置来做区分
+export HR_DDR_ALTERNATIVE=0
+```
+
+**miniboot/ddr对应代码**
+
+```c
+ddr4_write_para_data(file, DDR_FREQC_2666, index, K4A8G165WC);
+```
+

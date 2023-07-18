@@ -1,0 +1,26 @@
+{
+	"config_number":1,
+	"board_name":"x3dev",
+	"config_0":{
+		"interface_type": "mipi",
+		"port_number":1,
+		"port_0":{
+			"bus_type":0,
+			"bus_num":2,
+			"entry_num":1,
+			"sensor_addr":"0x1a",
+			"sensor_name":"imx307",
+			"reg_width":16,
+			"sensor_mode":1,
+			"fps":25,
+			"config_index":0,
+			"resolution":1080,
+			"gpio_pin":[119],
+			"gpio_level":[0],
+			"power_mode":1,
+			"deserial_index":0,
+			"deserial_port":0,
+			"config_path":"hb_mipi_imx307_raw12_%dfps_%dP.json"
+		}
+	}
+}

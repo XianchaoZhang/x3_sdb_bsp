@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.3.21. 蓝牙驱动调试指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="4.3.22. ALSA使用说明" href="7-Alsa_Manual_zh_CN.html" />
+    <link rel="prev" title="4.3.20. Wi-Fi 驱动调试指南" href="33-WIFI_Driver_Debug_Guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">4.3. 驱动开发指南</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="1-X3J3_Platform_System_Software_Overview.html">4.3.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="0-Configure_Kernel_And_Uboot.html">4.3.2. 配置uboot和kernel选项参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27-Uart_Driver_Debug_Guide.html">4.3.3. UART驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-I2C_Debug_Guide_zh_CN.html">4.3.4. I2C调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-GPIO_Debug_Guide_zh_CN.html">4.3.5. GPIO调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Pinctrl_Debug_Guide_zh_CN.html">4.3.6. Pinctrl调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-IO-DOMAIN_Debug_Guide_zh_CN.html">4.3.7. IO-DOMAIN调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14-SPI_Debug_Guide_zh_CN.html">4.3.8. SPI调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29-PWM_Driver_Debug_Guide.html">4.3.9. PWM 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16-BPU_Driver_sysfs_Interface_zh_CN.html">4.3.10. BPU驱动sysfs调试接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17-Temperature_Sensor_Usage_zh_CN.html">4.3.11. Thermal 系统</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18-Memory_Managment_zh_CN.html">4.3.12. 修改总内存大小和保留内存大小</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-DDR_Debug_Guide_zh_CN.html">4.3.13. DDR故障排查指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23-01-DDR_stress_test.html">4.3.14. DDR压力测试方案</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24-Phy_Driver_Debug_Guide.html">4.3.15. PHY 驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26-RTC_Driver_Debug_Guide.html">4.3.16. RTC 调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30-WatchDog_Driver_Debug_Guide.html">4.3.17. 看门狗驱动调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usb_develop_guide/index.html">4.3.18. USB开发调试指南</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31-Mipi_Screen_Driver_Debug_Guide.html">4.3.19. X3 mipi 屏适配说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="33-WIFI_Driver_Debug_Guide.html">4.3.20. Wi-Fi 驱动调试指南</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">4.3.21. 蓝牙驱动调试指南</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">4.3.21.1. 驱动配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">4.3.21.2. 蓝牙使用</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id4">状态确认</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id5">初始化</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id6">配对连接</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">4.3.21.3. 其他版本的驱动</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id8">驱动下载</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#bluetooth">BlueTooth使用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="7-Alsa_Manual_zh_CN.html">4.3.22. ALSA使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="35-Auto-start.html">4.3.23. 自定义启动项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="36-Custom_Partition_Content.html">4.3.24. 添加自定义内容进系统镜像</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../System_OTA_Manual.html">4.7. OTA实现原理和使用方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4.3. </span>驱动开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.3.21. </span>蓝牙驱动调试指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="33-WIFI_Driver_Debug_Guide.html" class="btn btn-neutral float-left" title="4.3.20. Wi-Fi 驱动调试指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="7-Alsa_Manual_zh_CN.html" class="btn btn-neutral float-right" title="4.3.22. ALSA使用说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">4.3.21. </span>蓝牙驱动调试指南<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="id2">
+<h2><span class="section-number">4.3.21.1. </span>驱动配置<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>CONFIG_BT</p>
+<p><img alt="image-20220322202612962" src="../../_images/image-20220322202612962.png" /></p>
+<p>CONFIG_CRYPTO_ECDH</p>
+<p><img alt="image-20220322202826278" src="../../_images/image-20220322202826278.png" /></p>
+<p>CONFIG_BT_HCIUART</p>
+<p><img alt="image-20220322203236745" src="../../_images/image-20220322203236745.png" /></p>
+<p>BT_HCIUART_BCM</p>
+<p><img alt="image-20220322204044925" src="../../_images/image-20220322204044925.png" /></p>
+<p>CONFIG_RFKILL</p>
+<p><img alt="image-20220322153943168" src="../../_images/image-202203221539431681.png" /></p>
+</section>
+<section id="id3">
+<h2><span class="section-number">4.3.21.2. </span>蓝牙使用<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<section id="id4">
+<h3>状态确认<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>在运行前，先查看一下当前设备上以下文件是否都存在。</p>
+<p><strong>初始化程序：</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">startbt6212</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p><strong>驱动和配置：</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/lib/firmware/bcm/BCM4343A1.hcd
+/lib/modules/4.14.87/hci_uart.ko
+/lib/modules/4.14.87/btbcm.ko
+/lib/modules/4.14.87/bluetooth.ko
+/lib/modules/4.14.87/ecdh_generic.ko
+/lib/modules/4.14.87/rfkill.ko
+</pre></div>
+</div>
+<p><strong>BlueZ程序：</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">dbus</span><span class="o">-</span><span class="n">daemon</span>
+<span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">bluetoothd</span>
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bluetoothctl</span>
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">hciattach</span>
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">hciconfig</span>
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">hcidump</span>
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">hcitool</span>
+</pre></div>
+</div>
+<p><strong>dbus和蓝牙配置文件：</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">bluetooth</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">conf</span>
+<span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">dbus</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">system</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">bluetooth</span><span class="o">.</span><span class="n">conf</span>
+<span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">dbus</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">system</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">obexd</span><span class="o">.</span><span class="n">conf</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>初始化<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>执行以下脚本程序完成初始化：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>startbt6212.sh
+</pre></div>
+</div>
+<p>这个脚本完成以下工作：</p>
+<ul class="simple">
+<li><p>复位蓝牙</p></li>
+<li><p>创建 <code class="docutils literal notranslate"><span class="pre">messagebus</span></code> 用户和用户组，<code class="docutils literal notranslate"><span class="pre">dbus-daemon</span></code> 程序运行时需要使用该用户</p></li>
+<li><p>运行 <code class="docutils literal notranslate"><span class="pre">brcm_patchram_plus</span></code> 完成蓝牙的驱动加载和固件加载</p></li>
+<li><p>循环检查 <code class="docutils literal notranslate"><span class="pre">/sys/class/bluetooth/hci0</span></code> 目录是否存在，确认蓝牙驱动已经正常运行</p></li>
+<li><p>出现 <strong>Done setting line discpline</strong>  表示蓝牙启用成功</p></li>
+<li><p>执行 <code class="docutils literal notranslate"><span class="pre">hciconfig</span> <span class="pre">hci0</span> <span class="pre">up</span></code>  完成蓝牙的Link Up</p></li>
+<li><p>执行 <code class="docutils literal notranslate"><span class="pre">hciconfig</span> <span class="pre">hci0</span> <span class="pre">piscan</span></code> 进行蓝牙扫描，本步骤可以根据情况去掉</p></li>
+<li><p>运行 <code class="docutils literal notranslate"><span class="pre">dbus-daemon</span></code> 服务</p></li>
+<li><p>运行 <code class="docutils literal notranslate"><span class="pre">bluetoothd</span></code> ，将蓝牙相关的守护进程启用并放在后台</p></li>
+</ul>
+<p><img alt="image-20220601152259664" src="../../_images/image-20220601152259664.png" /></p>
+<p>执行成功后，确认以下进程是否正常运行：</p>
+<p><img alt="image-20220601130731418" src="../../_images/image-20220601130731418.png" /></p>
+</section>
+<section id="id6">
+<h3>配对连接<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<p>执行<code class="docutils literal notranslate"><span class="pre">bluetoothctl</span></code>进入交互模式下的蓝牙配置界面，出现了类似下图的设备信息表示蓝牙被识别到了，然后用<code class="docutils literal notranslate"><span class="pre">show</span></code>来查看蓝牙信息，留意蓝牙的<code class="docutils literal notranslate"><span class="pre">powered</span></code>和<code class="docutils literal notranslate"><span class="pre">discoverable</span></code>状态。</p>
+<p><img alt="image-20220601152324243" src="../../_images/image-20220601152324243.png" /></p>
+<p>执行 <code class="docutils literal notranslate"><span class="pre">power</span> <span class="pre">on</span></code> 使能蓝牙，如下图所示：</p>
+<p><img alt="image-20220601172501882" src="../../_images/image-20220601172501882.png" /></p>
+<p>为了能够使蓝牙被附近的设备发现，需要执行<code class="docutils literal notranslate"><span class="pre">discoverable</span> <span class="pre">on</span></code>打开蓝牙可发现属性，如下图所示：</p>
+<p><img alt="image-20220601152535778" src="../../_images/image-20220601152535778.png" /></p>
+<p>此时使用手机或者电脑扫描蓝牙就可以发现 <code class="docutils literal notranslate"><span class="pre">Sunrise</span></code> 这个名称的蓝牙设备：</p>
+<p><img alt="image-20220601153936520" src="../../_images/image-20220601153936520.png" /></p>
+<p>接下来测试蓝牙的主动扫描功能，在<code class="docutils literal notranslate"><span class="pre">bluetoothctl</span></code>的交互界面输入<code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">on</span></code>即可打开主动扫描，它会周期性地打印附近的设备，可以看到已经发现了我的手机设备，<code class="docutils literal notranslate"><span class="pre">scan</span> <span class="pre">off</span></code>关闭扫描功能并汇总打印扫描到的蓝牙设备：</p>
+<p><img alt="image-20220601154131158" src="../../_images/image-20220601154131158.png" /></p>
+<p><img alt="image-20220601154253947" src="../../_images/image-20220601154253947.png" /></p>
+<p>然后就是和其他蓝牙的配对：</p>
+<ul class="simple">
+<li><p>配对命令：<code class="docutils literal notranslate"><span class="pre">pair</span> <span class="pre">[targetMAC]</span> </code>，输入该命令后，根据提示输入<code class="docutils literal notranslate"><span class="pre">yes</span></code>，对端蓝牙设备选择<code class="docutils literal notranslate"><span class="pre">配对</span></code>选项完成配对。</p></li>
+<li><p>配对成功后可以使用<code class="docutils literal notranslate"><span class="pre">trust</span> <span class="pre">[targetMAC]</span></code>来让下次自动连接</p></li>
+</ul>
+<p><img alt="image-20220601154414717" src="../../_images/image-20220601154414717.png" /></p>
+<p>经过以上操作后，蓝牙的扫描、配对的基本功能就完成了，如需使用更多功能，可查阅 <code class="docutils literal notranslate"><span class="pre">BlueZ</span></code>的官方帮助说明。</p>
+</section>
+</section>
+<section id="id7">
+<h2><span class="section-number">4.3.21.3. </span>其他版本的驱动<a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<p>针对地平线发布的<code class="docutils literal notranslate"><span class="pre">V0508</span></code> 和<code class="docutils literal notranslate"><span class="pre">V0807</span></code>等版本的SDK，使用蓝牙的方式有一点区别，请按照以下方式操作。</p>
+<section id="id8">
+<h3>驱动下载<a class="headerlink" href="#id8" title="永久链接至标题"></a></h3>
+<p><font color=red>备注：</font>仅V0508和V0807版本需要额外下载驱动</p>
+<p>从  <a class="reference external" href="https://pan.horizon.ai/index.php/s/JTitK4g8SLzSGa6">X3M附加工具包</a>  的 AP6212 目录下，下载BlueTooth的驱动（bluetooth_drivers）和AP6212固件文件（brcm.zip）</p>
+<p>安装固件：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mount</span> <span class="o">-</span><span class="n">o</span> <span class="n">rw</span><span class="p">,</span><span class="n">remount</span> <span class="o">/</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">xvf</span> <span class="n">brcm</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">cp</span> <span class="n">brcm</span> <span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">firmware</span><span class="o">/</span> <span class="o">-</span><span class="n">rf</span>
+</pre></div>
+</div>
+<p>首先复位BlueTooth:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="mi">23</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">gpio</span><span class="o">/</span><span class="n">export</span>
+<span class="n">echo</span> <span class="n">out</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">gpio</span><span class="o">/</span><span class="n">gpio23</span><span class="o">/</span><span class="n">direction</span>
+<span class="n">echo</span> <span class="mi">0</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">gpio</span><span class="o">/</span><span class="n">gpio23</span><span class="o">/</span><span class="n">value</span>
+<span class="n">sleep</span> <span class="mf">0.5</span>
+<span class="n">echo</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">gpio</span><span class="o">/</span><span class="n">gpio23</span><span class="o">/</span><span class="n">value</span>
+</pre></div>
+</div>
+<p>加载BlueTooth驱动（注意使用正确的版本）：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">bluetooth_drivers</span><span class="o">/</span><span class="n">V0508</span>
+<span class="n">insmod</span> <span class="n">ecdh_generic</span><span class="o">.</span><span class="n">ko</span>
+<span class="n">insmod</span> <span class="n">rfkill</span><span class="o">.</span><span class="n">ko</span>
+<span class="n">insmod</span> <span class="n">bluetooth</span><span class="o">.</span><span class="n">ko</span>
+<span class="n">insmod</span> <span class="n">btbcm</span><span class="o">.</span><span class="n">ko</span>
+<span class="n">insmod</span> <span class="n">hci_uart</span><span class="o">.</span><span class="n">ko</span>
+</pre></div>
+</div>
+<p>查看驱动：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>  <span class="m">384</span>.314361<span class="o">]</span> Bluetooth: Core ver <span class="m">2</span>.22
+<span class="o">[</span>  <span class="m">384</span>.314424<span class="o">]</span> NET: Registered protocol family <span class="m">31</span>
+<span class="o">[</span>  <span class="m">384</span>.314428<span class="o">]</span> Bluetooth: HCI device and connection manager initialized
+<span class="o">[</span>  <span class="m">384</span>.314442<span class="o">]</span> Bluetooth: HCI socket layer initialized
+<span class="o">[</span>  <span class="m">384</span>.314450<span class="o">]</span> Bluetooth: L2CAP socket layer initialized
+<span class="o">[</span>  <span class="m">384</span>.314493<span class="o">]</span> Bluetooth: SCO socket layer initialized
+<span class="o">[</span>  <span class="m">385</span>.570248<span class="o">]</span> Bluetooth: HCI UART driver ver <span class="m">2</span>.3
+<span class="o">[</span>  <span class="m">385</span>.570255<span class="o">]</span> Bluetooth: HCI UART protocol H4 registered
+<span class="o">[</span>  <span class="m">385</span>.570423<span class="o">]</span> Bluetooth: HCI UART protocol Broadcom registered
+</pre></div>
+</div>
+</section>
+<section id="bluetooth">
+<h3>BlueTooth使用<a class="headerlink" href="#bluetooth" title="永久链接至标题"></a></h3>
+<p>从  <a class="reference external" href="https://pan.horizon.ai/index.php/s/JTitK4g8SLzSGa6">X3M附加工具包</a>  的 AP6212 目录下，下载BlueTooth工具包 bt_tools.tar.gz</p>
+<p>上传工具包到开发板上并解压安装：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mount</span> <span class="o">-</span><span class="n">o</span> <span class="n">rw</span><span class="p">,</span><span class="n">remount</span> <span class="o">/</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">xvf</span> <span class="n">bt_tools</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> <span class="o">-</span><span class="n">C</span> <span class="o">/</span><span class="n">usr</span>
+</pre></div>
+</div>
+<p>初始化蓝牙：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">brcm_patchram_plus</span> <span class="o">--</span><span class="n">enable_hci</span> <span class="o">--</span><span class="n">no2bytes</span> <span class="o">--</span><span class="n">tosleep</span> <span class="mi">200000</span> <span class="o">--</span><span class="n">baudrate</span> <span class="mi">460800</span> <span class="o">--</span><span class="n">patchram</span> <span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">firmware</span><span class="o">/</span><span class="n">brcm</span><span class="o">/</span><span class="n">bcm43438a1</span><span class="o">.</span><span class="n">hcd</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">ttyS1</span> <span class="o">&amp;</span>
+
+<span class="c1"># 持续检查 /sys/class/bluetooth/hci0 文件是否生成,大概需要10秒左右</span>
+<span class="n">ls</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">bluetooth</span><span class="o">/</span><span class="n">hci0</span>
+<span class="n">hciconfig</span> <span class="n">a</span>
+
+<span class="n">hci0</span><span class="p">:</span>   <span class="n">Type</span><span class="p">:</span> <span class="n">Primary</span>  <span class="n">Bus</span><span class="p">:</span> <span class="n">UART</span>
+        <span class="n">BD</span> <span class="n">Address</span><span class="p">:</span> <span class="n">B0</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">47</span><span class="p">:</span><span class="n">A6</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">00</span>  <span class="n">ACL</span> <span class="n">MTU</span><span class="p">:</span> <span class="mi">1021</span><span class="p">:</span><span class="mi">8</span>  <span class="n">SCO</span> <span class="n">MTU</span><span class="p">:</span> <span class="mi">64</span><span class="p">:</span><span class="mi">1</span>
+        <span class="n">DOWN</span> 
+        <span class="n">RX</span> <span class="nb">bytes</span><span class="p">:</span><span class="mi">612</span> <span class="n">acl</span><span class="p">:</span><span class="mi">0</span> <span class="n">sco</span><span class="p">:</span><span class="mi">0</span> <span class="n">events</span><span class="p">:</span><span class="mi">30</span> <span class="n">errors</span><span class="p">:</span><span class="mi">0</span>
+        <span class="n">TX</span> <span class="nb">bytes</span><span class="p">:</span><span class="mi">398</span> <span class="n">acl</span><span class="p">:</span><span class="mi">0</span> <span class="n">sco</span><span class="p">:</span><span class="mi">0</span> <span class="n">commands</span><span class="p">:</span><span class="mi">30</span> <span class="n">errors</span><span class="p">:</span><span class="mi">0</span>
+        <span class="n">Features</span><span class="p">:</span> <span class="mh">0xbf</span> <span class="mh">0xfe</span> <span class="mh">0xcf</span> <span class="mh">0xfe</span> <span class="mh">0xdb</span> <span class="mh">0xff</span> <span class="mh">0x7b</span> <span class="mh">0x87</span>
+        <span class="n">Packet</span> <span class="nb">type</span><span class="p">:</span> <span class="n">DM1</span> <span class="n">DM3</span> <span class="n">DM5</span> <span class="n">DH1</span> <span class="n">DH3</span> <span class="n">DH5</span> <span class="n">HV1</span> <span class="n">HV2</span> <span class="n">HV3</span> 
+        <span class="n">Link</span> <span class="n">policy</span><span class="p">:</span> <span class="n">RSWITCH</span> <span class="n">SNIFF</span> 
+        <span class="n">Link</span> <span class="n">mode</span><span class="p">:</span> <span class="n">SLAVE</span> <span class="n">ACCEPT</span> 
+</pre></div>
+</div>
+<p>配置蓝牙：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hciconfig</span> <span class="n">hci0</span> <span class="n">up</span>
+<span class="n">hciconfig</span> <span class="n">hci0</span> <span class="n">name</span> <span class="n">hobot</span><span class="o">-</span><span class="n">BT</span>
+<span class="n">hciconfig</span> <span class="n">hci0</span> <span class="n">reset</span>
+<span class="n">hciconfig</span> <span class="n">hci0</span> <span class="n">piscan</span>
+<span class="n">hciconfig</span> <span class="n">a</span>
+
+<span class="n">hci0</span><span class="p">:</span>   <span class="n">Type</span><span class="p">:</span> <span class="n">Primary</span>  <span class="n">Bus</span><span class="p">:</span> <span class="n">UART</span>
+        <span class="n">BD</span> <span class="n">Address</span><span class="p">:</span> <span class="n">B0</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">47</span><span class="p">:</span><span class="n">A6</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">00</span>  <span class="n">ACL</span> <span class="n">MTU</span><span class="p">:</span> <span class="mi">1021</span><span class="p">:</span><span class="mi">8</span>  <span class="n">SCO</span> <span class="n">MTU</span><span class="p">:</span> <span class="mi">64</span><span class="p">:</span><span class="mi">1</span>
+        <span class="n">UP</span> <span class="n">RUNNING</span> <span class="n">PSCAN</span> <span class="n">ISCAN</span> 
+        <span class="n">RX</span> <span class="nb">bytes</span><span class="p">:</span><span class="mi">1857</span> <span class="n">acl</span><span class="p">:</span><span class="mi">0</span> <span class="n">sco</span><span class="p">:</span><span class="mi">0</span> <span class="n">events</span><span class="p">:</span><span class="mi">93</span> <span class="n">errors</span><span class="p">:</span><span class="mi">0</span>
+        <span class="n">TX</span> <span class="nb">bytes</span><span class="p">:</span><span class="mi">1455</span> <span class="n">acl</span><span class="p">:</span><span class="mi">0</span> <span class="n">sco</span><span class="p">:</span><span class="mi">0</span> <span class="n">commands</span><span class="p">:</span><span class="mi">93</span> <span class="n">errors</span><span class="p">:</span><span class="mi">0</span>
+        <span class="n">Features</span><span class="p">:</span> <span class="mh">0xbf</span> <span class="mh">0xfe</span> <span class="mh">0xcf</span> <span class="mh">0xfe</span> <span class="mh">0xdb</span> <span class="mh">0xff</span> <span class="mh">0x7b</span> <span class="mh">0x87</span>
+        <span class="n">Packet</span> <span class="nb">type</span><span class="p">:</span> <span class="n">DM1</span> <span class="n">DM3</span> <span class="n">DM5</span> <span class="n">DH1</span> <span class="n">DH3</span> <span class="n">DH5</span> <span class="n">HV1</span> <span class="n">HV2</span> <span class="n">HV3</span> 
+        <span class="n">Link</span> <span class="n">policy</span><span class="p">:</span> <span class="n">RSWITCH</span> <span class="n">SNIFF</span> 
+        <span class="n">Link</span> <span class="n">mode</span><span class="p">:</span> <span class="n">SLAVE</span> <span class="n">ACCEPT</span> 
+        <span class="n">Name</span><span class="p">:</span> <span class="s1">&#39;hobot-BT&#39;</span>
+        <span class="n">Class</span><span class="p">:</span> <span class="mh">0x000000</span>
+        <span class="n">Service</span> <span class="n">Classes</span><span class="p">:</span> <span class="n">Unspecified</span>
+        <span class="n">Device</span> <span class="n">Class</span><span class="p">:</span> <span class="n">Miscellaneous</span><span class="p">,</span> 
+        <span class="n">HCI</span> <span class="n">Version</span><span class="p">:</span> <span class="mf">4.0</span> <span class="p">(</span><span class="mh">0x6</span><span class="p">)</span>  <span class="n">Revision</span><span class="p">:</span> <span class="mh">0x108</span>
+        <span class="n">LMP</span> <span class="n">Version</span><span class="p">:</span> <span class="mf">4.0</span> <span class="p">(</span><span class="mh">0x6</span><span class="p">)</span>  <span class="n">Subversion</span><span class="p">:</span> <span class="mh">0x2209</span>
+        <span class="n">Manufacturer</span><span class="p">:</span> <span class="n">Broadcom</span> <span class="n">Corporation</span> <span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>扫描：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hcitool</span> <span class="n">scan</span>
+
+<span class="n">Scanning</span> <span class="o">...</span>
+        <span class="mi">48</span><span class="p">:</span><span class="mi">51</span><span class="p">:</span><span class="n">C5</span><span class="p">:</span><span class="mi">72</span><span class="p">:</span><span class="mi">70</span><span class="p">:</span><span class="mi">80</span>       <span class="n">LIYAQIANG</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="33-WIFI_Driver_Debug_Guide.html" class="btn btn-neutral float-left" title="4.3.20. Wi-Fi 驱动调试指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="7-Alsa_Manual_zh_CN.html" class="btn btn-neutral float-right" title="4.3.22. ALSA使用说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

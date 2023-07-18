@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6.5.4.1. 公版模型性能精度指标 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/translations.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" />
+    <link rel="next" title="6.5.4.2. 评测方法说明" href="ai-benchmark.html" />
+    <link rel="prev" title="6.5.4. 公版模型精度评测说明" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">6. 量化工具链开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../preface_toolchain_overview.html">6.1. 简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../env_install.html">6.2. 环境安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html">6.3. 快速体验</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../horizon_ai_toolchain_user_guide/index.html">6.4. 训练后量化(PTQ)使用说明</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">6.5. 上板运行(runtime)应用开发说明</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../horizon_runtime_sample/index.html">6.5.1. 模型上板运行示例说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../bpu_sdk_api_doc/index.html">6.5.2. 模型推理接口使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../horizon_runtime_tools/index.html">6.5.3. 模型上板分析工具说明</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">6.5.4. 公版模型精度评测说明</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">6.5.4.1. 公版模型性能精度指标</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ai-benchmark.html">6.5.4.2. 评测方法说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html"><span class="section-number">6. </span>量化工具链开发指南</a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">6.5. </span>上板运行(runtime)应用开发说明</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">6.5.4. </span>公版模型精度评测说明</a> &raquo;</li>
+      <li><span class="section-number">6.5.4.1. </span>公版模型性能精度指标</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="6.5.4. 公版模型精度评测说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="ai-benchmark.html" class="btn btn-neutral float-right" title="6.5.4.2. 评测方法说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">6.5.4.1. </span>公版模型性能精度指标<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>下表提供了部分典型开源模型和地平线改良模型在X3M芯片上的性能精度指标。</p>
+<img alt="../../../_images/model_accuracy.png" src="../../../_images/model_accuracy.png" />
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ol class="arabic simple">
+<li><p>表格中的数据均为X3M芯片（BPU 1GHz）在开发板端实测的结果（测试模型均来自于 <a class="reference external" href="../../env_install.html#id3">horizon_model_convert_sample</a> 模型示例包），其中：</p></li>
+</ol>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p><strong>耗时数据</strong> 为单帧单核串行指标（芯片有两个BPU核）</p></li>
+<li><p><strong>workflow帧率</strong> 为双核多线程打满，BPU/CPU 并发的指标</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>对于 BPU/CPU 混合异构模型，单帧串行下的耗时包括：</p></li>
+</ol>
+<blockquote>
+<div><p><strong>输入量化CPU节点 + 模型BPU算子 + 模型CPU算子 + 输出反量化CPU节点 + CPU后处理</strong></p>
+</div></blockquote>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>输入量化CPU节点：float32-&gt;int8，只有 featuremap 输入模型包含，图像输入模型不包含。因为需要遍历数据，所以耗时与 shape 大小成正比</p></li>
+<li><p>模型CPU算子：</p></li>
+</ol>
+<blockquote>
+<div><p>ⅰ. 分类模型尾部的 Softmax 和 Reshape 为 CPU 算子，耗时约 0.046ms</p>
+<p>ⅱ. 检测模型均没有 CPU 算子</p>
+<p>ⅲ. 分割模型 DeepLabV3+ 尾部的 Argmax 为 CPU 算子</p>
+</div></blockquote>
+<ol class="loweralpha simple" start="3">
+<li><p>输出反量化CPU节点：int8-&gt;float32，耗时同样与 shape 大小成正比</p></li>
+<li><p>地平线目前支持将 <strong>量化/反量化节点手动摘除</strong> ，由用户自行融入前后处理代码中实现，以减少数据重复遍历的损耗，我们已在交付包中提供了 EfficientDet 参考示例，摘除了反量化节点合入后处理，整体性能提升明显（ <strong>66FPS–&gt;100FPS</strong> ）</p></li>
+<li><p>目前地平线示例模型的后处理均未做针对性的性能优化，您可以根据实际需求采用如近似高效实现等优化手段进行代码级加速</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>在实际应用中， <strong>BPU 和 CPU 可以并发运行，提高整体推理速度</strong></p></li>
+<li><p>若实测性能与上述表格的测试结果不一致，有几个方面可能导致此种情况：</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>DDR带宽的影响，开发板只能运行ai_benchmark程序。</p></li>
+<li><p>量化工具链版本与系统镜像版本不完全匹配，最理想的情况是配套使用发布包的量化工具链和系统镜像。</p></li>
+<li><p>CPU降频影响，目前开发板重启后默认启用自动降频，为了获得最好的性能，您需要在开发板上执行关闭降频命令： <code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">performance</span> <span class="pre">&gt;</span> <span class="pre">/sys/devices/system/cpu/cpufreq/policy0/scaling_governor</span></code>。</p></li>
+</ul>
+</div></blockquote>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="6.5.4. 公版模型精度评测说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="ai-benchmark.html" class="btn btn-neutral float-right" title="6.5.4.2. 评测方法说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

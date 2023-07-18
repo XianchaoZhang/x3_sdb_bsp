@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6.4.2. 模型算子支持列表 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="6.5. 上板运行(runtime)应用开发说明" href="../horizon_runtime_samples/index.html" />
+    <link rel="prev" title="6.4.1.1. 简介" href="ptq_user_guide/chapter_model_conversion.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">6. 量化工具链开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../preface_toolchain_overview.html">6.1. 简介</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../env_install.html">6.2. 环境安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html">6.3. 快速体验</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">6.4. 训练后量化(PTQ)使用说明</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ptq_user_guide/index.html">6.4.1. PTQ原理及步骤详解</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">6.4.2. 模型算子支持列表</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">6.4.2.1. 使用限制说明</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#caffe">6.4.2.2. 支持的Caffe算子列表</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#onnx">6.4.2.3. 支持的ONNX算子列表</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../horizon_runtime_samples/index.html">6.5. 上板运行(runtime)应用开发说明</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">6. </span>量化工具链开发指南</a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">6.4. </span>训练后量化(PTQ)使用说明</a> &raquo;</li>
+      <li><span class="section-number">6.4.2. </span>模型算子支持列表</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="ptq_user_guide/chapter_model_conversion.html" class="btn btn-neutral float-left" title="6.4.1.1. 简介" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../horizon_runtime_samples/index.html" class="btn btn-neutral float-right" title="6.5. 上板运行(runtime)应用开发说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">6.4.2. </span>模型算子支持列表<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="id2">
+<h2><span class="section-number">6.4.2.1. </span>使用限制说明<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>本章节主要介绍X3芯片支持的 <code class="docutils literal notranslate"><span class="pre">Caffe</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ONNX</span></code> 算子情况，其他未列出的算子因X3 bpu硬件限制，暂不支持。</p>
+<p><strong>术语概念：</strong></p>
+<ul class="simple">
+<li><p><font color=red>BPU加速</font> ：地平线芯片可以进行加速的算子（一定约束条件下），如果不满足约束条件，则会在CPU进行计算</p></li>
+<li><p><font color=red>CPU计算</font> ：当前已经在地平线ARM CPU上进行优化的算子。</p></li>
+<li><p><font color=red>CPU计算※</font> ：暂时未集成的CPU算子。</p></li>
+</ul>
+<p><strong>其他注意事项：</strong></p>
+<ul class="simple">
+<li><p>所有BPU上运行的算子均遵守一般限制：input_batch ≤ 128。</p></li>
+<li><p>支持 <code class="docutils literal notranslate"><span class="pre">Caffe</span> <span class="pre">1.0</span></code> 基础算子以及常用扩展算子，支持onnx <code class="docutils literal notranslate"><span class="pre">opset10</span></code> 和 <code class="docutils literal notranslate"><span class="pre">opset11</span></code> 算子，对于无法满足BPU加速约束条件的算子将会退化到ARM CPU进行计算。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Cast</span></code> , <code class="docutils literal notranslate"><span class="pre">Constant</span></code> , <code class="docutils literal notranslate"><span class="pre">Dropout</span></code> , <code class="docutils literal notranslate"><span class="pre">Reshape</span></code> , <code class="docutils literal notranslate"><span class="pre">Squeeze</span></code> , <code class="docutils literal notranslate"><span class="pre">Unsqueeze</span></code> , <code class="docutils literal notranslate"><span class="pre">Shape</span></code> 这些算子(OP)无法直接运行在BPU上，但在一些情况下（常量折叠）量化工具链会将其优化掉进而实现支持的效果。</p></li>
+<li><p>标记为PyTorch的算子(OP)为官方的opset11不包含的算子，地平线量化工具链提供了导出脚本可以将其从PyTorch导出到地平线自定义的onnx OP中。</p></li>
+<li><p>基于tensorlfow-onnx（https://github.com/onnx/tensorflow-onnx）转换工具，支持将 <code class="docutils literal notranslate"><span class="pre">tensorlfow1.*</span></code> 版本的算子稳定的转换到opset6-opset11版本的ONNX模型格式，但是 <code class="docutils literal notranslate"><span class="pre">Tensroflow2.*</span></code> 当前支持还属于实验版本。</p></li>
+</ul>
+</section>
+<section id="caffe">
+<h2><span class="section-number">6.4.2.2. </span>支持的Caffe算子列表<a class="headerlink" href="#caffe" title="永久链接至标题"></a></h2>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>caffe算子名称</strong></th>
+<th><strong>CPU计算/BPU加速</strong></th>
+<th><strong>XJ3 BPU支持约束</strong></th>
+<th><strong>CPU支持约束</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Convolution</td>
+<td>BPU加速</td>
+<td>Kernel宽高取值范围：HxW=[1,7]x[1,7] <br> 输入输出Channel取值范围(one group) &lt;= 2048（对于非dilated、group、depthwise conv等普通卷积，可以放宽至&lt;=4096）。 <br> stride无限制。 <br> Dilation取值范围：只支持设置为2的幂次方，且必须能够被stride整除。<br>h_dilated和w_dilated可以不同但要求h_diated&lt;=w_dilated。 <br> 单个Kernel总体大小限制: HxWxC &lt;= 32768 。<br>不支持配置axis，默认为1</td>
+<td>仅支持4维Conv计算。<br>auto_pad 属性不支持。<br>type约束支持：float,int32,int8。<br>pads属性约束：[Hstart, Wstart, Hend, Wend]（pads长度等于4）并且Hstart==Hend，Wstart==Wend。</td>
+</tr>
+<tr>
+<td>Deconvolution</td>
+<td>BPU加速</td>
+<td>Kernel 宽高取值范围：HxW=[2,14]x[2,14]。 <br>输入输出Channel数值取值范围：C &lt;= 2048。 <br>Padding宽高取值范围：<br>HxW=[0,(Kernel_H-1)/2]x[0,(Kernel_W-1)/2] 。<br>Stride取值范围：Stride ∈ {2, 4} 。<br>stride_h ≦ stride_w 。<br>Dilation ∈ {(1, 1)}。 <br>不支持配置axis属性。</td>
+<td>不支持output_shape和output_padding参数； <br>auto_pad参数只支持NOTSET模式； <br>不支持axis</td>
+</tr>
+<tr>
+<td>MaxUnpool</td>
+<td>CPU计算</td>
+<td>---</td>
+<td>from_type支持：  <br>- X：type约束：仅支持float类型。 <br>- I：Tensor（int64）。 <br>to_type支持：type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Pooling</td>
+<td>BPU加速</td>
+<td>共有四种Pooling算子即MaxPooling，AveragePooling，GlobalMaxPooling，GlobalAveragePooling。<br>对四种Pooling的约束分别为：  <br>MaxPooling：<br> Kernel宽高的取值范围为：[1,64]x[1,64] 。<br>Stride取值范围为：[1,185]。<br> Padding值需要大于等于零。<br>AveragePooling：<br> Kernel HxW=[1, 7]x[1, 7], Stride ∈{1, 185}。 <br>GlobalAveragePooling： <br>假设输入shape为NCHW， 则输入宽高需满足 HxW &lt;= 8192 。<br>GlobalMaxPooling： <br>假设输入shape为NCHW，则输入宽高取值范围为HxW=[1,1024]x[1,1024]。</td>
+<td>无</td>
+</tr>
+<tr>
+<td>SPP</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>支持pyramid_height，2^n 次pooling, n&lt;7;<br>pooling kernel 小于等于 255； <br>支持pool，配置可选值为{0，1}</td>
+</tr>
+<tr>
+<td>InnerProduct</td>
+<td>BPU加速</td>
+<td>InnerProduct将被转化为Conv实现。 <br>假设InnerProduct的输入feature map的shape为NCHW ：<br>1. 如果HW均小于等于7，则Gemm的限制等同于Conv。 <br>2. 如果H和W均为1，那么C的限制为 &lt;= 16384；否则 C的大小限制为 &lt;= 2048。 <br>3. 如果Gemm后是一个BPU支持的节点，Gemm会进行低精度int8输出，此时的输入宽高限制为: H x W/8 x C/4 &lt;= 1024。 <br>4. 如果Gemm后是一个非BPU支持的节点，Gemm会进行高精度int32输出，此时的输入宽高限制为: H x W/8 x C/4 &lt; 2048 。<br> 不支持配置axis属性</td>
+<td>无</td>
+</tr>
+<tr>
+<td>LRN</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>local_size 支持、<br>alpha支持、<br>beta 支持、<br>norm_region 支持，配置可选值{ACROSS_CHANNELS, WITHIN_CHANNEL }、<br>k 支持</td>
+</tr>
+<tr>
+<td>MVN</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>normalize_variance支持，配置可选值为{0, 1}、<br>across_channels支持，配置可选值为{0, 1}、<br>仅支持Float32类型的计算。</td>
+</tr>
+<tr>
+<td>BatchNorm</td>
+<td>BPU加速</td>
+<td>无限制</td>
+<td>无</td>
+</tr>
+<tr>
+<td>ELU</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>无</td>
+</tr>
+<tr>
+<td>BNLL</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>无</td>
+</tr>
+<tr>
+<td>PReLU</td>
+<td>BPU加速</td>
+<td>无限制</td>
+<td>无</td>
+</tr>
+<tr>
+<td>ReLU/LeakyRelu</td>
+<td>BPU加速</td>
+<td>无限制</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Sigmoid</td>
+<td>BPU加速</td>
+<td>对于一个输入维度为1CHW的tensor，仅支持min(8W4C对齐后的shape，32C对齐后的shape) &lt;=8192的情况。<br>8W4C：实际运行时tensor的W维度padding至8的整数倍，C维度padding至4的整数倍。<br>32C：实际运行时tensor的C维度padding至32的整数倍。<br>在两个对齐方式中取对齐后shape最小值，判断是否&lt;=8192。</td>
+<td>无</td>
+</tr>
+<tr>
+<td>TanH</td>
+<td>BPU加速</td>
+<td>无限制</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Eltwise</td>
+<td>BPU加速</td>
+<td>operation目前支持Add和Mul，暂不支持减。 <br>Add： <br>输入channel大小 M&lt;= 2048 <br>支持以下几种情况：<br> 1. Add的两个输入shape为NCHW和NCHW； <br>2. Add的两个输入shape为NCHW和NC11（Add的两个输入都需要是其它op的输出）<br> Mul：<br> Mul的两个输入都需要是四维并且C的大小需要 &lt;= 2048。<br> 同时仅支持如下shape的相乘： <br>1. (1xCxHxW vs 1xCxHxW)。 <br>2. (1xCxHxW vs 1xCx1x1)。 <br>3. (1xCxHxW vs 1x1x1x1)。</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Bias</td>
+<td>BPU加速</td>
+<td>参考Eltwise等于Add的情况</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Scale</td>
+<td>BPU加速</td>
+<td>参考Eltwise等于Sub的情况</td>
+<td>无</td>
+</tr>
+<tr>
+<td>AbsVal</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Exp</td>
+<td>BPU加速</td>
+<td>无限制</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Log</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Power</td>
+<td>BPU加速</td>
+<td>无限制</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Threshold</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Reduction</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>operation 支持 SUM、ASUM、 SUMSQ、MEAN ；<br>axis 支持； <br> 仅支持Float32类型的计算。</td>
+</tr>
+<tr>
+<td>Softmax</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>无</td>
+</tr>
+<tr>
+<td>ArgMax</td>
+<td>BPU加速</td>
+<td>仅支持 axis=1，c&lt;=64 。<br>不支持配置top_k != 1</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Concat</td>
+<td>BPU加速</td>
+<td>输入输出Channel：C&lt;=2048</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Split</td>
+<td>BPU加速</td>
+<td>无限制</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Slice</td>
+<td>BPU加速</td>
+<td>无限制</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Reshape</td>
+<td>CPU计算</td>
+<td>不支持（一些场景下可以融合）</td>
+<td>shape 支持[1,4]个 shape_dim 配置 ；<br> axis 支持[-4,3]范围内可配，不支 持 N 维度，默认值 0，遵循 caffe 规则 ；<br> num_axes 支持[-1,3]范围内可配，默认 值-1 表示对 axis 起始的所有 轴进行变换</td>
+</tr>
+<tr>
+<td>Flatten</td>
+<td>CPU计算</td>
+<td>不支持（一些场景下可以融合）</td>
+<td>axis 取值范围[-4,3]，默认值 为 1，-4 与 0 含义相同。 <br>只支持End_axis == -1。</td>
+</tr>
+<tr>
+<td>Crop</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Dropout</td>
+<td>BPU加速</td>
+<td>无限制</td>
+<td>无</td>
+</tr>
+<tr>
+<td>LSTM</td>
+<td>BPU加速</td>
+<td>仅支持batch=1</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Normalize</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>PassThrough</td>
+<td>BPU加速</td>
+<td>支持mode=DCR 和 mode=CRD。<br>仅支持H和W方向的重新排列，并且仅支持blocksize=2的重排列。<br>举例：NxCxHxW -&gt; Nx(4C)x(H/2)x(W/2)。</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>CReLU</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>RReLU</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Permute</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>- 支持nhwc2nchw，perm：[0, 3, 1, 2]。 <br> - 支持nchw2nhwc，perm：[0, 2, 3, 1]。<br> - 支持指定perm维度转换，数据类型仅支持float，int8，int32。</td>
+</tr>
+<tr>
+<td>MatMul</td>
+<td>BPU加速</td>
+<td>对于两个输入分别为featuremap和weight的场景（即featuremap与常量相乘）<br> 其中第一个输入是featuremap，第二个输入是weight，以下几种场景均可优化到BPU上运行：<br>- K vs KxN、K vs 1xKxN、K vs 1x1xKxN <br>- MxK vs K、MxK vs KxN、MxK vs 1x1xKxN <br>- 1xMxK vs K、1xMxK vs 1xKxN <br>- 1x1xMxK vs K、1x1xMxK vs 1xKxN、1x1xMxK vs 1x1xKxN <br>- BxMxK vs KxN （B&gt;=1） <br>- 1xBxMxK vs KxN （B&gt;=1）<br>- AxBxMxK vs KxN (A&gt;1，B&gt;1) <br>- 其中第一个输入是weight，第二个输入是featuremap，以下场景可优化到BPU上运行：<br>- 1xBxMxK vs 1x1xKxN (B&gt;1) <br>对于两个输入均为featuremap的场景（即两个featuremap相乘），以下场景可优化到BPU上运行：<br>- 1xBxMxK vs 1x1xKxN （B&gt;=1）</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Upsample</td>
+<td>BPU加速</td>
+<td>输入featuremap需为四维NCHW，并且只支持在H和W维度上进行resize； <br> 放大系数factor支持2的幂数倍如2，4，8，16，32等；<br> 支持H维度和W维度的放大系数不同但需要满足H_factor &lt;= W_factor</td>
+<td>无</td>
+</tr>
+<tr>
+<td>ROIPooling</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>无</td>
+</tr>
+<tr>
+<td>PSROIPooling</td>
+<td>CPU计算</td>
+<td>不支持</td>
+<td>无</td>
+</tr>
+</tbody>
+</table></section>
+<section id="onnx">
+<h2><span class="section-number">6.4.2.3. </span>支持的ONNX算子列表<a class="headerlink" href="#onnx" title="永久链接至标题"></a></h2>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>ONNX算子名称</strong></th>
+<th><strong>CPU计算/BPU加速</strong></th>
+<th><strong>XJ3 BPU支持约束</strong></th>
+<th><strong>CPU支持约束</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abs</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Acos</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Acosh</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Add</td>
+<td>BPU加速</td>
+<td>输入channel大小 M&lt;= 2048 支持以下几种情况：<br> 1. Add的两个输入shape为NCHW和NCHW； <br>2. Add的两个输入shape为NCHW和NC11（Add的两个输入都需要是其它op的输出）；<br>3.作为resnet中的short-cut子结构的Add，会被融合到上一个conv中加速计算。</td>
+<td>- 支持相同输入shape计算。<br>- 支持输入1是标量或者输入2是标量的计算。<br>- 支持broadcast计算，最大维度是5。</td>
+</tr>
+<tr>
+<td>And</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>shape约束：<br>1.支持A或B为标量的计算。 <br>2.支持相同shape计算。<br>3.broadcast仅支持4维度计算，并且N、C相等。 <br>- HxW 与1x1，或者1x1与HxW。 <br>- HxW与Hx1，或者Hx1与HxW 。<br>- HxW与1xW，或者1xW与HxW。</td>
+</tr>
+<tr>
+<td>ArgMax</td>
+<td>BPU加速</td>
+<td>1. 输入维度为四维输入NCHW。 <br>2. 仅支持沿C维度进行argmax，即axis=1。<br> 3. C &lt;= 64</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>ArgMin</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Asin</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Asinh</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Atan</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Atanh</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>AveragePool</td>
+<td>BPU加速</td>
+<td>Kernel HxW=[1, 7]x[1, 7], Stride ∈{1, 185}</td>
+<td>auto_pad 属性不支持。<br>仅支持四维Tensor计算。</td>
+</tr>
+<tr>
+<td>BatchNormalization</td>
+<td>BPU加速</td>
+<td>优化阶段会被融合到上一个conv中支持</td>
+<td>type约束：仅支持float类型。 <br>支持第1个维度是channel的数据排布方式计算。</td>
+</tr>
+<tr>
+<td>BitShift</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Cast</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>from_type支持bool,float,int64,int32,int8,uint8。<br>to_type支持bool,float,int64,int32,int8,uint32,uint8。</td>
+</tr>
+<tr>
+<td>Ceil</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Clip</td>
+<td>BPU加速</td>
+<td>无限制。</td>
+<td>type约束：仅支持float类型。<br>仅有2个输入时，默认为min参数。</td>
+</tr>
+<tr>
+<td>Compress</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Concat</td>
+<td>BPU加速</td>
+<td>输入输出Channel：C&lt;=2048。</td>
+<td>--</td>
+</tr>
+<tr>
+<td>ConcatFromSequence</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Constant</td>
+<td>BPU加速</td>
+<td>会通过常量折叠将其优化为数值存储</td>
+<td>目前不支持sparse_tensor属性。<br> type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>ConstantOfShape</td>
+<td>BPU加速</td>
+<td>会通过常量折叠将其优化为数值存储</td>
+<td>type约束支持：float,int32,int8。</td>
+</tr>
+<tr>
+<td>Conv</td>
+<td>BPU加速</td>
+<td>Kernel宽高取值范围：HxW=[1,7]x[1,7]。<br> 输入输出Channel取值范围(one group) &lt;= 2048（对于非dilated、group、depthwise conv等普通卷积，可以放宽至&lt;=4096）。<br> stride无限制，，但对于Conv后接Add(resnet shortcut-connecting) Stride取值范围为：{1, 2}。<br> Dilation取值范围：只支持设置为2的幂次方，且必须能够被stride整除。<br>h_dilated和w_dilated可以不同但要求h_diated&lt;=w_dilated。<br> 单个Kernel总体大小限制: HxWxC &lt;= 32768</td>
+<td>仅支持4维Conv计算。<br>auto_pad 属性不支持。<br>type约束支持：float,int32,int8。<br>pads属性约束：[Hstart, Wstart, Hend, Wend]（pads长度等于4）并且Hstart==Hend，Wstart==Wend。</td>
+</tr>
+<tr>
+<td>ConvInteger</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>ConvTranspose</td>
+<td>BPU加速</td>
+<td>Kernel 宽高取值范围：HxW=[2,14]x[2,14]。<br> 输入输出Channel数值取值范围：C &lt;= 2048。<br> Padding宽高取值范围：HxW=[0,(Kernel_H-1)/2]x[0,(Kernel_W-1)/2]。<br> Stride取值范围：Stride ∈ {2, 4}。<br> stride_h ≦ stride_w。<br> Dilation ∈ {(1, 1)}</td>
+<td>auto_pad属性不支持。 <br>type约束支持：float,int32,int8。</td>
+</tr>
+<tr>
+<td>Cos</td>
+<td>BPU加速</td>
+<td>对于一个输入维度为1CHW的tensor，仅支持CxHxW &lt;= 8192的情况</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Cosh</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>CumSum</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>from_type：<br>x：type约束仅支持float类型。<br>axis：type约束仅支持int32类型。<br>to_type：type约束仅支持float类型。</td>
+</tr>
+<tr>
+<td>DepthToSpace</td>
+<td>BPU加速</td>
+<td>支持mode=DCR 和 mode=CRD。<br> 仅支持H和W方向的重新排列，并且仅支持blocksize=2的重排列。 <br>举例：NxCxHxW -&gt; Nx(C/4)x(2H)x(2W)</td>
+<td>from_type支持：<br>- type约束仅支持float类型。<br>- 仅支持4维度Tensor计算。<br>to_type支持：<br>- type约束仅支持float类型。<br>- 仅支持4维度Tensor计算。</td>
+</tr>
+<tr>
+<td>DequantizeLinear</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Det</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Div</td>
+<td>BPU加速</td>
+<td>1. 只支持两个输入均为featuremap（不支持输入来自于常量）； <br>2. 对input shape的约束请参考Mul算子</td>
+<td>- 支持相同输入shape计算。<br>- 支持输入1是标量或者输入2是标量的计算。<br>- 支持broadcast计算，最大维度是5。</td>
+</tr>
+<tr>
+<td>Dropout</td>
+<td>BPU加速</td>
+<td>该算子推理阶段不参加计算， 会被移除优化</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Einsum</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Elu</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Equal</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- 支持相同输入shape计算。<br>- 支持输入1是标量或者输入2是标量的计算。<br>- 支持broadcast计算，最大维度是5。</td>
+</tr>
+<tr>
+<td>Erf</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：支持float、double数据类型。</td>
+</tr>
+<tr>
+<td>Exp</td>
+<td>BPU加速</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Expand</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>EyeLike</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Flatten</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Floor</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>GRU</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- direction属性仅支持forward类型。<br>- type约束：仅支持float类型。<br>- 仅支持输入个数是3、4、6。<br>- 输出个数是2。</td>
+</tr>
+<tr>
+<td>Gather</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>from_type支持：<br>- input：type约束支持：<br>float,int64,int32,int8,uint64,uint32,uint8。<br>- indices：type约束支持int32, int64。 <br>to_type支持：type约束支持：<br>float,int64,int32,int8,uint64,uint32,uint8。</td>
+</tr>
+<tr>
+<td>GatherElements</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>GatherND</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>from_type支持：<br>- input：type约束支持float,int32,int8。<br>- indices：tensor(int64)。<br>to_type支持：type约束支持float,int32,int8。</td>
+</tr>
+<tr>
+<td>Gemm</td>
+<td>BPU加速</td>
+<td>Gemm将被转化为Conv实现。<br> 假设Gemm的输入feature map的shape为NCHW：<br> 1. 如果HW均小于等于7，则Gemm的限制等同于Conv。<br> 2. 如果H和W均为1，那么C的限制为 &lt;= 16384；否则 C的大小限制为 &lt;= 2048。<br> 3. 如果Gemm后是一个BPU支持的节点，Gemm会进行低精度int8输出，此时的输入宽高限制为: H x W/8 x C/4 &lt;= 1024。<br> 4. 如果Gemm后是一个非BPU支持的节点，Gemm会进行高精度int32输出，此时的输入宽高限制为: H x W/8 x C/4 &lt; 2048。</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>GlobalAveragePool</td>
+<td>BPU加速</td>
+<td>假设输入shape为NCHW， 则输入宽高需满足 HxW &lt;= 8192</td>
+<td>无</td>
+</tr>
+<tr>
+<td>GlobalLpPool</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- type约束：支持float和double类型。<br> - 仅支持四维Tensor计算。</td>
+</tr>
+<tr>
+<td>GlobalMaxPool</td>
+<td>BPU加速</td>
+<td>假设输入shape为NCHW， 则输入宽高取值范围为HxW=[1,1024]x[1,1024]</td>
+<td>- type约束仅支持float类型。<br>- 仅支持四维Tensor。</td>
+</tr>
+<tr>
+<td>Greater</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- from_type支持：type约束float,int32,int8。<br>- to_type支持：bool。<br>- 支持A或B为标量的计算。<br>- 支持相同shape计算。<br>- broadcast仅支持4维度计算，NCHW格式，并且N、C相等。 <br>- HxW 与1x1，或者1x1与HxW。<br>- HxW与Hx1，或者Hx1与HxW。 <br>- HxW与1xW，或者1xW与HxW。</td>
+</tr>
+<tr>
+<td>HardSigmoid</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束仅支持float类型。</td>
+</tr>
+<tr>
+<td>Hardmax</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Identity</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>If</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>InstanceNormalization</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- type约束仅支持float类型。<br>- 支持第1个维度是channel的数据排布方式计算。</td>
+</tr>
+<tr>
+<td>IsInf</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>IsNaN</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>LRN</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- type约束仅支持float类型。<br>- 仅支持四维Tensor。</td>
+</tr>
+<tr>
+<td>LSTM</td>
+<td>BPU加速</td>
+<td>仅支持batch_size=1</td>
+<td>- 不支持属性设置。<br>- type约束仅支持float类型。<br>- 仅支持输入个数是3、4、8。<br>- 输出个数是2。</td>
+</tr>
+<tr>
+<td>LeakyRelu</td>
+<td>BPU加速</td>
+<td>无</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Less</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- 支持相同输入shape计算。<br>- 支持输入1是标量或者输入2是标量的计算。<br>- 支持broadcast计算，最大维度是5。</td>
+</tr>
+<tr>
+<td>LessOrEqual</td>
+<td>CPU计算</td>
+<td></td>
+<td>- 支持相同输入shape计算。<br>- 支持输入1是标量或者输入2是标量的计算。<br>- 支持broadcast计算，最大维度是5。</td>
+</tr>
+<tr>
+<td>Log</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>LogSoftmax</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Loop</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>LpNormalization</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- p范数仅支持1或者2。<br>- type约束支持double类型和float类型。</td>
+</tr>
+<tr>
+<td>LpPool</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- auto_pad属性不支持。<br>- type约束支持double类型和float类型。<br>- 仅支持4维计算。</td>
+</tr>
+<tr>
+<td>MatMulInteger</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>MatMul</td>
+<td>BPU加速</td>
+<td>对于两个输入分别为featuremap和weight的场景（即featuremap与常量相乘）<br> 其中第一个输入是featuremap，第二个输入是weight，以下几种场景均可优化到BPU上运行：<br>- K vs KxN、K vs 1xKxN、K vs 1x1xKxN <br>- MxK vs K、MxK vs KxN、MxK vs 1x1xKxN <br>- 1xMxK vs K、1xMxK vs 1xKxN <br>- 1x1xMxK vs K、1x1xMxK vs 1xKxN、1x1xMxK vs 1x1xKxN <br>- BxMxK vs KxN （B&gt;=1） <br>- 1xBxMxK vs KxN （B&gt;=1）<br>- AxBxMxK vs KxN (A&gt;1，B&gt;1) <br>- 其中第一个输入是weight，第二个输入是featuremap，以下场景可优化到BPU上运行：<br>- 1xBxMxK vs 1x1xKxN (B&gt;1) <br>对于两个输入均为featuremap的场景（即两个featuremap相乘），以下场景可优化到BPU上运行：<br>- 1xBxMxK vs 1x1xKxN （B&gt;=1）</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Max</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- 支持1-∞个输入。<br>- 支持相同输入shape计算。<br>- 支持输入1是标量或者输入2是标量的计算。<br>- 支持broadcast计算，最大维度是5。</td>
+</tr>
+<tr>
+<td>MaxPool</td>
+<td>BPU加速</td>
+<td>Kernel宽高的取值范围为：[1, 64]x[1, 64]。<br> Stride取值范围为：[1,185]。<br>Padding值需要大于等于零。<br>MaxPool不支持dilation。</td>
+<td>1. dilation只支持1x1。<br>2. 只支持数据行优先存储。<br>3. auto_pad属性不支持。<br>4. storage_order属性不支持。<br>5. 仅支持四维Tensor计算。</td>
+</tr>
+<tr>
+<td>MaxRoiPool</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Mean</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Min</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- 支持1-∞个输入。<br>- 支持相同输入shape计算。<br>- 支持输入1是标量或者输入2是标量的计算。<br>- 支持broadcast计算，最大维度是5。</td>
+</tr>
+<tr>
+<td>Mod</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Mul</td>
+<td>BPU加速</td>
+<td>Mul的两个输入都需要是四维并且C的大小需要 &lt;= 2048。 <br>同时仅支持如下shape的相乘： <br>1. (1xCxHxW vs 1xCxHxW)。 <br>2. (1xCxHxW vs 1xCx1x1)。<br> 3. (1xCxHxW vs 1x1x1x1) 。<br>注意：输入的取值不能为0。</td>
+<td>- 支持相同输入shape计算。<br>- 支持输入1是标量或者输入2是标量的计算。<br>- 支持broadcast计算，最大维度是5。</td>
+</tr>
+<tr>
+<td>Multinomial</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Neg</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>NonZero</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- type约束支持：float,int32,int8。<br>- 支持1维计算。<br>- 支持4维计算。</td>
+</tr>
+<tr>
+<td>Not</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>OneHot</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Or</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- 支持A或B为标量的计算。<br>- 支持相同shape计算。<br>- broadcast仅支持4维度计算，并且N、C相等。  <br>- HxW 与1x1，或者1x1与HxW。  <br>- HxW与Hx1，或者Hx1与HxW。  <br>- HxW与1xW，或者1xW与HxW。</td>
+</tr>
+<tr>
+<td>PRelu</td>
+<td>BPU加速</td>
+<td>--</td>
+<td>- type约束支持：仅支持float类型。<br>- from_type：X和slope。<br>- to_type：Y。<br>- X的shape为data_shape，slope的为slope_shape ，shape约束如下：  <br>- data_shape == slope_shape。   <br>- slope_shape.ProdSize() == 1。   <br>- X和slope仅支持NCHW排布的4维度计算，并且N、C维度值相等。     <br>- HxW 与1x1（ slope_shape ）。     <br>- HxW与Hx1（ slope_shape ）。     <br>- HxW与1xW（ slope_shape ）。 <br>- X是4维度 &amp;&amp; slope是3维度 &amp;&amp; data_shape[1] == slope_shape [0] &amp;&amp; slope_shape [1] == 1 &amp;&amp; slope_shape [2] == 1。</td>
+</tr>
+<tr>
+<td>Pad</td>
+<td>BPU加速</td>
+<td>支持mode = Constant。<br>仅支持H，W维度的pad。</td>
+<td>Pad-10：<br>- type约束仅支持float类型。<br>- 仅支持NCHW排布的4维Tensor。<br>- 属性pads的约束如下：  <br>- len(pads) == 8 &amp;&amp; pads[i] &gt;=0 &amp;&amp; pads[0] == 0 &amp;&amp; pads[1] == 0 &amp;&amp; pads[4] == 0 &amp;&amp; pads[5] == 0。 <br>Pad-11：<br>- from_type支持：  <br>- data：type约束仅支持float类型。  <br>- pads : tensor(int64)。  <br>- constant_value (optional)：type约束仅支持float类型。<br>- to_type支持：type约束仅支持float类型。<br>- 仅支持4维Tensor。<br>- 仅支持2/3维度填充。</td>
+</tr>
+<tr>
+<td>Pow</td>
+<td>BPU加速</td>
+<td>只支持第二个输入（exponent）为单个值。</td>
+<td>- type约束支持：double, float，int64, int32。<br>- 支持相同输入shape的计算。<br>- 支持输入1是标量或者输入2是标量的计算。<br>- 支持broadcast计算，最大维度是5。<br>- 仅支持X和Y相同type。</td>
+</tr>
+<tr>
+<td>QLinearConv</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>QLinearMatMul</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>QuantizeLinear</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>RNN</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- type约束：仅支持float类型。<br>- 属性约束：direction属性仅支持forward。<br>- 输入约束：仅支持X、W、R输入，不支持可选输入B、sequence_lens、initial_h设置。<br>- 输出约束：仅支持Y_h的输出，shape [num_directions, batch_size, hidden_size]。</td>
+</tr>
+<tr>
+<td>RandomNormal</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>RandomNormalLike</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>RandomUniform</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>RandomUniformLike</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Range</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束支持：float,int64,int32,int16。</td>
+</tr>
+<tr>
+<td>Reciprocal</td>
+<td>BPU加速</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>ReduceL1</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>ReduceL2</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>ReduceLogSum</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>仅支持float、double数据类型</td>
+</tr>
+<tr>
+<td>ReduceLogSumExp</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束支持float、double数据类型。</td>
+</tr>
+<tr>
+<td>ReduceMax</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>axes支持0, 1或者等于输入数据的维数</td>
+</tr>
+<tr>
+<td>ReduceMean</td>
+<td>BPU加速</td>
+<td>input featuremap需为四维，并且axes=[2, 3]</td>
+<td>axes支持0, 1或者等于输入数据的维数</td>
+</tr>
+<tr>
+<td>ReduceMin</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>ReduceProd</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>ReduceSum</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>axes支持0, 1或者等于输入数据的维数</td>
+</tr>
+<tr>
+<td>ReduceSumSquare</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>axes支持0, 1或者等于输入数据的维数</td>
+</tr>
+<tr>
+<td>Relu</td>
+<td>BPU加速</td>
+<td>会被融合到前一个conv中</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Reshape</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Resize</td>
+<td>BPU加速</td>
+<td>1. 输入featuremap需为四维NCHW，并且只支持在H和W维度上进行resize，onnx opset=11时支持roi输入（pytorch转换的模型需手动修改算子添加roi输入，roi只支持常量输入），roi输入只支持H和W维度，roi输入只在tf_crop_and_resize模式下起作用。<br>2. 属性mode支持nearest和linear两种模式。<br>3. 支持放大和缩小。<br>4. 对于mode=nearest，放大系数factor支持2的幂数倍如2，4，8，16，32等；支持H维度和W维度的放大系数不同但需要满足H_factor &lt;= W_factor。<br>5. 对于onnx opset=11，属性coordinate_transformation_mode支持half_pixel，pytorch_half_pixel, asymmetric，align_corners和tf_crop_and_resize，当coordinate_transformation_mode=tf_crop_and_resize时，需要保证roi输入转换得到的边界坐标为整数。</td>
+<td>resize-10 <br>- 输入等于2时，使用opset10。<br>- 输入数据是4维Tensor。 <br>resize-11  <br>- 输入大于2时，使用opset11。<br>- 输入数据是4维Tensor。<br>- coordinate_transformation_mode在nearest, linear模式下支持half_pixel, asymmetric, align_corners和pytorch_half_pixel四种，在cubic模式下只支持half_pixel。<br>- extrapolation_value属性不支持。</td>
+</tr>
+<tr>
+<td>ReverseSequence</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>RoiAlign</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Round</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Scan</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Scatter (deprecated)</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>ScatterElements</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>from_type支持：<br>- data：type约束支持：float,int32,int8。<br>- indices：type约束仅支持int32类型。<br>- updates：type约束支持：float,int32,int8。<br>to_type支持：type约束支持：float,int32,int8。</td>
+</tr>
+<tr>
+<td>ScatterND</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>from_type支持：<br>- data：type约束支持：float,int32,int8。<br>- updates : type约束支持：float,int32,int8。<br>to_type支持：type约束支持：float,int32,int8。</td>
+</tr>
+<tr>
+<td>Selu</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>SequenceAt</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>SequenceConstruct</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>SequenceEmpty</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>SequenceErase</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>SequenceInsert</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>SequenceLength</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Shape</td>
+<td>BPU加速</td>
+<td>会通过常量折叠将其优化为数值存储</td>
+<td>from_type支持：type约束支持float,int32,int8类型。</td>
+</tr>
+<tr>
+<td>Shrink</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Sigmoid</td>
+<td>BPU加速</td>
+<td>对于一个输入维度为1CHW的tensor，仅支持min(8W4C对齐后的shape，32C对齐后的shape) &lt;=8192的情况。<br>8W4C：实际运行时tensor的W维度padding至8的整数倍，C维度padding至4的整数倍。<br>32C：实际运行时tensor的C维度padding至32的整数倍。<br>在两个对齐方式中取对齐后shape最小值，判断是否&lt;=8192。</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Sign</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Sin</td>
+<td>BPU加速</td>
+<td>对于一个输入维度为1CHW的tensor，仅支持CxHxW &lt;= 8192的情况</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Sinh</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>BPU加速</td>
+<td>会通过常量折叠将其优化为数值存储</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Slice</td>
+<td>BPU加速</td>
+<td>无限制</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Softmax</td>
+<td>BPU加速</td>
+<td>默认运行在CPU上，当该op输入为四维且axis=1，并且作为模型输出节点时，可以通过run_on_bpu指定该节点将其运行在BPU上。</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Softplus</td>
+<td>BPU加速</td>
+<td>对于一个输入维度为1CHW的tensor，仅支持CxHxW &lt;= 8192的情况</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Softsign</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>SpaceToDepth</td>
+<td>BPU加速</td>
+<td>支持mode=DCR 和 mode=CRD。<br> 仅支持H和W方向的重新排列，并且仅支持blocksize=2的重排列。 <br>举例：NxCxHxW -&gt; Nx(4C)x(H/2)x(W/2)</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Split</td>
+<td>BPU加速</td>
+<td>1. 只支持输入大小为NCHW； <br>2. 原始输入的长度必须是每个被切分的tensor长度的倍数； <br>3. 只支持沿着C，H，W维度的切分，也就是axis支持等于1，2，3； <br>4. split数应可以整除</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>SplitToSequence</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Sqrt</td>
+<td>BPU加速</td>
+<td>对于一个输入维度为1CHW的tensor，仅支持CxHxW &lt;= 8192的情况</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Squeeze</td>
+<td>CPU计算</td>
+<td>如果该op出现在模型中的常量计算子结构中，会被常量折叠优化删除掉，不参与推理</td>
+<td>--</td>
+</tr>
+<tr>
+<td>StringNormalizer</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Sub</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- 支持相同输入shape计算。<br>- 支持输入1是标量或者输入2是标量的计算。<br>- 支持broadcast计算，最大维度是5。</td>
+</tr>
+<tr>
+<td>Sum</td>
+<td>BPU加速</td>
+<td>限制条件等同于Add</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Tan</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Tanh</td>
+<td>BPU加速</td>
+<td>对于一个输入维度为1CHW的tensor，仅支持CxHxW &lt;= 8192的情况</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>TfIdfVectorizer</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>ThresholdedRelu</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float类型。</td>
+</tr>
+<tr>
+<td>Tile</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束：仅支持float,int64,int32,uint64,uint32类型。</td>
+</tr>
+<tr>
+<td>TopK</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- type约束：仅支持float类型。 <br>- 仅支持opset-10。</td>
+</tr>
+<tr>
+<td>Transpose</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>- 支持nhwc2nchw，perm：[0, 3, 1, 2]。<br>- 支持nchw2nhwc，perm：[0, 2, 3, 1]。<br>- 支持指定perm维度转换，数据类型仅支持float，int8，int32。</td>
+</tr>
+<tr>
+<td>Unique</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Unsqueeze</td>
+<td>CPU计算</td>
+<td>如果该op出现在模型中的常量计算子结构中，会被常量折叠优化删除掉，不参与推理</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Upsample (resize替代)</td>
+<td>BPU加速</td>
+<td>--</td>
+<td>Upsample-(resize-10) <br>- 输入等于2时，使用opset10。<br>- 输入数据是4维Tensor。 <br>Upsample-(resize-11)  <br>- 输入大于2时，使用opset11。<br>- 输入数据是4维Tensor。<br>- coordinate_transformation_mode在nearest, linear模式下支持half_pixel, asymmetric, align_corners和pytorch_half_pixel四种，在cubic模式下只支持half_pixel。<br>- extrapolation_value属性不支持。</td>
+</tr>
+<tr>
+<td>Where</td>
+<td>CPU计算</td>
+<td>--</td>
+<td>type约束支持float和int64类型。<br> condition的shape为cond_shape，X的shape为x_shape，Y的shape为y_shape ，output的shape为o_shape，shape约束如下：<br>- 仅支持cond_shape == o_shape情况下：  <br>- x_shape == o_shape的broadcast。  <br>- y_shape == o_shape的broadcast。<br>- 仅支持cond_shape.NDim() == 4 &amp;&amp; o_shape.NDim() == 4 &amp;&amp; N维度值相同 &amp;&amp; C维度值相同：  <br>- 1x1（cond_shape）与HxW （o_shape）。  <br>- Hx1（cond_shape）与HxW（o_shape）。  <br>- 1xW（cond_shape）与HxW（o_shape）。</td>
+</tr>
+<tr>
+<td>Xor</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Function</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>Celu</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>DynamicQuantizeLinear</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>GreaterOrEqual</td>
+<td>暂不支持</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>MeanVarianceNormalization</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td>--</td>
+</tr>
+<tr>
+<td>GridSample（PyTorch）</td>
+<td>CPU计算※</td>
+<td>--</td>
+<td></td>
+</tr>
+</tbody>
+</table></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ptq_user_guide/chapter_model_conversion.html" class="btn btn-neutral float-left" title="6.4.1.1. 简介" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../horizon_runtime_samples/index.html" class="btn btn-neutral float-right" title="6.5. 上板运行(runtime)应用开发说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

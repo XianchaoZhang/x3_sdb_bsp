@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.2. VIO使用指引 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="3.2.1. get_sif_data 使用说明" href="get_sif_data.html" />
+    <link rel="prev" title="3.1.3. 智能盒子" href="../Typical_Application_Scenarios/AI_Box_Demo.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">3. Demo使用指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Typical_Application_Scenarios/index.html">3.1. 典型应用场景</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.2. VIO使用指引</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="get_sif_data.html">3.2.1. get_sif_data 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_isp_data.html">3.2.2. get_isp_data 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_isp.html">3.2.3. sample_isp 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps.html">3.2.4. sample_vps 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps_zoom.html">3.2.5. sample_vps_zoom 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_osd.html">3.2.6. sample_osd 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html">3.2.7. sample video codec 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vot.html">3.2.8. sample_vot 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_lcd.html">3.2.9. sample_lcd 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_usb_cam_4k60.html">3.2.10. sample_usb_cam_4k60 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html">3.2.11. Sunrise_camera用户使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html">3.2.12. Sunrise_camera开发说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">3. </span>Demo使用指南</a> &raquo;</li>
+      <li><span class="section-number">3.2. </span>VIO使用指引</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../Typical_Application_Scenarios/AI_Box_Demo.html" class="btn btn-neutral float-left" title="3.1.3. 智能盒子" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="get_sif_data.html" class="btn btn-neutral float-right" title="3.2.1. get_sif_data 使用说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vio">
+<h1><span class="section-number">3.2. </span>VIO使用指引<a class="headerlink" href="#vio" title="永久链接至标题"></a></h1>
+<p>本章简述地平线多媒体应用示例，所涉及源码可以在SDK包的 board_support_package/platform_source_code/sample 目录下获取。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="get_sif_data.html">3.2.1. get_sif_data 使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="get_sif_data.html#id1">3.2.1.1. 程序功能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="get_sif_data.html#id2">3.2.1.2. 功能使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="get_sif_data.html#id3">硬件连接</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_sif_data.html#id4">程序部署</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_sif_data.html#id5">运行效果说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="get_sif_data.html#id6">3.2.1.3. 程序开发</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="get_sif_data.html#id7">源码结构</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_sif_data.html#id8">编译</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_sif_data.html#sensor">添加新sensor</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="get_isp_data.html">3.2.2. get_isp_data 使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="get_isp_data.html#id1">3.2.2.1. 程序功能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="get_isp_data.html#id2">3.2.2.2. 功能使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="get_isp_data.html#id3">硬件连接</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_isp_data.html#id4">程序部署</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_isp_data.html#id5">运行效果说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="get_isp_data.html#id6">3.2.2.3. 程序开发</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="get_isp_data.html#id7">源码结构</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_isp_data.html#id8">编译</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_isp_data.html#sensor">添加新sensor</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sample_isp.html">3.2.3. sample_isp 使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sample_isp.html#id1">3.2.3.1. 程序功能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample_isp.html#id2">3.2.3.2. 功能使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_isp.html#id3">程序部署</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_isp.html#id4">命令解释：</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sample_isp.html#id5">3.2.3.3. 程序开发</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_isp.html#id6">源码结构</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_isp.html#id7">编译</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sample_vps.html">3.2.4. sample_vps 使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sample_vps.html#id1">3.2.4.1. 程序功能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample_vps.html#id2">3.2.4.2. 功能使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps.html#id3">程序部署</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps.html#id4">运行效果说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sample_vps.html#id5">3.2.4.3. 程序开发</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps.html#id6">源码结构</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps.html#id7">编译</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sample_vps_zoom.html">3.2.5. sample_vps_zoom 使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sample_vps_zoom.html#id1">3.2.5.1. 程序功能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample_vps_zoom.html#id2">3.2.5.2. 功能使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps_zoom.html#id3">程序部署</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps_zoom.html#id4">运行效果说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sample_vps_zoom.html#id5">3.2.5.3. 程序开发</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps_zoom.html#id6">源码结构</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vps_zoom.html#id7">编译</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sample_osd.html">3.2.6. sample_osd 使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sample_osd.html#id1">3.2.6.1. 程序功能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample_osd.html#id2">3.2.6.2. 功能使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_osd.html#id3">程序部署</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_osd.html#id4">运行效果说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sample_osd.html#id5">3.2.6.3. 程序开发</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_osd.html#id6">源码结构</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_osd.html#id7">编译</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sample_video_codec.html">3.2.7. sample video codec 使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sample_video_codec.html#id1">3.2.7.1. 程序功能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample_video_codec.html#id2">3.2.7.2. 程序部署</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html#sample-vdec-basic">sample_vdec_basic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html#sample-venc-basic">sample_venc_basic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html#sample-vdec-two-channel">sample_vdec_two_channel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html#sample-venc-two-channel">sample_venc_two_channel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sample_video_codec.html#id3">3.2.7.3. 运行效果说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html#id4">sample_vdec_basic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html#id5">sample_venc_basic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html#id6">sample_vdec_two_channel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_video_codec.html#id7">sample_venc_two_channel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sample_video_codec.html#id8">3.2.7.4. 编译</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sample_vot.html">3.2.8. sample_vot 使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sample_vot.html#id1">3.2.8.1. 程序功能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample_vot.html#id2">3.2.8.2. 功能使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_vot.html#id3">程序部署</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vot.html#id4">运行效果说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sample_vot.html#id5">3.2.8.3. 程序开发</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_vot.html#id6">源码结构</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_vot.html#id7">编译</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sample_lcd.html">3.2.9. sample_lcd 使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sample_lcd.html#id1">3.2.9.1. 程序功能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample_lcd.html#id2">3.2.9.2. 功能使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_lcd.html#id3">程序部署</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_lcd.html#id4">运行效果说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sample_lcd.html#id5">3.2.9.3. 程序开发</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_lcd.html#id6">源码结构</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_lcd.html#id7">编译</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sample_usb_cam_4k60.html">3.2.10. sample_usb_cam_4k60 使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sample_usb_cam_4k60.html#id1">3.2.10.1. 程序功能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample_usb_cam_4k60.html#id2">3.2.10.2. 功能使用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_usb_cam_4k60.html#id3">程序部署</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_usb_cam_4k60.html#id4">运行效果说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sample_usb_cam_4k60.html#id5">3.2.10.3. 程序开发</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sample_usb_cam_4k60.html#id6">模块划分</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sample_usb_cam_4k60.html#id7">顶层源码结构</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sample_usb_cam_4k60.html#id8">头文件结构</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sample_usb_cam_4k60.html#id9">源代码结构</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sample_usb_cam_4k60.html#id10">编译</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sample_usb_cam_4k60.html#sensor">添加新sensor</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Sunrise_camera_user_guide.html">3.2.11. Sunrise_camera用户使用说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Sunrise_camera_user_guide.html#id1">3.2.11.1. 功能说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Sunrise_camera_user_guide.html#id2">3.2.11.2. 硬件环境准备</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html#sensor">Sensor连接</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html#id3">网络连接要求</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html#usb">USB连接要求</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Sunrise_camera_user_guide.html#id4">3.2.11.3. sunrise_camera部署方法</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html#id5">程序启动方式</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Sunrise_camera_user_guide.html#web">3.2.11.4. Web端使用说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html#id6">主界面</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html#id7">参数配置方式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html#id8">设备信息</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html#ip">IP摄像头配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html#id9">USB摄像头</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html#id10">智能盒子</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html#id11">其他配置</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_user_guide.html#id12">算法渲染配置</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_user_guide.html#id13">图像实时抓拍</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_user_guide.html#id14">预览码流切换</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_user_guide.html#id15">预览画面属性显示</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Sunrise_camera_user_guide.html#vlc">3.2.11.5. vlc播放器拉流</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html#id16">拉流方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_user_guide.html#k-30fps">4K&#64;30fps拉流配置说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Sunrise_camera_dev.html">3.2.12. Sunrise_camera开发说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Sunrise_camera_dev.html#id1">3.2.12.1. Sunrise camera 系统设计</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#id2">系统框图</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#id3">微核设计</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#id4">架构优缺点</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Sunrise_camera_dev.html#id5">3.2.12.2. Sunrise camera架构视图</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#id6">模块划分</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#communicate">核心模块（communicate）</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id7">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id8">功能描述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id9">模块代码结构</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id10">接口描述</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#common">公共库模块（common）</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id11">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id12">功能描述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id13">模块代码结构</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#camera-camera">Camera模块（Camera）</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id14">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id15">功能描述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id16">模块代码结构</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#x3-config-json">x3_config.json配置文件主要参数说明</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#transport">对外交互模块（Transport）</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id17">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#rtsp-server">RTSP Server模块</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#wesocket-server">Wesocket Server 模块</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#main">主程序入口（main）</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id18">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id19">执行流程</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#webserver">WebServer</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id20">概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id21">功能描述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id22">模块代码结构</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Sunrise_camera_dev.html#sensor">3.2.12.3. 添加新Sensor支持</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#id23">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#id24">新增sensor的相关代码</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id25">添加sensor库</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#vin">添加VIN配置代码</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id26">新增预配置接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id27">场景应用参数选择代码</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id28">自动检测sensor是否连接</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#web-jssensor">web js中增加解析新sensor的代码</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#id29">sensor点亮指南</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Sunrise_camera_dev.html#bpu">3.2.12.4. 算法推理BPU</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#id30">概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Sunrise_camera_dev.html#id31">添加一个新模型流程</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id32">准备算法模型</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id33">添加初始化过程</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id34">推理线程处理函数</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id35">后处理线程函数</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#id36">后处理代码</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sunrise_camera_dev.html#web">Web页面上增加渲染处理</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../Typical_Application_Scenarios/AI_Box_Demo.html" class="btn btn-neutral float-left" title="3.1.3. 智能盒子" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="get_sif_data.html" class="btn btn-neutral float-right" title="3.2.1. get_sif_data 使用说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

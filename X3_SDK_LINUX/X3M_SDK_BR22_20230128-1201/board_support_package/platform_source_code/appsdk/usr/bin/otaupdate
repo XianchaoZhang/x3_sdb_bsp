@@ -1,0 +1,908 @@
+#!/bin/sh
+
+function usage()
+{
+    echo "Usage:"
+    echo "    otaupdate partition_name img_file"
+    echo "    --partition_name:"
+    echo "      uboot|boot|system|app|all"
+    echo "    --img_file: "
+    echo "      uboot.zip(bootloader.zip - NAND)|boot.zip|system.zip|all_in_one.zip"
+}
+
+function check_hrut_bin()
+{
+    otastatus_bin="/usr/bin/hrut_otastatus"
+    resetreason_bin="/usr/bin/hrut_resetreason"
+    count_bin="/usr/bin/hrut_count"
+    cleanuserdata_bin="/usr/bin/hrut_cleanuserdata"
+    for bin in $otastatus_bin $resetreason_bin $count_bin $cleanuserdata_bin; do
+        if [ ! -f $bin ];then
+            echo "[OTAINFO] Error: file $bin not found!"
+            exit 1
+        fi
+    done
+}
+
+function mmc_part_number()
+{
+    line=$(busybox fdisk -l | grep -w "$1")
+    if [ ! -z "$line" ];then
+        echo $(echo "$line" | awk -F ' ' '{print $1}')
+    else
+        printinfo "Error：mmc partition $1 not found"
+        echo "2" >> $update_result
+        exit 1
+    fi
+}
+
+function printinfo()
+{
+    local log=$1
+
+    echo "[OTA_INFO] ${log}"
+    echo "[OTA_INFO]${log}[OFNI_ATO]" >> $ota_info
+}
+
+function printprogress()
+{
+    local log=$1
+
+    echo "[OTA_INFO] ${log}"
+    echo "[OTA_PROGRESS]${log}[SSERGORP_ATO]" >> $progress
+}
+
+function log_file_path_setting()
+{
+    local path=$1
+
+    progress="${path}/progress"
+    ota_info="${path}/info"
+    update_result="${path}/result"
+    app_log="${path}/applog"
+}
+
+function mkdir_log_file()
+{
+    if [ x"$ota_bootmode" = x"nor_flash" ];then
+        ota_logpath="/tmp/cache"
+    else
+        local userdata_free_space tmp_free_space
+        local log_need_space="150"
+        userdata_free_space=$(df -k /userdata/ | grep "userdata" | awk '{print $4}')
+        tmp_free_space=$(df -k /tmp/ | grep "tmp" | awk '{print $4}')
+
+        # clear log file: /ota
+        rm -rf /ota
+
+        if [ "$userdata_free_space" -gt "$log_need_space" ];then
+            ota_logpath="/userdata/cache"
+        elif [ "$tmp_free_space" -gt "$log_need_space" ];then
+            rm -rf /userdata/cache
+            ota_logpath="/tmp/cache"
+        else
+            echo "[OTA_INFO] Error: stop upgrade, not enough space in both /userdata and /tmp !"
+            exit 1
+        fi
+    fi
+
+    log_file_path_setting $ota_logpath
+
+    local file="${ota_logpath}"
+    if [ ! -d $file ];then
+        mkdir $file
+    fi
+
+    file=$progress
+    if [ ! -f $file ];then
+        touch $file
+    fi
+    echo " " > $file
+
+    file=$ota_info
+    if [ ! -f $file ];then
+        touch $file
+    fi
+    echo " " > $file
+
+    file=$app_log
+    if [ ! -f $file ];then
+        touch $file
+    fi
+    echo " " > $file
+
+    file=$update_result
+    if [ ! -f $file ];then
+        touch $file
+    fi
+    echo "0" > $file
+
+    # sync data to disk
+    sync
+}
+
+function cpfile()
+{
+    local file="${ota_logpath}/commend"
+    if [ ! -f $file ];then
+        touch $file
+    fi
+
+    local name=$2
+    echo "$1/$name" > $file
+}
+
+function set_resetreason()
+{
+    hr_reset="/usr/bin/hrut_resetreason"
+    if [ -z $1 ];then
+        printinfo "Error：upflag parameter not set"
+        echo "2" >> $update_result
+        exit 1
+    fi
+
+    tmp=$($hr_reset $1)
+
+    if [ x"$1" = x"recovery" ];then
+        sync
+        sleep 2
+        reboot
+    fi
+}
+
+function get_upgrade_file_path()
+{
+    local image=$1
+    local image_path=${image#*/}
+    image_path=${image_path%%/*}
+
+    local current_path=$(pwd)
+    current_path=${current_path#*/}
+    current_path=${current_path%%/*}
+
+    if [ x"${image:0:1}" != x"/" ];then
+        if [ x"$current_path" = x"tmp" ];then
+            upgrade_file_path="/tmp"
+        else
+            upgrade_file_path="/userdata/cache"
+        fi
+    elif [ x"$image_path" = x"tmp" ];then
+        upgrade_file_path="/tmp"
+    else
+        upgrade_file_path="/userdata/cache"
+    fi
+
+    if [ ! -d $upgrade_file_path ];then
+        mkdir -p $upgrade_file_path
+    fi
+}
+
+function parse_part_and_image()
+{
+    if [ -z $1 ];then
+        printinfo "Error：not set parameter partition or img_file"
+        echo "2" >> $update_result
+        usage
+        exit 1
+    fi
+
+    if [ -z $2 ];then
+        if [ ! -f $1 ];then
+            printinfo "Error：file $1 not exist"
+            echo "2" >> $update_result
+            usage
+            exit 1
+        fi
+
+        # get upgrade partition
+        local name=$1
+        partition=${name##*/}
+        partition=${partition%.*}
+        partition=${partition%_signed*}
+        partition=${partition%_in_one*}
+        up_partition=$partition
+
+        image=$1
+    elif [ ! -f $2 ];then
+        printinfo "Error：file $2 not exist"
+        echo "2" >> $update_result
+        usage
+        exit 1
+    fi
+
+    # check the parameter of partition
+    local flag=0
+    for element in uboot boot system app userdata all;do
+       if [ x"$element" = x"$partition" ];then
+           flag=1
+           break
+       fi
+    done
+
+    if [ x"$flag" = x"0" ];then
+        printinfo "Error：not support update partition $partition"
+        echo "2" >> $update_result
+        usage
+        exit 1
+    fi
+
+    # get image absolute path
+    if [ x"${image:0:1}" != x"/" ];then
+        image=$(pwd)/${image}
+    fi
+
+    # check the format of upgrade patch
+    local suffix=${image#*.}
+    while [[ x"$suffix" != x${suffix#*.} ]];
+    do
+        suffix=${suffix#*.}
+    done
+
+    if [ x"$suffix" != x"zip" ];then
+        printinfo "Error：file format $suffix not supported!"
+        echo "2" >> $update_result
+        usage
+        exit 1
+    fi
+
+    local name1=${image##*/}
+    suffix=${name1%.*}
+    suffix=${suffix%_signed*}
+    local inc_suffix=${partition}_inc
+    # get the prefix of app upgrade patch
+    if [ x"$partition" = x"app" ];then
+        suffix=${suffix%%_*}
+        suffix=${suffix%%-*}
+    fi
+
+    if [ "$ota_bootmode" = "nand_flash" -a "$suffix" = "bootloader" -a "$partition" = "uboot" ];then
+        return
+    fi
+
+    if [ "$suffix" = "${partition}$PARTITION_NAME_SUFFIX" ] || [ x"$partition" = x"all" ] || [ x"$suffix" = x"$inc_suffix" ];then
+        return
+    else
+        printinfo "Error：$suffix $partition $name1 $inc_suffix mismatching"
+        echo "2" >> $update_result
+        usage
+        exit 1
+    fi
+}
+
+function ota_get_boot_mode()
+{
+    local file="/sys/class/socinfo/boot_mode"
+
+    if [ ! -f $file ];then
+        echo "warning：not enable socinfo boot_mode support"
+        mode="0"
+    else
+        mode=$(cat $file)
+    fi
+
+    if [ x"$mode" = x"0" ];then
+        ota_bootmode="emmc"
+    elif [ x"$mode" = x"5" ];then
+        ota_bootmode="nor_flash"
+    elif [ x"$mode" = x"1" ];then
+        ota_bootmode="nand_flash"
+    elif [ x"$mode" = x"2" ];then
+        ota_bootmode="ap"
+    elif [ x"$mode" = x"3" ];then
+        ota_bootmode="uart"
+    else
+        ota_bootmode="emmc"
+    fi
+
+    echo "boot mode: $ota_bootmode"
+}
+
+function parameter_check()
+{
+    # get bootmode
+    ota_get_boot_mode
+
+    # mkdir log file
+    mkdir_log_file
+
+    # check parameter
+    parse_part_and_image $1 $2
+
+    # cpfile to /userdata/cache/
+    cpfile $partition $image
+
+    printinfo "parameter check success"
+    printprogress "5%"
+}
+
+function check_sys_free_space()
+{
+    local userdata_free_space tmp_free_space
+    local n str
+
+    # get /userdata and /tmp free space
+    if [ x"$ota_bootmode" == x"emmc" ];then
+        userdata_free_space=$(df -k /userdata/ | grep "userdata" | awk '{print $4}')
+    else
+        userdata_free_space=$(df -k /userdata/ | grep "ubi" | awk '{print $4}')
+    fi
+    tmp_free_space=$(df -k /tmp/ | grep "tmp" | awk '{print $4}')
+
+    # get upgrade file size
+    val=$(unzip -l $image)
+    val=${val##*------}
+    upgrade_file_size=$(echo $val | awk '{print $1}')
+
+    if [ x"$up_partition" = x"uboot" ] || [ x"$up_partition" = x"boot" ];then
+        upgrade_need_space=$(($upgrade_file_size/1024))
+    else
+        upgrade_need_space=$(($upgrade_file_size/1024 + 5*1024))
+    fi
+
+    printinfo "upgrade_need_space: $upgrade_need_space"
+    printinfo "tmp_free_space: $tmp_free_space"
+    printinfo "userdata_free_space: $userdata_free_space"
+
+    if [ x"$ota_bootmode" = x"emmc" ];then
+        # OTA only using userdata partition in emmc bootmode
+        if [ x"$upgrade_file_path" = x"/tmp" ];then
+            upgrade_file_path="/userdata/cache"
+        fi
+
+        if [ $upgrade_need_space -gt $userdata_free_space ];then
+            printinfo "Error：not enough space in userdata partition!"
+            return 1
+        fi
+    else
+        # check if there is enough space to upgrade
+        if [ x"$upgrade_file_path" = x"/tmp" ];then
+            if [ $upgrade_need_space -gt $tmp_free_space ];then
+                if [ $upgrade_need_space -gt $userdata_free_space ];then
+                    printinfo "Error：not enough space in the system!"
+                    return 1
+                else
+                    upgrade_file_path="/userdata/cache"
+                fi
+            fi
+        elif [ x"$upgrade_file_path" = x"/userdata/cache" ];then
+            if [ $upgrade_need_space -gt $userdata_free_space ];then
+                if [ $upgrade_need_space -gt $tmp_free_space ];then
+                    printinfo "Error：not enough space in the system!"
+                    return 1
+                else
+                    upgrade_file_path="/tmp"
+                fi
+            fi
+        fi
+    fi
+}
+
+function ota_config_logpath_and_upgradepath()
+{
+    check_sys_free_space
+    ret=$?
+    if [ x"$ret" = x"1" ];then
+        printinfo "warning: no enough space for OTA upgrade, clean userdata data"
+        # get image absolute path
+		if [ x"${image:0:1}" != x"/" ];then
+			image=$(pwd)/${image}
+		fi
+        hrut_cleanuserdata $image
+        check_sys_free_space
+        ret=$?
+        if [ x"$ret" = x"1" ];then
+            printinfo "Error：no enough space in the system!"
+            echo "2" >> $update_result
+            exit 1
+        fi
+    fi
+
+    if [ ! -d $upgrade_file_path ];then
+        mkdir -p $upgrade_file_path
+    fi
+
+    # config log_path and upgrade_path
+    if [ x"${ota_logpath:0:4}" != x"${upgrade_file_path:0:4}" ];then
+        commend="${ota_logpath}/commend"
+        file_list="$progress $ota_info $update_result $app_log $commend"
+        if [ x"$upgrade_file_path" = x"/tmp" ];then
+            dest_file="$upgrade_file_path/cache"
+        else
+            dest_file="$upgrade_file_path"
+        fi
+
+        mkdir -p $dest_file
+        cp -rf $file_list $dest_file
+        rm -rf $ota_logpath
+
+        ota_logpath=$dest_file
+        log_file_path_setting $ota_logpath
+    fi
+
+    sync
+}
+
+function recovery_mode_check()
+{
+    # get ota upmode
+    get_upmode
+    if [ x"$ota_upmode" = x"AB" ];then
+        return 0
+    fi
+
+    local part_id=$(mmc_part_number "recovery")
+
+    if [ x"$part_id" = x"255" ];then
+        printinfo "Error：no recovery partition, don't support OTA !"
+        echo "2" >> $update_result
+        exit 1
+    fi
+
+    magic=$(hexdump -n 8 -e '16/1 "%c"' /dev/mmcblk0p${part_id})
+
+    if [ x"$magic" != x"ANDROID!" ];then
+        printinfo "Error：recovery partition check failed, don't support OTA !"
+        echo "2" >> $update_result
+        exit 1
+    fi
+}
+
+function get_upmode()
+{
+    ota_upmode=$($otastatus_bin g upmode)
+    printinfo "get ota_upmode $ota_upmode"
+}
+
+function set_upmode()
+{
+    upmode=$($otastatus_bin s upmode $1)
+
+    if [ x"$upmode" = x"$1" ];then
+        printinfo "set upmode $upmode success ! "
+        ota_upmode=$1
+    else
+        printinfo "Error：set upmode $upmode failed !"
+        echo "2" >> $update_result
+        exit 1
+    fi
+}
+
+function check_dual_partition()
+{
+    line=$(fdisk -l | grep "boot")
+    if  [ -z "${line}" ];then
+        printinfo "Error：not dual partition, AB mode don't support update !"
+        echo "2" >> $update_result
+        exit 1
+    fi
+
+    part_id=$(mmc_part_number "boot_b")
+    if  [ -z "${line}" ];then
+        printinfo "Error：not dual partition, AB mode don't support update !"
+        echo "2" >> $update_result
+        exit 1
+    fi
+
+    printinfo "check dual partition success"
+}
+
+function check_update_mode()
+{
+    get_upmode
+
+    if [ -z "$ota_upmode" ] || [ x"$ota_upmode" != x"AB" -a x"$ota_upmode" != x"golden" ];then
+        printinfo "Error：ota_upmode $ota_upmode not support or not config !"
+        echo "2" >> $update_result
+        exit 1
+    fi
+
+    if [ x"$ota_bootmode" != x"emmc" -a  x"$ota_upmode" == x"AB" ] ;then
+        printinfo "Error：${ota_bootmode} ota not support AB mode !"
+        echo "2" >> $update_result
+        exit 1
+    fi
+
+    if [ x"$ota_upmode" = x"AB" ];then
+        check_dual_partition
+    fi
+
+    printinfo "check update mode $ota_upmode success"
+}
+
+function get_ab_partition_status()
+{
+    ab_partition_status=$($otastatus_bin g partstatus)
+    printinfo "get ab_partition_status $ab_partition_status"
+}
+
+function set_ab_partition_status()
+{
+    local partstatus=$($otastatus_bin s partstatus $1)
+
+    if [ x"$partstatus" = x"$1" ];then
+        printinfo "set upmode $partstatus success ! "
+        ab_partition_status=$1
+    else
+        printinfo "Error：set upmode $partstatus failed !"
+        echo "2" >> $update_result
+        exit 1
+    fi
+}
+
+function ota_init_status()
+{
+    # get update status
+    if [ x"$ota_upmode" = x"AB" ];then
+        get_ab_partition_status
+    fi
+
+    # get update flag
+    update_flag=$($otastatus_bin g upflag)
+
+    if [ x"$update_flag" != x"13" ];then
+        printinfo "Warning：update_flag $update_flag is error, maybe system upgrade failed !"
+        printinfo "Warning：set update_flag 13"
+        update_flag=$($otastatus_bin s upflag 13)
+    fi
+    printinfo "ota init status success"
+}
+
+function abstatus_to_number()
+{
+    local partname=$1
+    local i=0
+
+    for element in spl uboot boot system app userdata all;do
+        if [ x"$partname" = x"$element" ];then
+             return $i
+        fi
+        i=$((i+1))
+    done
+}
+
+function ota_img_write()
+{
+    local file="/usr/bin/up_partition.sh"
+    local pipe="/tmp/otapipe"
+    local up_command="${ota_logpath}/command"
+
+    if [ x"$ota_upmode" = x"AB" ];then
+        if [ x"$partition" = x"uboot" ] || [ x"$partition" = x"boot" ] || [ x"$partition" = x"system" ];then
+            abstatus_to_number $partition
+            local suffix=$?
+
+            flag=$((($ab_partition_status >> $suffix) & 0x1))
+
+            if [ x"$flag" = x"0" ];then
+                up_partition=${partition}_b
+            fi
+        fi
+        sync
+        printinfo "ota_img_write $file $up_partition $image"
+        echo "$file $up_partition $image $upgrade_file_path" > $pipe
+    elif [ x"$ota_upmode" = x"golden" ];then
+        #if [ x"$up_partition" = x"app" ];then
+        printinfo "ota update $up_partition"
+        printinfo "ota_img_write $file $up_partition $image $upgrade_file_path"
+        if [ x"$ota_bootmode" = x"emmc" ] && [ x"$up_partition" != x"app" ];then
+            echo "$file $up_partition $image $upgrade_file_path" > $up_command
+            set_resetreason recovery
+        else
+            echo "$file $up_partition $image $upgrade_file_path" > $pipe
+        fi
+    fi
+}
+
+function verify_partition_info()
+{
+    local part_name=$1
+    local start_lba=$2
+    local end_lba=$3
+    local part_id gptinfo num slba elba
+
+    part_id=$(mmc_part_number $part_name)
+
+    num=$(($part_id*128 + 928))
+    gptinfo=$(hexdump -s $num -n 16 -e '16/1 "%02x"' /dev/mmcblk0)
+
+    slba="0x${gptinfo:0:8}"
+    elba="0x${gptinfo:16:8}"
+
+    slba=$(((($slba&0xff)<<24) + (($slba&0xff00)<<8) + (($slba&0xff0000)>>8) + (($slba&0xff000000)>>24)))
+    elba=$(((($elba&0xff)<<24) + (($elba&0xff00)<<8) + (($elba&0xff0000)>>8) + (($elba&0xff000000)>>24)))
+
+    if [ x"$start_lba" = x"$slba" ] && [ x"$end_lba" = x"$elba" ];then
+        printinfo "verify success: $part_name  $start_lba  $end_lba"
+        return 0
+    else
+        printinfo "($start_lba, $end_lba) != ($slba, $elba)"
+        return 1
+    fi
+}
+
+function verify_gpt_config()
+{
+    local star_lba end_lba part_name
+    local n=0 arr line str
+    local file="${upgrade_file_path}/verify_tmp"
+    local gpt="$file/gpt.conf"
+
+    if [ x"$partition" = x"app" ] || [ x"$reset_reason" = x"recovery" ];then
+        return 0
+    fi
+
+    if [ -f $file/disk.img ] || [ -f $file/all.zip ];then
+        return 0
+    fi
+
+    if [ ! -f $gpt ];then
+        printinfo "warning: gpt config file not exist"
+        return 0
+    fi
+
+    for line in $(cat $gpt);do
+        arr=${line//:/ }
+        n=0
+        for str in $arr;do
+            eval a$n="$str"
+            n=$(($n+1))
+        done
+
+        part_name=${a0}
+        start_lba=${a1:0:-1}
+        end_lba=${a2:0:-1}
+
+        verify_partition_info $part_name  $start_lba  $end_lba
+        ret=$?
+        if [ x"$ret" != x"0" ];then
+            printinfo "Error：partition $part_name verify failed!"
+            printinfo "Warning: OTA partition change, please using the upgrade patch of disk.img"
+            printinfo "Error：verify gpt partition failed"
+            echo "2" >> $update_result
+            rm -rf $file
+            exit 1
+        fi
+    done
+}
+
+function verify_sys_version()
+{
+    local file="${upgrade_file_path}/verify_tmp"
+    local pkg_version="$file/version"
+    local sys_version="/etc/version"
+    local pkg_old_version_file="$file/old_version"
+
+    if [ x"$partition" = x"app" ] || [ x"$reset_reason" = x"recovery" ];then
+        return 0
+    fi
+
+    if [ -f $file/disk.img ] || [ -f $file/all.zip ];then
+        return 0
+    fi
+
+    if [ ! -f $pkg_version ];then
+        printinfo "warning: pkg version file not exist"
+        return 0
+    fi
+
+    if [ ! -f $sys_version ];then
+        printinfo "warning: sys version file not exist"
+        return 0
+    fi
+
+    pkg_version=$(cat $pkg_version)
+    sys_version=$(cat $sys_version)
+
+    pkg_version=${pkg_version#*20}
+    pkg_version=${pkg_version%% *}
+    sys_version=${sys_version#*20}
+    sys_version=${sys_version%% *}
+
+    if [ -f $pkg_old_version_file ];then
+
+        # incremental pakage sys version check
+        pkg_old_version=$(cat $pkg_old_version_file)
+        pkg_old_version=${pkg_old_version#*20}
+        pkg_old_version=${pkg_old_version%% *}
+        printinfo "pkg_version:$pkg_version  sys_version:$sys_version  pkg_old_version:$pkg_old_version  "
+    else
+
+        printinfo "pkg_version:$pkg_version  sys_version:$sys_version  "
+    fi
+
+
+    if [ ! -f $pkg_old_version_file ];then
+        if [ x"$pkg_version" \< x"$sys_version" ];then
+            printinfo "Warning: version back, please using the upgrade patch of disk.img"
+            printinfo "Error: the version of the upgrade patch is too low"
+            echo "2" >> $update_result
+            rm -rf $file
+            exit 1
+        fi
+    else
+        if [ "$pkg_old_version" != "$sys_version" ] || [ x"$pkg_version" \< x"$sys_version" ];then
+            printinfo "Warning: version back, please using the upgrade patch of disk.img"
+            printinfo "Error: the version of the upgrade patch is too low"
+            echo "2" >> $update_result
+            rm -rf $file
+            exit 1
+
+        fi
+    fi
+    printinfo "verify upgrade pkg version success"
+}
+
+function verify_rsa_signature()
+{
+    local file="${upgrade_file_path}/verify_tmp"
+    rm -rf $file
+    mkdir $file
+    local flag="true"
+    local flag_t="flase"
+    local pubkey="/etc/pubkey.pem"
+    local binary=${file}/binary.txt
+    local val actual_files files_count upgrade_file
+
+    unzip -q $1 -d ${file}
+    local signature_file=${file}/signature.txt
+
+    if [ x"$signature_check" != x"sign_check" ];then
+        printinfo "Forced signature verification is not enabled"
+        return
+    fi
+
+    if [ -s $signature_file ];then
+
+        # get actual upgrade files for xxx.zip except signature.txt
+        val=$(unzip -l $1 -x signature.txt|awk -F ' ' '{print $4}')
+        actual_files=${val#*----}
+        # get upgrade files count except signature.txt
+        val=$(unzip -l $1)
+        val=${val##*------}
+        files_count=$(echo $val | awk '{print $2}')
+        files_count=$(($files_count - 1))
+
+        tmp_file=$(cat $signature_file | sed 's/\= /\=/g')
+        for item in $(seq $files_count);do
+	        # Find upgrade_file files
+            upgrade_file=$(echo $actual_files |cut -d " " -f $item)
+
+            # Skip find directory signatures
+            if [ x"${upgrade_file: -1}" == x"/" ];then
+                continue
+            fi
+
+            for line in $tmp_file;do
+                local update_file=${line##*\(}
+                update_file=${update_file%\)*}
+
+                if [ x"$update_file" == x"$upgrade_file" ];then
+                    update_file=${file}/${update_file}
+                    flag_t="true"
+                    local signature=${line##*=}
+
+                    if [ ! -f $update_file ];then
+                        printinfo "Error: $update_file not exist"
+                        flag="false"
+                        break 2
+                    fi
+
+                    for i in $(seq 0 2 ${#signature})
+                    do
+                        s1=${signature:$i:2}
+                        printf "\x${s1}"
+                    done > $binary
+
+                    # openssl verify signature
+                    result=$(openssl dgst -verify $pubkey -sha256 -signature $binary $update_file)
+                    if [ x"$result" != x"Verified OK" ];then
+                        printinfo "Error: $update_file verify failed"
+                        flag="false"
+                        break 2
+                    else
+                        break
+                    fi
+                fi
+            done
+
+            if [ x"$flag_t" != x"true" ];then
+                printinfo "Error: $upgrade_file signature not exist"
+                flag="false"
+                break
+            fi
+
+            # if signature check success reset flag_t
+            flag_t="flase"
+        done
+    else
+        printinfo "warning: file signature.txt not exist or empty"
+        flag="false"
+    fi
+
+    if [ x"$flag" = x"false" ];then
+        printinfo "Error：rsa verify signature failed !"
+        echo "2" >> $update_result
+        rm -rf $file
+        exit 1
+    fi
+
+    printinfo "rsa verify signature success !"
+}
+
+function extract_warning_info()
+{
+    local warning_file="${upgrade_file_path}/verify_tmp/warning.txt"
+    local warning_cache="${ota_logpath}/warning"
+
+    if [ -f $warning_file ];then
+        info=$(cat $warning_file)
+        echo "[OTA_INFO]$info[OFNI_ATO]" > $warning_cache
+    else
+        echo "" > $warning_cache
+    fi
+}
+
+function all()
+{
+    # check input parameter
+    parameter_check $partition $image
+
+    if [ x"$ota_bootmode" != x"nor_flash" ];then
+        # check recovery mode
+        recovery_mode_check
+    fi
+
+    # check system free space and config upgrade path
+    ota_config_logpath_and_upgradepath
+    printprogress "10%"
+
+    # check update mode <AB | golden>
+    check_update_mode
+    printprogress "15%"
+
+    # verify signature
+    verify_rsa_signature $image
+
+    if [ x"$ota_bootmode" = x"emmc" ];then
+        # verify gpt config
+        verify_gpt_config
+    fi
+
+    # verify version
+    verify_sys_version
+
+    # get warning info
+    extract_warning_info
+
+    # handle update status
+    ota_init_status
+    printprogress "20%"
+
+    # write img to partition
+    ota_img_write
+
+    # sync data to disk
+    sync
+
+    exit 0
+}
+
+partition=$1
+up_partition=$1
+image=$2
+signature_check=$3
+
+ota_upmode="AB"
+ab_partition_status=0
+update_flag=10
+ota_bootmode="emmc"
+
+# check hrut binary
+check_hrut_bin
+
+reset_reason=$(hrut_resetreason)
+ota_logpath="/userdata/cache"
+log_file_path_setting $ota_logpath
+upgrade_file_path="/tmp"
+
+all

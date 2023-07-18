@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5. 多媒体开发指南 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="5.1. 系统概述" href="1-Overview_zh_CN.html" />
+    <link rel="prev" title="4.10. X3降功耗用户指南" href="../bsp_develop/Low_Power_Solution_User_Guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. 多媒体开发指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1-Overview_zh_CN.html">5.1. 系统概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-System_Control_zh_CN.html">5.2. 系统控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-Video_Input_zh_CN.html">5.3. 视频输入</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html">5.4. ISP图像系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5-Video_Processing_zh_CN.html">5.5. 视频处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6-Region_Processing_zh_CN.html">5.6. 区域处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7-Video_Output_zh_CN.html">5.7. 视频输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8-Video_Encode_zh_CN.html">5.8. 视频编码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9-Video_Decode_zh_CN.html">5.9. 视频解码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/index.html">5.10. 图像调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html">5.11. 查询多媒体模块调试信息</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html">5.12. 多媒体性能调试</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">5. </span>多媒体开发指南</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../bsp_develop/Low_Power_Solution_User_Guide.html" class="btn btn-neutral float-left" title="4.10. X3降功耗用户指南" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="1-Overview_zh_CN.html" class="btn btn-neutral float-right" title="5.1. 系统概述" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">5. </span>多媒体开发指南<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1-Overview_zh_CN.html">5.1. 系统概述</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1-Overview_zh_CN.html#id2">5.1.1. 概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1-Overview_zh_CN.html#id3">5.1.2. 多媒体系统架构</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1-Overview_zh_CN.html#id4">5.1.3. 术语约定</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2-System_Control_zh_CN.html">5.2. 系统控制</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2-System_Control_zh_CN.html#id2">5.2.1. 概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-System_Control_zh_CN.html#id3">5.2.2. 功能描述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#id4">5.2.2.1. 视频缓冲池</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#id5">5.2.2.2. 绑定关系</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#id6">5.2.2.3. 工作模式</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-System_Control_zh_CN.html#api">5.2.3. API参考</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-init">5.2.3.1. HB_SYS_Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-exit">5.2.3.2. HB_SYS_Exit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-bind">5.2.3.3. HB_SYS_Bind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-unbind">5.2.3.4. HB_SYS_UnBind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-setvinvpsmode">5.2.3.5. HB_SYS_SetVINVPSMode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-getvinvpsmode">5.2.3.6. HB_SYS_GetVINVPSMode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-setconfig">5.2.3.7. HB_VP_SetConfig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-getconfig">5.2.3.8. HB_VP_GetConfig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-init">5.2.3.9. HB_VP_Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-exit">5.2.3.10. HB_VP_Exit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-createpool">5.2.3.11. HB_VP_CreatePool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-destroypool">5.2.3.12. HB_VP_DestroyPool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-getblock">5.2.3.13. HB_VP_GetBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-releaseblock">5.2.3.14. HB_VP_ReleaseBlock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-physaddr2block">5.2.3.15. HB_VP_PhysAddr2Block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-block2physaddr">5.2.3.16. HB_VP_Block2PhysAddr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-block2poolid">5.2.3.17. HB_VP_Block2PoolId</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-mmappool">5.2.3.18. HB_VP_MmapPool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-munmappool">5.2.3.19. HB_VP_MunmapPool</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-getblockviraddr">5.2.3.20. HB_VP_GetBlockVirAddr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-inquireusercnt">5.2.3.21. HB_VP_InquireUserCnt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-setauxiliaryconfig">5.2.3.22. HB_VP_SetAuxiliaryConfig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-alloc">5.2.3.23. HB_SYS_Alloc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-alloccached">5.2.3.24. HB_SYS_AllocCached</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-free">5.2.3.25. HB_SYS_Free</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-cacheinvalidate">5.2.3.26. HB_SYS_CacheInvalidate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-cacheflush">5.2.3.27. HB_SYS_CacheFlush</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-dmacopy">5.2.3.28. HB_VP_DmaCopy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-System_Control_zh_CN.html#id7">5.2.4. 数据类型</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-mod-id-e">5.2.4.1. HB_SYS_MOD_ID_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-mod-s">5.2.4.2. HB_SYS_MOD_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-sys-vin-vps-mode-e">5.2.4.3. HB_SYS_VIN_VPS_MODE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-pool-config-s">5.2.4.4. HB_VP_POOL_CONFIG_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-config-s">5.2.4.5. HB_VP_CONFIG_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vp-auxiliary-config-s">5.2.4.6. HB_VP_AUXILIARY_CONFIG_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#hb-vio-buffer-t">5.2.4.7. hb_vio_buffer_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#pym-buffer-t">5.2.4.8. pym_buffer_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#image-info-t">5.2.4.9. image_info_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-System_Control_zh_CN.html#address-info-t">5.2.4.10. address_info_t</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-System_Control_zh_CN.html#id8">5.2.5. 错误码</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3-Video_Input_zh_CN.html">5.3. 视频输入</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3-Video_Input_zh_CN.html#id2">5.3.1. 概述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#id3">5.3.1.1. 概念</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="3-Video_Input_zh_CN.html#id4">5.3.2. 功能描述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#id5">5.3.2.1. 视频输入设备</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#pipe">5.3.2.2. 视频输入PIPE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#id6">5.3.2.3. 视频物理通道</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#id7">5.3.2.4. 绑定关系</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="3-Video_Input_zh_CN.html#api">5.3.3. API参考</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-setbus">5.3.3.1. HB_MIPI_SetBus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-setport">5.3.3.2. HB_MIPI_SetPort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-sensorbindserdes">5.3.3.3. HB_MIPI_SensorBindSerdes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-sensorbindmipi">5.3.3.4. HB_MIPI_SensorBindMipi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-setextramode">5.3.3.5. HB_MIPI_SetExtraMode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-initsensor-hb-mipi-deinitsensor">5.3.3.6. HB_MIPI_InitSensor/HB_MIPI_DeinitSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-resetsensor-hb-mipi-unresetsensor">5.3.3.7. HB_MIPI_ResetSensor/HB_MIPI_UnresetSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-enablesensorclock-hb-mipi-disablesensorclock">5.3.3.8. HB_MIPI_EnableSensorClock/HB_MIPI_DisableSensorClock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-setsensorclock">5.3.3.9. HB_MIPI_SetSensorClock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-resetmipi-hb-mipi-unresetmipi">5.3.3.10. HB_MIPI_ResetMipi/HB_MIPI_UnresetMipi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-setmipiattr">5.3.3.11. HB_MIPI_SetMipiAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-clear">5.3.3.12. HB_MIPI_Clear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-readsensor">5.3.3.13. HB_MIPI_ReadSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-writesensor">5.3.3.14. HB_MIPI_WriteSensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-getsensorinfo">5.3.3.15. HB_MIPI_GetSensorInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-mipi-swsensorfps">5.3.3.16. HB_MIPI_SwSensorFps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-setmipibinddev-hb-vin-getmipibinddev">5.3.3.17. HB_VIN_SetMipiBindDev/HB_VIN_GetMipiBindDev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-setdevattr-hb-vin-getdevattr">5.3.3.18. HB_VIN_SetDevAttr/HB_VIN_GetDevAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-setdevattrex-hb-vin-getdevattrex">5.3.3.19. HB_VIN_SetDevAttrEx/HB_VIN_GetDevAttrEx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-enabledev-hb-vin-disabledev">5.3.3.20. HB_VIN_EnableDev/HB_VIN_DisableDev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-destroydev">5.3.3.21. HB_VIN_DestroyDev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-setdevbindpipe-hb-vin-getdevbindpipe">5.3.3.22. HB_VIN_SetDevBindPipe/HB_VIN_GetDevBindPipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-createpipe-hb-vin-destroypipe">5.3.3.23. HB_VIN_CreatePipe/HB_VIN_DestroyPipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-startpipe-hb-vin-stoppipe">5.3.3.24. HB_VIN_StartPipe/HB_VIN_StopPipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-enablechn-hb-vin-disablechn">5.3.3.25. HB_VIN_EnableChn/HB_VIN_DisableChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-setchnldcattr-hb-vin-getchnldcattr">5.3.3.26. HB_VIN_SetChnLDCAttr/HB_VIN_GetChnLDCAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-setchndisattr-hb-vin-getchndisattr">5.3.3.27. HB_VIN_SetChnDISAttr/HB_VIN_GetChnDISAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-setchnattr">5.3.3.28. HB_VIN_SetChnAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-destroychn">5.3.3.29. HB_VIN_DestroyChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-getchnframe-hb-vin-releasechnframe">5.3.3.30. HB_VIN_GetChnFrame/HB_VIN_ReleaseChnFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-getdevframe-hb-vin-releasedevframe">5.3.3.31. HB_VIN_GetDevFrame/HB_VIN_ReleaseDevFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-sendpiperaw">5.3.3.32. HB_VIN_SendPipeRaw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-setpipeattr-hb-vin-getpipeattr">5.3.3.33. HB_VIN_SetPipeAttr/HB_VIN_GetPipeAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-ctrlpipemirror">5.3.3.34. HB_VIN_CtrlPipeMirror</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-motiondetect">5.3.3.35. HB_VIN_MotionDetect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-initlens">5.3.3.36. HB_VIN_InitLens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-deinitlens">5.3.3.37. HB_VIN_DeinitLens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-registerdiscallback">5.3.3.38. HB_VIN_RegisterDisCallback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-setdevvcnumber-hb-vin-getdevvcnumber">5.3.3.39. HB_VIN_SetDevVCNumber/HB_VIN_GetDevVCNumber</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-adddevvcnumber">5.3.3.40. HB_VIN_AddDevVCNumber</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-setdevmclk">5.3.3.41. HB_VIN_SetDevMclk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-getchnfd">5.3.3.42. HB_VIN_GetChnFd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-closefd">5.3.3.43. HB_VIN_CloseFd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-enabledevmd">5.3.3.44. HB_VIN_EnableDevMd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#hb-vin-disabledevmd">5.3.3.45. HB_VIN_DisableDevMd</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="3-Video_Input_zh_CN.html#id8">5.3.4. 数据结构</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#mipi-input-mode-e">5.3.4.1. MIPI_INPUT_MODE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#mipi-sensor-mode-e">5.3.4.2. MIPI_SENSOR_MODE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#mipi-deserial-info-t">5.3.4.3. MIPI_DESERIAL_INFO_T</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#mipi-sns-info-s">5.3.4.4. MIPI_SNS_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#mipi-sensor-info-s">5.3.4.5. MIPI_SENSOR_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#mipi-host-cfg-s">5.3.4.6. MIPI_HOST_CFG_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#mipi-attr-s">5.3.4.7. MIPI_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#mipi-spi-data-s">5.3.4.8. MIPI_SPI_DATA_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-dev-size-s">5.3.4.9. VIN_DEV_SIZE_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-mipi-attr-s">5.3.4.10. VIN_MIPI_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-dev-input-ddr-attr-s">5.3.4.11. VIN_DEV_INPUT_DDR_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-dev-output-ddr-s">5.3.4.12. VIN_DEV_OUTPUT_DDR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-dev-output-isp-s">5.3.4.13. VIN_DEV_OUTPUT_ISP_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-dev-attr-s">5.3.4.14. VIN_DEV_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-dev-attr-ex-s">5.3.4.15. VIN_DEV_ATTR_EX_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-pipe-sensor-mode-e">5.3.4.16. VIN_PIPE_SENSOR_MODE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-pipe-cfa-pattern-e">5.3.4.17. VIN_PIPE_CFA_PATTERN_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-pipe-size-s">5.3.4.18. VIN_PIPE_SIZE_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-pipe-calib-s">5.3.4.19. VIN_PIPE_CALIB_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-pipe-attr-s">5.3.4.20. VIN_PIPE_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-ldc-path-sel-s">5.3.4.21. VIN_LDC_PATH_SEL_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-ldc-picsize-s">5.3.4.22. VIN_LDC_PICSIZE_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-ldc-algoparam-s">5.3.4.23. VIN_LDC_ALGOPARAM_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-ldc-off-shift-s">5.3.4.24. VIN_LDC_OFF_SHIFT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-ldc-woi-s">5.3.4.25. VIN_LDC_WOI_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-ldc-attr-s">5.3.4.26. VIN_LDC_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-dis-picsize-s">5.3.4.27. VIN_DIS_PICSIZE_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-dis-path-sel-s">5.3.4.28. VIN_DIS_PATH_SEL_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-dis-crop-s">5.3.4.29. VIN_DIS_CROP_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-dis-callback-s">5.3.4.30. VIN_DIS_CALLBACK_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-dis-mv-info-s">5.3.4.31. VIN_DIS_MV_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-dis-attr-s">5.3.4.32. VIN_DIS_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-lens-func-type-e">5.3.4.33. VIN_LENS_FUNC_TYPE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-lens-ctrl-attr-s">5.3.4.34. VIN_LENS_CTRL_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vin-lens-motor-type-e">5.3.4.35. VIN_LENS_MOTOR_TYPE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#data-type">5.3.4.36. DATA TYPE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#sif-mclk">5.3.4.37. SIF MCLK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-Video_Input_zh_CN.html#vpu-clk">5.3.4.38. VPU CLK</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="3-Video_Input_zh_CN.html#id9">5.3.5. 错误码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-Video_Input_zh_CN.html#id10">5.3.6. 参考代码</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html">5.4. ISP图像系统</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id1">5.4.1. 概述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#ae">5.4.1.1. AE</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id2">重要概念</a></li>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id3">基本原理</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#awb">5.4.1.2. AWB</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id4">重要概念</a></li>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id5">基本原理</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#demosaic">5.4.1.3. Demosaic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#sharpen">5.4.1.4. Sharpen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#gamma">5.4.1.5. Gamma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#iridix">5.4.1.6. Iridix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#cnr">5.4.1.7. CNR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#ccm">5.4.1.8. CCM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#sinter">5.4.1.9. Sinter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#temper">5.4.1.10. Temper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#mesh-shading">5.4.1.11. Mesh Shading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#radial-shading">5.4.1.12. Radial Shading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#color-space-conversion">5.4.1.13. Color Space Conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id6">5.4.1.14. 统计信息</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id7">AWB统计信息</a></li>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id8">AE统计信息</a></li>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#bin">5-bin直方图</a></li>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id9">1024-bin直方图</a></li>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#af">AF统计信息</a></li>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id10">AF度量数据计算</a></li>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#auto-level">Auto Level统计信息</a></li>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id11">平均亮度和平均亮度方差统计信息</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id12">5.4.2. 功能描述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id13">5.4.2.1. 交互数据</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#isp-firmware">算法库与ISP Firmware交互框图</a></li>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id14">算法库与ISP Firmware交互数据</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#a">5.4.2.2. 3A开发说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id15">AE算法注册</a></li>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id16">AWB算法注册</a></li>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id17">AF算法注册</a></li>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id18">算法注册举例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#api">5.4.3. API参考</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setfwstate-hb-isp-getfwstate">5.4.3.1. HB_ISP_SetFWState/HB_ISP_GetFWState</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setregister-hb-isp-getregister">5.4.3.2. HB_ISP_SetRegister/HB_ISP_GetRegister</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setmodulecontrol-hb-isp-getmodulecontrol">5.4.3.3. HB_ISP_SetModuleControl/ HB_ISP_GetModuleControl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-switchscence">5.4.3.4. HB_ISP_SwitchScence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-starti2cbus-hb-isp-stopi2cbus">5.4.3.5. HB_ISP_StartI2CBus/HB_ISP_StopI2CBus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-sendi2cdata">5.4.3.6. HB_ISP_SendI2CData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-aelibregcallback">5.4.3.7. HB_ISP_AELibRegCallback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-awblibregcallback">5.4.3.8. HB_ISP_AWBLibRegCallback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-aflibregcallback">5.4.3.9. HB_ISP_AFLibRegCallback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-aelibunregcallback">5.4.3.10. HB_ISP_AELibUnRegCallback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-awblibunregcallback">5.4.3.11. HB_ISP_AWBLibUnRegCallback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-aflibunregcallback">5.4.3.12. HB_ISP_AFLibUnRegCallback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getsetinit-hb-isp-getsetexit">5.4.3.13. HB_ISP_GetSetInit/HB_ISP_GetSetExit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setaeattr-hb-isp-getaeattr">5.4.3.14. HB_ISP_SetAeAttr/HB_ISP_GetAeAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setafattr-hb-isp-getafattr">5.4.3.15. HB_ISP_SetAfAttr/HB_ISP_GetAfAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setawbattr-hb-isp-getawbattr">5.4.3.16. HB_ISP_SetAwbAttr/HB_ISP_GetAwbAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setblacklevelattr-hb-isp-getblacklevelattr">5.4.3.17. HB_ISP_SetBlackLevelAttr/HB_ISP_GetBlackLevelAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setdemosaicattr-hb-isp-getdemosaicattr">5.4.3.18. HB_ISP_SetDemosaicAttr/HB_ISP_GetDemosaicAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setsharpenattr-hb-isp-getsharpenattr">5.4.3.19. HB_ISP_SetSharpenAttr/HB_ISP_GetSharpenAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setgammaattr-hb-isp-getgammaattr">5.4.3.20. HB_ISP_SetGammaAttr/HB_ISP_GetGammaAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setiridixattr-hb-isp-getiridixattr">5.4.3.21. HB_ISP_SetIridixAttr/HB_ISP_GetIridixAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setiridixstrengthlevel-hb-isp-getiridixstrengthlevel">5.4.3.22. HB_ISP_SetIridixStrengthLevel/HB_ISP_GetIridixStrengthLevel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setcnrattr-hb-isp-getcnrattr">5.4.3.23. HB_ISP_SetCnrAttr/HB_ISP_GetCnrAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setsinterattr-hb-isp-getsinterattr">5.4.3.24. HB_ISP_SetSinterAttr/HB_ISP_GetSinterAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-settemperattr-hb-isp-gettemperattr">5.4.3.25. HB_ISP_SetTemperAttr/HB_ISP_GetTemperAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setmeshshadingattr-hb-isp-getmeshshadingattr">5.4.3.26. HB_ISP_SetMeshShadingAttr/HB_ISP_GetMeshShadingAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setmeshshadinglut-hb-isp-getmeshshadinglut">5.4.3.27. HB_ISP_SetMeshShadingLUT/HB_ISP_GetMeshShadingLUT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setradialshadingattr-hb-isp-getradialshadingattr">5.4.3.28. HB_ISP_SetRadialShadingAttr/HB_ISP_GetRadialShadingAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setradialshadinglut-hb-isp-getradialshadinglut">5.4.3.29. HB_ISP_SetRadialShadingLUT/HB_ISP_GetRadialShadingLUT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setcscattr-hb-isp-getcscattr">5.4.3.30. HB_ISP_SetCSCAttr/HB_ISP_GetCSCAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setscenemodesattr-hb-isp-getscenemodesattr">5.4.3.31. HB_ISP_SetSceneModesAttr/HB_ISP_GetSceneModesAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setawbzoneinfo-hb-isp-getawbzoneinfo">5.4.3.32. HB_ISP_SetAwbZoneInfo/HB_ISP_GetAwbZoneInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setafzoneinfo-hb-isp-getafzoneinfo">5.4.3.33. HB_ISP_SetAfZoneInfo/HB_ISP_GetAfZoneInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setae5binzoneinfo-hb-isp-getae5binzoneinfo">5.4.3.34. HB_ISP_SetAe5binZoneInfo/HB_ISP_GetAe5binZoneInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setafkernelinfo-hb-isp-getafkernelinfo">5.4.3.35. HB_ISP_SetAfKernelInfo/HB_ISP_GetAfKernelInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setaeparam-hb-isp-getaeparam">5.4.3.36. HB_ISP_SetAeParam/HB_ISP_GetAeParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setaeroiinfo-hb-isp-getaeroiinfo">5.4.3.37. HB_ISP_SetAeRoiInfo/HB_ISP_GetAeRoiInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setawbstatareaattr-hb-isp-getawbstatareaattr">5.4.3.38. HB_ISP_SetAwbStatAreaAttr/HB_ISP_GetAwbStatAreaAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getaefullhist">5.4.3.39. HB_ISP_GetAeFullHist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getawbzonehist">5.4.3.40. HB_ISP_GetAwbZoneHist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getae5binzonehist">5.4.3.41. HB_ISP_GetAe5binZoneHist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getafzonehist">5.4.3.42. HB_ISP_GetAfZoneHist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getmeteringdata">5.4.3.43. HB_ISP_GetMeteringData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getvdttimeout">5.4.3.44. HB_ISP_GetVDTTimeOut</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getlumazonehist">5.4.3.45. HB_ISP_GetLumaZoneHist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setaecontrol-hb-isp-getaecontrol">5.4.3.46. HB_ISP_SetAEControl/ HB_ISP_GetAEControl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setaecorrection-hb-isp-getaecorrection">5.4.3.47. HB_ISP_SetAECorrection/ HB_ISP_GetAECorrection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-set-ae-5bin-hist-hb-isp-get-ae-5bin-hist">5.4.3.48. HB_ISP_Set_AE_5bin_Hist/ HB_ISP_Get_AE_5bin_Hist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setexposureratioadjustment-hb-isp-getexposureratioadjustment">5.4.3.49. HB_ISP_SetExposureRatioAdjustment/ HB_ISP_GetExposureRatioAdjustment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setexposurepartitionluts-hb-isp-getexposurepartitionluts">5.4.3.50. HB_ISP_SetExposurePartitionLuts/ HB_ISP_GetExposurePartitionLuts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setawbbgmaxgain-hb-isp-getawbbgmaxgain">5.4.3.51. HB_ISP_SetAwbBgMaxGain/HB_ISP_GetAwbBgMaxGain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setccmsaturationstrength-hb-isp-getccmsaturationstrength">5.4.3.52. HB_ISP_SetCcmSaturationStrength/ HB_ISP_GetCcmSaturationStrength</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setccmmtls-hb-isp-getccmmtls">5.4.3.53. HB_ISP_SetCcmMtLs/ HB_ISP_GetCcmMtLs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setccmattr-hb-isp-getccmattr">5.4.3.54. HB_ISP_SetCcmAttr/HB_ISP_GetCcmAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setgammaev1-hb-isp-getgammaev1">5.4.3.55. HB_ISP_SetGammaEv1/HB_ISP_GetGammaEv1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setgammaev2-hb-isp-getgammaev2">5.4.3.56. HB_ISP_SetGammaEv2/HB_ISP_GetGammaEv2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setgammathreshold-hb-isp-getgammathreshold">5.4.3.57. HB_ISP_SetGammaThreshold/ HB_ISP_GetGammaThreshold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getevtoluxstatustattr-hb-isp-setevtoluxstatustattr">5.4.3.58. HB_ISP_GetEvToLuxStatustAttr/ HB_ISP_SetEvToLuxStatustAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setcctctrlattr-hb-isp-getcctctrlattr">5.4.3.59. HB_ISP_SetCctCtrlAttr/ HB_ISP_GetCctCtrlAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setawbavgcoeff-hb-isp-getawbavgcoeff">5.4.3.60. HB_ISP_SetAwbAvgCoeff/HB_ISP_GetAwbAvgCoeff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setmixlightattr-hb-isp-getmixlightattr">5.4.3.61. HB_ISP_SetMixLightAttr/HB_ISP_GetMixLightAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setskyctrlattr-hb-isp-getskyctrlattr">5.4.3.62. HB_ISP_SetSkyCtrlAttr/ HB_ISP_GetSkyCtrlAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-apictrl">5.4.3.63. HB_ISP_ApiCtrl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-gettemplut-hb-isp-settemplut">5.4.3.64. HB_ISP_GetTempLut/ HB_ISP_SetTempLut</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setawbrgbgweightattr-hb-isp-getawbrgbgweightattr">5.4.3.65. HB_ISP_SetAwbRgBgWeightAttr/ HB_ISP_GetAwbRgBgWeightAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getawblsweightatt-hb-isp-setawblsweightattr">5.4.3.66. HB_ISP_GetAwbLsWeightAtt/ HB_ISP_SetAwbLsWeightAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getawbdefultparmattr-hb-isp-setawbdefultparmattr">5.4.3.67. HB_ISP_GetAwbDefultParmAttr/ HB_ISP_SetAwbDefultParmAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setawbcolortempweightattr-hb-isp-getawbcolortempweightattr">5.4.3.68. HB_ISP_SetAwbColorTempWeightAttr/ HB_ISP_GetAwbColorTempWeightAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setawbposstatusattr-hb-isp-getawbposstatusattr">5.4.3.69. HB_ISP_SetAwbPosStatusAttr/ HB_ISP_GetAwbPosStatusAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setawblightsourceattr-hb-isp-getawblightsourceattr">5.4.3.70. HB_ISP_SetAwbLightSourceAttr/ HB_ISP_GetAwbLightSourceAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getwdroffsetattr-hb-isp-setwdroffsetattr">5.4.3.71. HB_ISP_GetWdrOffsetAttr/ HB_ISP_SetWdrOffsetAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-sethdraexptypeattr">5.4.3.72. HB_ISP_SetHdrAexpTypeAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getafstatus">5.4.3.73. HB_ISP_GetAfStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getafinfo">5.4.3.74. HB_ISP_GetAfInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setafmanualpos">5.4.3.75. HB_ISP_SetAfManualPos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setflickerstatus-hb-isp-getflickerstatus">5.4.3.76. HB_ISP_SetFlickerStatus/HB_ISP_GetFlickerStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setaeattrex-hb-isp-getaeattrex">5.4.3.77. HB_ISP_SetAeAttrEx/HB_ISP_GetAeAttrEx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getaeweight-hb-isp-setaeweight">5.4.3.78. HB_ISP_GetAeWeight/HB_ISP_SetAeWeight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-getaeminintertime-hb-isp-setaeminintertime">5.4.3.79. HB_ISP_GetAeMinIntertime/HB_ISP_SetAeMinIntertime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-getawbtemperatureinfo">5.4.3.80. HB_GetAwbTemperatureInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setawbtolerance">5.4.3.81. HB_ISP_SetAwbTolerance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-getawbmodeinfo-hb-setawbmodeinfo">5.4.3.82. HB_GetAwbModeInfo/HB_SetAwbModeInfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-getawbgainbytemp">5.4.3.83. HB_GetAwbGainByTemp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-setafspeed">5.4.3.84. HB_ISP_SetAfSpeed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id19">5.4.4. 数据结构</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-fw-state-e">5.4.4.1. HB_ISP_FW_STATE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-module-ctrl-u">5.4.4.2. HB_ ISP_MODULE_CTRL_U</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-i2c-data-s">5.4.4.3. HB_ISP_I2C_DATA_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-ae-func-s">5.4.4.4. HB_ISP_AE_FUNC_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#ae-stats-data-t">5.4.4.5. ae_stats_data_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#ae-input-data-t">5.4.4.6. ae_input_data_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#ae-acamera-input-t">5.4.4.7. ae_acamera_input_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#ae-output-data-t">5.4.4.8. ae_output_data_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#ae-acamera-output-t">5.4.4.9. ae_acamera_output_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#ae-out-info-t">5.4.4.10. ae_out_info_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#ae-1024bin-weight-t">5.4.4.11. ae_1024bin_weight_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-awb-func-s">5.4.4.12. HB_ISP_AWB_FUNC_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#awb-stats-data-t">5.4.4.13. awb_stats_data_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#awb-zone-t">5.4.4.14. awb_zone_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#awb-input-data-t">5.4.4.15. awb_input_data_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#awb-acamera-input-t">5.4.4.16. awb_acamera_input_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#awb-output-data-t">5.4.4.17. awb_output_data_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#awb-acamera-output-t">5.4.4.18. awb_acamera_output_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-af-func-s">5.4.4.19. HB_ISP_AF_FUNC_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#af-stats-data-t">5.4.4.20. af_stats_data_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#af-input-data-t">5.4.4.21. af_input_data_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#af-acamera-input-t">5.4.4.22. af_acamera_input_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#af-output-data-t">5.4.4.23. af_output_data_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#af-acamera-output-t">5.4.4.24. af_acamera_output_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-op-type-e">5.4.4.25. HB_ISP_OP_TYPE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-ae-attr-s">5.4.4.26. HB_ISP_AE_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-af-attr-s">5.4.4.27. HB_ISP_AF_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-awb-attr-s">5.4.4.28. HB_ISP_AWB_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-black-level-attr-s">5.4.4.29. HB_ISP_BLACK_LEVEL_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-demosaic-attr-s">5.4.4.30. HB_ISP_DEMOSAIC_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-sharpen-attr-s">5.4.4.31. HB_ISP_SHARPEN_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-gamma-attr-s">5.4.4.32. HB_ISP_GAMMA_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#isp-iridix-attr-s">5.4.4.33. ISP_IRIDIX_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-cnr-attr-s">5.4.4.34. HB_ISP_CNR_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-sinter-attr-s">5.4.4.35. HB_ISP_SINTER_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-temper-attr-s">5.4.4.36. HB_ISP_TEMPER_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-mesh-shading-attr-s">5.4.4.37. HB_MESH_SHADING_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-mesh-shading-lut-s">5.4.4.38. HB_MESH_SHADING_LUT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-radial-shading-attr-s">5.4.4.39. HB_RADIAL_SHADING_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-radial-shading-lut-s">5.4.4.40. HB_RADIAL_SHADING_LUT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-csc-attr-s">5.4.4.41. HB_ISP_CSC_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-scene-modes-attr-s">5.4.4.42. HB_ISP_SCENE_MODES_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-statistics-awb-zone-attr-s">5.4.4.43. HB_ISP_STATISTICS_AWB_ZONE_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-statistics-ae-5bin-zone-attr-s">5.4.4.44. HB_ISP_STATISTICS_AE_5BIN_ZONE_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-ae-param-s">5.4.4.45. HB_ISP_AE_PARAM_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-ae-roi-attr-s">5.4.4.46. HB_ISP_AE_ROI_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#isp-zone-attr-s">5.4.4.47. ISP_ZONE_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-statistics-lumvar-zone-attr-s">5.4.4.48. HB_ISP_STATISTICS_LUMVAR_ZONE_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#isp-awb-stat-area-attr-s">5.4.4.49. ISP_AWB_STAT_AREA_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-ae-control">5.4.4.50. HB_ISP_AE_CONTROL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-ae-correction">5.4.4.51. HB_ISP_AE_CORRECTION</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-5bin-hist">5.4.4.52. HB_ISP_5BIN_HIST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-exp-ratio-adj">5.4.4.53. HB_ISP_EXP_RATIO_ADJ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-exp-pat-luts">5.4.4.54. HB_ISP_EXP_PAT_LUTS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-awb-max-bgain">5.4.4.55. HB_ISP_AWB_MAX_BGAIN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-ccm-satura-streng">5.4.4.56. HB_ISP_CCM_SATURA_STRENG</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-mt-absolute-ls">5.4.4.57. HB_ISP_MT_ABSOLUTE_LS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-ccm-one-gain-threshold">5.4.4.58. HB_ISP_CCM_ONE_GAIN_THRESHOLD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-gamma-ev1">5.4.4.59. HB_ISP_GAMMA_EV1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-gamma-ev2">5.4.4.60. HB_ISP_GAMMA_EV2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-gamma-threshold">5.4.4.61. HB_ISP_GAMMA_THRESHOLD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-awb-cct-ctrl-s">5.4.4.62. HB_ISP_AWB_CCT_CTRL_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-mix-light-param-s">5.4.4.63. HB_ISP_MIX_LIGHT_PARAM_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-sky-param-s">5.4.4.64. HB_ISP_SKY_PARAM_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-tmper-np-lut-s">5.4.4.65. HB_TMPER_NP_LUT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-mesh-rgbg-weight-s">5.4.4.66. HB_ISP_MESH_RGBG_WEIGHT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-mesh-ls-weight-s">5.4.4.67. HB_ ISP_MESH_LS_WEIGHT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-awb-default-param-s">5.4.4.68. HB_ ISP_AWB_DEFAULT_PARAM_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-mesh-color-temp-weight-s">5.4.4.69. HB_ISP_MESH_COLOR_TEMP_WEIGHT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-awb-pos-status-s">5.4.4.70. HB_ISP_AWB_POS_STATUS_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-awb-light-source-s">5.4.4.71. HB_ISP_AWB_LIGHT_SOURCE_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-wdr-offset-s">5.4.4.72. HB_ISP_WDR_OFFSET_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-af-lens-info-s">5.4.4.73. HB_ISP_AF_LENS_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-isp-ae-attr-ex-s">5.4.4.74. HB_ISP_AE_ATTR_EX_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#hb-ae-zones-weight-s">5.4.4.75. HB_AE_ZONES_WEIGHT_S</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id20">补充说明：</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html#id21">5.4.5. 参考代码</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5-Video_Processing_zh_CN.html">5.5. 视频处理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5-Video_Processing_zh_CN.html#id2">5.5.1. 概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5-Video_Processing_zh_CN.html#id3">5.5.2. 功能描述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#id4">5.5.2.1. 基本概念</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#id5">5.5.2.2. 功能描述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#id6">5.5.2.3. 注意事项</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="5-Video_Processing_zh_CN.html#api">5.5.3. API参考</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-creategrp">5.5.3.1. HB_VPS_CreateGrp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-destroygrp">5.5.3.2. HB_VPS_DestroyGrp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-startgrp">5.5.3.3. HB_VPS_StartGrp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-stopgrp">5.5.3.4. HB_VPS_StopGrp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-getgrpattr">5.5.3.5. HB_VPS_GetGrpAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-setgrpattr">5.5.3.6. HB_VPS_SetGrpAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-setgrprotate">5.5.3.7. HB_VPS_SetGrpRotate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-getgrprotate">5.5.3.8. HB_VPS_GetGrpRotate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-setgrprotaterepeat">5.5.3.9. HB_VPS_SetGrpRotateRepeat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-setgrpgdc">5.5.3.10. HB_VPS_SetGrpGdc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-sendframe">5.5.3.11. HB_VPS_SendFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-setchnattr">5.5.3.12. HB_VPS_SetChnAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-getchnattr">5.5.3.13. HB_VPS_GetChnAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-enablechn">5.5.3.14. HB_VPS_EnableChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-disablechn">5.5.3.15. HB_VPS_DisableChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-setchnrotate">5.5.3.16. HB_VPS_SetChnRotate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-getchnrotate">5.5.3.17. HB_VPS_GetChnRotate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-setchngdc">5.5.3.18. HB_VPS_SetChnGdc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-updategdcsize">5.5.3.19. HB_VPS_UpdateGdcSize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-setchncrop">5.5.3.20. HB_VPS_SetChnCrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-getchncrop">5.5.3.21. HB_VPS_GetChnCrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-setchnframerate">5.5.3.22. HB_VPS_SetChnFrameRate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-triggersnapframe">5.5.3.23. HB_VPS_TriggerSnapFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-getchnframe">5.5.3.24. HB_VPS_GetChnFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-getchnframe-cond">5.5.3.25. HB_VPS_GetChnFrame_Cond</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-releasechnframe">5.5.3.26. HB_VPS_ReleaseChnFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-setpymchnattr">5.5.3.27. HB_VPS_SetPymChnAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-getpymchnattr">5.5.3.28. HB_VPS_GetPymChnAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-changepymus">5.5.3.29. HB_VPS_ChangePymUs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-getchnfd">5.5.3.30. HB_VPS_GetChnFd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-closechnfd">5.5.3.31. HB_VPS_CloseChnFd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#vps">5.5.3.32. VPS参考代码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#id7">5.5.3.33. VPS接口调用流程</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#id8">5.5.3.34. VPS场景使用说明</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="5-Video_Processing_zh_CN.html#id9">5.5.4. 数据结构</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-grp-attr-s">5.5.4.1. HB_VPS_GRP_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-rect-s">5.5.4.2. HB_RECT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-crop-info-s">5.5.4.3. HB_VPS_CROP_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-frame-rate-ctrl-s">5.5.4.4. HB_FRAME_RATE_CTRL_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-chn-attr-s">5.5.4.5. HB_VPS_CHN_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-rotation-e">5.5.4.6. HB_ROTATION_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#dynamic-src-info-s">5.5.4.7. DYNAMIC_SRC_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-pym-scale-info-s">5.5.4.8. HB_PYM_SCALE_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-vps-pym-chn-attr-s">5.5.4.9. HB_VPS_PYM_CHN_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-Video_Processing_zh_CN.html#hb-dis-mv-info-s">5.5.4.10. HB_DIS_MV_INFO_S</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="5-Video_Processing_zh_CN.html#id10">5.5.5. 错误码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5-Video_Processing_zh_CN.html#id11">5.5.6. 参考代码</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6-Region_Processing_zh_CN.html">5.6. 区域处理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6-Region_Processing_zh_CN.html#id2">5.6.1. 概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6-Region_Processing_zh_CN.html#id3">5.6.2. 功能描述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#id4">5.6.2.1. 基本概念</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#id5">5.6.2.2. 使用示意</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="6-Region_Processing_zh_CN.html#api">5.6.3. API参考</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#hb-rgn-create-hb-rgn-destory">5.6.3.1. HB_RGN_Create/HB_RGN_Destory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#hb-rgn-getattr-hb-rgn-setattr">5.6.3.2. HB_RGN_GetAttr/HB_RGN_SetAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#hb-rgn-setbitmap">5.6.3.3. HB_RGN_SetBitMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#hb-rgn-attachtochn-hb-rgn-detachfromchn">5.6.3.4. HB_RGN_AttachToChn/HB_RGN_DetachFromChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#hb-rgn-setdisplayattr-hb-rgn-getdisplayattr">5.6.3.5. HB_RGN_SetDisplayAttr/HB_RGN_GetDisplayAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#hb-rgn-getcanvasinfo-hb-rgn-updatecanvas">5.6.3.6. HB_RGN_GetCanvasInfo/HB_RGN_UpdateCanvas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#hb-rgn-drawword">5.6.3.7. HB_RGN_DrawWord</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#hb-rgn-drawline-hb-rgn-drawlinearray">5.6.3.8. HB_RGN_DrawLine/HB_RGN_DrawLineArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#hb-rgn-batchbegin-hb-rgn-batchend">5.6.3.9. HB_RGN_BatchBegin/HB_RGN_BatchEnd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#hb-rgn-setcolormap">5.6.3.10. HB_RGN_SetColorMap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#hb-rgn-setsta-hb-rgn-getsta">5.6.3.11. HB_RGN_SetSta/HB_RGN_GetSta</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#hb-rgn-addtoyuv">5.6.3.12. HB_RGN_AddToYUV</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#hb-rgn-setdisplaylevel">5.6.3.13. HB_RGN_SetDisplayLevel</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="6-Region_Processing_zh_CN.html#id6">5.6.4. 数据结构</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-size-s">5.6.4.1. RGN_SIZE_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-point-s">5.6.4.2. RGN_POINT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-rect-s">5.6.4.3. RGN_RECT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-overlay-s">5.6.4.4. RGN_OVERLAY_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-attr-s">5.6.4.5. RGN_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-chn-s">5.6.4.6. RGN_CHN_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-overlay-chn-s">5.6.4.7. RGN_OVERLAY_CHN_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-cover-chn-s">5.6.4.8. RGN_COVER_CHN_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-chn-u">5.6.4.9. RGN_CHN_U</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-canvas-s">5.6.4.10. RGN_CANVAS_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-chn-attr-s">5.6.4.11. RGN_CHN_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-bitmap-s">5.6.4.12. RGN_BITMAP_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-draw-word-s">5.6.4.13. RGN_DRAW_WORD_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-draw-line-s">5.6.4.14. RGN_DRAW_LINE_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-sta-s">5.6.4.15. RGN_STA_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-type-e">5.6.4.16. RGN_TYPE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-chn-id-e">5.6.4.17. RGN_CHN_ID_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-font-size-e">5.6.4.18. RGN_FONT_SIZE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-font-color-e">5.6.4.19. RGN_FONT_COLOR_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-pixel-format-e">5.6.4.20. RGN_PIXEL_FORMAT_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-handle">5.6.4.21. RGN_HANDLE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-handle-max">5.6.4.22. RGN_HANDLE_MAX</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-handlegroup">5.6.4.23. RGN_HANDLEGROUP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6-Region_Processing_zh_CN.html#rgn-group-max">5.6.4.24. RGN_GROUP_MAX</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="6-Region_Processing_zh_CN.html#id7">5.6.5. 错误码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6-Region_Processing_zh_CN.html#id8">5.6.6. 参考代码</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7-Video_Output_zh_CN.html">5.7. 视频输出</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7-Video_Output_zh_CN.html#id2">5.7.1. 概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7-Video_Output_zh_CN.html#id3">5.7.2. 功能描述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#id4">5.7.2.1. 基本概念</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="7-Video_Output_zh_CN.html#api">5.7.3. API参考</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-setpubattr">5.7.3.1. HB_VOT_SetPubAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-getpubattr">5.7.3.2. HB_VOT_GetPubAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-enable">5.7.3.3. HB_VOT_Enable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-disable">5.7.3.4. HB_VOT_Disable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-setlcdbacklight">5.7.3.5. HB_VOT_SetLcdBackLight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-setvideolayerattr">5.7.3.6. HB_VOT_SetVideoLayerAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-getvideolayerattr">5.7.3.7. HB_VOT_GetVideoLayerAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-enablevideolayer">5.7.3.8. HB_VOT_EnableVideoLayer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-disablevideolayer">5.7.3.9. HB_VOT_DisableVideoLayer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-setvideolayercsc">5.7.3.10. HB_VOT_SetVideoLayerCSC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-getvideolayercsc">5.7.3.11. HB_VOT_GetVideoLayerCSC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-setvideolayerupscale">5.7.3.12. HB_VOT_SetVideoLayerUpScale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-getvideolayerupscale">5.7.3.13. HB_VOT_GetVideoLayerUpScale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-batchbegin">5.7.3.14. HB_VOT_BatchBegin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-batchend">5.7.3.15. HB_VOT_BatchEnd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-getscreenframe">5.7.3.16. HB_VOT_GetScreenFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-releasescreenframe">5.7.3.17. HB_VOT_ReleaseScreenFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-setchnattr">5.7.3.18. HB_VOT_SetChnAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-getchnattr">5.7.3.19. HB_VOT_GetChnAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-setchnattrex">5.7.3.20. HB_VOT_SetChnAttrEx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-getchnattrex">5.7.3.21. HB_VOT_GetChnAttrEx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-enablechn">5.7.3.22. HB_VOT_EnableChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-disablechn">5.7.3.23. HB_VOT_DisableChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-setchncrop">5.7.3.24. HB_VOT_SetChnCrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-getchncrop">5.7.3.25. HB_VOT_GetChnCrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-setchndisplayposition">5.7.3.26. HB_VOT_SetChnDisplayPosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-getchndisplayposition">5.7.3.27. HB_VOT_GetChnDisplayPosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-setchnframerate">5.7.3.28. HB_VOT_SetChnFrameRate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-getchnframerate">5.7.3.29. HB_VOT_GetChnFrameRate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-showchn">5.7.3.30. HB_VOT_ShowChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-hidechn">5.7.3.31. HB_VOT_HideChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-sendframe">5.7.3.32. HB_VOT_SendFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-clearchnbuf">5.7.3.33. HB_VOT_ClearChnBuf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-bindvps">5.7.3.34. HB_VOT_BindVps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-enablewb">5.7.3.35. HB_VOT_EnableWB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-disablewb">5.7.3.36. HB_VOT_DisableWB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-getwbattr">5.7.3.37. HB_VOT_GetWBAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-setwbattr">5.7.3.38. HB_VOT_SetWBAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-getwbframe">5.7.3.39. HB_VOT_GetWBFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-releasewbframe">5.7.3.40. HB_VOT_ReleaseWBFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-shutdownhdmi">5.7.3.41. HB_VOT_ShutDownHDMI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-starthdmi">5.7.3.42. HB_VOT_StartHDMI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#id5">5.7.3.43. API调用流程示例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="7-Video_Output_zh_CN.html#id6">5.7.4. 数据结构</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-pub-attr-s">5.7.4.1. HB_VOT_PUB_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-output-mode-e">5.7.4.2. HB_VOT_OUTPUT_MODE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-intf-sync-e">5.7.4.3. HB_VOT_INTF_SYNC_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-sync-info-s">5.7.4.4. HB_VOT_SYNC_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-video-layer-attr-s">5.7.4.5. HB_VOT_VIDEO_LAYER_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-csc-s">5.7.4.6. HB_VOT_CSC_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-upscale-attr-s">5.7.4.7. HB_VOT_UPSCALE_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-chn-attr-s">5.7.4.8. HB_VOT_CHN_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-vot-chn-attr-ex-s">5.7.4.9. HB_VOT_CHN_ATTR_EX_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#vot-wb-attr-s">5.7.4.10. VOT_WB_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#vot-crop-info-s">5.7.4.11. VOT_CROP_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#vot-frame-info-s">5.7.4.12. VOT_FRAME_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-point-s">5.7.4.13. HB_POINT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#vot-wb">5.7.4.14. VOT_WB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-pixel-format-yuv-e">5.7.4.15. HB_PIXEL_FORMAT_YUV_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-pixel-format-rgb-e">5.7.4.16. HB_PIXEL_FORMAT_RGB_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="7-Video_Output_zh_CN.html#hb-size-s">5.7.4.17. HB_SIZE_S</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="7-Video_Output_zh_CN.html#id7">5.7.5. 错误码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7-Video_Output_zh_CN.html#id8">5.7.6. 参考代码</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8-Video_Encode_zh_CN.html">5.8. 视频编码</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8-Video_Encode_zh_CN.html#id2">5.8.1. 概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8-Video_Encode_zh_CN.html#id3">5.8.2. 功能描述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#id4">5.8.2.1. 基础规格</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#id5">5.8.2.2. 编解码通道</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#id6">5.8.2.3. 码率控制</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#gop">5.8.2.4. GOP结构</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="8-Video_Encode_zh_CN.html#id7">GOP预置结构</a></li>
+<li class="toctree-l4"><a class="reference internal" href="8-Video_Encode_zh_CN.html#gopi">GOP和I帧周期关系</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#roi">5.8.2.5. ROI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#intra-refresh">5.8.2.6. Intra Refresh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#id8">5.8.2.7. 长期参考帧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#smart-background-encoding">5.8.2.8. Smart background encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#skip">5.8.2.9. 帧skip设置</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="8-Video_Encode_zh_CN.html#api">5.8.3. API参考</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-createchn">5.8.3.1. HB_VENC_CreateChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-destroychn">5.8.3.2. HB_VENC_DestroyChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-resetchn">5.8.3.3. HB_VENC_ResetChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-startrecvframe">5.8.3.4. HB_VENC_StartRecvFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-stoprecvframe">5.8.3.5. HB_VENC_StopRecvFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-setchnattr">5.8.3.6. HB_VENC_SetChnAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-getchnattr">5.8.3.7. HB_VENC_GetChnAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-getstream">5.8.3.8. HB_VENC_GetStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-releasestream">5.8.3.9. HB_VENC_ReleaseStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-sendframe">5.8.3.10. HB_VENC_SendFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-requestidr">5.8.3.11. HB_VENC_RequestIDR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-setroiattr">5.8.3.12. HB_VENC_SetRoiAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-getroiattr">5.8.3.13. HB_VENC_GetRoiAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-seth264slicesplit">5.8.3.14. HB_VENC_SetH264SliceSplit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-geth264slicesplit">5.8.3.15. HB_VENC_GetH264SliceSplit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-seth264intrapred">5.8.3.16. HB_VENC_SetH264IntraPred</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-geth264intrapred">5.8.3.17. HB_VENC_GetH264IntraPred</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-seth264trans">5.8.3.18. HB_VENC_SetH264Trans</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-geth264trans">5.8.3.19. HB_VENC_GetH264Trans</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-seth264entropy">5.8.3.20. HB_VENC_SetH264Entropy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-geth264entropy">5.8.3.21. HB_VENC_GetH264Entropy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-seth264dblk">5.8.3.22. HB_VENC_SetH264Dblk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-geth264dblk">5.8.3.23. HB_VENC_GetH264Dblk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-seth264vui">5.8.3.24. HB_VENC_SetH264Vui</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-geth264vui">5.8.3.25. HB_VENC_GetH264Vui</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-seth265vui">5.8.3.26. HB_VENC_SetH265Vui</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-geth265vui">5.8.3.27. HB_VENC_GetH265Vui</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-setrcparam">5.8.3.28. HB_VENC_SetRcParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-getrcparam">5.8.3.29. HB_VENC_GetRcParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-setrefparam">5.8.3.30. HB_VENC_SetRefParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-getrefparam">5.8.3.31. HB_VENC_GetRefParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-enableidr">5.8.3.32. HB_VENC_EnableIDR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-seth265slicesplit">5.8.3.33. HB_VENC_SetH265SliceSplit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-geth265slicesplit">5.8.3.34. HB_VENC_GetH265SliceSplit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-seth265predunit">5.8.3.35. HB_VENC_SetH265PredUnit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-geth265predunit">5.8.3.36. HB_VENC_GetH265PredUnit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-seth265trans">5.8.3.37. HB_VENC_SetH265Trans</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-geth265trans">5.8.3.38. HB_VENC_GetH265Trans</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-seth265dblk">5.8.3.39. HB_VENC_SetH265Dblk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-geth265dblk">5.8.3.40. HB_VENC_GetH265Dblk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-seth265sao">5.8.3.41. HB_VENC_SetH265Sao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-geth265sao">5.8.3.42. HB_VENC_GetH265Sao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-setintrarefresh">5.8.3.43. HB_VENC_SetIntraRefresh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-getintrarefresh">5.8.3.44. HB_VENC_GetIntraRefresh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-setcuprediction">5.8.3.45. HB_VENC_SetCuPrediction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-getcuprediction">5.8.3.46. HB_VENC_GetCuPrediction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-setjpegparam">5.8.3.47. HB_VENC_SetJpegParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-getjpegparam">5.8.3.48. HB_VENC_GetJpegParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-setmjpegparam">5.8.3.49. HB_VENC_SetMjpegParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-getmjpegparam">5.8.3.50. HB_VENC_GetMjpegParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-getfd">5.8.3.51. HB_VENC_GetFd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-closefd">5.8.3.52. HB_VENC_CloseFd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-querystatus">5.8.3.53. HB_VENC_QueryStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-inseruserdata">5.8.3.54. HB_VENC_InserUserData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-setchnparam">5.8.3.55. HB_VENC_SetChnParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-getchnparam">5.8.3.56. HB_VENC_GetChnParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-setmodparam">5.8.3.57. HB_VENC_SetModParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-getmodparam">5.8.3.58. HB_VENC_GetModParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-sendframeex">5.8.3.59. HB_VENC_SendFrameEx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-setaverageqp">5.8.3.60. HB_VENC_SetAverageQp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-getaverageqp">5.8.3.61. HB_VENC_GetAverageQp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-set3dnrparam">5.8.3.62. HB_VENC_Set3DNRParam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-get3dnrparam">5.8.3.63. HB_VENC_Get3DNRParam</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="8-Video_Encode_zh_CN.html#id9">5.8.4. 数据结构</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-pixel-format-e">5.8.4.1. HB_PIXEL_FORMAT_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#payload-type-e">5.8.4.2. PAYLOAD_TYPE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-rotation-e">5.8.4.3. HB_ROTATION_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#mirror-flip-e">5.8.4.4. MIRROR_FLIP_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-h264-profile-e">5.8.4.5. HB_VENC_H264_PROFILE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-h264-level">5.8.4.6. HB_VENC_H264_LEVEL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#hb-venc-h265-level">5.8.4.7. HB_VENC_H265_LEVEL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#codec-rect-s">5.8.4.8. CODEC_RECT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-attr-h264-s">5.8.4.9. VENC_ATTR_H264_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-attr-h265-s">5.8.4.10. VENC_ATTR_H265_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-attr-mjpeg-s">5.8.4.11. VENC_ATTR_MJPEG_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-attr-jpeg-s">5.8.4.12. VENC_ATTR_JPEG_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-attr-s">5.8.4.13. VENC_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-rc-mode-e">5.8.4.14. VENC_RC_MODE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h264-cbr-s">5.8.4.15. VENC_H264_CBR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h264-vbr-s">5.8.4.16. VENC_H264_VBR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h264-avbr-s">5.8.4.17. VENC_H264_AVBR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h264-fixqp-s">5.8.4.18. VENC_H264_FIXQP_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h264-qpmap-s">5.8.4.19. VENC_H264_QPMAP_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h265-cbr-s">5.8.4.20. VENC_H265_CBR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h265-vbr-s">5.8.4.21. VENC_H265_VBR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h265-avbr-s">5.8.4.22. VENC_H265_AVBR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h265-fixqp-s">5.8.4.23. VENC_H265_FIXQP_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h265-qpmap-s">5.8.4.24. VENC_H265_QPMAP_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-mjpeg-fixqp-s">5.8.4.25. VENC_MJPEG_FIXQP_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-rc-attr-s">5.8.4.26. VENC_RC_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-gop-picture-custom-s">5.8.4.27. VENC_GOP_PICTURE_CUSTOM_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-gop-custom-s">5.8.4.28. VENC_GOP_CUSTOM_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-gop-attr-s">5.8.4.29. VENC_GOP_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-chn-attr-s">5.8.4.30. VENC_CHN_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-jpeg-param-s">5.8.4.31. VENC_JPEG_PARAM_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-mjpeg-param-s">5.8.4.32. VENC_MJPEG_PARAM_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-intra-refresh-mode-e">5.8.4.33. VENC_INTRA_REFRESH_MODE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-intra-refresh-s">5.8.4.34. VENC_INTRA_REFRESH_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h264-entropy-s">5.8.4.35. VENC_H264_ENTROPY_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h264-dblk-s">5.8.4.36. VENC_H264_DBLK_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h265-dblk-s">5.8.4.37. VENC_H265_DBLK_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-vui-h264-time-info-s">5.8.4.38. VENC_VUI_H264_TIME_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h264-vui-s">5.8.4.39. VENC_H264_VUI_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-vui-h265-time-info-s">5.8.4.40. VENC_VUI_H265_TIME_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h265-vui-s">5.8.4.41. VENC_H265_VUI_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h265-sao-s">5.8.4.42. VENC_H265_SAO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h264-slice-split-s">5.8.4.43. VENC_H264_SLICE_SPLIT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h265-slice-split-s">5.8.4.44. VENC_H265_SLICE_SPLIT_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h264-intra-pred-s">5.8.4.45. VENC_H264_INTRA_PRED_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h265-pu-s">5.8.4.46. VENC_H265_PU_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h264-trans-s">5.8.4.47. VENC_H264_TRANS_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-h265-trans-s">5.8.4.48. VENC_H265_TRANS_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-cu-prediction-s">5.8.4.49. VENC_CU_PREDICTION_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#video-crop-info-s">5.8.4.50. VIDEO_CROP_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#video-frame-pack-s">5.8.4.51. VIDEO_FRAME_PACK_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#video-frame-s">5.8.4.52. VIDEO_FRAME_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#video-frame-info-s">5.8.4.53. VIDEO_FRAME_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#video-frame-info-jpeg-s">5.8.4.54. VIDEO_FRAME_INFO_JPEG_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#video-stream-pack-s">5.8.4.55. VIDEO_STREAM_PACK_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#video-stream-info-s">5.8.4.56. VIDEO_STREAM_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#video-stream-info-jpeg-s">5.8.4.57. VIDEO_STREAM_INFO_JPEG_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#video-stream-s">5.8.4.58. VIDEO_STREAM_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-recv-pic-param-s">5.8.4.59. VENC_RECV_PIC_PARAM_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-ref-param-s">5.8.4.60. VENC_REF_PARAM_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-user-rc-attr-s">5.8.4.61. VENC_USER_RC_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#user-frame-info-s">5.8.4.62. USER_FRAME_INFO_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-param-mod-s">5.8.4.63. VENC_PARAM_MOD_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-frame-rate-s">5.8.4.64. VENC_FRAME_RATE_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-chn-param-s">5.8.4.65. VENC_CHN_PARAM_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-roi-attr-s">5.8.4.66. VENC_ROI_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-chn-status-s">5.8.4.67. VENC_CHN_STATUS_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="8-Video_Encode_zh_CN.html#venc-3dnr-params">5.8.4.68. VENC_3DNR_PARAMS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="8-Video_Encode_zh_CN.html#id10">5.8.5. 错误码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8-Video_Encode_zh_CN.html#id11">5.8.6. 参考代码</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="9-Video_Decode_zh_CN.html">5.9. 视频解码</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="9-Video_Decode_zh_CN.html#id2">5.9.1. 概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9-Video_Decode_zh_CN.html#id3">5.9.2. 功能描述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#id4">5.9.2.1. 基础规格</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#id5">5.9.2.2. 码流发送方式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#id6">5.9.2.3. 图像输出方式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#pts">5.9.2.4. 时间戳(PTS)处理</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#buffer">5.9.2.5. 码流Buffer配置模式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#skip">5.9.2.6. Skip高级跳帧解码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#id7">5.9.2.7. 带宽优化模式解码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#id8">5.9.2.8. 解码器绑定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#id9">5.9.2.9. 注意事项</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="9-Video_Decode_zh_CN.html#api">5.9.3. API参考</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-createchn">5.9.3.1. HB_VDEC_CreateChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-destroychn">5.9.3.2. HB_VDEC_DestroyChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-startrecvstream">5.9.3.3. HB_VDEC_StartRecvStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-stoprecvstream">5.9.3.4. HB_VDEC_StopRecvStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-resetchn">5.9.3.5. HB_VDEC_ResetChn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-sendstream">5.9.3.6. HB_VDEC_SendStream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-getframe">5.9.3.7. HB_VDEC_GetFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-releaseframe">5.9.3.8. HB_VDEC_ReleaseFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-getfd">5.9.3.9. HB_VDEC_GetFd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-closefd">5.9.3.10. HB_VDEC_CloseFd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-getchnattr">5.9.3.11. HB_VDEC_GetChnAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-setchnattr">5.9.3.12. HB_VDEC_SetChnAttr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-querystatus">5.9.3.13. HB_VDEC_QueryStatus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-getuserdata">5.9.3.14. HB_VDEC_GetUserData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-releaseuserdata">5.9.3.15. HB_VDEC_ReleaseUserData</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="9-Video_Decode_zh_CN.html#id10">5.9.4. 数据结构</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#video-mode-e">5.9.4.1. VIDEO_MODE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#video-output-order-e">5.9.4.2. VIDEO_OUTPUT_ORDER_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#video-dec-mode-e">5.9.4.3. VIDEO_DEC_MODE_E</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#vdec-attr-h264-s">5.9.4.4. VDEC_ATTR_H264_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#vdec-attr-h265-s">5.9.4.5. VDEC_ATTR_H265_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#vdec-attr-mjpeg-s">5.9.4.6. VDEC_ATTR_MJPEG_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#vdec-attr-jpeg-s">5.9.4.7. VDEC_ATTR_JPEG_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#vdec-chn-attr-s">5.9.4.8. VDEC_CHN_ATTR_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-userdata-s">5.9.4.9. HB_VDEC_USERDATA_S</a></li>
+<li class="toctree-l3"><a class="reference internal" href="9-Video_Decode_zh_CN.html#hb-vdec-chn-status-s">5.9.4.10. HB_VDEC_CHN_STATUS_S</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="9-Video_Decode_zh_CN.html#id11">5.9.5. 错误码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9-Video_Decode_zh_CN.html#id12">5.9.6. 参考代码</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="10-ISP_Tuning_Guide/index.html">5.10. 图像调试指南</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/ISP_Tuning_User_Guide.html">5.10.1. ISP图像调试指引</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html">5.10.2. X3 Camera点亮说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id1">5.10.2.1. 范围</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id2">5.10.2.2. 准备工作</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#sensor">5.10.2.3. 添加新sensor点亮步骤</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id3">步骤1 增加设备驱动</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id4">步骤1.1 sensor驱动文件添加</a></li>
+<li class="toctree-l5"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id5">步骤1.2 sensor驱动结构体填充</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id6">步骤2 配置文件添加</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id7">步骤2.1 sensor配置文件添加</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#vio">步骤2.1.1 VIO配置文件添加</a></li>
+<li class="toctree-l6"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#mipi">步骤2.1.2 MIPI配置文件添加</a></li>
+<li class="toctree-l6"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#tuning-tool">步骤2.1.3 tuning_tool工具配置文件添加</a></li>
+<li class="toctree-l6"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id8">步骤2.1.4 tuning_tool程序的命令行参数配置</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id9">步骤3 启动脚本添加</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id10">步骤4 板端运行程序</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#hobot-player">步骤5 Hobot player工具查看图像</a></li>
+<li class="toctree-l5"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id11">步骤6 图像确认</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#ispchecklist">5.10.2.4. isp调试前的checklist项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#faq">5.10.2.5. FAQ</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id12">手动复位sensor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#dtsmipi-host">dts未配置对应mipi host</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#i2c">i2c通讯失败</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#cant-open-dev-mipi-dev0">Can’t open /dev/mipi_dev0</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#mipi-start-error">mipi start error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#mipi-check-error">mipi check error</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#mipi-phy">mipi phy报错</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#serdesidxserdesport0">serdesIdx和serdesPort配置为0</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id13">sensor初始化时序</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#input-size-mismatch">input size mismatch错误</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#dq-too-much-timeout-error-detail">dq too much timeout error_detail</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#s1-gp0-res-4-rcnt-0">出现[S1]GP0(res 4, rcnt 0)错误</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#overflow">出现overflow错误</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id14">串口无任何报错，应用程序报错</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#hobotplayer">Hobotplayer注意事项</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id15">调试新的sensor时，图像错位花屏</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id16">图像出现横纹/异常色</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#hdrsif-otf-isp">图像分屏异常（hdr模式下sif-otf-isp场景）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#yuv">YUV底下有几行异常</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#isp-online-ipu">图像锯齿感（isp-&gt;online-&gt;ipu）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#id17">帧率偏低</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#raw">RAW图边缘噪点</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Sensor_Bring_Up.html#ldc">LDC参数修改</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html">5.10.3. ISP工具指南</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#control-tool">5.10.3.1. Control tool 功能说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#id1">5.10.3.2. Control tool 操作说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#calibration-tool">5.10.3.3. Calibration tool 使用说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#calibration-tool-installation">5.10.3.4. Calibration tool-Installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#installation-procedure">Installation procedure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#isp-calibration-tool-home-window">5.10.3.5. ISP calibration tool Home window</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#home-window">Home window</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#menu-buttons">Menu buttons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#getting-started">Getting started</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#calibration-tool-image-format">5.10.3.6. Calibration tool – Image format</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#image-format-window">Image format window</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#window-features">Window features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#file-types-supported">File types supported</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Control_Tool_Guide.html#output-formats">Output formats</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/Camera_Tuning_Tool.html">5.10.4. Hobot player工具指南</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Camera_Tuning_Tool.html#id1">5.10.4.1. Hobot player 功能说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Camera_Tuning_Tool.html#id2">5.10.4.2. Hobot player 使用说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Camera_Tuning_Tool.html#id3">Hobot player网络传输</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/Camera_Tuning_Tool.html#id4">Hobot player静态图片</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/Generate_ISP_Lib.html">5.10.5. 生成ISP效果库</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Generate_ISP_Lib.html#id1">5.10.5.1. 功能说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Generate_ISP_Lib.html#id2">5.10.5.2. 源文件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Generate_ISP_Lib.html#id3">5.10.5.3. 工具下载地址</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Generate_ISP_Lib.html#command-json">5.10.5.4. 更新Command.json</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Generate_ISP_Lib.html#id4">5.10.5.5. 编译方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/Generate_ISP_Lib.html#debug">5.10.5.6. Debug信息</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html">5.10.6. GDC 使用说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#id1">5.10.6.1. 模块描述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#id2">5.10.6.2. 软件接口</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#hb-vio-gen-gdc-cfg-hb-vio-free-gdc-cfg">hb_vio_gen_gdc_cfg/ hb_vio_free_gdc_cfg</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#hb-vio-set-gdc-cfg">hb_vio_set_gdc_cfg</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#id3">5.10.6.3. 数据结构</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#frame-format-t">frame_format_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#resolution-t">resolution_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#param-t">param_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#rect-t">rect_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#point-t">point_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#transformation-t">transformation_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#custom-tranformation-t">custom_tranformation_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#window-t">window_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#id4">5.10.6.4. 各参数调试效果</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#pan">pan调试效果</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#tile">tile调试效果</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#zoom">zoom调试效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#id5">5.10.6.5. 调试说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#gdc-tool">启动gdc-tool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#affine">affine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#equisolid-panoramic">equisolid（Panoramic）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#equisold-cylinder-stereographic">equisold(cylinder)（Stereographic）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#equidistant-universal">equidistant（Universal）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#custom">custom</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#keystone-dewarping-dewarp-keystone">keystone+dewarping（Dewarp_keystone）暂无验证</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#id6">5.10.6.6. 示例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#id7">affine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#id8">equisolid（Panoramic）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#equisolid-cylinder-stereographic">equisolid(cylinder) （Stereographic）</a></li>
+<li class="toctree-l4"><a class="reference internal" href="10-ISP_Tuning_Guide/GDC_Operation_Manual/AN-2521-8-X3J3_GDC_Operation_Manual_zh_CN.html#id9">equidistant（Universal）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/Image_Quality_Evaluation.html">5.10.7. 图像质量测评</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/Expand_Content.html">5.10.8. ISP 调试视频教程</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html">5.11. 查询多媒体模块调试信息</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#id2">5.11.1. 驱动与多媒体系统交互</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#vio">5.11.2. VIO调试信息</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#sif">5.11.2.1. SIF调试信息</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#isp">5.11.2.2. ISP调试信息</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#ipu">5.11.2.3. IPU调试信息</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#pym">5.11.2.4. PYM调试信息</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#iar">5.11.2.5. IAR调试信息</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#vpu">5.11.3. VPU调试信息</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#venc">5.11.3.1. VENC调试信息</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#vdec">5.11.3.2. VDEC调试信息</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#jpu">5.11.4. JPU调试信息</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#jenc">5.11.4.1. JENC调试信息</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#jdec">5.11.4.2. JDEC调试信息</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#id3">5.11.5. 媒体模块日志查看</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#id4">5.11.5.1. 日志级别</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#id5">5.11.5.2. 日志标签</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#id6">5.11.5.3. 日志过滤</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html#id7">5.11.5.4. 日志存储</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html">5.12. 多媒体性能调试</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#id2">5.12.1. 概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#ddr-masterqos">5.12.2. DDR Master的QoS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#axi-qos">5.12.3. AXI QOS控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#vio">5.12.4. VIO子模块配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#sifhblank">5.12.5. SIF的hblank设置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#ipu">5.12.6. IPU的设置</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#ipu-line-delay-wr-ddr-fifo-thred">5.12.6.1. IPU Line_delay wr_ddr_fifo_thred</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#ipu-clock">5.12.6.2. IPU Clock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#id3">5.12.6.3. IPU 安全尺寸</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#id4">5.12.7. 典型场景的设置</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#k">5.12.7.1. 单路4K输入多通道编码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#p">5.12.7.2. 双路1080P输入</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#id5">5.12.7.3. 单路1080P输入</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#id6">5.12.8. 多进程共享配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#id7">5.12.9. VIO延时查看</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#id8">5.12.9.1. 方法一：</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html#id9">5.12.9.2. 方法二：</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../bsp_develop/Low_Power_Solution_User_Guide.html" class="btn btn-neutral float-left" title="4.10. X3降功耗用户指南" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="1-Overview_zh_CN.html" class="btn btn-neutral float-right" title="5.1. 系统概述" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

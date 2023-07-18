@@ -1,0 +1,13 @@
+# SDIO(WIFI)压力测试
+## 测试方法
+1. 使用开源`iperf`工具进行测试。
+2. 进入`test_tools/06_wifi_sdio_test`目录。
+3. 修改`01-startwlan6212.sh`脚本中的`wifi热点名`和`密码`。![wifi](_static/_images/07_wifi_1.png).
+4. 执行`01-startwlan6212.sh`脚本配置wifi和自动获取ip地址，建议连接wifi天线以获得最佳信号质量。关于WIFI使用，详细信息可以参考[Wi-Fi驱动调试指南](../driver_develop_guide/33-WIFI_Driver_Debug_Guide.md)。
+5. Server端（可以是PC也可以是另一块X3)，执行`iperf -s -m -p 端口号`.
+6. Clinet端执行`iperf -c [server端IP地址] -i [数据打印间隔时间] -t [总运行时间] -p [对应端口号]`。
+## 测试标准
+1. 高温：45°、低温：-10°、常温下，程序正常执行，不会出现重启挂死的情况。
+2. LOG中没有`fail`、`error`、`timeout`等异常打印。
+3. 能稳定运行48小时。
+4. Server端统计数据正常。

@@ -1,0 +1,3 @@
+/usr/sbin/flash_lock
+/bin/busybox 50
+/usr/sbin/flash_lock.mtd-utils 100

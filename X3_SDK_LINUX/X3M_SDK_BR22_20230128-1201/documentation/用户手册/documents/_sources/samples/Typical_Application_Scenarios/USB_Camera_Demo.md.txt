@@ -1,0 +1,122 @@
+# USB Camera
+
+基于地平线旭日`X3M`系列边缘AI芯片，搭配完善的系统软件，可以快速高效的搭建不同应用场景的`USB Camera`解决方案。这里介绍几种基本的`USB Camera`应用场景，我们使用`X3M`芯片图像处理模块(`VIN`、`ISP`、`VPS`)、多媒体模块(`VENC`)、`USB`模块的`UVC`接口功能，向用户展示如何快使用地平线`X3 SDB`开发板搭建USB Camera。 
+
+## 硬件环境准备
+
+使用地平线`X3 SDB`开发板搭建`USB Camera`，需要准备如下硬件：
+
+* `X3 SDB`开发板；
+* 摄像头模组，800W: IMX415, 200W: F37;
+* 12V电源适配器；
+* 串口线；
+* micro USB线；
+
+整体连接方式如下图所示：
+
+![](_static/_images/USB_Camera_Demo/image-20220307215620638-16526896439641.png)
+
+## 软件部署
+
+根据第二章快速入门章节烧录好配套的系统镜像后，对于单路`200Wp@30fps`和单路`800W@30fps`的场景，将发布包中sample目录下已经编译好的部署包sunrise_camera.tar.gz，通过winscp等工具将部署包拷贝到开发板/app目录下，解压生成的文件包括：sunrise_camera主程序目录、WebServer 目录（httpd服务程序和网页目录）、start_app.sh 启动脚本，详细目录结构说明如下：
+
+```bash
+.
+├── start_app.sh 		# 启动脚本，按顺序启动web服务、主程序
+├── sunrise_camera
+│   ├── bin				# 主程序和sensor库
+│   ├── include			# 通用头文件（备用）
+│   ├── lib				# 编译生成的静态库和 bpu predict动态库
+│   ├── model_zoom			# 应用中用到的算法模型
+│   └── test_data			# 应用默认配置文件和测试文件
+└── WebServer
+    ├── fcgi				# fcgi程序（备用）
+    ├── lighttpd-x3			# httpd和web页面
+    ├── pcre				# lighttpd依赖
+    ├── README.txt			# fcgi、lighttpd、pcre编译部署说明
+└── start_lighttpd.sh		# web服务启动脚本
+```
+
+对于单路`800W@60fps`的场景，将发布包中`sample/sample_usb_cam_4k60`目录下已经编译好的部署包out，通过winscp等工具将部署包拷贝到开发板/app目录下，out目录的文件包括：`vin_vps_config_usb_cam.json`配置文件、`run_usb_cam_imx415.sh`主程序启动脚本，详细目录结构说明如下：
+
+```bash
+.
+├── vin_vps_config_usb_cam.json				# imx415的sensor主配置文件
+├── libguvc.so								# 针对4k60fps修改的uvc相关库
+├── libimx415.so							# 针对4k60fps修改sensor驱动库
+├── run_usb_cam_imx415.sh					# 主程序启动脚本
+├── sample_usb_cam							# 主程序
+└── usb-gadget.sh							# uvc驱动脚本
+```
+
+## 单路，200W@30fps接入；
+
+### 硬件连接方式
+
+摄像头模组使用F37，连接`X3 SDB`开发板`MIPI CSI RX0/2`口。
+
+![](_static/_images/USB_Camera_Demo/20220516-194108.jpg)
+
+### 软件启动方式
+
+在/app目录下解压sunrise_camera.tar.gz后，执行 ``sh start_app.sh`` 启动，正常启动后，通过chrome浏览器在地址栏输入IP地址（开发板默认IP为192.168.1.10）可以登录用户控制主界面， 例如：http://192.168.1.10
+
+![](_static/_images/USB_Camera_Demo/image-20220513114932.png)
+
+登录成功后的界面显示如下：
+
+![](_static/_images/USB_Camera_Demo/20220516-195024.png)
+
+单路200W USB Camera场景配置操作如下，第一步点击场景配置按钮如下：
+
+![](_static/_images/USB_Camera_Demo/20220516-195507.png)
+
+第二步选择USB摄像头单选按钮，选择sensor F37，然后点机 ``提交`` 按钮：
+
+![](_static/_images/USB_Camera_Demo/20220516-195817.png)
+
+第三步通过Potplayer播放器选择UVC Camera，分辨率选择H264 1920x1080P 30,打开设备就可以播放UVC视频流
+
+![](_static/_images/USB_Camera_Demo/20220516-200201.png)
+
+![](_static/_images/USB_Camera_Demo/20220516-200717.png)
+
+## 单路，800W@30fps；
+
+### 硬件连接方式
+
+摄像头模组使用IMX415，连接`X3 SDB`开发板`MIPI CSI RX1/3`口。
+
+![](_static/_images/USB_Camera_Demo/20220516-201417.jpg)
+
+### 软件启动方式
+
+sunrise camera程序部署好之后，启动方式参考单路200W场景。单路800W USB Camera场景配置操作如下，选择USB摄像头单选按钮，选择sensor IMX415，然后 ``提交`` 按钮：
+
+![](_static/_images/USB_Camera_Demo/20220516-201935.png)
+
+然后通过Potplayer播放器选择UVC Camera，分辨率选择H264 3840x2160P 30,打开设备就可以播放UVC视频流
+
+![](_static/_images/USB_Camera_Demo/20220516-202151.png)
+
+![](_static/_images/USB_Camera_Demo/20220516-202254.png)
+
+## 单路，800W@60fps;
+
+### 硬件连接方式
+
+摄像头模组使用IMX415，连接`X3 SDB`开发板`MIPI CSI RX1/3`口。
+
+![](_static/_images/USB_Camera_Demo/20220516-201417.jpg)
+
+### 软件启动方式
+
+在/app/out目录下执行 ``sh run_usb_cam_imx415.sh`` 启动，主程序正常运行后的截图如下：
+
+![](_static/_images/USB_Camera_Demo/20220520-113756.jpg)
+
+通过Potplayer播放器选择UVC Camera，分辨率选择H264 3840x2160P 60,打开设备就可以播放UVC视频流
+
+![](_static/_images/USB_Camera_Demo/20220520-113947.png)
+
+![](_static/_images/USB_Camera_Demo/20220527131109.png)

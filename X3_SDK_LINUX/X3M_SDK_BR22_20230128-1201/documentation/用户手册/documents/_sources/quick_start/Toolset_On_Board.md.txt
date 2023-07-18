@@ -1,0 +1,143 @@
+# 调试工具说明
+
+X3系统预置了几种常用的板端调试工具，可实现BPU、DDR、网络、Thermal等多个子系统的状态统计和功能配置，下面将逐一介绍。
+
+## BPU工具
+
+hrut_bpuprofile可用来查询、配置BPU模块，例如调节频率、上下电控制、时钟控制、占用统计等。工具说明如下：
+
+```bash
+BPU PROFILE HELP INFORMATION
+
+>>> -b/--bpu [BPU CORE,0--bpu0,1--bpu1,2--ALL BPU] (required)
+
+>>> -p/--power [POWER OFF/ON,0--OFF,1--ON]
+
+>>> -c/--clock [CLOCK OFF/ON,0--OFF,1--ON]
+
+>>> -e/--enabletime [GET FC TIME/ON,0--OFF,1--ON]
+
+>>> -t/--time [GET FC TIME,NO ARGUMENT]
+
+>>> -f/--frq [SET BPU FREQUENCY,ARGUMENT：N]
+
+>>> -r/--ratio [BPU RATIO,N--N TIMES,0--FOREVER]
+```
+
+**查看bpu使用率**
+
+```bash
+hrut_bpuprofile -b 2 -r 0
+```
+
+**设置bpu运行频率**
+
+```bash
+hrut_bpuprofile -b 0 -f 400000000
+```
+
+**设置bpu掉电**
+
+```bash
+hrut_bpuprofile -b 1 -p 0
+```
+
+## DDR工具
+
+hrut_ddr可用统计DDR带宽使用情况，工具既支持单模块的带宽统计，也支持所有模块的总和统计。工具说明如下：
+
+```bash
+hrut_ddr -h
+
+DDR MONITOR HELP INFORMATION
+
+>>> -t/--type [SAMPLE TYPE,cpu,bif,bpu0,bpu1,vio0,vpu,vio1, peri,sum,all]
+
+>>> -p/--period [SAMPLE PERIOD, 1 - 100ms]
+```
+
+**单模块统计**
+
+```bash
+root@Unknown:/userdata# hrut_ddr -t cpu -p 100
+
+[100009]cpubw R:3607MB/s W:1580MB/s
+
+[200005]cpubw R:3752MB/s W:1611MB/s
+```
+
+**总和统计**
+
+```bash
+root@x3dvbx3-hynix4G-2666:~# hrut_ddr -t all -p 100
+
+[100011]cpu R:1431MB/s W:1139MB/s bif R:0MB/s W:0MB/s bpu0 R:675MB/s W:361MB/s bpu1 R:705MB/s W:419MB/s vio0 R:0MB/s W:0MB/s vpu R:0MB/s W:0MB/s vio1 R:115MB/s W:0MB/s peri R:0MB/s W:0MB/s sum R:2962MB/s W:1920MB/s
+```
+
+## 网络工具
+
+hrut_ipfull工具可用于修改系统的网络配置，如IP地址、子网掩码及网关地址等。工具配置后重启生效，断电可保存。工具说明如下：
+
+**配置写入**
+
+```bash
+hrut_ipfull s IP MASK GATEWAY
+
+e.g. hrut_ipfull s 192.168.1.10 255.255.255.0 192.168.1.255
+```
+
+**配置读取**
+
+```bash
+hrut_ipfull g
+```
+
+**配置清除**
+
+```bash
+hrut_ipfull c
+```
+
+配置清除是指恢复系统默认配置：192.168.1.10 255.255.255.0 192.168.1.255
+
+hrut_mac工具可用于修改网络MAC地址。工具配置后重启生效，断电可保存。工具说明如下：
+
+**MAC写入**
+
+```bash
+hrut_mac s aa:bb:cc:dd:ee:ff
+```
+
+**MAC读取**
+
+```bash
+hrut_mac g
+```
+## 芯片状态统计工具
+
+hrut_somstatus工具可用于系统状态的统计，包括芯片温度、CPU频率、BPU频率、BPU占用率等信息。工具说明如下：
+
+```bash
+root@x3sdbx3-samsung2G-3200:/# watch -n 1 hrut_somstatus
+Every 1s: hrut_somstatus                                                                                                                                                          
+
+=====================1=====================
+temperature-->
+        CPU      : 52.4 (C)
+cpu frequency-->
+              min       cur     max
+        cpu0: 240000    1200000 1200000
+        cpu1: 240000    800000  1200000
+        cpu2: 240000    800000  1200000
+        cpu3: 240000    800000  1200000
+bpu status information---->
+             min        cur             max             ratio
+        bpu0: 400000000 1000000000      1000000000      0
+        bpu1: 400000000 1000000000      1000000000      0
+```
+
+- temperature代表X3芯片结温，单位为摄氏度
+- frequency代表CPU、BPU频率，单位为KHz。min、cur、max分别代表最小、当前、最大频率，例如1200000KHz=1200MHz=1.2GHz
+- cpu0~4代表4核A53，工具分别统计每个核心的最小、当前、最大频率
+- bpu0~1代表2核BPU，工具分别统计每个核心的最小、当前、最大频率
+- ratio代表BPU当前使用率，取值范围0~100，单位为百分比

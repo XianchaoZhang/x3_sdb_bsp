@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.7. OTA实现原理和使用方法 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="4.8. X3 Approved Vendor List" href="Approved_Vendor_List/index.html" />
+    <link rel="prev" title="4.6. 安全启动使用说明" href="Secure_Boot_Manual.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">4. BSP开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Bsp_Develop.html">4.1. 环境搭建及编译说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="board_bring_up.html">4.2. 硬件点亮指引</a></li>
+<li class="toctree-l2"><a class="reference internal" href="driver_develop_guide/index.html">4.3. 驱动开发指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_test/index.html">4.4. 硬件单元测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kernel_debug_guide/index.html">4.5. 内核调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Secure_Boot_Manual.html">4.6. 安全启动使用说明</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.7. OTA实现原理和使用方法</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">4.7.1. 术语和定义</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">4.7.2. OTA实现方案</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">4.7.2.1. 概述</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id4">OTA介绍</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id5">OTA系统主要组成部分</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">4.7.2.2. 系统分区</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id7">单分区</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id8">双分区</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#gpt">4.7.2.3. GPT分区配置和修改说明</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id9">分区配置说明</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id10">分区镜像生成</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">4.7.2.4. OTA升级模式配置</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id12">初始化配置</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#utility">通过utility修改模式</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id13">4.7.2.5. OTA标志位</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id14">概述</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#up-flag">up_flag标志位</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#update-success">update_success</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#flash-success">flash_success</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#first-try">first_try</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#app-success">app_success</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#reset-reason">reset_reason</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#part-status">part_status</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id15">4.7.2.6. OTA日志系统</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id16">概述</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#command">文件：command</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#info">文件：info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#progress">文件：progress</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#result">文件：result</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id17">4.7.2.7. OTA升级脚本</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id18">概述</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#otaupdate">脚本：otaupdate</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hbota-utility">脚本：hbota_utility</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#up-partition-sh">脚本：up_partition.sh</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#s9updatecheck-sh">脚本s9updatecheck.sh</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#ota-utility">4.7.2.8. OTA utility定义</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id19">概述</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hrut-boardid">程序：hrut_boardid</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hrut-eeprom">程序：hrut_eeprom</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hrut-resetreason">4.7.2.9. 程序：hrut_resetreason</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hrut-count">程序：hrut_count</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hrut-otastatus">程序：hrut_otastatus</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hrut-checksuccess">脚本：hrut_checksuccess</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hrut-checkinfo">脚本：hrut_checkinfo</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hrut-checkprogress">脚本：hrut_checkprogress</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hrut-otaextrainfo">脚本：hrut_otaextrainfo</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#warning">4.7.2.10. Warning信息约定</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id20">功能介绍</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id21">使用方法</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#recovery">4.7.2.11. recovery实现</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id22">recovery功能介绍</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id23">镜像说明</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id24">recovery系统的功能：</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#id25">进入recovery模式的方式</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id26">自动进入</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id27">手动进入</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id28">硬件设置</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id29">4.7.2.12. OTA升级流程</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#golden">golden模式升级流程</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id30">实现原理</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id31">升级流程</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id32">流程图</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#ab">AB模式升级流程</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id33">实现原理</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id34">升级流程</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#id35">流程图</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#ubootota">uboot中OTA实现原理</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id36">实现原理</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id37">流程图</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#ota-secure">4.7.2.13. OTA secure方案</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id38">版本校验</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id39">分区校验</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id40">签名校验</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id41">4.7.3. OTA升级包获取方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sdk">4.7.3.1. 发布的SDK包</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id42">4.7.3.2. ota打包工具</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id43">4.7.4. OTA升级方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#otawrite">4.7.4.1. otawrite接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id44">4.7.4.2. 板端升级接口</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id45">4.7.5. 参考文献</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Approved_Vendor_List/index.html">4.8. X3 Approved Vendor List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Rootfs_develop/index.html">4.9. 根文件系统制作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Low_Power_Solution_User_Guide.html">4.10. X3降功耗用户指南</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">4. </span>BSP开发指南</a> &raquo;</li>
+      <li><span class="section-number">4.7. </span>OTA实现原理和使用方法</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="Secure_Boot_Manual.html" class="btn btn-neutral float-left" title="4.6. 安全启动使用说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Approved_Vendor_List/index.html" class="btn btn-neutral float-right" title="4.8. X3 Approved Vendor List" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ota">
+<h1><span class="section-number">4.7. </span>OTA实现原理和使用方法<a class="headerlink" href="#ota" title="永久链接至标题"></a></h1>
+<p>本文描述了X3芯片中OTA系统软件详细设计，包括系统分区、OTA标志位、日志系统、OTA相关utility、warning信息约定、recovery系统、OTA升级流程、OTA升级包获取方式、以及OTA升级方法等。</p>
+<section id="id1">
+<h2><span class="section-number">4.7.1. </span>术语和定义<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>OTA（Over-the-Air Technology）原指空中下载技术。在地平线系统软件实际实现为不断电升级系统功能。</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>缩略语</strong></th>
+<th><strong>英文全称</strong></th>
+<th><strong>中文解释</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SoC</td>
+<td>System on Chip</td>
+<td>片上系统</td>
+</tr>
+<tr>
+<td>BL[x]</td>
+<td>Boot Loader Stage [x]</td>
+<td>启动的阶段x</td>
+</tr>
+<tr>
+<td>SPL</td>
+<td>Secondary Program Loader</td>
+<td>二级程序加载器</td>
+</tr>
+<tr>
+<td>GPT</td>
+<td>GUID Partition Table</td>
+<td>GUID磁盘分区表</td>
+</tr>
+<tr>
+<td>GUID</td>
+<td>Globally Unique IDentifier</td>
+<td>全局唯一标识符</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></section>
+<section id="id2">
+<h2><span class="section-number">4.7.2. </span>OTA实现方案<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<section id="id3">
+<h3><span class="section-number">4.7.2.1. </span>概述<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<section id="id4">
+<h4>OTA介绍<a class="headerlink" href="#id4" title="永久链接至标题"></a></h4>
+<p><img alt="ed17fd8337417617232280b707e22865" src="../_images/ed17fd8337417617232280b707e22865.png" /></p>
+<p><strong>OTA Services</strong></p>
+<ul class="simple">
+<li><p>信息查询服务：OTA服务器中保存各系统和软件的最新信息，设备向服务器查询时，提供相应的信息，包括device、version、image size等；</p></li>
+<li><p>软件包下载服务：服务器中保存各系统和软件的安装包，通过网络为设备提供软件包的下载服务。</p></li>
+</ul>
+<p><strong>OTA App</strong></p>
+<ul class="simple">
+<li><p>查询：定期向OTA服务器查询系统或软件是否有更新；</p></li>
+<li><p>下载：在查询到系统或软件有更新后，通过网络从OTA服务器中下载升级包到本地相应的内存中；</p></li>
+<li><p>验证：升级包下载后，通过RSA和HASH算法验证升级包的完整性和安全性，如果验证不通过，则不进行升级。</p></li>
+</ul>
+<p><strong>OTA System</strong></p>
+<ul>
+<li><p>分区管理：设备中有不同的分区，包括uboot、system、recovery和cache等，OTA升级中将升级包写入对应的分区，完成系统或软件的升级；</p></li>
+<li><p>鲁棒性：OTA要确保升级包写入正确的分区，同时可以使用A/B System来保证升级失败后，设备仍有可用的系统；</p></li>
+<li><p>安全性：OTA支持对升级包进行RSA签名校验，确保升级包的完整性；</p></li>
+<li><p>版本管理：OTA对升级包和系统的版本进行校验，确保系统升级由低版本到高版本。</p>
+<p>（注：目前提供特殊disk.img OTA升级包，跳过版本校验，支持由高版本向低版本升级）</p>
+</li>
+</ul>
+</section>
+<section id="id5">
+<h4>OTA系统主要组成部分<a class="headerlink" href="#id5" title="永久链接至标题"></a></h4>
+<p>OTA系统主要由5部分组成，如下图列出了每个部分的部分相关代码。</p>
+<p><img alt="image-202203252310-3.1.2" src="../_images/image-202203252310-3.1.2.png" /></p>
+<p><strong>SPL</strong></p>
+<p>主要实现OTA升级的校验功能，根据OTA的相关标志位，判断升级是否成功，成功SPL会正常启动”uboot”分区，失败golden模式下会启动”ubootbak”分区，进入recovery模式。AB模式下会启动原系统（升级前使用的”uboot”分区）。</p>
+<p><strong>UBoot</strong></p>
+<p>实现OTA升级的校验功能和UBoot命令行下otawrite功能。根据OTA的相关标志位，判断升级是否成功。成功，UBoot会正常启动Kernel，失败golden模式下会启动recovery.gz，进入recovery模式。AB模式下会启动原系统（升级前使用的kernel和system分区）。</p>
+<p>“otawrite”功能提供UBoot下更新GPT分区的能力，方便更新系统镜像，具体使用方法见5.1小节。</p>
+<p><strong>OTA升级脚本</strong></p>
+<p>OTA升级的主体部分，完成OTA升级包的校验、系统状态判断、以及OTA升级的处理等功能。主要包括otaupdate，up_partition.sh，S9updatecheck.sh。</p>
+<p><strong>OTA相关utility</strong></p>
+<p>Utility支持对veeprom相关标志位的读写功能，支持对log日志的读功能。通过utility，OTA可以方便的处理升级中的状态和日志信息。</p>
+<p><strong>OTA打包工具</strong></p>
+<p>打包工具用于生成OTA升级包，升级包中会加入GPT信息、版本信息、warning信息和对应的update.sh升级脚本。支持生成分区升级包和disk.img升级包，支持生成eMMC和nor flash的升级包。</p>
+<p>注：打包工具介绍详见<strong>ota打包工具</strong>章节。</p>
+</section>
+</section>
+<section id="id6">
+<h3><span class="section-number">4.7.2.2. </span>系统分区<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<section id="id7">
+<h4>单分区<a class="headerlink" href="#id7" title="永久链接至标题"></a></h4>
+<ul class="simple">
+<li><p><strong>分区设计</strong></p></li>
+</ul>
+<p>“veeprom，spl，ddr，bl31，vbmenta，system，app，bpu，userdata”为单分区</p>
+<p>其中UBoot和Kernel分区做双备份，ubootB和recovery（KernelB）用于recovery模式，在OTA升级失败的情况下，进入recovery模式进行再升级/恢复。</p>
+<p><img alt="60fd8ec36457612ac044bc220d54c20b" src="../_images/60fd8ec36457612ac044bc220d54c20b.png" /></p>
+<ul class="simple">
+<li><p>veeprom：存放OTA相关标志位，开发板的相关信息，包括：IP，MAC，upmode，upflag等</p></li>
+<li><p>spl：存放second boot的镜像，对应spl.bin；</p></li>
+<li><p>DDR：存放DDR的初始化镜像和配置efuse的bin（可配），对应ddr_storage.bin和efuse.bin</p></li>
+<li><p>Bl31：存放bl31的镜像，对应bl31.bin</p></li>
+<li><p>uboot：uboot分区做双备份，保存ubootA和ubootB</p>
+<ul>
+<li><p>ubootA：存放normal boot过程中的third boot的镜像，对应uboot.bin；</p></li>
+<li><p>ubootB：存放recovery boot过程中的third boot的镜像，对应uboot.bin；</p></li>
+</ul>
+</li>
+<li><p>vbmenta：存放vbmenta的数据</p></li>
+<li><p>kernel：存放kernel镜像，包括Image.gz,*.dtb, dtb-mapping.conf等</p></li>
+<li><p>recovery：存放recovery镜像，包括与kernel相同的Image.gz,*dtb,dtb-mapping.con以及cpio</p></li>
+<li><p>system：存放rootfs相关文件，对应etc, sbin, usr, bin, lib等；</p></li>
+<li><p>bpu: 存放bpu image的镜像</p></li>
+<li><p>app：存放相关应用程序，例如：adas-rt的应用程序；</p></li>
+<li><p>userdata：存放user的数据，例如：OTA升级包，DDR dump数据，APP存放的数据等。</p></li>
+<li><p><strong>分区属性</strong></p></li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>分区名</strong></th>
+<th><strong>分区偏移</strong></th>
+<th><strong>分区大小</strong></th>
+<th><strong>分区格式</strong></th>
+<th><strong>加载到内存地址</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Head(MBR+GPT)</strong></td>
+<td>0x0000 0000</td>
+<td>17K</td>
+<td>raw</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>veeprom</strong></td>
+<td>0x0000 4400</td>
+<td>2K</td>
+<td>raw</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>spl</strong></td>
+<td>0x0000 4C00</td>
+<td>512K</td>
+<td>raw</td>
+<td>0x8020 0000</td>
+</tr>
+<tr>
+<td><strong>ddr</strong></td>
+<td>0x0008 4C00</td>
+<td>512K</td>
+<td>raw</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>bl31</strong></td>
+<td>0x0010 4C00</td>
+<td>512K</td>
+<td>raw</td>
+<td>0x0000 0000</td>
+</tr>
+<tr>
+<td><strong>uboot</strong></td>
+<td>0x0018 4C00</td>
+<td>2M</td>
+<td>raw</td>
+<td>0x0400 0000</td>
+</tr>
+<tr>
+<td><strong>vbmeta</strong></td>
+<td>0x0038 4C00</td>
+<td>128K</td>
+<td>raw</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>boot</strong></td>
+<td>0x003A 4C00</td>
+<td>10M</td>
+<td>raw</td>
+<td>0x0028 0000</td>
+</tr>
+<tr>
+<td><strong>recovery</strong></td>
+<td>0x00DA 4C00</td>
+<td>15M</td>
+<td>raw</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>system</strong></td>
+<td>0x01CA 4C00</td>
+<td>150M</td>
+<td>ext4</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>bpu</strong></td>
+<td>0x0B2A 4C00</td>
+<td>100M</td>
+<td>raw</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>app</strong></td>
+<td>0x116A 4C00</td>
+<td>256M</td>
+<td>ext4</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>userdata</strong></td>
+<td>0x216A 4C00</td>
+<td>6921M</td>
+<td>ext4</td>
+<td>*</td>
+</tr>
+</tbody>
+</table><ul class="simple">
+<li><p><strong>分区实现</strong></p></li>
+</ul>
+<p><img alt="9235199188a183d0fc5093df99c2b63f" src="../_images/9235199188a183d0fc5093df99c2b63f.png" /></p>
+</section>
+<section id="id8">
+<h4>双分区<a class="headerlink" href="#id8" title="永久链接至标题"></a></h4>
+<ul class="simple">
+<li><p><strong>分区设计</strong></p></li>
+</ul>
+<p>spl, ddr, app, userdata为单分区</p>
+<p>其中uboot分区做双备份，ubootB用于recovery模式，在OTA升级失败的情况下，进入recovery模式进行再升级。</p>
+<p>kernel和system为双分区，AB为等价的双系统</p>
+<p><img alt="d7dc0ab924bca62369839cb65fc12980" src="../_images/d7dc0ab924bca62369839cb65fc12980.png" /></p>
+<p>veeprom、spl、DDR、app、userdata介绍同单分区，这里不再赘述。</p>
+<ul class="simple">
+<li><p>uboot：uboot分区做双备份ubootA和ubootB</p></li>
+<li><p>vbmeta: 双分区vbmetaA和vbmetaB</p></li>
+<li><p>kernel：双分区kernelA和kernelB</p></li>
+<li><p>system：双分区systemA和systemB</p></li>
+<li><p><strong>分区属性</strong></p></li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>分区名</strong></th>
+<th><strong>分区偏移</strong></th>
+<th><strong>分区大小</strong></th>
+<th><strong>分区格式</strong></th>
+<th><strong>加载到内存地址</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Head(MBR+GPT)</strong></td>
+<td>0x0000 0000</td>
+<td>17K</td>
+<td>raw</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>veeprom</strong></td>
+<td>0x0000 4400</td>
+<td>2K</td>
+<td>raw</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>spl</strong></td>
+<td>0x0000 4C00</td>
+<td>512K</td>
+<td>raw</td>
+<td>0x80200000</td>
+</tr>
+<tr>
+<td><strong>ddr</strong></td>
+<td>0x0008 4C00</td>
+<td>512K</td>
+<td>raw</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>bl31</strong></td>
+<td>0x0010 4C00</td>
+<td>512K</td>
+<td>raw</td>
+<td>0x0000 0000</td>
+</tr>
+<tr>
+<td><strong>uboot</strong></td>
+<td>0x0018 4C00</td>
+<td>2M</td>
+<td>raw</td>
+<td>0x4000000</td>
+</tr>
+<tr>
+<td><strong>vbmeta</strong></td>
+<td>0x0038 4C00</td>
+<td>128K</td>
+<td>raw</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>vbmeta_b</strong></td>
+<td>0x003A 4C00</td>
+<td>128K</td>
+<td>raw</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>boot</strong></td>
+<td>0x003C 4C00</td>
+<td>10M</td>
+<td>raw</td>
+<td>0x280000</td>
+</tr>
+<tr>
+<td><strong>boot_b</strong></td>
+<td>0x00DC 4C00</td>
+<td>10M</td>
+<td>raw</td>
+<td>0x280000</td>
+</tr>
+<tr>
+<td><strong>system</strong></td>
+<td>0x017A 4C00</td>
+<td>150M</td>
+<td>ext4</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>system_b</strong></td>
+<td>0x0ADC 4C00</td>
+<td>150M</td>
+<td>ext4</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>bpu</strong></td>
+<td>0x143C 4C00</td>
+<td>100M</td>
+<td>raw</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>app</strong></td>
+<td>0x1A7C 4C00</td>
+<td>256M</td>
+<td>ext4</td>
+<td>*</td>
+</tr>
+<tr>
+<td><strong>userdata</strong></td>
+<td>0x2A7C 4C00</td>
+<td>6776M</td>
+<td>ext4</td>
+<td>*</td>
+</tr>
+</tbody>
+</table><ul class="simple">
+<li><p><strong>分区实现</strong></p></li>
+</ul>
+<p><img alt="236cce70994c18ba585777aac6181b86" src="../_images/236cce70994c18ba585777aac6181b86.png" /></p>
+</section>
+</section>
+<section id="gpt">
+<h3><span class="section-number">4.7.2.3. </span>GPT分区配置和修改说明<a class="headerlink" href="#gpt" title="永久链接至标题"></a></h3>
+<section id="id9">
+<h4>分区配置说明<a class="headerlink" href="#id9" title="永久链接至标题"></a></h4>
+<ul class="simple">
+<li><p><strong>配置文件：</strong></p></li>
+</ul>
+<p>单分区：build/device/horizon/x3/debug-gpt.config</p>
+<p>双分区：build/device/horizon/x3/debug-gpt-dual.conf</p>
+<p>配置文件通过”:”分割，不同的位表示不同的内容，如下是单分区的分区表</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">1</span>:veeprom:none:34s:37s:1
+
+<span class="m">1</span>:sbl/<span class="si">${</span><span class="nv">UBOOT_SPL_NAME</span><span class="si">}</span>:none:38s:1061s:1
+
+<span class="m">0</span>:sbl/<span class="si">${</span><span class="nv">UBOOT_WARM_SPL_NAME</span><span class="si">}</span>:none:550s:1061s:1
+
+<span class="m">1</span>:ddr/<span class="si">${</span><span class="nv">DDR_IMAGE_NAME</span><span class="si">}</span>:none:1062s:2085s:1
+
+<span class="m">0</span>:ddr/<span class="si">${</span><span class="nv">EFUSE_IMAGE_NAME</span><span class="si">}</span>:none:2080s:2085s:1
+
+<span class="m">1</span>:bl31/<span class="si">${</span><span class="nv">BL31_IMAGE_NAME</span><span class="si">}</span>:none:2086s:3109s:1
+
+<span class="m">1</span>:uboot/<span class="si">${</span><span class="nv">UBOOT_IMAGE_NAME</span><span class="si">}</span>:none:3110s:7205s:1
+
+<span class="m">0</span>:ubootbak/<span class="si">${</span><span class="nv">UBOOT_IMAGE_NAME</span><span class="si">}</span>:none:5158s:7205s:1
+
+<span class="m">1</span>:vbmeta/<span class="si">${</span><span class="nv">VBMETA_IMAGE_NAME</span><span class="si">}</span>:none:7206s:7461s:1
+
+<span class="m">1</span>:boot/<span class="si">${</span><span class="nv">BOOT_PART_IMAGE_NAME</span><span class="si">}</span>:none:7462s:27941s:1
+
+<span class="m">1</span>:recovery/<span class="si">${</span><span class="nv">BOOT_RECOVERY_IMAGE_NAME</span><span class="si">}</span>:none:27942s:58661s:1
+
+<span class="m">1</span>:system:ext4:58662s:365861s:1
+
+<span class="m">1</span>:bpu/<span class="si">${</span><span class="nv">BPU_IMAGE_NAME</span><span class="si">}</span>:none:365862s:570661s:1
+
+<span class="m">1</span>:app:ext4:570662s:1094949s:0
+
+<span class="m">1</span>:userdata:none:1094950s:15269751s:0
+</pre></div>
+</div>
+<p><strong>说明：</strong> 如果需要调整分区大小，可以直接修改GPT分区表中的start_sector和end_sector，后续的分区需要做对应调整。</p>
+<ul class="simple">
+<li><p>配置文件不同的位表示内容如下：</p></li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>0</th>
+<th>0：不需要单独分区，如uboot和uboot-bak只需要分配一个分区，uboot指定整个分区大小，ubootbak指定在整个分区占用的区域 1：需要单独分区</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>分区名</td>
+</tr>
+<tr>
+<td>2</td>
+<td>文件系统类型；none表示不需要格式化</td>
+</tr>
+<tr>
+<td>3</td>
+<td>start sector</td>
+</tr>
+<tr>
+<td>4</td>
+<td>end sector</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0：不需要打包到disk.img（烧写镜像），分区内无初始化内容；如app、userdata分区 1：需要打包到disk.img</td>
+</tr>
+</tbody>
+</table></section>
+<section id="id10">
+<h4>分区镜像生成<a class="headerlink" href="#id10" title="永久链接至标题"></a></h4>
+<ul class="simple">
+<li><p><strong>相关脚本</strong></p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>./partition.sh debug-gpt.conf \&lt;====== 这里生成分区镜像
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>添加文件到分区</strong></p></li>
+</ul>
+<p>该过程由partition.sh脚本完成，如果生成镜像的位置有文件夹名称和分区表名一样，则会在分区过程中自动拷贝文件夹内容到镜像中。</p>
+<p>例如：以上面debug-gpt.conf为例</p>
+<p>在partition.sh所在的目录，如果有kernel目录，则会在生成镜像的时候，将这个目录下的所有内容拷贝到对应的分区中</p>
+<p>如果system分区没有对应的名为system文件夹，则建立好镜像后，该分区没有文件。</p>
+<p>如果文件系统格式为none的条目，则使用dd命令将目标文件导入到disk.img镜像中</p>
+</section>
+</section>
+<section id="id11">
+<h3><span class="section-number">4.7.2.4. </span>OTA升级模式配置<a class="headerlink" href="#id11" title="永久链接至标题"></a></h3>
+<section id="id12">
+<h4>初始化配置<a class="headerlink" href="#id12" title="永久链接至标题"></a></h4>
+<ul class="simple">
+<li><p><strong>配置文件</strong></p></li>
+</ul>
+<p>路径：hbre/hbutils/ota_utility/S9updatecheck.sh</p>
+<p>SDK中路径：prebuilts/root/etc/rcS.d/ S9updatecheck.sh</p>
+<ul>
+<li><p><strong>初始化</strong></p>
+<p>模式初始化的位置如下，默认给golden模式，如果需要AB模式可以手动修改。</p>
+</li>
+</ul>
+</section>
+<section id="utility">
+<h4>通过utility修改模式<a class="headerlink" href="#utility" title="永久链接至标题"></a></h4>
+<p>提供hrut_otastatus工具修改升级模式，AB模式需要双分区支持，否则OTA升级会报错。</p>
+<ul class="simple">
+<li><p><strong>查询方法</strong></p></li>
+</ul>
+<p>hrut_otastatus g upmode</p>
+<ul class="simple">
+<li><p><strong>设置方法</strong></p></li>
+</ul>
+<p>hrut_otastatus s upmode &lt;AB | golden&gt;</p>
+<p><strong>说明：</strong> utility工具的使用方法，可以参考hrut_otastatus</p>
+</section>
+</section>
+<section id="id13">
+<h3><span class="section-number">4.7.2.5. </span>OTA标志位<a class="headerlink" href="#id13" title="永久链接至标题"></a></h3>
+<section id="id14">
+<h4>概述<a class="headerlink" href="#id14" title="永久链接至标题"></a></h4>
+<p>OTA升级的标志位保存在veeprom分区，用于在OTA升级的过程中进行完整性和鲁棒性判断，保证OTA升级的顺利进行。</p>
+<p>实现的标志位有：update_success, flash_success, first_try, app_success, reset_reason和part_status。</p>
+</section>
+<section id="up-flag">
+<h4>up_flag标志位<a class="headerlink" href="#up-flag" title="永久链接至标题"></a></h4>
+<p>其中，update_success, flash_success, first_try以及app_success统一作为”upflag”，占用1个byte，比特分布为：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Bit7</th>
+<th>Bit6</th>
+<th>Bit5</th>
+<th>Bit4</th>
+<th>Bit3</th>
+<th>Bit2</th>
+<th>Bit1</th>
+<th>Bit0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reserved</td>
+<td>reserved</td>
+<td>reserved</td>
+<td>reserved</td>
+<td>update_success</td>
+<td>flash_success</td>
+<td>First_try</td>
+<td>app_success</td>
+</tr>
+</tbody>
+</table><section id="update-success">
+<h5>update_success<a class="headerlink" href="#update-success" title="永久链接至标题"></a></h5>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>此标志位用于判断OTA升级是否成功</p>
+</li>
+<li><p><strong>具体实现：</strong></p>
+<p>1：升级成功</p>
+<p>0：升级失败</p>
+</li>
+</ul>
+</section>
+<section id="flash-success">
+<h5>flash_success<a class="headerlink" href="#flash-success" title="永久链接至标题"></a></h5>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>此标志位用于判断升级包镜像写入emmc或nor中是否成功</p>
+</li>
+<li><p><strong>具体实现：</strong></p>
+<p>1：emmc镜像写入成功</p>
+<p>0：emmc镜像写入失败</p>
+</li>
+</ul>
+</section>
+<section id="first-try">
+<h5>first_try<a class="headerlink" href="#first-try" title="永久链接至标题"></a></h5>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>此标志用于判断OTA升级后，是否是第一次启动。</p>
+<p>如果是第一次启动，则会尝试启动更新的分区或系统；否则正常启动。</p>
+</li>
+<li><p><strong>具体实现：</strong></p>
+<p>1：OTA升级后的第一次启动</p>
+<p>0：正常启动</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="app-success">
+<h4>app_success<a class="headerlink" href="#app-success" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>此标志位用于判断，镜像更新重启后，核心APP是否启动成功。</p>
+</li>
+<li><p><strong>具体实现：</strong></p>
+<p>1：更新后进入rootfs，app启动成功</p>
+<p>0：更新后进入rootfs，app启动失败</p>
+<p>注：目前因没有具体APP是否启动成功的判断功能，当能正常进入rootfs，则认为app启动成功。</p>
+</li>
+</ul>
+</section>
+<section id="reset-reason">
+<h4>reset_reason<a class="headerlink" href="#reset-reason" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>用于记录此次OTA升级更新的具体partition name，正常启动或强制进入recovery模式。</p>
+</li>
+<li><p><strong>具体实现：</strong></p>
+<p>uboot/system/kernel：表示此次OTA升级的是对应分区</p>
+<p>all：表示OTA升级所有的分区，包括uboot、kernel和system</p>
+<p>normal：正常启动</p>
+<p>recovery：进入recovery模式</p>
+</li>
+</ul>
+</section>
+<section id="part-status">
+<h4>part_status<a class="headerlink" href="#part-status" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>用于标记当前系统所处的分区状态（即A分区或B分区）</p>
+</li>
+</ul>
+<p>升级前： 00000000 在ubootA分区</p>
+<p>升级uboot分区后： 00000010 在ubootB分区</p>
+<ul>
+<li><p><strong>具体实现：</strong></p>
+<p>0：表示在A分区</p>
+<p>1：表示在B分区</p>
+<p>初始状态：00000000 ，升级对应的分区后，在AB模式下会更新分区状态</p>
+<p>每一位对应的分区如下：</p>
+</li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>bit7</th>
+<th>bit6</th>
+<th>bit5</th>
+<th>bit4</th>
+<th>bit3</th>
+<th>bit2</th>
+<th>bit1</th>
+<th>bit0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td>userdata</td>
+<td>app</td>
+<td>system</td>
+<td>kernel</td>
+<td>uboot</td>
+<td>spl</td>
+</tr>
+</tbody>
+</table><p><strong>例如：</strong></p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Action</th>
+<th>Value</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Before updating UBoot</td>
+<td>0b00000000</td>
+<td>Booting from UBootA</td>
+</tr>
+<tr>
+<td>After updating UBoot</td>
+<td>0b00000010</td>
+<td>Booting from UBootB</td>
+</tr>
+</tbody>
+</table></section>
+</section>
+<section id="id15">
+<h3><span class="section-number">4.7.2.6. </span>OTA日志系统<a class="headerlink" href="#id15" title="永久链接至标题"></a></h3>
+<section id="id16">
+<h4>概述<a class="headerlink" href="#id16" title="永久链接至标题"></a></h4>
+<p>OTA日志系统用于保存OTA升级过程中的log信息、出错时的错误信息和OTA升级的结果信息。</p>
+<ul class="simple">
+<li><p><strong>日志存放位置：</strong></p>
+<ul>
+<li><p>默认使用/userdata/cache 目录存放日志</p></li>
+<li><p>/userdata/cache空间满，则使用/tmp/cache空间临时存放日志</p></li>
+<li><p>/tmp/cache空间也满，就停止升级（ps: 这时升级包也已经放不下了）</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>说明：</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>放在/tmp空间，重启后日志丢失，这个影响不是很大，OTA重启后会再次创建日志文件，确保download工具query时必要日志存在，只是丢失了一些log信息（ps:使用/ota目录，更新disk.img也会有这个问题）
+</pre></div>
+</div>
+</section>
+<section id="command">
+<h4>文件：command<a class="headerlink" href="#command" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>保存升级分区名和升级包的绝对路径，用于up_partition.sh脚本或recovery模式获取升级的分区和升级包。</p>
+</li>
+<li><p><strong>文件格式：</strong></p>
+<p>partition_name/absolute_path</p>
+<p>partition_name：指要升级的分区（uboot, kernel, system, all等）</p>
+<p>absolute_path：升级包的绝对路径</p>
+</li>
+<li><p><strong>实现示例：</strong></p>
+<p>uboot//userdata/up_img/uboot.zip</p>
+</li>
+</ul>
+</section>
+<section id="info">
+<h4>文件：info<a class="headerlink" href="#info" title="永久链接至标题"></a></h4>
+<p><strong>功能说明：</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>保存OTA升级过程中的log信息，用于查看OTA升级的细节和出错时定位具体的原因。
+</pre></div>
+</div>
+<p><strong>文件格式：</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[OTA_INFO]log[OFNI_ATO]
+
+[OTA_INFO]：log信息前后加上OTA_INFO，便于download工具获取log信息
+</pre></div>
+</div>
+<p><strong>实现示例：</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[OTA_INFO]boot mode: emmc[OFNI_ATO]
+
+[OTA_INFO]parameter check success[OFNI_ATO]
+
+[OTA_INFO]get ota_upmode golden[OFNI_ATO]
+
+[OTA_INFO]upgrade_need_space: 1027[OFNI_ATO]
+
+[OTA_INFO]tmp_free_space: 95920[OFNI_ATO]
+
+[OTA_INFO]userdata_free_space: 2924764[OFNI_ATO]
+
+[OTA_INFO]get ota_upmode golden[OFNI_ATO]
+
+[OTA_INFO]check update mode golden success[OFNI_ATO]
+</pre></div>
+</div>
+</section>
+<section id="progress">
+<h4>文件：progress<a class="headerlink" href="#progress" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>保存OTA升级的进度信息，用于查看OTA的进度。</p>
+</li>
+<li><p><strong>文件格式：</strong></p>
+<p>[OTA_PROGRESS]log[SSERGORP_ATO]</p>
+<p>[OTA_PROGRESS]：log信息前后加上OTA_PROGRESS，便于download工具获取log信息</p>
+</li>
+<li><p><strong>实现示例：</strong></p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[OTA_PROGRESS]5%[SSERGORP_ATO]
+
+[OTA_PROGRESS]10%[SSERGORP_ATO]
+
+[OTA_PROGRESS]15%[SSERGORP_ATO]
+
+[OTA_PROGRESS]20%[SSERGORP_ATO]
+
+[OTA_PROGRESS]30%[SSERGORP_ATO]
+
+[OTA_PROGRESS]90%[SSERGORP_ATO]
+
+[OTA_PROGRESS]95%[SSERGORP_ATO]
+
+[OTA_PROGRESS]100%[SSERGORP_ATO]
+</pre></div>
+</div>
+</section>
+<section id="result">
+<h4>文件：result<a class="headerlink" href="#result" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能定义：</strong></p>
+<p>保存OTA升级的结果信息</p>
+</li>
+<li><p><strong>文件格式：</strong></p>
+<p>使用0,1,2来表示升级的结果，具体定义如下</p>
+<p>0：升级进行中或未开始</p>
+<p>1：升级成功</p>
+<p>2：升级失败</p>
+</li>
+<li><p><strong>实现示例：</strong></p>
+<p>0 //升级开始时，写入0</p>
+<p>1 //升级成功，写入1</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="id17">
+<h3><span class="section-number">4.7.2.7. </span>OTA升级脚本<a class="headerlink" href="#id17" title="永久链接至标题"></a></h3>
+<section id="id18">
+<h4>概述<a class="headerlink" href="#id18" title="永久链接至标题"></a></h4>
+<p>OTA升级的主要部分，完成OTA升级包校验、系统状态判断、以及OTA升级镜像的写入功能。主要包括otaupdate, hbota_utility, up_partition.sh和S9updatecheck.sh。</p>
+<ul class="simple">
+<li><p><strong>代码路径：</strong></p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hbre</span><span class="o">/</span><span class="n">hbutils</span><span class="o">/</span><span class="n">ota_utility</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>脚本之间的关系：</strong></p></li>
+</ul>
+<p><img alt="image-202203252302-3.7.1" src="../_images/image-202203252302-3.7.1.png" /></p>
+</section>
+<section id="otaupdate">
+<h4>脚本：otaupdate<a class="headerlink" href="#otaupdate" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>Otaupdate是CP侧升级的接口，OTA升级会首先在CP侧调用此接口，该脚本的主要功能有：</p>
+</li>
+<li><p><strong>参数检查：</strong> 首先检查partition和image是否合法，partition是否为系统的分区，image升级文件是否存在，partition和image是否匹配等。</p></li>
+<li><p><strong>创建日志：</strong> 升级之前先创建info, result, progress等日志文件，保存OTA升级的日志信息和升级出错时的错误信息。</p></li>
+<li><p><strong>模式检查：</strong> 检查系统是否支持recovery模式，如果golden模式下没有recovery.gz镜像，则停止升级。</p></li>
+<li><p><strong>剩余空间检查：</strong> 升级前查询系统空间使用情况，确定使用userdata空间或tmp空间进行OTA升级。如果需要的空间不足，则停止升级。</p></li>
+<li><p><strong>系统版本认证：</strong> 对升级包中的版本信息进行验证，详见 版本校验</p></li>
+<li><p><strong>GPT分区认证</strong>：对升级包中的GPT信息进行验证，详见 分区校验</p></li>
+<li><p><strong>RSA签名认证：</strong> 对升级包中的签名进行验证，详见 签名校验</p></li>
+<li><p><strong>Warning信息提取：</strong> 提取升级包中的warning信息，并输出到日志warning中，详见 warning 信息约定</p></li>
+<li><p><strong>向otapipe发送升级信号：</strong> 所有上述验证通过后，otaupdate会向otapipe发送升级信息，信号格式如下：</p>
+<ol class="simple">
+<li><p>echo “$file $up_partition $image $upgrade_file_path” &gt; $pipe</p></li>
+</ol>
+</li>
+<li><p>接口定义：</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> root@x3sdbx3-samsung2G-3200:~# otaupd
+ Usa
+ otaupdate partition_name img_f
+ --partition_na
+ uboot <span class="p">|</span> kernel <span class="p">|</span> system <span class="p">|</span> app <span class="p">|</span> 
+ --img_fi
+ uboot.zip <span class="p">|</span> kernel.zip <span class="p">|</span> system.zip <span class="p">|</span> all_in_one.zip
+</pre></div>
+</div>
+</section>
+<section id="hbota-utility">
+<h4>脚本：hbota_utility<a class="headerlink" href="#hbota-utility" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>在系统启动的时候，hbota_utility会在后台创建otapipe管道，otapipe接收到OTA升级信号后主要做2件事：</p>
+</li>
+<li><p>关闭在OTA升级前需要退出的程序，例如：HBIPC相关进程。</p></li>
+<li><p>调用up_partition.sh进行升级。</p></li>
+</ul>
+</section>
+<section id="up-partition-sh">
+<h4>脚本：up_partition.sh<a class="headerlink" href="#up-partition-sh" title="永久链接至标题"></a></h4>
+<ul class="simple">
+<li><p><strong>功能说明：</strong></p></li>
+</ul>
+<p>实现镜像写入emmc或nor flash的功能，支持对单分区镜像和all_in_one.zip的升级。up_partition.sh在确认升级包在后，会调用升级包中的update.sh脚本来完成镜像写入。</p>
+<ul class="simple">
+<li><p><strong>参数检查：</strong>
+确保升级包存在</p></li>
+<li><p><strong>调用update.sh：</strong>
+升级包中存在update.sh，直接调用update.sh执行升级。</p></li>
+<li><p><strong>直接升级：</strong>
+升级包中不存在update.sh，判断是否是分区img镜像，如果是直接升级。</p></li>
+<li><p><strong>标志位和日志更新：</strong>
+镜像写入成功后，更新upflag, resetreason等相关标志位和日志，用于重启后，系统判断升级是否成功。</p></li>
+<li><p><strong>重启：</strong>
+执行reboot操作。</p></li>
+</ul>
+</section>
+<section id="s9updatecheck-sh">
+<h4>脚本s9updatecheck.sh<a class="headerlink" href="#s9updatecheck-sh" title="永久链接至标题"></a></h4>
+<ul class="simple">
+<li><p><strong>功能说明：</strong>
+初始化和OTA升级后检查脚本，主要功能如下：</p></li>
+<li><p><strong>初始化veeprom：</strong>
+在系统启动时，该脚本会检查veeprom是否初始化，如果未初始化，则初始化boardid，upflag，upmode，resetreason和partstatus等标志位。</p></li>
+<li><p><strong>启动otapipe：</strong>
+在系统启动时，会自动启动hbota_utility，创建管道otapipe，等待接收OTA升级信号。</p></li>
+<li><p><strong>检查升级是否成功：</strong>
+根据标志位检查OTA升级是否成功，并写入相关结果到veeprom的标志位和日志文件中，</p></li>
+<li><p><strong>恢复功能：</strong>
+如果升级失败，golden双分区模式会尝试使用备份分区恢复原分区，确保系统的鲁棒性。</p></li>
+</ul>
+</section>
+</section>
+<section id="ota-utility">
+<h3><span class="section-number">4.7.2.8. </span>OTA utility定义<a class="headerlink" href="#ota-utility" title="永久链接至标题"></a></h3>
+<section id="id19">
+<h4>概述<a class="headerlink" href="#id19" title="永久链接至标题"></a></h4>
+<p>OTA相关的utility用于辅助OTA升级，支持对veeprom中相关标志位的读写，支持对OTA日志文件的查询。</p>
+<p>Utility相关代码路径如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hbre</span><span class="o">/</span><span class="n">hbutils</span><span class="o">/</span><span class="n">utility</span>
+</pre></div>
+</div>
+<p>veeprom分区根据存储介质不同，分区定义如下：</p>
+<p><img alt="731145ae706d96321edc1dc6792de7b9" src="../_images/731145ae706d96321edc1dc6792de7b9.png" /></p>
+</section>
+<section id="hrut-boardid">
+<h4>程序：hrut_boardid<a class="headerlink" href="#hrut-boardid" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>查询和设置开发板的board id。“board id”的详细介绍，请参考地平线DDR编程指南。</p>
+</li>
+<li><p><strong>实现原理：</strong></p>
+<p>小写的s和g读写veeprom标志位，标志位在veeprom中定义如下：</p>
+</li>
+</ul>
+<p><img alt="aaf7497d03d1a50dcc4bed473dc0f5e2" src="../_images/aaf7497d03d1a50dcc4bed473dc0f5e2.png" /></p>
+<p>大写的S和G读写bootinfo中board id位</p>
+<ul class="simple">
+<li><p><strong>使用方法：</strong></p></li>
+</ul>
+<p>X3J3：</p>
+<p><img alt="5a407f63085bfc944a3548b887c8f78c" src="../_images/5a407f63085bfc944a3548b887c8f78c.png" /></p>
+</section>
+<section id="hrut-eeprom">
+<h4>程序：hrut_eeprom<a class="headerlink" href="#hrut-eeprom" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>查询和设置veeprom中的数据</p>
+</li>
+<li><p><strong>实现原理：</strong></p>
+<p>直接对veeprom分区进行操作，read/write/clear/dump分区中的数据</p>
+</li>
+<li><p><strong>使用方法：</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:~# hrut_eepr
+ usag
+ hrut_eeprom r ADDR SIZE : Read data <span class="k">in</span> eepr
+ hrut_eeprom w ADDR 0xAA 0xBB ** : Write data to eepr
+ hrut_eeprom c : Clear eepr
+ hrut_eeprom d : Display all the data <span class="k">in</span> eepr
+</pre></div>
+</div>
+</section>
+</section>
+<section id="hrut-resetreason">
+<h3><span class="section-number">4.7.2.9. </span>程序：hrut_resetreason<a class="headerlink" href="#hrut-resetreason" title="永久链接至标题"></a></h3>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>查询或设置系统的resetreason</p>
+</li>
+<li><p><strong>实现原理：</strong></p>
+<p>读写veeprom中的resetreason标志位，标志位定义如下：</p>
+</li>
+</ul>
+<p><img alt="8f15c6e0537d23972aaf55669cb30f7c" src="../_images/8f15c6e0537d23972aaf55669cb30f7c.png" /></p>
+<ul>
+<li><p><strong>使用方法：</strong></p>
+<p><strong>查询：</strong> 不带参数，直接执行hrut_resetreason</p>
+<p><strong>设置：</strong> 带参数，设置执行hrut_resetreason &lt;value&gt;</p>
+<p>value取值范围：uboot | kernel | system | all | normal | recovery</p>
+</li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> root@x3sdbx3-samsung2G-3200:~# hrut_resetrea
+ nor
+ root@x3sdbx3-samsung2G-3200:~#
+ root@x3sdbx3-samsung2G-3200:~#
+ root@x3sdbx3-samsung2G-3200:~# hrut_resetreason recov
+ recovery
+</pre></div>
+</div>
+<section id="hrut-count">
+<h4>程序：hrut_count<a class="headerlink" href="#hrut-count" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>OTA中引入count功能，如果系统连续25次启动未成功，会进入备份系统或recovery模式。</p>
+<p>注：未启动成功指系统启动未进入rootfs</p>
+<p>在build/ddr/hb_imem_parameter.c 文件init_ddr_header函数中可以设置ota_check_count，设置为0，上电将不检查count。默认设置为25，表示连续25次启动未成功，进入备份或recovery模式。</p>
+</li>
+<li><p><strong>实现原理：</strong></p>
+<p><strong>启动过程对Count的操作：</strong></p>
+<p><strong>Count加操作：</strong> 每次启动spl中会做count +1操作</p>
+<p><strong>Count减操作：</strong> 每次进入rootfs中，S9updatecheck.sh脚本会初始化count = 0</p>
+<p><strong>Utility操作：</strong>
+读写veeprom中的count标志位，标志位定义如下：</p>
+</li>
+</ul>
+<p><img alt="610bc91dbc5adc675fc027c06dc3b4bb" src="../_images/610bc91dbc5adc675fc027c06dc3b4bb.png" /></p>
+<ul>
+<li><p>使用方法：</p>
+<p><strong>查询：</strong> 不带参数，直接执行hrut_count</p>
+<p><strong>设置：</strong> 带参数，执行hrut_count &lt;value&gt;</p>
+<p>value取值范围：0 - 25</p>
+</li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> root@x3sdbx3-samsung2G-3200:~# hrut_count
+ <span class="m">25</span>
+ root@x3sdbx3-samsung2G-3200:~#
+ root@x3sdbx3-samsung2G-3200:~#
+ root@x3sdbx3-samsung2G-3200:~# hrut_count <span class="m">9</span>
+ <span class="m">9</span>
+</pre></div>
+</div>
+</section>
+<section id="hrut-otastatus">
+<h4>程序：hrut_otastatus<a class="headerlink" href="#hrut-otastatus" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>查询或设置OTA相关标志，包括：upflag，upmode和upstatus</p>
+</li>
+<li><p><strong>实现原理：</strong></p>
+<p>读写veeprom中的upflag，upmode和upstatus标志位，标志位定义如下：</p>
+</li>
+</ul>
+<p><img alt="aacce78b8852a67b82adddbe3dcf8428" src="../_images/aacce78b8852a67b82adddbe3dcf8428.png" /></p>
+<p><img alt="4658d6077d3043804f9d472efcb1574b" src="../_images/4658d6077d3043804f9d472efcb1574b.png" /></p>
+<ul class="simple">
+<li><p><strong>使用方法：</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:~# hrut_otastatus
+
+Usage: hrut_otastatus <span class="o">[</span>Options<span class="o">]</span> &lt;Target&gt; &lt;value&gt;
+
+Example:
+
+hrut_otastatus g upflag
+
+hrut_otastatus s upflag <span class="m">13</span>
+
+Options:
+
+g gain <span class="o">[</span>upflag <span class="p">|</span> upmode <span class="p">|</span> partstatus<span class="o">]</span>
+
+s <span class="nb">set</span> <span class="o">[</span>upflag <span class="p">|</span> upmode <span class="p">|</span> partstatus<span class="o">]</span>
+
+h display this <span class="nb">help</span> text
+
+Target:
+
+upflag OTA update flag
+
+upmode OTA update mode <span class="o">[</span>AB <span class="p">|</span> golden<span class="o">]</span>
+
+partstatus GPT partition status
+</pre></div>
+</div>
+</section>
+<section id="hrut-checksuccess">
+<h4>脚本：hrut_checksuccess<a class="headerlink" href="#hrut-checksuccess" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>查询OTA升级的result信息</p>
+</li>
+<li><p><strong>实现原理：</strong></p>
+<p>直接读取log文件：result的结果，result中信息的定义详见 result
+默认输出3次（P.S.：与download tools之间的约定，方便获取结果）</p>
+</li>
+<li><p><strong>使用方法：</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> root@x3sdbx3-samsung2G-3200:~# hrut_checksuccess
+
+ <span class="m">1</span>
+ <span class="m">1</span>
+ <span class="m">1</span>
+</pre></div>
+</div>
+</section>
+<section id="hrut-checkinfo">
+<h4>脚本：hrut_checkinfo<a class="headerlink" href="#hrut-checkinfo" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>查询OTA升级的info信息</p>
+</li>
+<li><p><strong>实现原理：</strong></p>
+<p>直接读取log文件：info的结果，info中信息的定义详见 info
+默认输出info文件的最后一行log信息，输出3次（P.S.：与download tools之间的约定，方便获取结果）</p>
+</li>
+<li><p><strong>使用方法：</strong></p>
+<p>参数：l 会过滤掉[OTA_INFO] [OFNI_ATO]</p>
+</li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:~# hrut_checkinfo l
+
+write uboot img to emmc success
+
+write uboot img to emmc success
+
+write uboot img to emmc success
+
+root@x3sdbx3-samsung2G-3200:~#
+
+root@x3sdbx3-samsung2G-3200:~#
+
+root@x3sdbx3-samsung2G-3200:~# hrut_checkinfo
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span>write uboot img to emmc success <span class="o">[</span>OFNI_ATO<span class="o">]</span>
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span>write uboot img to emmc success <span class="o">[</span>OFNI_ATO<span class="o">]</span>
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span> write uboot img to emmc success <span class="o">[</span>OFNI_ATO<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<section id="hrut-checkprogress">
+<h4>脚本：hrut_checkprogress<a class="headerlink" href="#hrut-checkprogress" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>查询OTA升级的progress信息</p>
+</li>
+<li><p><strong>实现原理：</strong></p>
+<p>直接读取log文件progress，progress中信息的定义详见 progress
+默认输出progress文件的最后一行log信息，输出3次（P.S.：与download tools之间的约定，方便获取结果）</p>
+</li>
+<li><p><strong>使用方法：</strong></p>
+<p>参数：l 会过滤掉[OTA_INFO] [OFNI_ATO]</p>
+</li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:~# hrut_checkprogress l
+
+<span class="m">100</span>%
+
+<span class="m">100</span>%
+
+<span class="m">100</span>%
+
+root@x3sdbx3-samsung2G-3200:~#
+
+root@x3sdbx3-samsung2G-3200:~#
+
+root@x3sdbx3-samsung2G-3200:~# hrut_checkprogress
+
+<span class="o">[</span>OTA_PROGRESS<span class="o">]</span><span class="m">100</span>%<span class="o">[</span>SSERGORP_ATO<span class="o">]</span>
+
+<span class="o">[</span>OTA_PROGRESS<span class="o">]</span><span class="m">100</span>%<span class="o">[</span>SSERGORP_ATO<span class="o">]</span>
+
+<span class="o">[</span>OTA_PROGRESS<span class="o">]</span><span class="m">100</span>%<span class="o">[</span>SSERGORP_ATO<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<section id="hrut-otaextrainfo">
+<h4>脚本：hrut_otaextrainfo<a class="headerlink" href="#hrut-otaextrainfo" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>查询OTA升级的warning信息，warning信息具体介绍见 warning 信息约定</p>
+</li>
+<li><p><strong>实现原理：</strong></p>
+<p>直接读取log文件warning中信息</p>
+<p>默认输出warning文件的所有信息，输出1次</p>
+</li>
+<li><p><strong>使用方法：</strong></p>
+<p>参数：l 会过滤掉[OTA_INFO] [OFNI_ATO]</p>
+</li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:~# hrut_otaextrainfo l
+
+wait_before_query: <span class="m">51</span>
+
+estimate: <span class="m">51</span>
+
+msg: The update will take about <span class="m">51</span> seconds
+
+root@x3sdbx3-samsung2G-3200:~#
+
+root@x3sdbx3-samsung2G-3200:~#
+
+root@x3sdbx3-samsung2G-3200:~# hrut_otaextrainfo
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span>wait_before_query: <span class="m">51</span>
+
+estimate: <span class="m">51</span>
+
+msg: The update will take about <span class="m">51</span> seconds<span class="o">[</span>OFNI_ATO<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="warning">
+<h3><span class="section-number">4.7.2.10. </span>Warning信息约定<a class="headerlink" href="#warning" title="永久链接至标题"></a></h3>
+<section id="id20">
+<h4>功能介绍<a class="headerlink" href="#id20" title="永久链接至标题"></a></h4>
+<p>warning信息中定义download工具在升级开始后的查询等待时间、预估升级时间和提示信息。具体定义如下：</p>
+<ul>
+<li><p>wait_before_query：开始升级后，download工具查询前的等待时间，避免系统升级过程中，download工具查询引起OTA升级失败的情况出现。</p>
+<p>（ps：升级过程中，系统所处的一些状态不能进行查询操作，会导致系统异常。）</p>
+</li>
+<li><p>estimate：预估的OTA升级所需要的总时间，estimate &gt;= wait_before_query。</p></li>
+<li><p>msg：提示信息，用于向用户提示该升级包中需要注意的地方，例如：升级需要等待的时间。</p>
+<p>例如：约定文件名为warning.txt，在升级包的根目录</p>
+<ol class="simple">
+<li><p>wait_before_query: 60</p></li>
+<li><p>estimate: 60</p></li>
+<li><p>msg: the update will take about 60 minutes</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="id21">
+<h4>使用方法<a class="headerlink" href="#id21" title="永久链接至标题"></a></h4>
+<p>OTA升级过程中会提取升级包中的warning信息，download工具通过utility</p>
+<p>hrut_otaextrainfo查询并获取warning相关信息。</p>
+</section>
+</section>
+<section id="recovery">
+<h3><span class="section-number">4.7.2.11. </span>recovery实现<a class="headerlink" href="#recovery" title="永久链接至标题"></a></h3>
+<section id="id22">
+<h4>recovery功能介绍<a class="headerlink" href="#id22" title="永久链接至标题"></a></h4>
+<section id="id23">
+<h5>镜像说明<a class="headerlink" href="#id23" title="永久链接至标题"></a></h5>
+<p>Recovery分区的镜像内容如下：</p>
+<p><img alt="image-202203252328-3.10.1.1" src="../_images/image-202203252328-3.10.1.1.png" /></p>
+<ul class="simple">
+<li><p><strong>recovery.gz：</strong> Kernel镜像(附带cpio)的压缩文件，用于升级失败后恢复；</p></li>
+<li><p><strong>hobot-xj3-dtb.img:</strong>  结合了dtb文件以及dtb-mapping的镜像文件</p></li>
+<li><p><strong>*.dtb：</strong> dtb文件，每个开发板的配置不同，通过dtb来区分不同的开发板；</p></li>
+<li><p><strong>dtb-mapping.conf：</strong> board id，gpio id和dtb的索引文件，用于通过board id和gpio id来查找dtb文件。</p></li>
+</ul>
+</section>
+<section id="id24">
+<h5>recovery系统的功能：<a class="headerlink" href="#id24" title="永久链接至标题"></a></h5>
+<p><strong>1）系统升级</strong></p>
+<p>在golden单分区模式下，升级失败后会进入recovery系统，可以再次进行系统升级，升级次数不受限制，升级成功后会回到正常系统。</p>
+<p>可以强制进入recovery系统，进行系统升级。</p>
+<p><strong>2）其他操作</strong></p>
+<p>可以强制进入recovery系统，进行其他操作。例如：emmc分区操作等。</p>
+</section>
+</section>
+<section id="id25">
+<h4>进入recovery模式的方式<a class="headerlink" href="#id25" title="永久链接至标题"></a></h4>
+<section id="id26">
+<h5>自动进入<a class="headerlink" href="#id26" title="永久链接至标题"></a></h5>
+<p>OTA升级失败后，golden方式会进入recovery系统。</p>
+</section>
+<section id="id27">
+<h5>手动进入<a class="headerlink" href="#id27" title="永久链接至标题"></a></h5>
+<p>通过设置标志位reset_reason为recovery，重启后进入recovery系统。</p>
+<ul class="simple">
+<li><p><strong>进入方法：</strong></p>
+<ol class="simple">
+<li><p>hrut_reasetreason recovery //设置resetreason为recovery</p></li>
+<li><p>reboot //重启后，进入recovery系统</p></li>
+</ol>
+</li>
+<li><p><strong>退出方法：</strong></p>
+<ol class="simple">
+<li><p>hrut_reasetreason normal //设置resetreason为normal</p></li>
+<li><p>reboot //重启后，返回正常系统</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="id28">
+<h5>硬件设置<a class="headerlink" href="#id28" title="永久链接至标题"></a></h5>
+<p>启动过程中，通过相关gpio的值，可以进入recovery系统。（待实现）</p>
+<p>例如：可以通过特殊的键组合 电源键 + 音量键</p>
+</section>
+</section>
+</section>
+<section id="id29">
+<h3><span class="section-number">4.7.2.12. </span>OTA升级流程<a class="headerlink" href="#id29" title="永久链接至标题"></a></h3>
+<section id="golden">
+<h4>golden模式升级流程<a class="headerlink" href="#golden" title="永久链接至标题"></a></h4>
+<blockquote>
+<div><p>golden模式支持单分区方案，uboot做双备份，用于recovery系统</p>
+</div></blockquote>
+<blockquote>
+<div><p>A：golden模式正常使用的系统</p>
+</div></blockquote>
+<section id="id30">
+<h5>实现原理<a class="headerlink" href="#id30" title="永久链接至标题"></a></h5>
+<p>1）A为golden模式使用的系统，OTA只升级A系统。</p>
+<p>2）A升级成功，继续在A系统运行；升级失败，则进入recovery系统；</p>
+<p>3）升级失败后，可在recovery系统下再次升级；</p>
+</section>
+<section id="id31">
+<h5>升级流程<a class="headerlink" href="#id31" title="永久链接至标题"></a></h5>
+<p>例如：升级all_in_one.zip</p>
+<p>1）升级包获取：A系统正在运行，获取升级包all_in_one.zip，准备升级A系统;</p>
+<p>2）升级：调用板端接口otaupdate，使用升级包升级A系统，设置相关标志位，创建临时文件系统，chroot到临时文件系统进行升级；</p>
+<p>3）重启验证：验证A是否升级成功，升级成功，继续运行A；升级失败，进入recovery系统恢复系统或再次尝试进行升级；</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>a）成功：继续使用A系统
+
+b）失败：重启进入recovery系统，在recovery系统下，如果为双分区，则尝试恢复系统，如果为单分区支持再次升级。
+</pre></div>
+</div>
+</section>
+<section id="id32">
+<h5>流程图<a class="headerlink" href="#id32" title="永久链接至标题"></a></h5>
+<p><img alt="image-202203252336-3.11.1.3" src="../_images/image-202203252336-3.11.1.3.png" /></p>
+</section>
+</section>
+<section id="ab">
+<h4>AB模式升级流程<a class="headerlink" href="#ab" title="永久链接至标题"></a></h4>
+<blockquote>
+<div><p>AB模式只支持双分区方案，A系统和B系统等价，互为对方的备份</p>
+</div></blockquote>
+<blockquote>
+<div><p>A：正在使用的系统 B：未使用的备份系统</p>
+</div></blockquote>
+<section id="id33">
+<h5>实现原理<a class="headerlink" href="#id33" title="永久链接至标题"></a></h5>
+<p>1）A为当前正在运行的系统或分区，OTA升级时升级B系统或分区；</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>注：这个方案只针对AB模式
+</pre></div>
+</div>
+<p>2）A升级B成功，进行系统分区状态切换，进入B系统或分区继续运行；升级失败，则回退到A系统继续运行。</p>
+<p>3）升级失败后，A系统或分区可以再次升级B系统或分区，直到升级成功。</p>
+</section>
+<section id="id34">
+<h5>升级流程<a class="headerlink" href="#id34" title="永久链接至标题"></a></h5>
+<p>例如：升级all_in_one.zip</p>
+<p>1）升级包获取：A系统正在运行，获取升级包all_in_one.zip，准备升级B系统</p>
+<p>2）升级：调用板端接口otaupdate，使用升级包升级B系统，设置相关标志位，开始升级</p>
+<p>3）重启验证：验证B是否升级成功，升级成功，运行B；升级失败，回退到A系统；</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>a）成功：切换A(system) --\&gt; B(systembak)，使用B系统
+
+b）失败：重启回到A，再次升级时升级B，B升级成功才会使用B
+</pre></div>
+</div>
+</section>
+<section id="id35">
+<h5>流程图<a class="headerlink" href="#id35" title="永久链接至标题"></a></h5>
+<p><img alt="image-202203252336-3.11.2.3" src="../_images/image-202203252336-3.11.2.3.png" /></p>
+</section>
+</section>
+<section id="ubootota">
+<h4>uboot中OTA实现原理<a class="headerlink" href="#ubootota" title="永久链接至标题"></a></h4>
+</section>
+<section id="id36">
+<h4>实现原理<a class="headerlink" href="#id36" title="永久链接至标题"></a></h4>
+<p>1）校验upmode位：UBoot首先判断系统是否支持OTA，如果不支持OTA，则跳过OTA标志位校验，正常启动系统。是否支持OTA通过veeprom中的upmode位进行判断。</p>
+<ul class="simple">
+<li><p>AB：AB模式，支持OTA</p></li>
+<li><p>Golden：golden模式，支持OTA</p></li>
+<li><p>其它：未初始化，不支持OTA</p></li>
+</ul>
+<p>2）校验boot_reason位：如果支持OTA，则校验boot_reason位，根据boot_reason位判断是否是升级流程。</p>
+<ul class="simple">
+<li><p>normal：系统正常启动，正常启动kernel和system</p></li>
+<li><p>recovery：升级失败或强制进入recovery系统，启动recovery.gz</p></li>
+<li><p>uboot/kernel/system/all：升级流程，进入步骤3</p></li>
+</ul>
+<p>3）判断是否升级kernel和system：根据boot_reason判断是否是升级kernel和system。</p>
+<ul class="simple">
+<li><p>kernel/system/all：此次OTA升级了kernel或system，进入步骤4</p></li>
+<li><p>uboot：此次OTA未升级kernel和system，正常启动kernel和system</p></li>
+</ul>
+<p>4）判断flash_success位：根据flash_success位判断镜像写入是否成功。</p>
+<ul class="simple">
+<li><p>true：镜像写入emmc/nor中成功，进入步骤5</p></li>
+<li><p>false：镜像写入emmc/nor中失败，升级失败。AB模式启动原分区（升级前使用的kernel或system分区），golden模式启动recovery.gz。</p></li>
+</ul>
+<p>5）判断first_try位：根据first_try位判断是否是第一次启动。</p>
+<ul class="simple">
+<li><p>true：OTA升级后第一次启动，正常启动kernel和system</p></li>
+<li><p>false：OTA升级后第一次启动失败，进入步骤6</p></li>
+</ul>
+<p>6）判断app_success位：根据app_success位判断app是否启动成功。</p>
+<ul class="simple">
+<li><p>true：正常启动kernel和system（ps：目前OTA正常升级流程，不会走到这个位置）</p></li>
+<li><p>false：OTA升级失败，AB模式启动原分区（升级前使用的kernel和system分区），golden模式启动recovery.gz。</p></li>
+</ul>
+</section>
+<section id="id37">
+<h4>流程图<a class="headerlink" href="#id37" title="永久链接至标题"></a></h4>
+<p><img alt="image-202203252336-3.12.2" src="../_images/image-202203252336-3.12.2.png" /></p>
+</section>
+</section>
+<section id="ota-secure">
+<h3><span class="section-number">4.7.2.13. </span>OTA secure方案<a class="headerlink" href="#ota-secure" title="永久链接至标题"></a></h3>
+<section id="id38">
+<h4>版本校验<a class="headerlink" href="#id38" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>OTA升级前会进行版本校验，验证升级包的版本是否低于系统的版本，如果低于系统版本，则停止升级。（ps：防止版本回退）</p>
+</li>
+</ul>
+<p><img alt="image-202203252336-3.13.1" src="../_images/image-202203252336-3.13.1.png" /></p>
+<p><strong>注：下面两种方式可跳过版本校验。</strong></p>
+<p>（1）提供版本降级方案，使用disk.img的升级包即all_disk.zip跳过版本校验；</p>
+<p>（2）如果升级包中不包含version文件，则跳过版本校验。</p>
+<ul>
+<li><p><strong>数据定义：</strong></p>
+<p>约定版本文件名为version，位于升级包根目录，具体内容如下：</p>
+<ol class="simple">
+<li><p>x3j3_lnx_wb_20XXXXX release</p></li>
+<li><p>注：如修改了version内版本号格式，上述校验接口也要按照实际情况修改。</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="id39">
+<h4>分区校验<a class="headerlink" href="#id39" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>OTA升级前对镜像中的GPT分区校验，通过与当前系统的GPT分区进行对比，验证GPT分区是否调整，如果GPT分区有调整，则停止升级。提醒用户GPT分区已经调整，分区升级包不能升级系统。需要使用disk.img的升级包all_disk.zip升级系统。</p>
+<p>注：nor flash中没有GPT分区，升级跳过分区校验</p>
+</li>
+</ul>
+<p><img alt="image-202203252336-3.13.2" src="../_images/image-202203252336-3.13.2.png" /></p>
+<ul>
+<li><p><strong>数据定义：</strong></p>
+<p>约定分区文件为gpt.conf，具体内容如下：</p>
+</li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>veeprom:34s:37s
+
+sbl:38s:293s
+
+ddr:294s:2597s
+
+uboot:2598s:4645s
+
+kernel:4646s:45605s
+</pre></div>
+</div>
+</section>
+<section id="id40">
+<h4>签名校验<a class="headerlink" href="#id40" title="永久链接至标题"></a></h4>
+<ul>
+<li><p><strong>功能描述：</strong></p>
+<p>OTA支持对升级包的签名进行校验，使用RSA2048 SHA256算法对升级包的每个文件进行签名验证，验证不通过则停止升级，确保升级包的完整性。Xj3使用openssl来进行签名验证，如需修改签名算法，对照接口，做相应调整即可。</p>
+<p>说明：目前未开启强制校验功能，如果升级包没有签名或签名验证失败，只有warning提示信息。0222版本后可通过sign_check参数来开启强制验证，签证不通过停止升级。</p>
+<p>例如：otaupdate all all_in_one.zip sign_check</p>
+</li>
+</ul>
+<p><img alt="image-202203252336-3.13.3-1" src="../_images/image-202203252336-3.13.3-1.png" /></p>
+<ul>
+<li><p><strong>数据定义：</strong>
+下方是一个例子：</p>
+<ol class="simple">
+<li><p>RSA-SHA256(gpt.conf)=
+b0f7cd46a065529a25917167efce092ab1cc2387ca68aba1e6313108a3abf90c5162fb5e4fdf3da161723
+7e8c06370fe842b33b1cc79debf8a80b92d5762e15e8d1d7a5da6c2aebb1074bcfcecb606f6c5a29c7292
+4f59a8b1df5c06819b5d904e0a18ab5110ea4713afec5fbc58a1a0f4255934684691409787b661f7254f95</p></li>
+<li><p>RSA-SHA256(hobot-x2-som-ipc.dtb)=
+1e7313f4b931e5680efcf6bd2adae28dd6f16920a83c9b072d9a8942232b2068ba34accec8e00e3d017ba
+30356c3b0524b9d68b878edaf9d6fad04b62641958beb9de3b92139f4d445d83c2d70706f0ddada38f6ad
+9b3bebd6e90f67c4511a670cd982613ce4bbafede98e37ec651c2df1746408ad61c3bfe3c04ec13b2af90a</p></li>
+<li><p>RSA-SHA256(version)=
+b109c3e04ccdfc23d793ef3ef5ce71d7180df6b57026d8f4cf4079131ee9fdea1dc08acc3afcedf5b15ac
+67fbc783e83d5c3d80a4069b2fbbcbd6957abb77947c8034b3a8fa399ca3ee6d8b966a8181077effad74a
+e7190986ae6704e55a99d2304989fa156d64db30a25661b3b3fed0c09fab04e1a545a762498dcd75fe448b</p></li>
+<li><p>RSA-SHA256(Image.gz)=
+7bb3d740e3e26a334ec501bacc105da5583b40c0835715534d2c69c7d367e25c30bd3557d2f44e41c8bce
+4aae348c38b6f4c1f978a237600f4d5619595b2d1e27d985279da545d8f80a872724af591abfe1a0cbbee
+5b11d02c082720c987d26271baaf336a62ac4cf04dabc945b6dff5a853f050f2472b43b7142aeba420ee97</p></li>
+</ol>
+</li>
+<li><p><strong>签名校验流程：</strong></p>
+<p>RSA pub key来自系统本身，对升级包中的每个文件进行校验。</p>
+</li>
+</ul>
+<p><img alt="image-202203252336-3.13.3-3" src="../_images/image-202203252336-3.13.3-3.png" /></p>
+</section>
+</section>
+</section>
+<section id="id41">
+<h2><span class="section-number">4.7.3. </span>OTA升级包获取方法<a class="headerlink" href="#id41" title="永久链接至标题"></a></h2>
+<section id="sdk">
+<h3><span class="section-number">4.7.3.1. </span>发布的SDK包<a class="headerlink" href="#sdk" title="永久链接至标题"></a></h3>
+<ul>
+<li><p><strong>镜像包，可以使用如下方法获取OTA包</strong></p>
+<p>通过gen_ota.sh脚本获取对应板子的OTA升级包</p>
+<p>gen_ota.sh用法（执行之前先给脚本执行权限：chmod +x gen_ota.sh）：</p>
+</li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>X3J3:
+./gen_ota.sh: illegal option -- h  
+
+usage: ./gen_ota.sh &lt;-b board&gt; <span class="o">[</span>-s<span class="o">]</span> <span class="o">[</span>-u<span class="o">]</span> <span class="o">[</span>-t debug/release<span class="o">]</span> <span class="o">[</span>-l<span class="o">]</span> <span class="o">[</span>-o output_file<span class="o">]</span> <span class="o">[</span>-p<span class="o">][</span>-d<span class="o">]</span>  
+
+avaliable board  : xj3  
+          xj3       support ddr4 and lpddr4 board, ddr4 development board needs burn chip id  
+
+optimize boot    : -l reduce boot log <span class="k">for</span> performance <span class="nb">test</span> and projects that are needed  
+
+dual_boot        : support AB Boot image  
+                   when switching between normal and AB boot, -b xj3 must be used to update gpt  
+
+ex: build xj3 OTA UT disk pkg:   ./gen_ota.sh -b xj3 -u  
+
+    build xj3 OTA normal disk pkg:      ./gen_ota.sh -b xj3  
+
+    build xj3 OTA secure disk pkg:   ./gen_ota.sh -b xj3 -s  
+
+    build xj3 OTA UT disk pkg: ./gen_ota.sh -b xj3 -u  
+
+    build xj3 OTA AB Boot disk pkgs: ./gen_ota.sh -b xj3 -d -p  
+
+    build xj3 OTA partition upgrade pkgs: ./gen_ota.sh -p 
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>SDK源码包，可以直接编译build系统，会自动生成OTA包</strong></p></li>
+</ul>
+</section>
+<section id="id42">
+<h3><span class="section-number">4.7.3.2. </span>ota打包工具<a class="headerlink" href="#id42" title="永久链接至标题"></a></h3>
+<ul>
+<li><p><strong>功能说明：</strong></p>
+<p>OTA打包工具用于编译生成OTA升级包</p>
+</li>
+<li><p><strong>代码路径：</strong></p>
+<p>build/ota_tools</p>
+</li>
+<li><p><strong>编译方法：</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Usage: ./make_update_package.sh <span class="o">[</span>-b emmc <span class="se">\|</span> nor <span class="se">\|</span> nand<span class="o">]</span> <span class="o">[</span>-e all <span class="se">\|</span> disk<span class="o">]</span>
+
+Options:
+
+–b choose board <span class="nb">type</span>
+
+    <span class="s1">&#39;emmc&#39;</span> emmc board <span class="nb">type</span>
+
+    <span class="s1">&#39;nor&#39;</span> nor board <span class="nb">type</span>
+
+    <span class="s1">&#39;nand&#39;</span> nand board <span class="nb">type</span>
+
+–e build image
+
+    <span class="s1">&#39;all&#39;</span> means build partition update package
+
+    <span class="s1">&#39;disk&#39;</span> means build disk.img update package
+
+–h this <span class="nb">help</span> info
+</pre></div>
+</div>
+<p><strong>说明：</strong></p>
+<p>all：正常的升级包，包括uboot.zip，kernel.zip，system.zip和all_in_one.zip</p>
+<p>disk：特殊的升级包，支持版本升级和版本降级，升级包包含disk.img + update.sh</p>
+<p>注：disk方案升级板子中镜像会全更新，这时recovery系统也会被更新，不能保证升级失败后进入recovery系统。</p>
+<ul class="simple">
+<li><p><strong>OTA打包工具获取升级包的步骤如下：</strong></p></li>
+</ul>
+<ol>
+<li><p>先编译整个工程，生成disk.img，确保打包的镜像是最新的。</p></li>
+<li><p>执行脚本：</p>
+<p>emmc all升级文件： ./make_update_package.sh -b emmc -e all</p>
+<p>emmc disk升级文件： ./make_update_package.sh -b emmc -e disk</p>
+<p>nor all升级文件： ./make_update_package.sh -b nor -e all</p>
+<p>nor disk升级文件： ./make_update_package.sh -b nor -e disk</p>
+<p>获取镜像：ota_tools目录和out/target/deploy/目录</p>
+</li>
+</ol>
+<ul>
+<li><p><strong>编译 app.zip 修改⽅法</strong></p>
+<p>xj3平台系统软件本⾝不提供app.zip的⽀持，如有需求可按照如下步骤⽅法修改。</p>
+<p>xj3平台编译代码时提供了-e ut参数，可将源码下的unittest⾥的部分内容编译为app.img，如图所⽰。</p>
+<p>注意：unittest⾥的内容只是平台⼀些测试软件，没有实际意义。</p>
+</li>
+</ul>
+<p><img alt="image-20220328224832" src="../_images/image-20220328224832.png" /></p>
+<ol class="simple">
+<li><p>具体⽣成的app.img的内容是由如下⽂件组成，可参考unittest/utest/build.sh，如需将unittest下 的内容替换，也要做相应的修改。</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash </span>
+
+<span class="k">function</span> all<span class="o">()</span>
+<span class="o">{</span>
+    <span class="nv">prefix</span><span class="o">=</span><span class="nv">$TARGET_TMPUNITTEST_DIR</span> 
+    <span class="c1"># 将unittst下的⽂件拷⻉到out/horizon_xj3-debug.64/tmpunittest下⾯，最终的app.z ip就是这些⽂件 </span>
+    <span class="c1"># put binaries to dest directory </span>
+    cpfiles <span class="s2">&quot;</span><span class="nv">$SRC_UNITTEST_DIR</span><span class="s2">/prebuilts/*&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">prefix</span><span class="si">}</span><span class="s2">/bin/&quot;</span> 
+    cpfiles <span class="s2">&quot;</span><span class="nv">$SRC_UNITTEST_DIR</span><span class="s2">/utest/cases/*&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">prefix</span><span class="si">}</span><span class="s2">/cases/&quot;</span> 
+    cpfiles <span class="s2">&quot;</span><span class="nv">$SRC_UNITTEST_DIR</span><span class="s2">/utest/scripts/*&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">prefix</span><span class="si">}</span><span class="s2">/scripts/&quot;</span> 
+    cpfiles <span class="s2">&quot;</span><span class="nv">$SRC_UNITTEST_DIR</span><span class="s2">/utest/utest&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">prefix</span><span class="si">}</span><span class="s2">/&quot;</span> 
+<span class="o">}</span> 
+
+<span class="k">function</span> all_32<span class="o">()</span> 
+<span class="o">{</span> 
+    <span class="nv">prefix</span><span class="o">=</span><span class="nv">$TARGET_TMPUNITTEST_DIR</span> 
+    
+     <span class="c1"># put binaries to dest directory </span>
+     cpfiles <span class="s2">&quot;</span><span class="nv">$SRC_UNITTEST_DIR</span><span class="s2">/prebuilts32/*&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">prefix</span><span class="si">}</span><span class="s2">/bin/&quot;</span> 
+     cpfiles <span class="s2">&quot;</span><span class="nv">$SRC_UNITTEST_DIR</span><span class="s2">/utest/cases/*&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">prefix</span><span class="si">}</span><span class="s2">/cases/&quot;</span> 
+     cpfiles <span class="s2">&quot;</span><span class="nv">$SRC_UNITTEST_DIR</span><span class="s2">/utest/scripts/*&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">prefix</span><span class="si">}</span><span class="s2">/scripts/&quot;</span> 
+     cpfiles <span class="s2">&quot;</span><span class="nv">$SRC_UNITTEST_DIR</span><span class="s2">/utest/utest&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">prefix</span><span class="si">}</span><span class="s2">/&quot;</span> 
+<span class="o">}</span> 
+
+<span class="k">function</span> clean<span class="o">()</span> 
+<span class="o">{</span> 
+    : 
+<span class="o">}</span> 
+
+<span class="c1"># include </span>
+. <span class="nv">$INCLUDE_FUNCS</span> 
+<span class="c1"># include end</span>
+
+<span class="nb">cd</span> <span class="k">$(</span>dirname <span class="nv">$0</span><span class="k">)</span> 
+
+buildopt <span class="nv">$1</span>
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>修改编译脚本，在编译脚本build/ota_tools/make_update_package.sh⾥如下位置增加如下⼏⾏：</p></li>
+</ol>
+<p><img alt="image-20220328225555" src="../_images/image-20220328225555.png" /></p>
+<p><strong>注意：</strong> 此时会将build/ota_tools/app_package_maker/resource/update.sh参考脚本也⼀并打 包到app.zip⾥，此update.sh只是参考升级脚本，升级时otaupdate app app.zip会调⽤app.z ip⾥的update.sh升级。所以需要⾃⼰按照实际情况修改实现升级操作。</p>
+<ol class="simple">
+<li><p>通过上述两步修改后，编译加上-e ut参数后，最终会在out/horizon_xj3- debug.64/target/deploy/ota⽬录下⽣成app.zip。</p></li>
+</ol>
+<p><img alt="image-202203282301555" src="../_images/image-202203282301555.png" /></p>
+<p><strong>注意：</strong> app.zip⾥的内容是普通⽂件的格式，不是img的格式，升级时通过cp操作即可。</p>
+<p><img alt="image-202203282302555" src="../_images/image-202203282302555.png" /></p>
+</section>
+</section>
+<section id="id43">
+<h2><span class="section-number">4.7.4. </span>OTA升级方法<a class="headerlink" href="#id43" title="永久链接至标题"></a></h2>
+<section id="otawrite">
+<h3><span class="section-number">4.7.4.1. </span>otawrite接口<a class="headerlink" href="#otawrite" title="永久链接至标题"></a></h3>
+<ul>
+<li><p><strong>升级接口：</strong></p>
+<p>UBoot下OTA升级接口，用于UBoot模式更新系统镜像。</p>
+</li>
+</ul>
+<p><strong>代码路径：</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uboot</span><span class="o">/</span><span class="n">cmd</span><span class="o">/</span><span class="n">ota</span><span class="o">.</span><span class="n">c</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>使用方法：</strong></p></li>
+</ul>
+<p>（1）首先将待升级文件传输到内存中，例如：bifrw或tftp传输文件到0x10200000，</p>
+<p>（2）执行otawrite</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">1.</span>  <span class="n">otawrite</span> <span class="n">uboot</span> <span class="mh">0x10200000</span> <span class="mh">0x100000</span> <span class="n">emmc</span>
+</pre></div>
+</div>
+<p>（3）调用otawrite成功后，镜像会自动写到对应的分区</p>
+<ul class="simple">
+<li><p><strong>接口定义：</strong></p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Hobot&gt;otawrite
+
+Usage:
+
+otawrite &lt;partition name&gt; &lt;ddr addr&gt; &lt;image size&gt; <span class="o">[</span>emmc <span class="p">|</span> nor<span class="o">]</span>
+
+– emmc partition name:
+
+<span class="o">[</span>all <span class="p">|</span> gpt-main <span class="p">|</span> sbl <span class="p">|</span> ddr <span class="p">|</span> uboot <span class="p">|</span> kernel <span class="p">|</span> system <span class="p">|</span> app gpt-backup<span class="o">]</span>
+
+– nor partition name:
+
+<span class="o">[</span>all <span class="p">|</span> uboot <span class="p">|</span> kernel <span class="p">|</span> system <span class="p">|</span> app<span class="o">]</span>
+
+– image size:
+
+bytes size <span class="o">[</span>Example: 0x8000<span class="o">]</span>
+
+– emmc <span class="p">|</span> nor:
+
+options, write emmc or nor partition
+
+**default**: writing device depend on bootmode
+
+- example:
+
+otawrite uboot 0x4000000 0x100000
+
+- version:
+
+<span class="o">[</span><span class="m">2019</span>-08-02<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<section id="id44">
+<h3><span class="section-number">4.7.4.2. </span>板端升级接口<a class="headerlink" href="#id44" title="永久链接至标题"></a></h3>
+<ul>
+<li><p><strong>升级接口：</strong></p>
+<p>ota升级工具为：</p>
+<p>otaupdate</p>
+<p>说明：otaupdate接口功能详见 otaupdate</p>
+</li>
+<li><p><strong>使用方法：</strong></p></li>
+</ul>
+<p><strong>（1）获取升级包</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>根据升级的内容不同，获取不同的OTA升级包。
+</pre></div>
+</div>
+<p><strong>（2）传镜像到板端</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>升级包可以传输到userdata目录
+
+tftp方式： tftp 192.168.1.10 –gr all_in_one.zip /userdata/all_in_one.zip
+
+hbipc方式：hbipc-utils put /root/mount/all_in_one.zip /userdata/all_in_one.zip
+</pre></div>
+</div>
+<p><strong>（3）调用接口开始升级</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">otaupdate</span> <span class="nb">all</span> <span class="n">all_in_one</span><span class="o">.</span><span class="n">zip</span>
+</pre></div>
+</div>
+<p><strong>说明：</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>OTA执行完升级后，会重启一次系统，验证升级是否成功
+
+例如：all_in_one.zip升级的部分log如下
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:~# otaupdate all /userdata/all_in_one.zip
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span> boot mode: emmc
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span> parameter check success
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span> <span class="m">5</span>%
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span> get ota_upmode golden
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span> upgrade_need_space: <span class="m">33339</span>
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span> tmp_free_space: <span class="m">95916</span>
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span> userdata_free_space: <span class="m">3014412</span>
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span> <span class="m">10</span>%
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span> get ota_upmode golden
+
+<span class="o">[</span>OTA_INFO<span class="o">]</span> check update mode golden success
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id45">
+<h2><span class="section-number">4.7.5. </span>参考文献<a class="headerlink" href="#id45" title="永久链接至标题"></a></h2>
+<ol class="simple">
+<li><p><a class="reference external" href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.den0022d/index.html">Power_State_Coordination_Interface_PDD_v1_1_DEN0022D</a></p></li>
+<li><p><a class="reference external" href="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git/about/">Trusted Firmware-A - version2.1</a></p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Secure_Boot_Manual.html" class="btn btn-neutral float-left" title="4.6. 安全启动使用说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Approved_Vendor_List/index.html" class="btn btn-neutral float-right" title="4.8. X3 Approved Vendor List" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

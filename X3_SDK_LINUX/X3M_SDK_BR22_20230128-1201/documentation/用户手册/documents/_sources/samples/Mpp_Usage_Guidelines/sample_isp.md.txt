@@ -1,0 +1,179 @@
+# sample_isp 使用说明
+
+## 程序功能
+
+`sample_isp`程序完成`isp`图像接口初始化，主要功能是调用每一个`isp`图像进行接口动态设置/获取参数，并返回测试结果
+
+## 功能使用
+
+### 程序部署
+
+把 `sample/sample_isp/sample_isp` 文件上传到开发板后，给程序赋予可执行权限 `chmod a+x sample_isp`, 然后执行程序 `./sample_isp`，注意此程序运行前需要有当前的sensor程序在运行中，sensor的程序可以直接使用Sunrise_camera, `sample_isp`运行过程如下
+
+```bash
+chmod +x sample_isp
+# ./sample_isp
+============================================
+APP: ./sample_isp
+a: AE
+b: AF
+c: AWB
+d: BL
+e: DEMOSAIC
+f: SHARPEN
+g: GAMMA
+h: IRIDIX
+i: CNR
+j: SINTER
+k: TEMPER
+l: SCENE_MODES
+m: FIRMWARE STATE
+n: MODULE CONTROL
+o: REGISTER
+p: LIBREG_AE
+q: LIBREG_AWB
+r: LIBREG_AF
+s: METERING AE(read only)
+t: METERING AWB(read only)
+u: METERING AF(read only)
+v: METERING AE_5BIN(read only)
+w: METERING_DATA_TIME(read only)
+x: SWITCH SCENCE
+A: CSC
+B: MESH SHADING
+C: MESH SHADING LUT
+D: RADIAL SHADING
+E: RADIAL SHADING LUT
+F: IRIDIX STRENGTH LEVEL
+G: IDX_IRQ_SYNC
+H: IDX_AWB_ZONE
+I: IDX_AF_ZONE
+L: IDX_AF_KERNEL
+M: IDX_AEROI_INFO
+N: IDX_LUMA_INFO
+O: IDX_AEPARAM_INFO
+J: IDX_AE5BIN_ZONE
+K: IDX_AE_ZONE
+P: IDX_AE_EX
+y: Help
+Q: Exit
+============================================
+ISP_TEST>
+```
+### 命令解释：
+
+a： 获取/设置AE属性
+
+b： 示例中暂不支持
+
+c:  获取/设置AWB属性
+
+d:  获取/设置BlackLevel属性
+
+e:  获取/设置Demosaic属性
+
+f:  获取/设置SHARPEN属性
+
+g:  获取/设置GAMMA属性
+
+h:  获取/设置IRIDIX属性
+
+i:  获取/设置CNR属性
+
+j:  获取/设置SINTER属性
+
+k:  获取/设置TEMPER属性
+
+l:  获取/设置SCENE_MODES属性
+
+m:  获取/设置FWSTATE属性
+
+n:  获取/设置ModuleControl属性
+
+o:  获取/设置Register寄存器
+
+p:  注册AE回调接口
+
+q:  注册AWB回调接口
+
+r:  注册AF回调接口
+
+s:  获取AE统计信息
+
+t:  获取AWB统计信息
+
+u:  获取AF统计信息
+
+v:  获取AE_5BIN统计信息
+
+w:  获取最新的统计信息(代码里面默认获取AWB，可以仿照代码通过传参获取AE,AF统计信息)
+
+x:  切换isp效果库(so库需要跟isp_test文件同一目录)
+
+A:  获取/设置CSC属性
+
+B:  获取/设置MESH_SHADING属性
+
+C:  获取/设置MESH SHADING LUT属性
+
+D:  获取/设置RADIAL SHADING属性
+
+E:  获取/设置RADIAL SHADING LUT属性
+
+F:  获取/设置IRIDIX STRENGTH LEVEL属性
+
+G:  获取帧同步开始/结束时间
+
+H:  设置AWB_ZONE属性
+
+I:  设置AF_ZONE属性
+
+L:  获取/设置AF_KERNEL_INFO属性
+
+M:  获取/设置AEROI信息
+
+N:  获取LUMA信息
+
+O:  获取/设置AEParam信息
+
+J:  设置AE5BIN_ZONE属性
+
+K:  设置AEZONE属性
+
+P:  获取/设置AE额外属性
+
+y:  帮助信息
+
+Q:  退出程序
+
+
+
+## 程序开发
+
+### 源码结构
+
+```
+.
+├── main.c				# 主程序
+├── Makefile			# 编译makefile
+└── Readme.md			# 程序说明
+```
+
+### 编译
+
+当前代码通过一个Makefile文件配置编译
+
+依赖的多媒体头文件和库文件分别在BSP SDK的appsdk目录和system/rootfs_yocto/root目录下，编译时需要注意这两个依赖目录位置是否存在
+
+安装交叉编译工具链后，执行 make 命令直接可以编译生成 sample_isp 程序
+
+```
+cd sample/sample_isp
+$ make clean # 清理源码，保持干净的代码环境
+$ make
+... ... # 一大段编译打印
+$ ls
+main.c  main.o  Makefile  sample_isp
+$ make install # 把产出物安装到 out 目录下
+```
+

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5.12. 多媒体性能调试 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="6. 量化工具链开发指南" href="../ai_toolchain_develop/index.html" />
+    <link rel="prev" title="5.11. 查询多媒体模块调试信息" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">5. 多媒体开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1-Overview_zh_CN.html">5.1. 系统概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-System_Control_zh_CN.html">5.2. 系统控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-Video_Input_zh_CN.html">5.3. 视频输入</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html">5.4. ISP图像系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5-Video_Processing_zh_CN.html">5.5. 视频处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6-Region_Processing_zh_CN.html">5.6. 区域处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7-Video_Output_zh_CN.html">5.7. 视频输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8-Video_Encode_zh_CN.html">5.8. 视频编码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9-Video_Decode_zh_CN.html">5.9. 视频解码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/index.html">5.10. 图像调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html">5.11. 查询多媒体模块调试信息</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.12. 多媒体性能调试</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">5.12.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ddr-masterqos">5.12.2. DDR Master的QoS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#axi-qos">5.12.3. AXI QOS控制</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vio">5.12.4. VIO子模块配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sifhblank">5.12.5. SIF的hblank设置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ipu">5.12.6. IPU的设置</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ipu-line-delay-wr-ddr-fifo-thred">5.12.6.1. IPU Line_delay wr_ddr_fifo_thred</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ipu-clock">5.12.6.2. IPU Clock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">5.12.6.3. IPU 安全尺寸</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">5.12.7. 典型场景的设置</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#k">5.12.7.1. 单路4K输入多通道编码</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#p">5.12.7.2. 双路1080P输入</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">5.12.7.3. 单路1080P输入</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">5.12.8. 多进程共享配置</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">5.12.9. VIO延时查看</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id8">5.12.9.1. 方法一：</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">5.12.9.2. 方法二：</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">5. </span>多媒体开发指南</a> &raquo;</li>
+      <li><span class="section-number">5.12. </span>多媒体性能调试</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html" class="btn btn-neutral float-left" title="5.11. 查询多媒体模块调试信息" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../ai_toolchain_develop/index.html" class="btn btn-neutral float-right" title="6. 量化工具链开发指南" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">5.12. </span>多媒体性能调试<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="id2">
+<h2><span class="section-number">5.12.1. </span>概述<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>Camera是图像数据的主要外部来源，VIO部分软件是一个相对不透明的内部软件，主要面向提供内部应用软件提供相关的图像以及信息，XJ3芯片内部图像处理IP信息大致如下：</p>
+<p><img alt="image-20220329205706352" src="../_images/image-20220329205706352.png" /></p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>输入方式</th>
+<th>IP</th>
+<th>输出方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Online</td>
+<td>MIPI</td>
+<td>Online</td>
+</tr>
+<tr>
+<td>Online/Offline</td>
+<td>SIF</td>
+<td>Online/Offline</td>
+</tr>
+<tr>
+<td>Online</td>
+<td>ISP</td>
+<td>Online/Offline</td>
+</tr>
+<tr>
+<td>Online</td>
+<td>LDC</td>
+<td>Online</td>
+</tr>
+<tr>
+<td>Offline</td>
+<td>GDC</td>
+<td>Offline</td>
+</tr>
+<tr>
+<td>Online/Offline</td>
+<td>IPU</td>
+<td>Online/Offline</td>
+</tr>
+<tr>
+<td>Online/Offline</td>
+<td>PYM</td>
+<td>Offline</td>
+</tr>
+</tbody>
+</table><p>注：Online 指硬件通过片内RAM交换数据，Offline指硬件通过DDR交换数据。</p>
+<p>本章节主要描述X3芯片关于图像数据处理通路等模块在实际使用的常用场景中，根据DDR带宽和延迟进行各处理模块DDR优先级和其它一些相关参数的调整。</p>
+<p>在DDR瞬时带宽不足时会造成视频丢帧，在帧率和丢帧这两个问题之间，可以根据本章节的描述，选择一个合适的配置值来平衡。</p>
+</section>
+<section id="ddr-masterqos">
+<h2><span class="section-number">5.12.2. </span>DDR Master的QoS<a class="headerlink" href="#ddr-masterqos" title="永久链接至标题"></a></h2>
+<p>XJ3 各模块通过AXI接口访问DDR，XJ3有8个AXI接口，分别为AXI_0 ~ AXI_7，XJ3的模块使用AXI接口关系如下表：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>端口号</th>
+<th>AXI_0</th>
+<th>AXI_1</th>
+<th>AXI_2</th>
+<th>AXI_3</th>
+<th>AXI_4</th>
+<th>AXI_5</th>
+<th>AXI_6</th>
+<th>AXI_7</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模块名</td>
+<td>CPU/R5</td>
+<td>NOC</td>
+<td>CNN0</td>
+<td>CNN1</td>
+<td>VIO0</td>
+<td>VPU/JPU</td>
+<td>VIO1</td>
+<td>PERI</td>
+</tr>
+</tbody>
+</table><p>AXI_4和AXI_6可配置，可以通过寄存器配置VIO子模块到AXI_4或者AXI_6，AXI_6有更高的优先级。</p>
+<p>XJ3 VIO包括如下子模块：SIF_W、ISP0_M0、ISP0_M2、GDC0、DIS、SIF_R、IPU0、PYM、IAR。</p>
+</section>
+<section id="axi-qos">
+<h2><span class="section-number">5.12.3. </span>AXI QOS控制<a class="headerlink" href="#axi-qos" title="永久链接至标题"></a></h2>
+<p>AXI Qos优先级范围0~15，值越大优先级越高。XJ3系统启动后读写QoS默认配置为0x2021100。</p>
+<p>每个Port的优先级值通过Perf Monitor的DDR_PORT_READ/WRITE_QOS_CTRL寄存器设置，Perf
+Montior再通过硬件的方式设置到DDR控制器中。软件无需设置DDR控制器。</p>
+<p>DDR QoS的值在DDR_Monitor驱动中通过Sysfs的属性文件的方式设置和查询。</p>
+<p>可以通过all属性文件一次性设置，最低的4bit对应P0_CPU，最高4bit对应P7_PERI。</p>
+<p>也可以通过cpu、bifdma、bpu0、bpu1、vio0、vpu、vio1、peri单独设置和查询各个端口的优先级，如下：</p>
+<p><strong>QoS sysfs接口</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>#查询读QoS：
+cat /sys/bus/platform/drivers/ddr_monitor/read_qos_ctrl/all
+
+CPU port isn&#39;t allowed to be configured in runtime.
+You can run chmod +w as root for debugging purpose.
+****************************************************
+
+04032221:
+P0_CPU:    1
+P1_BIFDMA: 2
+P2_CNN0:   2
+P3_CNN1:   2
+P4_VIO0:   3
+P5_VPU:    0
+P6_VIO1:   4
+P7_PERI:   0
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /sys/bus/platform/drivers/ddr_monitor/write_qos_ctrl/all
+
+****************************************************
+CPU port isn&#39;t allowed to be configured in runtime.
+You can run chmod +w as root for debugging purpose.
+****************************************************
+
+04032211:
+P0_CPU:    1
+P1_BIFDMA: 1
+P2_CNN0:   2
+P3_CNN1:   2
+P4_VIO0:   3
+P5_VPU:    0
+P6_VIO1:   4
+P7_PERI:   0
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#设置bifdma读QoS为2：</span>
+<span class="nb">echo</span> <span class="m">2</span> &gt; /sys/bus/platform/drivers/ddr_monitor/read_qos_ctrl/bifdma
+<span class="c1">#设置bpu0读QoS为1：</span>
+<span class="nb">echo</span> <span class="m">1</span> &gt; /sys/bus/platform/drivers/ddr_monitor/read_qos_ctrl/bpu0
+<span class="c1">#设置bpu1读QoS为1：</span>
+<span class="nb">echo</span> <span class="m">1</span> &gt; /sys/bus/platform/drivers/ddr_monitor/read_qos_ctrl/bpu1
+<span class="c1">#设置vio0读QoS为2：</span>
+<span class="nb">echo</span> <span class="m">2</span> &gt; /sys/bus/platform/drivers/ddr_monitor/read_qos_ctrl/vio0
+<span class="c1">#设置vpu读QoS为0：</span>
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/bus/platform/drivers/ddr_monitor/read_qos_ctrl/vpu
+<span class="c1">#设置vio1读QoS为3：</span>
+<span class="nb">echo</span> <span class="m">3</span> &gt; /sys/bus/platform/drivers/ddr_monitor/read_qos_ctrl/vio1
+<span class="c1">#设置peri读QoS为0：</span>
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/bus/platform/drivers/ddr_monitor/read_qos_ctrl/peri 
+<span class="c1">#设置bifdma写QoS为2：</span>
+<span class="nb">echo</span> <span class="m">2</span> &gt; /sys/bus/platform/drivers/ddr_monitor/write_qos_ctrl/bifdma
+<span class="c1">#设置bpu0写QoS为1：</span>
+<span class="nb">echo</span> <span class="m">1</span> &gt; /sys/bus/platform/drivers/ddr_monitor/write_qos_ctrl/bpu0
+<span class="c1">#设置bpu1写QoS为1：</span>
+<span class="nb">echo</span> <span class="m">1</span> &gt; /sys/bus/platform/drivers/ddr_monitor/write_qos_ctrl/bpu1
+<span class="c1">#设置vio0写QoS为2：</span>
+<span class="nb">echo</span> <span class="m">2</span> &gt; /sys/bus/platform/drivers/ddr_monitor/write_qos_ctrl/vio0
+<span class="c1">#设置vpu写QoS为0：</span>
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/bus/platform/drivers/ddr_monitor/write_qos_ctrl/vpu
+<span class="c1">#设置vio1写QoS为3：</span>
+<span class="nb">echo</span> <span class="m">3</span> &gt; /sys/bus/platform/drivers/ddr_monitor/write_qos_ctrl/vio1
+<span class="c1">#设置peri写QoS为0：</span>
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/bus/platform/drivers/ddr_monitor/write_qos_ctrl/peri
+</pre></div>
+</div>
+</section>
+<section id="vio">
+<h2><span class="section-number">5.12.4. </span>VIO子模块配置<a class="headerlink" href="#vio" title="永久链接至标题"></a></h2>
+<p>XJ3 VIO子模块包括SIF_W、ISP0_M0、ISP0_M2、GDC0、DIS、SIF_R、IPU0、PYM、IAR，分别对应SIF模块写、ISP写、ISP Temper读写、GDC0读写、DIS写、SIF模块读、IPU0模块读写、PYM模块读写、IAR模块读写。</p>
+<p>可以通过AXIBUS寄存器将这些子模块配置到VIO0或者VIO1上，XJ3系统启动后默认配置IAR和SIF_W到VIO1，其余模块配置到VIO0。AXIBUS寄存器bit31~bit16对应子模块如下图：</p>
+<p><img alt="../_images/3bbeb4873d19bd13fa9428d926853d2c.png" src="../_images/3bbeb4873d19bd13fa9428d926853d2c.png" /></p>
+<p>其中灰色部分模块不存在，对应bit设置为1，该子模块被配置到VIO1上，否则配置到VIO0上。可以通过all属性一次性配置或查询，查询返回vio1上的模块，别的模块在vio0上。也可以通过子模块属性单独配置或查询。</p>
+<p>AXIBUS sys接口</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 设置，值为1配置到vio1，值为0配置到vio0</span>
+<span class="nb">echo</span> 0xc0020000 &gt; /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/all
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/sifr
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/isp0m0
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/isp0m1
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/isp0m2
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/t21
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/gdc0
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/gdc1
+<span class="nb">echo</span> <span class="m">1</span> &gt; /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/iar
+<span class="nb">echo</span> <span class="m">1</span> &gt; /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/pym
+<span class="nb">echo</span> <span class="m">1</span> &gt; /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/sifw
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/ipu0 
+<span class="c1">#读取，打印所有配置在vio1上的模块，其余模块为vio0</span>
+cat /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/all axibus: 0xc0020000: sifw: vio1 pym: vio1 iar: vio1
+<span class="c1">#模块读取</span>
+cat /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/sifr axibus: 0xc0020000: sifr: vio0
+cat /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/sifw axibus: 0xc0020000: sif: vio1
+cat /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/isp0m0 axibus: 0xc0020000: isp_0_m0: vio0
+cat /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/isp0m1 axibus: 0xc0020000: isp_0_m1: vio0
+cat /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/isp0m2 axibus: 0xc0020000: isp_0_m2: vio0
+cat /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/gdc0 axibus: 0xc0020000: gdc_0: vio0
+cat /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/gdc1 axibus: 0xc0020000: gdc_1: vio0
+cat /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/t21 axibus: 0xc0020000: t21: vio0
+cat /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/ipu0 axibus: 0xc0020000: ipu0: vio0
+cat /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/pym axibus: 0xc0020000: pym: vio1
+cat /sys/bus/platform/drivers/ddr_monitor/axibus_ctrl/iar axibus: 0xc0020000: iar: vio1
+</pre></div>
+</div>
+</section>
+<section id="sifhblank">
+<h2><span class="section-number">5.12.5. </span>SIF的hblank设置<a class="headerlink" href="#sifhblank" title="永久链接至标题"></a></h2>
+<p>SIF将读取到的图像逐行送给ISP处理，可以通过增加行间隔hblank来延迟下一行的送出，以置换更多时间给ISP或后边的模块做处理。</p>
+<p>XJ3 SIF默认的hblank为10。</p>
+<p>hblank会影响帧率，与帧率的关系为：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">time</span> <span class="o">=</span> <span class="o">((</span>width + hblank * <span class="m">32</span><span class="o">)</span> * hight）/ <span class="o">(</span>clock * <span class="m">1000</span><span class="o">)</span> 
+<span class="c1"># clock为ISP频率，默认为544M。</span>
+</pre></div>
+</div>
+<p>以4K为例计算如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="o">=</span> <span class="p">((</span><span class="n">width</span> <span class="o">+</span> <span class="n">hblank</span> <span class="o">*</span> <span class="mi">32</span><span class="p">)</span> <span class="o">*</span> <span class="n">high</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">clock</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>image width</th>
+<th>hblank(register)</th>
+<th>image high</th>
+<th>clock(MHz)</th>
+<th>time(ms)</th>
+<th>fps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3840</td>
+<td>10</td>
+<td>2160</td>
+<td>544</td>
+<td>16.5176</td>
+<td>60.54</td>
+</tr>
+<tr>
+<td>3840</td>
+<td>40</td>
+<td>2160</td>
+<td>544</td>
+<td>20.3294</td>
+<td>49.19</td>
+</tr>
+<tr>
+<td>3840</td>
+<td>70</td>
+<td>2160</td>
+<td>544</td>
+<td>24.1412</td>
+<td>41.42</td>
+</tr>
+<tr>
+<td>3840</td>
+<td>120</td>
+<td>2160</td>
+<td>544</td>
+<td>30.4941</td>
+<td>32.79</td>
+</tr>
+</tbody>
+</table><p>提供Sysfs接口设置查询hblank，如下：</p>
+<p>设置hblank：echo 120 &gt; /sys/devices/platform/soc/a4001000.sif/hblank</p>
+<p>查询hblank：cat /sys/devices/platform/soc/a4001000.sif/hblank</p>
+</section>
+<section id="ipu">
+<h2><span class="section-number">5.12.6. </span>IPU的设置<a class="headerlink" href="#ipu" title="永久链接至标题"></a></h2>
+<section id="ipu-line-delay-wr-ddr-fifo-thred">
+<h3><span class="section-number">5.12.6.1. </span>IPU Line_delay wr_ddr_fifo_thred<a class="headerlink" href="#ipu-line-delay-wr-ddr-fifo-thred" title="永久链接至标题"></a></h3>
+<p>IPU有个line_delay设置，单位为1行。值越大，代表IPU可以忍受的总线延迟更大，对offline模式下降低frame drop有帮助。</p>
+<p>同时wr_ddr_fifo_thred的值越小越能够降低frame drop。</p>
+<p>当ipu输出多个通道同时到DDR的时候，建议将line_delay设置为255，wr_ddr_fifo_thred设置为0。</p>
+<p>line_delay默认值是16，wr_fifo_thred0默认值是0x30323020，wr_fifo_thred1默认值是0x00003220。</p>
+<p>提供sysfs接口设置如下:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="mh">0x0</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">soc</span><span class="o">/</span><span class="n">a4040000</span><span class="o">.</span><span class="n">ipu</span><span class="o">/</span><span class="n">wr_fifo_thred0</span>
+<span class="n">echo</span> <span class="mh">0x0</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">soc</span><span class="o">/</span><span class="n">a4040000</span><span class="o">.</span><span class="n">ipu</span><span class="o">/</span><span class="n">wr_fifo_thred1</span>
+<span class="n">echo</span> <span class="mi">255</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">soc</span><span class="o">/</span><span class="n">a4040000</span><span class="o">.</span><span class="n">ipu</span><span class="o">/</span><span class="n">line_delay</span>
+</pre></div>
+</div>
+</section>
+<section id="ipu-clock">
+<h3><span class="section-number">5.12.6.2. </span>IPU Clock<a class="headerlink" href="#ipu-clock" title="永久链接至标题"></a></h3>
+<p>IPU的clock由SIF mclk提供，可以通过sysfs配置SIF clock来改变IPU的频率，IPU频率默认为544MHz，可以配置的频率有544M、408M、326M、272M。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="mi">544000000</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">module</span><span class="o">/</span><span class="n">hobot_dev_ips</span><span class="o">/</span><span class="n">parameters</span><span class="o">/</span><span class="n">sif_mclk_freq</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3><span class="section-number">5.12.6.3. </span>IPU 安全尺寸<a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>IPU多个通道的FIFO深度不同，安全尺寸如下</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>IPU Scaler #</strong></th>
+<th><strong>Full 深度限制 (Bytes)</strong></th>
+<th><strong>建议分辨率(像素)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scaler 5(IPU US)</td>
+<td>4096</td>
+<td>8M</td>
+</tr>
+<tr>
+<td>Scaler 2(DS2)</td>
+<td>4096</td>
+<td>8M</td>
+</tr>
+<tr>
+<td>Scaler 1(DS1)</td>
+<td>2048</td>
+<td>2M</td>
+</tr>
+<tr>
+<td>Scaler 3(DS3)</td>
+<td>2048</td>
+<td>2M</td>
+</tr>
+<tr>
+<td>Scaler 4(DS4)</td>
+<td>1280</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>Scaler 0(DS0)</td>
+<td>1280</td>
+<td>1M</td>
+</tr>
+</tbody>
+</table><p>Scaler0~4对应IPU的ds0~5，Scaler5对应IPU的us。如果输出尺寸超过安全尺寸，可能会造成硬件丢帧概率变大、输出数据中连续二三十字节出错的风险。</p>
+</section>
+</section>
+<section id="id4">
+<h2><span class="section-number">5.12.7. </span>典型场景的设置<a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<section id="k">
+<h3><span class="section-number">5.12.7.1. </span>单路4K输入多通道编码<a class="headerlink" href="#k" title="永久链接至标题"></a></h3>
+<p>典型场景如下：4k DOL2输入，SIF - offline - ISP - GDC - IPU，IPU出1路4k，2路1080P，2路D1 共5路送编码器编码。同时IPU ds2 online 到PYM，PYM出720P。</p>
+<p>SIF hblank和QoS建议配置如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="mi">120</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">soc</span><span class="o">/</span><span class="n">a4001000</span><span class="o">.</span><span class="n">sif</span><span class="o">/</span><span class="n">hblank</span>
+<span class="n">echo</span> <span class="mh">0x10100000</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">drivers</span><span class="o">/</span><span class="n">ddr_monitor</span><span class="o">/</span><span class="n">axibus_ctrl</span><span class="o">/</span><span class="nb">all</span>
+<span class="n">echo</span> <span class="mh">0x03120000</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">drivers</span><span class="o">/</span><span class="n">ddr_monitor</span><span class="o">/</span><span class="n">read_qos_ctrl</span><span class="o">/</span><span class="nb">all</span>
+<span class="n">echo</span> <span class="mh">0x03120000</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">drivers</span><span class="o">/</span><span class="n">ddr_monitor</span><span class="o">/</span><span class="n">write_qos_ctrl</span><span class="o">/</span><span class="nb">all</span>
+</pre></div>
+</div>
+</section>
+<section id="p">
+<h3><span class="section-number">5.12.7.2. </span>双路1080P输入<a class="headerlink" href="#p" title="永久链接至标题"></a></h3>
+<p>典型场景如下：两路1080P输入，SIF-offline-ISP-online-IPU-online-PYM-&gt;DDR(基础层)。</p>
+<p>一路pym出来的去编码（1080P）+显示（1080P），另一路开BPU。</p>
+<p>SIF hblank和QoS建议配置如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="mi">120</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">soc</span><span class="o">/</span><span class="n">a4001000</span><span class="o">.</span><span class="n">sif</span><span class="o">/</span><span class="n">hblank</span>  
+<span class="n">echo</span> <span class="mh">0x40000000</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">bus</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">drivers</span><span class="o">/</span><span class="n">ddr_monitor</span><span class="o">/</span><span class="n">axibus_ctrl</span><span class="o">/</span><span class="nb">all</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3><span class="section-number">5.12.7.3. </span>单路1080P输入<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>典型场景如下：单路1080P输入，SIF-offline-ISP-online-IPU，IPU 6通道roi打开。</p>
+<p>SIF hblank建议配置如下：</p>
+<p>echo 64 &gt; /sys/devices/platform/soc/a4001000.sif/hblank</p>
+</section>
+</section>
+<section id="id6">
+<h2><span class="section-number">5.12.8. </span>多进程共享配置<a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>多进程共享目前最多支持8个进程共享一路camera数据，支持从IPU和PYM获取输出数据，多进程共享需要满足：</p>
+<ul class="simple">
+<li><p>必须是全online的场景：SIF-online-ISP-online-IPU-online-PYM；</p></li>
+<li><p>输出通道配置BUF个数需要大于等于4，否则会有帧率较低的风险；</p></li>
+</ul>
+</section>
+<section id="id7">
+<h2><span class="section-number">5.12.9. </span>VIO延时查看<a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<section id="id8">
+<h3><span class="section-number">5.12.9.1. </span>方法一：<a class="headerlink" href="#id8" title="永久链接至标题"></a></h3>
+<p>1.正常跑vio应用，ls /tmp，可以看到如下在/tmp目录下有vio_group_info_pidxxx，其中xxx是进
+程号。</p>
+<p>2.在板子命令行输入echo “frame_state” &gt; /tmp/vio_group_info_pidxxx命令，其中xxx对应步骤1
+的进程号。</p>
+<p>3.步骤2之后，会在/userdata/log/usr/目录下面生成dump的信息
+vio_frame_state_pipe[pipeline]_[time].log</p>
+<p>4.用Notepad++，通过搜索Frmid xxxxx，其中xxxxx是帧号，会把ISP，IPU，PYM的TimeStp搜索出
+来，通过把PYM out free前面对应的xxx时间-ISP out dq前面对应的xxx时间得出模块得处理时间。</p>
+<p>如下截图：</p>
+<p><img alt="image-20220929113655983" src="../_images/image-20220929113655983.png" /></p>
+</section>
+<section id="id9">
+<h3><span class="section-number">5.12.9.2. </span>方法二：<a class="headerlink" href="#id9" title="永久链接至标题"></a></h3>
+<p>通过HB_VPS_GetChnFrame(int VpsGrp, int VpsChn, void *videoFrame, int ms)接口获取到金字塔得videoFrame，此结构体指针强制转换成pym_buffer_t指针，通过pym_buffer_t找到pym_img_info，pym_img_info包含了struct timeval tv，这个tv是sif得frame start填充得系统时间，使用gettimeofday接口获取到系统当前时间减去tv时间就是sif的frame start-&gt;pym获取到数据的延时。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html" class="btn btn-neutral float-left" title="5.11. 查询多媒体模块调试信息" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../ai_toolchain_develop/index.html" class="btn btn-neutral float-right" title="6. 量化工具链开发指南" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

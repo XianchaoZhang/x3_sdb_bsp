@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2.1. X3 SDB开发板说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="2.2. 开发板登录方法" href="Login_Method.html" />
+    <link rel="prev" title="2. 快速入门" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2. 快速入门</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.1. X3 SDB开发板说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">2.1.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">2.1.2. 规格参数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">2.1.3. 组装方法</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Login_Method.html">2.2. 开发板登录方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Firmware_Update.html">2.3. 镜像升级方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Interface_User_Guide.html">2.4. 接口使用说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Toolset_On_Board.html">2.5. 调试工具说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="X3SDBv3_Setup.html">2.6. X3 SDB v3 开发板接口说明</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">2. </span>快速入门</a> &raquo;</li>
+      <li><span class="section-number">2.1. </span>X3 SDB开发板说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="2. 快速入门" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Login_Method.html" class="btn btn-neutral float-right" title="2.2. 开发板登录方法" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="x3-sdb">
+<h1><span class="section-number">2.1. </span>X3 SDB开发板说明<a class="headerlink" href="#x3-sdb" title="永久链接至标题"></a></h1>
+<section id="id1">
+<h2><span class="section-number">2.1.1. </span>概述<a class="headerlink" href="#id1" title="永久链接至标题"></a></h2>
+<p>地平线X3 SDB开发板套件是集成了地平线X3M AI处理器的开发板形态产品，提供5Tops等效算力(int8)，支持多路摄像头输入，提供丰富的外围硬件接口。开发板通过搭载地平线“天工开物”软件栈，可以满足功能评测、产品开发以及创新预研等多方面需求。</p>
+<p>开发板由核心板和底板组成，两者通过DIMM插槽连接，并具有防呆设计，安装方法跟笔记本内存类似，将核心板倾斜45度插入DIMM插槽，然后按压锁止即可。其中核心板作为核心模组，集成了X3最小系统，包括X3芯片、DDR、eMMC及电源模块；底板作为外围接口板，集成了以太网、USB、Wi-Fi、HDMI、MIPI CSI等多种外设接口。</p>
+<p><img alt="image-x3som-interface" src="../_images/image-x3som-interface.png" /></p>
+<p>（注：如果您使用的底板和上图有差异，请查阅 <a class="reference internal" href="X3SDBv3_Setup.html"><span class="doc">X3 SDB v3 开发板接口说明</span></a> 了解接口差异）</p>
+<p>开发套件清单：</p>
+<ol class="simple">
+<li><p>12V&#64;2A电源适配器 x1</p></li>
+<li><p>底板 x1 核心板 x1</p></li>
+<li><p>串口USB转接板 x1，4PIN转3PIN杜邦线 x1</p></li>
+<li><p>Camera模组板 x1（选购配件）</p></li>
+</ol>
+<p>自备配件清单：</p>
+<ol class="simple">
+<li><p>HDMI视频线一条</p></li>
+<li><p>RJ-45网线一条</p></li>
+<li><p>Micro USB数据线一条</p></li>
+</ol>
+</section>
+<section id="id2">
+<h2><span class="section-number">2.1.2. </span>规格参数<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p><strong>关键特性：</strong></p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>模块</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>处理器</strong></td>
+<td>地平线X3M芯片</td>
+</tr>
+<tr>
+<td><strong>CPU</strong></td>
+<td>4核Cortex A53@1.2G</td>
+</tr>
+<tr>
+<td><strong>BPU</strong></td>
+<td>2核BPU@1.0G，等效5TOPS</td>
+</tr>
+<tr>
+<td><strong>存储</strong></td>
+<td>2GB LPDDR4 3200Mhz，16GB eMMC</td>
+</tr>
+<tr>
+<td><strong>摄像头</strong></td>
+<td>MIPI CSI x2，支持双路摄像头接入</td>
+</tr>
+<tr>
+<td><strong>显示</strong></td>
+<td>HDMI x1、MIPI DSI x1，最大支持1080p60</td>
+</tr>
+<tr>
+<td><strong>USB</strong></td>
+<td>Host：USB 3.0 x1、USB 2.0 x2，Device: Micro USB x1</td>
+</tr>
+<tr>
+<td><strong>有线网络</strong></td>
+<td>千兆以太网 x1，RJ45接口</td>
+</tr>
+<tr>
+<td><strong>无线网络</strong></td>
+<td>2.4G Wi-Fi x1，支持802.11 b/g/n、Bluetooth 4.1</td>
+</tr>
+<tr>
+<td><strong>其他接口</strong></td>
+<td>TF卡接口 x1，40 Pin接口 x1</td>
+</tr>
+<tr>
+<td><strong>供电</strong></td>
+<td>12V DC or USB Type C</td>
+</tr>
+</tbody>
+</table><p><strong>开发板功能框图</strong></p>
+<p><img alt="image-X3SDB-Diagram" src="../_images/image-X3SDB-Diagram.png" /></p>
+<p><strong>核心板尺寸图</strong></p>
+<p><img alt="image-X3SDB-Core-Board" src="../_images/image-X3SDB-Core-Board.png" /></p>
+<p><strong>底板尺寸图</strong></p>
+<p><img alt="image-X3SDB-Interface-Board" src="../_images/image-X3SDB-Interface-Board.png" /></p>
+</section>
+<section id="id3">
+<h2><span class="section-number">2.1.3. </span>组装方法<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p><strong>安装核心板</strong></p>
+<p>开发板的核心板和底板通过DIMM插槽连接，并具有防呆设计，具体组装步骤如下：</p>
+<ol class="simple">
+<li><p>将核心板倾斜插入底板DIMM插槽中，并沿倾斜方向用力按压核心板。</p></li>
+<li><p>向下按压核心板，使底板插槽簧片有效锁止核心板。</p></li>
+<li><p>观察核心板金手指是否有外露，如有外露说明安装不到位，需取下核心板并重复步骤1。</p></li>
+<li><p>如有亚克力底板，则使用铜柱、螺丝将其与底板组装。</p></li>
+<li><p>在X3M芯片表面黏贴套件中附送的鳞片散热片。</p></li>
+</ol>
+<p><strong>安装串口线</strong></p>
+<p>开发板套件中配套了杜邦线和串口USB转接板，方便用户在PC上使用串口助手对开发板的在线调试。串口线连接方法如下：</p>
+<ol class="simple">
+<li><p>将杜邦线白色端插入开发板连接器</p></li>
+<li><p>将杜邦线黑色端正面朝上插入转接板中间三个插针，参考下图红色框图细节</p></li>
+<li><p>将转接板USB插入PC，完成串口连接</p></li>
+</ol>
+<p>完成核心板、串口线安装的开发板如下图所示：</p>
+<p><img alt="image-X3SDB-Setup-Done" src="../_images/image-X3SDB-Setup-Done.png" /></p>
+<p>对于使用其他型号串口USB转接板的用户，可以按照实际的信号定义来调整安装方式。一般来说，串口USB转接板至少有四个引脚：电源、地、RX、TX，这些引脚跟开发板串口的连接关系如下：</p>
+<ul class="simple">
+<li><p>GND，串口转接板的地线，接开发板串口的 GND 针</p></li>
+<li><p>TXD，串口转接板的输出线，接开发板串口的 TX 针</p></li>
+<li><p>RXD，串口转接板的输入线，接开发板串口的 RX 针</p></li>
+<li><p>3.3V，电源，<strong>不需要连接</strong></p></li>
+</ul>
+<p><strong>上电确认</strong></p>
+<p>首先在PC机上打开串口工具，并连接开发板串口，串口工具配置方法可参考2.2.1章节。然后将12V电源接入开发板，如果debug串口同步输出log信息并进入登录界面，则说明安装正常。如果串口无log信息，请按如下步骤进行排查：</p>
+<ol class="simple">
+<li><p>检查核心板、底板安装，确认核心板金手指是否有明显外露。</p></li>
+<li><p>检查串口线与串口USB转接板线序，注意杜邦线黑色端正面朝上插入转接板中间三个插针。</p></li>
+<li><p>检查PC端串口工具配置是否正常，配置方法可参考2.2.1章节。</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="2. 快速入门" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="Login_Method.html" class="btn btn-neutral float-right" title="2.2. 开发板登录方法" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

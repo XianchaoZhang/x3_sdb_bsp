@@ -1,0 +1,2866 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5.5. 视频处理 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="5.6. 区域处理" href="6-Region_Processing_zh_CN.html" />
+    <link rel="prev" title="5.4. ISP图像系统" href="4-Graphic_System_API_Reference_Manual.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">5. 多媒体开发指南</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1-Overview_zh_CN.html">5.1. 系统概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-System_Control_zh_CN.html">5.2. 系统控制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-Video_Input_zh_CN.html">5.3. 视频输入</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-Graphic_System_API_Reference_Manual.html">5.4. ISP图像系统</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.5. 视频处理</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">5.5.1. 概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">5.5.2. 功能描述</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">5.5.2.1. 基本概念</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">5.5.2.2. 功能描述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">5.5.2.3. 注意事项</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#api">5.5.3. API参考</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-creategrp">5.5.3.1. HB_VPS_CreateGrp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-destroygrp">5.5.3.2. HB_VPS_DestroyGrp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-startgrp">5.5.3.3. HB_VPS_StartGrp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-stopgrp">5.5.3.4. HB_VPS_StopGrp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-getgrpattr">5.5.3.5. HB_VPS_GetGrpAttr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-setgrpattr">5.5.3.6. HB_VPS_SetGrpAttr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-setgrprotate">5.5.3.7. HB_VPS_SetGrpRotate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-getgrprotate">5.5.3.8. HB_VPS_GetGrpRotate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-setgrprotaterepeat">5.5.3.9. HB_VPS_SetGrpRotateRepeat</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-setgrpgdc">5.5.3.10. HB_VPS_SetGrpGdc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-sendframe">5.5.3.11. HB_VPS_SendFrame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-setchnattr">5.5.3.12. HB_VPS_SetChnAttr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-getchnattr">5.5.3.13. HB_VPS_GetChnAttr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-enablechn">5.5.3.14. HB_VPS_EnableChn</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-disablechn">5.5.3.15. HB_VPS_DisableChn</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-setchnrotate">5.5.3.16. HB_VPS_SetChnRotate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-getchnrotate">5.5.3.17. HB_VPS_GetChnRotate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-setchngdc">5.5.3.18. HB_VPS_SetChnGdc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-updategdcsize">5.5.3.19. HB_VPS_UpdateGdcSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-setchncrop">5.5.3.20. HB_VPS_SetChnCrop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-getchncrop">5.5.3.21. HB_VPS_GetChnCrop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-setchnframerate">5.5.3.22. HB_VPS_SetChnFrameRate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-triggersnapframe">5.5.3.23. HB_VPS_TriggerSnapFrame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-getchnframe">5.5.3.24. HB_VPS_GetChnFrame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-getchnframe-cond">5.5.3.25. HB_VPS_GetChnFrame_Cond</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-releasechnframe">5.5.3.26. HB_VPS_ReleaseChnFrame</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-setpymchnattr">5.5.3.27. HB_VPS_SetPymChnAttr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-getpymchnattr">5.5.3.28. HB_VPS_GetPymChnAttr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-changepymus">5.5.3.29. HB_VPS_ChangePymUs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-getchnfd">5.5.3.30. HB_VPS_GetChnFd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-closechnfd">5.5.3.31. HB_VPS_CloseChnFd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vps">5.5.3.32. VPS参考代码</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">5.5.3.33. VPS接口调用流程</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">5.5.3.34. VPS场景使用说明</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">5.5.4. 数据结构</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-grp-attr-s">5.5.4.1. HB_VPS_GRP_ATTR_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rect-s">5.5.4.2. HB_RECT_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-crop-info-s">5.5.4.3. HB_VPS_CROP_INFO_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-frame-rate-ctrl-s">5.5.4.4. HB_FRAME_RATE_CTRL_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-chn-attr-s">5.5.4.5. HB_VPS_CHN_ATTR_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-rotation-e">5.5.4.6. HB_ROTATION_E</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dynamic-src-info-s">5.5.4.7. DYNAMIC_SRC_INFO_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-pym-scale-info-s">5.5.4.8. HB_PYM_SCALE_INFO_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-vps-pym-chn-attr-s">5.5.4.9. HB_VPS_PYM_CHN_ATTR_S</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hb-dis-mv-info-s">5.5.4.10. HB_DIS_MV_INFO_S</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">5.5.5. 错误码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">5.5.6. 参考代码</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="6-Region_Processing_zh_CN.html">5.6. 区域处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7-Video_Output_zh_CN.html">5.7. 视频输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8-Video_Encode_zh_CN.html">5.8. 视频编码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9-Video_Decode_zh_CN.html">5.9. 视频解码</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10-ISP_Tuning_Guide/index.html">5.10. 图像调试指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11-Image_Media_Module_Debugging_Guide/MU-2520-11-X3J3_Image_Media_Module_Debugging_Guide_zh_CN.html">5.11. 查询多媒体模块调试信息</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12-Media_Processing_Performance_Debug_Guide.html">5.12. 多媒体性能调试</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">5. </span>多媒体开发指南</a> &raquo;</li>
+      <li><span class="section-number">5.5. </span>视频处理</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="4-Graphic_System_API_Reference_Manual.html" class="btn btn-neutral float-left" title="5.4. ISP图像系统" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="6-Region_Processing_zh_CN.html" class="btn btn-neutral float-right" title="5.6. 区域处理" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">5.5. </span>视频处理<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<section id="id2">
+<h2><span class="section-number">5.5.1. </span>概述<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">VPS（Video</span> <span class="pre">Process</span> <span class="pre">System）</span></code>是视频处理系统，支持对图像进行缩小、放大、裁剪、旋转、GDC矫正、帧率控制以及金字塔图像输出。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">5.5.2. </span>功能描述<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<section id="id4">
+<h3><span class="section-number">5.5.2.1. </span>基本概念<a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<ul>
+<li><p>Group</p>
+<p><code class="docutils literal notranslate"><span class="pre">VPS</span></code>对用户提供组的概念，各个<code class="docutils literal notranslate"><span class="pre">Group</span></code>分时复用<code class="docutils literal notranslate"><span class="pre">IPU</span></code>, <code class="docutils literal notranslate"><span class="pre">GDC</span></code>, <code class="docutils literal notranslate"><span class="pre">PYM</span></code>硬件，可以将多个<code class="docutils literal notranslate"><span class="pre">VPS</span> <span class="pre">Group</span></code>进行级联使用。</p>
+</li>
+<li><p>Channel</p>
+<p><code class="docutils literal notranslate"><span class="pre">VPS</span></code>的通道，一路通道代表<code class="docutils literal notranslate"><span class="pre">VPS</span></code>的一路输出。输出的通道主要分为普通图像通道和金字塔图像通道，普通通道输出缩放裁剪或旋转后的单层数据，金字塔通道输出多层金字塔缩放数据。</p>
+</li>
+</ul>
+</section>
+<section id="id5">
+<h3><span class="section-number">5.5.2.2. </span>功能描述<a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p><img alt="Func Description" src="../_images/ss_ch5_func_description.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">VPS</span></code>可以通过调用 <a class="reference internal" href="2-System_Control_zh_CN.html"><span class="doc">系统控制</span></a> 提供的绑定接口与其他模块绑定，输入可以与<code class="docutils literal notranslate"><span class="pre">VIN</span></code>、<code class="docutils literal notranslate"><span class="pre">VDEC</span></code>模块绑定，<code class="docutils literal notranslate"><span class="pre">VPS</span></code>输出可以与<code class="docutils literal notranslate"><span class="pre">VOT</span></code>、<code class="docutils literal notranslate"><span class="pre">VENC</span></code>模块绑定，前者为<code class="docutils literal notranslate"><span class="pre">VPS</span></code>的输入源，后者为<code class="docutils literal notranslate"><span class="pre">VPS</span></code>的接收者，也可以与另一个<code class="docutils literal notranslate"><span class="pre">VPS</span></code>绑定实现更多的通道；支持处理用户回灌的图像数据。用户可以通过<code class="docutils literal notranslate"><span class="pre">VPS</span></code>接口对<code class="docutils literal notranslate"><span class="pre">Group</span></code>进行管理，每个<code class="docutils literal notranslate"><span class="pre">Group</span></code>仅可以与一个输入源绑定，每个<code class="docutils literal notranslate"><span class="pre">Channel</span></code>可以与不同的模块绑定。 <code class="docutils literal notranslate"><span class="pre">VPS</span></code>与<code class="docutils literal notranslate"><span class="pre">VIN</span></code>绑定场景下，需要调用<code class="docutils literal notranslate"><span class="pre">HB_SYS_SetVINVPSMode</span></code> 来配置<code class="docutils literal notranslate"><span class="pre">VIN</span></code>与<code class="docutils literal notranslate"><span class="pre">VPS</span></code>之间在线或离线的不同模式。</p>
+<p><img alt="Func Description Topology" src="../_images/ss_ch5_func_description_topology.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">VPS</span></code>硬件由一个<code class="docutils literal notranslate"><span class="pre">IPU</span></code>，一个<code class="docutils literal notranslate"><span class="pre">PYM</span></code>，两个<code class="docutils literal notranslate"><span class="pre">GDC</span></code>组成。共有7路输出<code class="docutils literal notranslate"><span class="pre">Channel</span></code>（chn0~chn6），chn0~chn4可以实现<code class="docutils literal notranslate"><span class="pre">downscale</span></code>，chn5可以实现<code class="docutils literal notranslate"><span class="pre">upscale</span></code>，chn0~chn5均可实现裁剪（ROI）、旋转、矫正、帧率控制，chn6为金字塔online Channel。虚框为硬件复用，其中<code class="docutils literal notranslate"><span class="pre">OSD</span></code>灰色块为CPU叠加，其余三个米色块为硬件叠加。</p>
+<ul>
+<li><p>Upscale功能：</p>
+<p>尺寸限制请参考下表</p>
+<p>支持水平方向最大1.5倍放大，宽度需为4的倍数，最小32x32，最大4096</p>
+<p>支持垂直方向最大1.5倍放大, 高度需为偶数，最小32x32，最大4096</p>
+<p>只有channel5支持Upscale功能</p>
+</li>
+<li><p>Downscale功能：</p>
+<p>尺寸限制参考下表</p>
+<p>水平方向最大缩小为原尺寸的1/8（大于1/8）, 最小32x32，最大4096</p>
+<p>垂直方向最大缩小为原尺寸的1/8（大于1/8）, 最小32x32，最大4096</p>
+<p>Channel0~channel4支持Downscale功能</p>
+</li>
+<li><p>IPU各通道的尺寸限制如下：</p></li>
+</ul>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">Scaler</th>
+<th align="center">FIFO(bytes)</th>
+<th align="center">Resolution(pixel)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Scaler 5 (IPU US)</td>
+<td align="center">4096</td>
+<td align="center">8M</td>
+</tr>
+<tr>
+<td align="center">Scaler 2 (IPU DS2)</td>
+<td align="center">4096</td>
+<td align="center">8M</td>
+</tr>
+<tr>
+<td align="center">Scaler 1 (IPU DS1)</td>
+<td align="center">2048</td>
+<td align="center">2M</td>
+</tr>
+<tr>
+<td align="center">Scaler 3 (IPU DS3)</td>
+<td align="center">2048</td>
+<td align="center">2M</td>
+</tr>
+<tr>
+<td align="center">Scaler 4 (IPU DS4)</td>
+<td align="center">1280</td>
+<td align="center">1M</td>
+</tr>
+<tr>
+<td align="center">Scaler 0 (IPU DS0)</td>
+<td align="center">1280</td>
+<td align="center">1M</td>
+</tr>
+</tbody>
+</table><ul>
+<li><p>Crop功能：</p>
+<p><code class="docutils literal notranslate"><span class="pre">VPS</span></code>可以对输入的图形进行裁剪，选择裁剪后的ROI区域去做放大或者缩小</p>
+</li>
+<li><p>PYM金字塔处理功能：</p>
+<p>最大输入图像宽度4096，最大输入图像高度4096</p>
+<p>最小输入图像宽度64，最小输入图像高度64</p>
+<p>最大输出图像宽度4096，最大输出图像高度4096</p>
+<p>最小输出图像宽度48，最小输出图像高度32</p>
+<p>缩小图像层数24（0~23）层，其中0、4、8、12、16、20层为基础Base层，基础层每一层的size为上一层的1/2；其余层为ROI层，ROI层基于Base层作缩小（1、2、3层基于Base0层，5、6、7层基于Base4层，以此类推）各层可以单独使能，缩放区域、缩放系数可以配置放大图像层数为6（24~29）层，放大比例固定，分别为1.28、1.6、2、2.56、3.2、4倍。</p>
+<p><code class="docutils literal notranslate"><span class="pre">PYM</span></code>通道也可以为0~5，此时为非online通道。</p>
+<p>每一个group下最多使用一个<code class="docutils literal notranslate"><span class="pre">PYM</span></code>。</p>
+</li>
+</ul>
+</section>
+<section id="id6">
+<h3><span class="section-number">5.5.2.3. </span>注意事项<a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">PYM</span></code>硬件要求最少使能BASE0层与BASE4层；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PYM</span></code>在online输入（chn6）时，PYM ds所有层（0~23）累计输出数据量不得大于输入数据量的2.5倍，us层（24~29）累计宽之和不得超过输入宽，否则会有未知风险；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IPU</span></code>绑定了<code class="docutils literal notranslate"><span class="pre">PYM</span></code>后，不能再绑定<code class="docutils literal notranslate"><span class="pre">VOT</span></code>；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Rotate</span></code>旋转功能：</p>
+<p><code class="docutils literal notranslate"><span class="pre">VPS</span></code>支持旋转90度、180度、270度，支持<code class="docutils literal notranslate"><span class="pre">Group旋转</span></code>与<code class="docutils literal notranslate"><span class="pre">Chnnel旋转</span></code>（二选一），<code class="docutils literal notranslate"><span class="pre">Group旋转</span></code>时<code class="docutils literal notranslate"><span class="pre">VPS</span></code>所有输出通道均旋转，<code class="docutils literal notranslate"><span class="pre">Chnnel旋转</span></code>可以将chn0~chn5中任意两路旋转，<code class="docutils literal notranslate"><span class="pre">PYM</span></code>处理过的通道不可以旋转。</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Gdc</span></code>矫正功能：</p>
+<p><code class="docutils literal notranslate"><span class="pre">VPS</span></code>支持输入矫正文件作图形畸变矫正，支持<code class="docutils literal notranslate"><span class="pre">Group矫正</span></code>与<code class="docutils literal notranslate"><span class="pre">Chnnel矫正</span></code>（二选一），<code class="docutils literal notranslate"><span class="pre">Group矫正</span></code>时<code class="docutils literal notranslate"><span class="pre">VPS</span></code>所有输出通道均作矫正，<code class="docutils literal notranslate"><span class="pre">Chnnel矫正</span></code>可以在chn0~chn5中任意两路作矫正。</p>
+</li>
+<li><p>帧率控制功能：</p>
+<p><code class="docutils literal notranslate"><span class="pre">VPS</span></code>的channel0~5支持帧率控制，可以输出小于等于输入帧率的任意帧率。</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="api">
+<h2><span class="section-number">5.5.3. </span>API参考<a class="headerlink" href="#api" title="永久链接至标题"></a></h2>
+<section id="hb-vps-creategrp">
+<h3><span class="section-number">5.5.3.1. </span>HB_VPS_CreateGrp<a class="headerlink" href="#hb-vps-creategrp" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_CreateGrp</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">VPS_GRP_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">grpAttr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>创建一个VPS Group</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">grpAttr</td>
+<td align="left">Group属性指针</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>VPS最多可以创建8个Group；Group属性主要包含输入的宽、高和GDC的buf深度。</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-destroygrp">
+<h3><span class="section-number">5.5.3.2. </span>HB_VPS_DestroyGrp<a class="headerlink" href="#hb-vps-destroygrp" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_DestroyGrp</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>销毁一个VPS Group</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>Group必须已经创建</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-startgrp">
+<h3><span class="section-number">5.5.3.3. </span>HB_VPS_StartGrp<a class="headerlink" href="#hb-vps-startgrp" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_StartGrp</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>启动VPS Group处理</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>Group必须已经创建</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-stopgrp">
+<h3><span class="section-number">5.5.3.4. </span>HB_VPS_StopGrp<a class="headerlink" href="#hb-vps-stopgrp" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_StopGrp</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>停止VPS Group处理</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="right">描述</th>
+<th align="right">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="right">Group号</td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>Group必须已经创建并且已经启动</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-getgrpattr">
+<h3><span class="section-number">5.5.3.5. </span>HB_VPS_GetGrpAttr<a class="headerlink" href="#hb-vps-getgrpattr" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_GetGrpAttr</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="n">VPS_GRP_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">grpAttr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取VPS Group属性</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">grpAttr</td>
+<td align="left">属性结构体指针</td>
+<td align="center">输出</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-setgrpattr">
+<h3><span class="section-number">5.5.3.6. </span>HB_VPS_SetGrpAttr<a class="headerlink" href="#hb-vps-setgrpattr" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_SetGrpAttr</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">VPS_GRP_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">grpAttr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置VPS Group属性</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">grpAttr</td>
+<td align="left">属性结构体指针</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-setgrprotate">
+<h3><span class="section-number">5.5.3.7. </span>HB_VPS_SetGrpRotate<a class="headerlink" href="#hb-vps-setgrprotate" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_SetGrpRotate</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="n">ROTATION_E</span><span class="w"> </span><span class="n">enRotation</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置VPS Group旋转功能，使VPS的所有输出都旋转</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">enRotation</td>
+<td align="left">旋转参数</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>该接口需要在HB_VPS_SetChnAttr之前调用，GroupRotate使能之后禁止使能ChnRotate；isp绑定ipu必须得是offline模式</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-getgrprotate">
+<h3><span class="section-number">5.5.3.8. </span>HB_VPS_GetGrpRotate<a class="headerlink" href="#hb-vps-getgrprotate" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">HB_VPS_Get</span><span class="w"> </span><span class="n">GrpRotate</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="n">ROTATION_E</span><span class="w"> </span><span class="o">*</span><span class="n">enRotation</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取VPS Group旋转功能属性</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">enRotation</td>
+<td align="left">旋转功能参数指针</td>
+<td align="center">输出</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-setgrprotaterepeat">
+<h3><span class="section-number">5.5.3.9. </span>HB_VPS_SetGrpRotateRepeat<a class="headerlink" href="#hb-vps-setgrprotaterepeat" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_SetGrpRotateRepeat</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="n">ROTATION_E</span><span class="w"> </span><span class="n">enRotation</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>动态组旋转：该接口会保存当前group及后面绑定的多个VPS group所有通道配置，根据传的enRotation，自动重新计算旋转后所有通道的尺寸、roi区域，重新初始化group，重新绑定VIN；</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">enRotation</td>
+<td align="left">旋转参数</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>该接口暂时不支持配置过PYM的场景</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-setgrpgdc">
+<h3><span class="section-number">5.5.3.10. </span>HB_VPS_SetGrpGdc<a class="headerlink" href="#hb-vps-setgrpgdc" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">HB_VPS_SetGrpGdc</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">buf_addr</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">buf_len</span><span class="p">,</span><span class="w"> </span><span class="n">ROTATION_E</span><span class="w"> </span><span class="n">enRotation</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置VPS Group GDC矫正功能，使VPS的所有输出都有矫正效果</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">buf_addr</td>
+<td align="left">矫正文件地址</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">buf_len</td>
+<td align="left">矫正文件长度</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">enRotation</td>
+<td align="left">旋转参数</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>该接口需要在HB_VPS_SetChnAttr之前调用；根据不同的镜头，不同的畸变，不同的尺寸，需要传入不同矫正bin文件。</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-sendframe">
+<h3><span class="section-number">5.5.3.11. </span>HB_VPS_SendFrame<a class="headerlink" href="#hb-vps-sendframe" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_SendFrame</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">videoFrame</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>向VPS发送数据</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">videoFrame</td>
+<td align="left">图像数据指针；VPS回灌数据结构为hb_vio_buffer_t结构；</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">ms</td>
+<td align="left">超时参数 ms设为-1 时，为阻塞接口；0 时为 非阻塞接口；大于 0 时为超时等待时间，超时时间的 单位为毫秒（ms）</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-setchnattr">
+<h3><span class="section-number">5.5.3.12. </span>HB_VPS_SetChnAttr<a class="headerlink" href="#hb-vps-setchnattr" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_SetChnAttr</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">VPS_CHN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">chnAttr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置VPS通道属性（设置IPU某个通道的输出尺寸）</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">chnAttr</td>
+<td align="left">通道属性指针</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>该接口支持动态配置IPU的输出尺寸，动态配置需要在StartGrp之后调用该接口，动态配置的新尺寸不可以比第一次初始化配置的尺寸大。如果需要启动以后从小尺寸改到大尺寸，那么需要在StartVps之前调用两次该接口，第一次传最大size，第二次传最小size。</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-getchnattr">
+<h3><span class="section-number">5.5.3.13. </span>HB_VPS_GetChnAttr<a class="headerlink" href="#hb-vps-getchnattr" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_GetChnAttr</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="n">VPS_CHN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">chnAttr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取VPS通道属性</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">chnAttr</td>
+<td align="left">通道属性指针</td>
+<td align="center">输出</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-enablechn">
+<h3><span class="section-number">5.5.3.14. </span>HB_VPS_EnableChn<a class="headerlink" href="#hb-vps-enablechn" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_EnableChn</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>启用VPS通道</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>如果未使能通道，GetChnFrame接口获取不到图像</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-disablechn">
+<h3><span class="section-number">5.5.3.15. </span>HB_VPS_DisableChn<a class="headerlink" href="#hb-vps-disablechn" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_DisableChn</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>禁用VPS通道</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-setchnrotate">
+<h3><span class="section-number">5.5.3.16. </span>HB_VPS_SetChnRotate<a class="headerlink" href="#hb-vps-setchnrotate" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_SetChnRotate</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="n">ROTATION_E</span><span class="w"> </span><span class="n">enRotation</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置VPS通道图像固定角度旋转</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">enRotation</td>
+<td align="left">旋转属性</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>SetChnRotate属性需要在SetChnAttr之后调用，最多同时支持两个CHN做旋转；启动以后也支持调用，可以动态控制通道旋转。</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-getchnrotate">
+<h3><span class="section-number">5.5.3.17. </span>HB_VPS_GetChnRotate<a class="headerlink" href="#hb-vps-getchnrotate" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_GetChnRotate</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="n">ROTATION_E</span><span class="w"> </span><span class="o">*</span><span class="n">enRotation</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取VPS通道图像旋转属性</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">enRotation</td>
+<td align="left">旋转属性</td>
+<td align="center">输出</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-setchngdc">
+<h3><span class="section-number">5.5.3.18. </span>HB_VPS_SetChnGdc<a class="headerlink" href="#hb-vps-setchngdc" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">HB_VPS_SetChnGdc</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">buf_addr</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">buf_len</span><span class="p">,</span><span class="w"> </span><span class="n">ROTATION_E</span><span class="w"> </span><span class="n">enRotation</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置VPS chn GDC矫正功能</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">Channel号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">buf_addr</td>
+<td align="left">矫正文件地址</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">buf_len</td>
+<td align="left">矫正文件长度</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">enRotation</td>
+<td align="left">旋转参数</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>该接口需要在HB_VPS_SetChnAttr之后调用，最多同时支持两个CHN做矫正；根据不同的镜头，不同的畸变，不同的尺寸，需要传入不同矫正bin文件。</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-updategdcsize">
+<h3><span class="section-number">5.5.3.19. </span>HB_VPS_UpdateGdcSize<a class="headerlink" href="#hb-vps-updategdcsize" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">HB_VPS_UpdateGdcSize</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">out_width</span><span class="p">,</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">out_height</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置VPS GDC矫正输出尺寸（GDC输入输出尺寸默认是一致的，可以用该接口改变GDC输出的尺寸）</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">Channel号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">out_width</td>
+<td align="left">输出宽度</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">out_height</td>
+<td align="left">输出高度</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>该接口需要在HB_VPS_SetChnGdc和HB_VPS_SetGrpGdc之后调用，传入的输出尺寸需要与矫正bin文件对应；出入的尺寸不能比当前GDC输入的尺寸大</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>Group作gdc矫正时输出尺寸和输入尺寸不一致的场景：</p>
+</div></blockquote>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_SetGrpGdc</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">bin_buf</span><span class="p">,</span><span class="w"> </span><span class="n">buf_len</span><span class="p">,</span><span class="w"> </span><span class="n">degree</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_UpdateGdcSize</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1280</span><span class="p">,</span><span class="w"> </span><span class="mi">720</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>channel作gdc矫正时输出尺寸和输入尺寸不一致的场景：</p>
+</div></blockquote>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_SetChnGdc</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">chn_id</span><span class="p">,</span><span class="w"> </span><span class="n">bin_buf</span><span class="p">,</span><span class="w"> </span><span class="n">buf_len</span><span class="p">,</span><span class="w"> </span><span class="n">degree</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_UpdateGdcSize</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1280</span><span class="p">,</span><span class="w"> </span><span class="mi">720</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="hb-vps-setchncrop">
+<h3><span class="section-number">5.5.3.20. </span>HB_VPS_SetChnCrop<a class="headerlink" href="#hb-vps-setchncrop" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">HB_VPS_SetChnCrop</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">VPS_CROP_INFO_S</span><span class="w"> </span><span class="o">*</span><span class="n">cropInfo</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置VPS Chn裁剪功能</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">cropInfo</td>
+<td align="left">裁剪属性</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>需要在SetChnAttr之后调用；传入的ROI区域需要在IPU输入的size范围内；</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-getchncrop">
+<h3><span class="section-number">5.5.3.21. </span>HB_VPS_GetChnCrop<a class="headerlink" href="#hb-vps-getchncrop" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">HB_VPS_GetChnCrop</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="n">VPS_CROP_INFO_S</span><span class="w"> </span><span class="o">*</span><span class="n">cropInfo</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取VPS Chn固定角度旋转</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">cropInfo</td>
+<td align="left">裁剪属性</td>
+<td align="center">输出</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-setchnframerate">
+<h3><span class="section-number">5.5.3.22. </span>HB_VPS_SetChnFrameRate<a class="headerlink" href="#hb-vps-setchnframerate" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">HB_VPS_SetChnFrameRate</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="n">FRAME_RATE_CTRL_S</span><span class="w"> </span><span class="o">*</span><span class="n">frameRate</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置VPS通道帧率</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">frameRate 帧率属性结构体</td>
+<td align="left">输入</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-triggersnapframe">
+<h3><span class="section-number">5.5.3.23. </span>HB_VPS_TriggerSnapFrame<a class="headerlink" href="#hb-vps-triggersnapframe" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">HB_VPS_TriggerSnapFrame</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">frameCnt</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>抓拍帧；从当前帧开始标记frameCnt帧</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">frameCnt</td>
+<td align="left">抓拍帧的个数</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>启动以后才可以调用</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-getchnframe">
+<h3><span class="section-number">5.5.3.24. </span>HB_VPS_GetChnFrame<a class="headerlink" href="#hb-vps-getchnframe" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_GetChnFrame</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">videoFrame</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>从通道获取一帧处理完的图像</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">videoFrame</td>
+<td align="left">图像信息</td>
+<td align="center">输出</td>
+</tr>
+<tr>
+<td align="center">ms</td>
+<td align="left">超时参数 <br/>ms设为-1 时，为阻塞接口；<br/>0 时为 非阻塞接口；<br/>大于 0 时为超时等待时间，超时时间的单位为毫秒（ms）</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>获取到的图像结构分为正常BUF结构（hb_vio_buffer_t）和金字塔BUF结构（pym_buffer_t）</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-getchnframe-cond">
+<h3><span class="section-number">5.5.3.25. </span>HB_VPS_GetChnFrame_Cond<a class="headerlink" href="#hb-vps-getchnframe-cond" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_GetChnFrame_Cond</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">videoFrame</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">time</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>有条件的从通道获取一帧处理完的图像</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">videoFrame</td>
+<td align="left">图像信息</td>
+<td align="center">输出</td>
+</tr>
+<tr>
+<td align="center">ms</td>
+<td align="left">超时参数 <br/>ms设为-1 时，为阻塞接口；<br/>0 时为 非阻塞接口；<br/>大于 0 时为超时等待时间，超时时间的单位为毫秒（ms）</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">time</td>
+<td align="left">时间条件：为0表示从当前开始丢弃旧帧，等待获取新的一帧，其余值未作支持</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>获取到的图像结构分为正常BUF结构（hb_vio_buffer_t）和金字塔BUF结构（pym_buffer_t）</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-releasechnframe">
+<h3><span class="section-number">5.5.3.26. </span>HB_VPS_ReleaseChnFrame<a class="headerlink" href="#hb-vps-releasechnframe" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_ReleaseChnFrame</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">videoFrame</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>释放一帧通道图像</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">videoFrame</td>
+<td align="left">图像信息</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-setpymchnattr">
+<h3><span class="section-number">5.5.3.27. </span>HB_VPS_SetPymChnAttr<a class="headerlink" href="#hb-vps-setpymchnattr" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_SetPymChnAttr</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">VPS_PYM_CHN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pymChnAttr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>设置金字塔通道属性</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">pymChnAttr</td>
+<td align="left">金字塔通道属性指针</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<ol class="simple">
+<li><p>该接口支持动态配置PYM roi层的输出尺寸，需要在StartGrp之后调用该接口，动态配置的新roi size不可以比第一次初始化配置的size大。如果需要启动以后从小尺寸改到大尺寸，那么需要在StartVps之前调用两次该接口，第一次传最大size，第二次传最小size。</p></li>
+<li><p>该接口同时支持动态配置PYM的输入尺寸，仅在PYM回灌时有效，支持StartGrp以后src尺寸从大改小。</p></li>
+</ol>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>VPS参考代码</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-getpymchnattr">
+<h3><span class="section-number">5.5.3.28. </span>HB_VPS_GetPymChnAttr<a class="headerlink" href="#hb-vps-getpymchnattr" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_GetPymChnAttr</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">,</span><span class="w"> </span><span class="n">VPS_PYM_CHN_ATTR_S</span><span class="w"> </span><span class="o">*</span><span class="n">pymChnAttr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取金字塔通道属性</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="right">描述</th>
+<th align="right">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="right">Group号</td>
+<td align="right">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="right">通道号</td>
+<td align="right">输入</td>
+</tr>
+<tr>
+<td align="center">pymChnAttr</td>
+<td align="right">金字塔通道属性指针</td>
+<td align="right">输出</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-changepymus">
+<h3><span class="section-number">5.5.3.29. </span>HB_VPS_ChangePymUs<a class="headerlink" href="#hb-vps-changepymus" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">HB_VPS_ChangePymUs</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">us_num</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">enable</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>使能或关闭pym的us某一层</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="right">描述</th>
+<th align="right">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="right">Group号</td>
+<td align="right">输入</td>
+</tr>
+<tr>
+<td align="center">us_num</td>
+<td align="right">金字塔us层</td>
+<td align="right">输入</td>
+</tr>
+<tr>
+<td align="center">enable</td>
+<td align="right">是使能</td>
+<td align="right">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-getchnfd">
+<h3><span class="section-number">5.5.3.30. </span>HB_VPS_GetChnFd<a class="headerlink" href="#hb-vps-getchnfd" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_GetChnFd</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">VpsGrp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">VpsChn</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>获取VPS通道对应的设备文件描述符，获得的fd可以作select监听，select返回后可以直接通过getChnFrame接口获得图像。</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="left">描述</th>
+<th align="center">输入/输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">VpsGrp</td>
+<td align="left">Group号</td>
+<td align="center">输入</td>
+</tr>
+<tr>
+<td align="center">VpsChn</td>
+<td align="left">通道号</td>
+<td align="center">输入</td>
+</tr>
+</tbody>
+</table><p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">正数值</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">负值</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="hb-vps-closechnfd">
+<h3><span class="section-number">5.5.3.31. </span>HB_VPS_CloseChnFd<a class="headerlink" href="#hb-vps-closechnfd" title="永久链接至标题"></a></h3>
+<p>【函数声明】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">HB_VPS_CloseChnFd</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>关闭VPS内所有的通道fd。</p>
+</div></blockquote>
+<p>【参数描述】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【返回值】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">返回值</th>
+<th align="right">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="right">成功</td>
+</tr>
+<tr>
+<td align="center">非0</td>
+<td align="right">失败</td>
+</tr>
+</tbody>
+</table><p>【注意事项】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+<p>【参考代码】</p>
+<blockquote>
+<div><p>无</p>
+</div></blockquote>
+</section>
+<section id="vps">
+<h3><span class="section-number">5.5.3.32. </span>VPS参考代码<a class="headerlink" href="#vps" title="永久链接至标题"></a></h3>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">grp_attr</span><span class="p">.</span><span class="n">maxW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1280</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">grp_attr</span><span class="p">.</span><span class="n">maxH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">720</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_CreateGrp</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">grp_attr</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">grp_attr</span><span class="p">.</span><span class="n">maxW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1920</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">grp_attr</span><span class="p">.</span><span class="n">maxH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1080</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_SetGrpAttr</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">grp_attr</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_SetGrpRotate</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">ROTATION_90</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_SetGrpGdc</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">bin_buf</span><span class="p">,</span><span class="w"> </span><span class="n">bin_len</span><span class="p">,</span><span class="w"> </span><span class="n">ROTATION_90</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">chn_attr</span><span class="p">.</span><span class="n">enScale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">chn_attr</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1280</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">chn_attr</span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">720</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">chn_attr</span><span class="p">.</span><span class="n">frameDepth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_SetChnAttr</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">chn_id</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">chn_attr</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">chn_crop_info</span><span class="p">.</span><span class="n">en</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">chn_crop_info</span><span class="p">.</span><span class="n">cropRect</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">chn_crop_info</span><span class="p">.</span><span class="n">cropRect</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">chn_crop_info</span><span class="p">.</span><span class="n">cropRect</span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1280</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">chn_crop_info</span><span class="p">.</span><span class="n">cropRect</span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">720</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_SetChnCrop</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">chn_id</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">chn_crop_info</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_EnableChn</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">chn_id</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_SetChnRotate</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">chn_id</span><span class="p">,</span><span class="w"> </span><span class="n">ROTATION_90</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_SetChnGdc</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">chn_id</span><span class="p">,</span><span class="w"> </span><span class="n">bin_buf</span><span class="p">,</span><span class="w"> </span><span class="n">bin_len</span><span class="p">,</span><span class="w"> </span><span class="n">ROTATION_90</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">pym_chn_attr</span><span class="p">.</span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2000</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">pym_chn_attr</span><span class="p">.</span><span class="n">ds_layer_en</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">24</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">pym_chn_attr</span><span class="p">.</span><span class="n">us_layer_en</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">pym_chn_attr</span><span class="p">.</span><span class="n">frame_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">pym_chn_attr</span><span class="p">.</span><span class="n">frameDepth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_SetPymChnAttr</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">pym_chn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pym_chn_attr</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_StartGrp</span><span class="p">(</span><span class="n">grp_id</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_SendFrame</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">feedback_buf</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_GetChnFrame</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">chn_id</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">out_buf</span><span class="p">,</span><span class="w"> </span><span class="mi">2000</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_ReleaseChnFrame</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">chn_id</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">out_buf</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_DisableChn</span><span class="p">(</span><span class="n">grp_id</span><span class="p">,</span><span class="w"> </span><span class="n">chn_id</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_StopGrp</span><span class="p">(</span><span class="n">grp_id</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HB_VPS_DestroyGrp</span><span class="p">(</span><span class="n">grp_id</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h3><span class="section-number">5.5.3.33. </span>VPS接口调用流程<a class="headerlink" href="#id7" title="永久链接至标题"></a></h3>
+<p>VPS初始化接口主要分为Group的初始化和Channel的初始化，Group的接口可视为全局配置，Group属性对整个VPS输出均生效，Channel的接口是用作对多个输出通道分别配置，配置的属性仅对当前channel有效；初始化时需要先配置Group属性，然后再分别配置每个channel属性。</p>
+<p><img alt="image-20220329204239415" src="../_images/image-20220329204239415.png" /></p>
+</section>
+<section id="id8">
+<h3><span class="section-number">5.5.3.34. </span>VPS场景使用说明<a class="headerlink" href="#id8" title="永久链接至标题"></a></h3>
+<p>VPS内部主要由一个IPU、一个PYM、两个GDC共四个模块组成，根据接口的调用顺序将不同的模块动态绑定在一起，可以单独一个模块运行，也可以多个模块组合运行，不同的链接关系对应的接口调用流程如下：</p>
+<p><img alt="VPS IPU" src="../_images/ss_vps_ipu.png" /></p>
+<p>如果仅用IPU一个模块，在创建Group之后只调用HB_VPS_SetChnAttr，如果需要IPU输出多个通道，那么需要多次调用该接口。</p>
+<p><img alt="VPS GDC" src="../_images/ss_vps_gdc.png" /></p>
+<p>如果仅使用GDC一个模块，在创建Group之后调用HB_VPS_SetGrpGdc/Rotate接口。</p>
+<p><img alt="VPS PYM" src="../_images/ss_vps_pym.png" /></p>
+<p>如果仅使用PYM一个模块，在创建Group之后调用HB_VPS_SetPymChnAttr接口。</p>
+<p><img alt="VPS IPU_PYM" src="../_images/ss_vps_ipu_pym.png" /></p>
+<p>IPU作为第一个模块，PYM作为第二个模块，需要创建Group之后先调用HB_VPS_SetChnAttr，然后调用HB_VPS_SetPymChnAttr。</p>
+<p><img alt="VPS GDC_IPU" src="../_images/ss_vps_gdc_ipu.png" /></p>
+<p>GDC放在IPU之前，先调用HB_VPS_SetGrpGdc/Rotate，再调用HB_VPS_SetChnAttr。</p>
+<p><img alt="VPS GDC_PYM" src="../_images/ss_vps_gdc_pym.png" /></p>
+<p>GDC放在PYM之前，先调用HB_VPS_SetGrpGdc/Rotate，再调用HB_VPS_SetPymChnAttr。</p>
+<p><img alt="VPS IPU_GDC" src="../_images/ss_vps_ipu_gdc.png" /></p>
+<p>IPU放在GDC之前，先调用HB_VPS_SetChnAttr，再调用HB_VPS_SetChnGdc/Rotate。</p>
+<p><img alt="VPS IPU_GDC_PYM" src="../_images/ss_vps_ipu_gdc_pym.png" /></p>
+<p>先IPU然后GDC再PYM的话，需要先调用HB_VPS_SetChnAttr，再调用HB_VPS_SetChnGdc/Rotate，最后调用HB_VPS_SetPymChnAttr。</p>
+<p><img alt="VPS IPU_GDC+PYM" src="../_images/ss_vps_ipu_gdc+pym.png" /></p>
+<p>如果需要IPU输出的多个通道分别接GDC和PYM，那么需要先调用HB_VPS_SetChnAttr(chnA)、HB_VPS_SetChnAttr(chnB)，然后HB_VPS_SetChnGdc/Rotate(chnA)，然后HB_VPS_SetPymChnAttr(chnB)。</p>
+<p><img alt="VPS IPU_GDC_PYM+GDC" src="../_images/ss_vps_ipu_gdc_pym+gdc.png" /></p>
+<p>HB_VPS_SetChnAttr(chnA)、HB_VPS_SetChnAttr(chnB)，然后HB_VPS_SetChnGdc/Rotate(chnA)，然后HB_VPS_SetChnGdc/Rotate(chnB)，最后HB_VPS_SetPymChnAttr(chnB)。</p>
+<p><img alt="VPS IPU+GDC+PYM+GDC" src="../_images/ss_vps_ipu+gdc+pym+gdc.png" /></p>
+<p>HB_VPS_SetChnAttr(chnA)、HB_VPS_SetChnAttr(chnB)、HB_VPS_SetChnAttr(chnC)，然后HB_VPS_SetChnGdc/Rotate(chnA) ， HB_VPS_SetPymChnAttr(chnB)，HB_VPS_SetChnGdc/Rotate(chnC)。</p>
+<p><img alt="VPS IPU_GDC_PYM_GDC" src="../_images/ss_vps_gdc_ipu_gdc_pym.png" /></p>
+<p>如果需要VPS中四个模块串一起跑，需要HB_VPS_SetGrpGdc、HB_VPS_SetChnAttr(chnA)，HB_VPS_SetChnRotate(chnA)、HB_VPS_SetPymChnAttr(chnA)。</p>
+</section>
+</section>
+<section id="id9">
+<h2><span class="section-number">5.5.4. </span>数据结构<a class="headerlink" href="#id9" title="永久链接至标题"></a></h2>
+<section id="hb-vps-grp-attr-s">
+<h3><span class="section-number">5.5.4.1. </span>HB_VPS_GRP_ATTR_S<a class="headerlink" href="#hb-vps-grp-attr-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_VPS_GRP_ATTR_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">		</span><span class="n">maxW</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">		</span><span class="n">maxH</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> 	</span><span class="n">frameDepth</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w">				</span><span class="n">pixelFormat</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">VPS_GRP_ATTR_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>VPS组的属性结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">maxW</td>
+<td align="center">VPS输入图像最大宽度</td>
+</tr>
+<tr>
+<td align="center">maxH</td>
+<td align="center">VPS输入图像最大高度</td>
+</tr>
+<tr>
+<td align="center">frameDepth</td>
+<td align="center">Gdc申请的buf个数，如果是vps绑定了vot，需要注意frameDepth不能大于6，iar输入的buffer个数实际是8，gdc的话是framedepth+2，iar里面会判断gdc送过来index（下标从0开始算）不能大于等于8</td>
+</tr>
+<tr>
+<td align="center">pixelFormat</td>
+<td align="center">像素格式（VPS只支持nv12一种格式，当前参数预留）</td>
+</tr>
+</tbody>
+</table></section>
+<section id="hb-rect-s">
+<h3><span class="section-number">5.5.4.2. </span>HB_RECT_S<a class="headerlink" href="#hb-rect-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_RECT_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">    </span><span class="n">x</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">    </span><span class="n">y</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">    </span><span class="n">width</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">    </span><span class="n">height</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">RECT_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>定义矩形区域</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">x</td>
+<td align="center">起始x坐标</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td align="center">起始y坐标</td>
+</tr>
+<tr>
+<td align="center">width</td>
+<td align="center">图像宽</td>
+</tr>
+<tr>
+<td align="center">height</td>
+<td align="center">图像高</td>
+</tr>
+</tbody>
+</table></section>
+<section id="hb-vps-crop-info-s">
+<h3><span class="section-number">5.5.4.3. </span>HB_VPS_CROP_INFO_S<a class="headerlink" href="#hb-vps-crop-info-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="n">HB_VPS_CROP_INFO_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">bool</span><span class="w">        </span><span class="n">en</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">RECT_S</span><span class="w">      </span><span class="n">cropRect</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">VPS_CROP_INFO_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>裁剪信息结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">en</td>
+<td align="center">裁剪是否使能</td>
+</tr>
+<tr>
+<td align="center">cropRect</td>
+<td align="center">裁剪的区域</td>
+</tr>
+</tbody>
+</table></section>
+<section id="hb-frame-rate-ctrl-s">
+<h3><span class="section-number">5.5.4.4. </span>HB_FRAME_RATE_CTRL_S<a class="headerlink" href="#hb-frame-rate-ctrl-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="n">HB_FRAME_RATE_CTRL_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">uint32</span><span class="w">		</span><span class="n">srcFrameRate</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">uin32</span><span class="w">		</span><span class="n">dstFrameRate</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">FRAME_RATE_CTRL_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>帧率控制信息结构体，dstFrameRate不得大于srcFrameRate</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">srcFrameRate</td>
+<td align="center">输入视频帧率</td>
+</tr>
+<tr>
+<td align="center">dstFrameRate</td>
+<td align="center">目标视频帧率</td>
+</tr>
+</tbody>
+</table></section>
+<section id="hb-vps-chn-attr-s">
+<h3><span class="section-number">5.5.4.5. </span>HB_VPS_CHN_ATTR_S<a class="headerlink" href="#hb-vps-chn-attr-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_VPS_CHN_ATTR_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">		</span><span class="n">width</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">		</span><span class="n">height</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w">			</span><span class="n">pixelFormat</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint8_t</span><span class="w">		</span><span class="n">enMirror</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint8_t</span><span class="w">		</span><span class="n">enFlip</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint8_t</span><span class="w">		</span><span class="n">enScale</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">		</span><span class="n">frameDepth</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="n">FRAME_RATE_CTRL_S</span><span class="w">	</span><span class="n">frameRate</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">VPS_CHN_ATTR_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>通道输出属性结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">width</td>
+<td align="center">图像输出宽</td>
+</tr>
+<tr>
+<td align="center">height</td>
+<td align="center">图像输出高</td>
+</tr>
+<tr>
+<td align="center">pixelFormat</td>
+<td align="center">像素格式（VPS目前输出只有nv12一种格式）</td>
+</tr>
+<tr>
+<td align="center">enMirror</td>
+<td align="center">镜像使能,VPS不支持此功能，可以使用isp接口的HB_VIN_CtrlPipeMirror去水平镜像</td>
+</tr>
+<tr>
+<td align="center">enFlip</td>
+<td align="center">翻转使能，VPS不支持此功能，需要使用sensor的上下翻转</td>
+</tr>
+<tr>
+<td align="center">enScale</td>
+<td align="center">缩放使能</td>
+</tr>
+<tr>
+<td align="center">frameDepth</td>
+<td align="center">图像队列长度</td>
+</tr>
+<tr>
+<td align="center">frameRate</td>
+<td align="center">帧率控制（此帧率不生效，可以使用HB_VPS_SetChnFrameRate接口实现帧率控制）</td>
+</tr>
+</tbody>
+</table></section>
+<section id="hb-rotation-e">
+<h3><span class="section-number">5.5.4.6. </span>HB_ROTATION_E<a class="headerlink" href="#hb-rotation-e" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="n">HB_ROTATION_E</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">ROTATION_0</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">ROTATION_90</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">ROTATION_180</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">ROTATION_270</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">ROTATION_MAX</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">ROTATION_E</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>旋转枚举</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">ROTATION_0</td>
+<td align="center">不旋转</td>
+</tr>
+<tr>
+<td align="center">ROTATION_90</td>
+<td align="center">旋转90度</td>
+</tr>
+<tr>
+<td align="center">ROTATION_180</td>
+<td align="center">旋转180度</td>
+</tr>
+<tr>
+<td align="center">ROTATION_270</td>
+<td align="center">旋转270度</td>
+</tr>
+<tr>
+<td align="center">ROTATION_MAX</td>
+<td align="center">枚举的最大值</td>
+</tr>
+</tbody>
+</table></section>
+<section id="dynamic-src-info-s">
+<h3><span class="section-number">5.5.4.7. </span>DYNAMIC_SRC_INFO_S<a class="headerlink" href="#dynamic-src-info-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_VPS_DYNAMIC_SRC_INFO_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint8_t</span><span class="w"> 	</span><span class="n">src_change_en</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint16_t</span><span class="w"> 	</span><span class="n">new_width</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint16_t</span><span class="w"> 	</span><span class="n">new_height</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">DYNAMIC_SRC_INFO_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>金字塔动态改变输入size配置结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">src_change_en</td>
+<td align="center">使能输入size改变</td>
+</tr>
+<tr>
+<td align="center">new_width</td>
+<td align="center">宽</td>
+</tr>
+<tr>
+<td align="center">new_height</td>
+<td align="center">高</td>
+</tr>
+</tbody>
+</table></section>
+<section id="hb-pym-scale-info-s">
+<h3><span class="section-number">5.5.4.8. </span>HB_PYM_SCALE_INFO_S<a class="headerlink" href="#hb-pym-scale-info-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_PYM_SCALE_INFO_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint8_t</span><span class="w">		</span><span class="n">factor</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint16_t</span><span class="w">		</span><span class="n">roi_x</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint16_t</span><span class="w">		</span><span class="n">roi_y</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint16_t</span><span class="w">		</span><span class="n">roi_width</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint16_t</span><span class="w">		</span><span class="n">roi_height</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">PYM_SCALE_INFO_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>金字塔裁剪缩放属性结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">factor</td>
+<td align="center">缩放参数（1~63），对于缩小得层，缩放公式是factor/(factor+64),对于放大得层对应是64/factor，因为放大层是固定的倍数，也即对应放大层24的factor固定是50，25层的factor固定是40，26层factor固定是32，27层factor固定是25，28层factor固定是20，29层factor固定是16</td>
+</tr>
+<tr>
+<td align="center">roi_x</td>
+<td align="center">起始x坐标</td>
+</tr>
+<tr>
+<td align="center">roi_y</td>
+<td align="center">起始y坐标</td>
+</tr>
+<tr>
+<td align="center">roi_width</td>
+<td align="center">图像宽</td>
+</tr>
+<tr>
+<td align="center">roi_height</td>
+<td align="center">图像高</td>
+</tr>
+</tbody>
+</table></section>
+<section id="hb-vps-pym-chn-attr-s">
+<h3><span class="section-number">5.5.4.9. </span>HB_VPS_PYM_CHN_ATTR_S<a class="headerlink" href="#hb-vps-pym-chn-attr-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_VPS_PYM_CHN_ATTR_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">		</span><span class="n">frame_id</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">		</span><span class="n">ds_uv_bypass</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint16_t</span><span class="w">		</span><span class="n">ds_layer_en</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint8_t</span><span class="w">		</span><span class="n">us_layer_en</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint8_t</span><span class="w">		</span><span class="n">us_uv_bypass</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">int</span><span class="w">			</span><span class="n">timeout</span><span class="p">;</span><span class="w"></span>
+<span class="w">	</span><span class="kt">uint32_t</span><span class="w">		</span><span class="n">frameDepth</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">DYNAMIC_SRC_INFO_S</span><span class="w">	</span><span class="n">dynamic_src_info</span><span class="p">;</span><span class="w"></span>
+<span class="cp">#define			MAX_PYM_DS_NUM			24</span>
+<span class="cp">#define			MAX_PYM_US_NUM			6</span>
+<span class="w">	</span><span class="n">PYM_SCALE_INFO_S</span><span class="w"> </span><span class="n">ds_info</span><span class="p">[</span><span class="n">MAX_PYM_DS_NUM</span><span class="p">];</span><span class="w"></span>
+<span class="w">	</span><span class="n">PYM_SCALE_INFO_S</span><span class="w"> </span><span class="n">us_info</span><span class="p">[</span><span class="n">MAX_PYM_US_NUM</span><span class="p">];</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">VPS_PYM_CHN_ATTR_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>辅助通道属性结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">frame_id</td>
+<td align="center">帧ID使能</td>
+</tr>
+<tr>
+<td align="center">ds_uv_bypass</td>
+<td align="center">DS层uv分量bypass</td>
+</tr>
+<tr>
+<td align="center">ds_layer_en</td>
+<td align="center">DS层使能层数（4~23）</td>
+</tr>
+<tr>
+<td align="center">us_layer_en</td>
+<td align="center">US层使能层数（0~6）</td>
+</tr>
+<tr>
+<td align="center">us_uv_bypass</td>
+<td align="center">US层uv分量bypass</td>
+</tr>
+<tr>
+<td align="center">timeout</td>
+<td align="center">超时时间</td>
+</tr>
+<tr>
+<td align="center">frameDepth</td>
+<td align="center">图像队列长度</td>
+</tr>
+<tr>
+<td align="center">ds_info</td>
+<td align="center">DS缩放信息</td>
+</tr>
+<tr>
+<td align="center">us_info</td>
+<td align="center">US缩放信息</td>
+</tr>
+</tbody>
+</table></section>
+<section id="hb-dis-mv-info-s">
+<h3><span class="section-number">5.5.4.10. </span>HB_DIS_MV_INFO_S<a class="headerlink" href="#hb-dis-mv-info-s" title="永久链接至标题"></a></h3>
+<p>【结构定义】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="nc">HB_DIS_MV_INFO_S</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w">    </span><span class="n">gmvX</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w">    </span><span class="n">gmvY</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w">    </span><span class="n">xUpdate</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w">    </span><span class="n">yUpdate</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">DIS_MV_INFO_S</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>【功能描述】</p>
+<blockquote>
+<div><p>偏移信息结构体</p>
+</div></blockquote>
+<p>【成员说明】</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">成员</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">gmvX</td>
+<td align="center">横坐标偏移值</td>
+</tr>
+<tr>
+<td align="center">gmvY</td>
+<td align="center">纵坐标偏移值</td>
+</tr>
+<tr>
+<td align="center">xUpdate</td>
+<td align="center">X更新值</td>
+</tr>
+<tr>
+<td align="center">yUpdate</td>
+<td align="center">Y更新值</td>
+</tr>
+</tbody>
+</table></section>
+</section>
+<section id="id10">
+<h2><span class="section-number">5.5.5. </span>错误码<a class="headerlink" href="#id10" title="永久链接至标题"></a></h2>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th align="center">错误码</th>
+<th align="left">宏定义</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">-268,696,577</td>
+<td align="left">HB_ERR_VPS_INVALID_GROUPID</td>
+<td align="left">非法组号</td>
+</tr>
+<tr>
+<td align="center">-268,696,578</td>
+<td align="left">HB_ERR_VPS_BUFMGR</td>
+<td align="left">帧队列错误</td>
+</tr>
+<tr>
+<td align="center">-268,696,579</td>
+<td align="left">HB_ERR_VPS_GROUP_FAIL</td>
+<td align="left">组失败</td>
+</tr>
+<tr>
+<td align="center">-268,696,580</td>
+<td align="left">HB_ERR_VPS_GROUP_UNEXIST</td>
+<td align="left">组不存在</td>
+</tr>
+<tr>
+<td align="center">-268,696,581</td>
+<td align="left">HB_ERR_VPS_CHN_UNEXIST</td>
+<td align="left">通道不存在</td>
+</tr>
+<tr>
+<td align="center">-268,696,582</td>
+<td align="left">HB_ERR_VPS_ROTATE</td>
+<td align="left">旋转失败</td>
+</tr>
+<tr>
+<td align="center">-268,696,583</td>
+<td align="left">HB_ERR_VPS_NULL_PARA</td>
+<td align="left">参数NULL指针</td>
+</tr>
+<tr>
+<td align="center">-268,696,584</td>
+<td align="left">HB_ERR_VPS_BAD_ARG</td>
+<td align="left">非法参数</td>
+</tr>
+<tr>
+<td align="center">-268,696,585</td>
+<td align="left">HB_ERR_VPS_UN_PREPARED</td>
+<td align="left">未准备好</td>
+</tr>
+<tr>
+<td align="center">-268,696,586</td>
+<td align="left">HB_ERR_VPS_SENDFRAME</td>
+<td align="left">回灌图像失败</td>
+</tr>
+<tr>
+<td align="center">-268,696,587</td>
+<td align="left">HB_ERR_VPS_CHN_DISABLE</td>
+<td align="left">通道未使能</td>
+</tr>
+<tr>
+<td align="center">-268,696,588</td>
+<td align="left">HB_ERR_VPS_TIMEOUT</td>
+<td align="left">超时</td>
+</tr>
+<tr>
+<td align="center">-268,696,589</td>
+<td align="left">HB_ERR_VPS_CHN_FD</td>
+<td align="left">获取通道文件描述符失败</td>
+</tr>
+<tr>
+<td align="center">-268,696,590</td>
+<td align="left">HB_ERR_VPS_SET_AFTER_START</td>
+<td align="left">不允许启动以后配置</td>
+</tr>
+<tr>
+<td align="center">-268,696,591</td>
+<td align="left">HB_ERR_VPS_SET_BEFORE_START</td>
+<td align="left">不允许启动前配置</td>
+</tr>
+<tr>
+<td align="center">-268,696,592</td>
+<td align="left">HB_ERR_VPS_SET_AT_WRONG_TIME</td>
+<td align="left">在不允许时刻配置</td>
+</tr>
+<tr>
+<td align="center">-268,696,593</td>
+<td align="left">HB_ERR_VPS_UN_SUPPORT_SIZE</td>
+<td align="left">不支持的尺寸</td>
+</tr>
+<tr>
+<td align="center">-268,696,594</td>
+<td align="left">HB_ERR_VPS_FRAME_UNEXIST</td>
+<td align="left">不存在的帧图像</td>
+</tr>
+<tr>
+<td align="center">-268,696,595</td>
+<td align="left">HB_ERR_VPS_DEV_FRAME_DROP</td>
+<td align="left">硬件丢帧</td>
+</tr>
+<tr>
+<td align="center">-268,696,596</td>
+<td align="left">HB_ERR_VPS_NOT_ENOUGH</td>
+<td align="left">缓冲帧不够</td>
+</tr>
+<tr>
+<td align="center">-268,696,597</td>
+<td align="left">HB_ERR_VPS_UN_SUPPORT_RATE</td>
+<td align="left">不支持的帧率</td>
+</tr>
+<tr>
+<td align="center">-268,696,598</td>
+<td align="left">HB_ERR_VPS_FRAME_RATE</td>
+<td align="left">帧率错误</td>
+</tr>
+</tbody>
+</table></section>
+<section id="id11">
+<h2><span class="section-number">5.5.6. </span>参考代码<a class="headerlink" href="#id11" title="永久链接至标题"></a></h2>
+<p>VPS部分示例代码可以参考，<a class="reference external" href="../samples/Mpp_Usage_Guidelines/sample_vps.html">sample_vps</a>和<a class="reference external" href="../samples/Mpp_Usage_Guidelines/sample_vps_zoom.html">sample_vps_zoom</a>。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="4-Graphic_System_API_Reference_Manual.html" class="btn btn-neutral float-left" title="5.4. ISP图像系统" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="6-Region_Processing_zh_CN.html" class="btn btn-neutral float-right" title="5.6. 区域处理" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

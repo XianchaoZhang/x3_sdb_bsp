@@ -1,0 +1,83 @@
+# USB3.0 TX 电气特性测试
+
+## 测试项：USB3.0 TX 电气特性测试
+
+测试仪器：Lecroy SDA813Zi-B ，USB3.0 HOST测试夹具
+
+## 测试步骤如下：
+1. 搭建测试环境如下图所示
+    
+    ![Generated](_static/_images/20-01/59fd8d91c8cb5af96bbb868e0efaeeab.png)
+    
+2. 将usb_verify文件夹拷贝到电路板Linux系统文件夹userdata下，里面有readme，包括软件的操作指令及步骤
+    
+3. 打开示波器QualiPHY软件,选择USB3.1/3.2 TX测试项，
+    
+    ![Generated](_static/_images/20-01/016c4a9ca9d86f62dda637345c89e635.png)
+    
+4. 选择Standard-A HOST GEN1 and GEN2选项
+    
+    ![Generated](_static/_images/20-01/837bba0720218a2a0cf2393d45b4d93b.png)
+    
+5. 按如图所示勾选GEN1 和User Controlled
+    
+    ![Generated](_static/_images/20-01/c4528e4da4703978a73511715dae75c5.png)
+    
+6. 测试项勾选LFPS及GEN1 Tests相关测试项
+    
+    ![Generated](_static/_images/20-01/565bdc53d72b3de3a1d8059461da734e.png)
+    
+7. 点击Start按钮开始测试
+    
+    ![Generated](_static/_images/20-01/b11aa8773e32c3c868d627ac9b8aeb18.png)
+    
+8. 描述待测设备相关信息及测试环境
+    
+    ![Generated](_static/_images/20-01/3f5f973a46a86a4a4a95db6bc1eca5e3.png)
+    
+9. 此项是校准通道间的deskew,示波器已校准，点击Skip
+    
+    ![Generated](_static/_images/20-01/330ca41ea9d8d169cc95fb67e61cec64.png)
+    
+10. 按照图片描述进行连接:
+    
+    Connect Host Test Fixture 1 + SMA to oscilloscope C2 and Host Test Fixture 1 - SMA to C3.
+    
+    ![Generated](_static/_images/20-01/7ca5709b9e6e5536b214a3b6510b8084.png)
+    
+11. 在此操作之前先给板子上电进入系统，此时测试夹具device口未插入DUT Host口，示波器点击ok
+    
+    ![Generated](_static/_images/20-01/2fc12daa2bbb010033ff851be8e34b61.png)
+    
+12. 先将测试夹具插入DUT
+        Host口，此时示波器触发到LFPS信号，点击OK，等待示波器进行分析
+    
+    ![Generated](_static/_images/20-01/89029538600aee4d2680c734a94910a9.png)
+    
+13. 在软件客户端执行操作
+    ```bash
+    cd /userdata/usb_verify/
+    
+    export PATH=\$PWD/:\$PATH:
+    
+    sh usb_enter_CP0.sh
+    ```
+
+    执行完后会在示波器看到CP0波形，然后点击OK
+    
+    ![Generated](_static/_images/20-01/dc8d3a92ebe3faf2b690d50c40baab2c.png)
+    
+14. 在软件客户端执行操作：sh usb_next_CP.sh
+    
+    示波器上会看到CP1波形，然后点击OK
+    
+    ![Generated](_static/_images/20-01/fb2a3eddd1b5c85fb79fd638e5ccec05.png)
+    
+15. 点击Create生成测试报告
+    
+    ![Generated](_static/_images/20-01/760cc048e1e90542b0ae6d249ce7e53c.png)
+    
+## 附
+相关工具见附件:
+[USB3.0信号测试.7z](../../../_files/USB3.0信号测试.7z)
+

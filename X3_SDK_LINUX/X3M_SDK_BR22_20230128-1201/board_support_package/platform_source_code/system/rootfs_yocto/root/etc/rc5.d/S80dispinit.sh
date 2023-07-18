@@ -1,0 +1,1 @@
+../init.d/x3dispinit.sh

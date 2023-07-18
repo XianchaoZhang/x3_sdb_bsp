@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1.1. 概述 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="2. 快速入门" href="../quick_start/index.html" />
+    <link rel="prev" title="1. 前言" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. 前言</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.1. 概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">1.2. 交付包总体说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#x3m">1.3. X3M 芯片规格</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">1.3.1. 关键特性</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">1.4. 操作系统版本</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">1. </span>前言</a> &raquo;</li>
+      <li><span class="section-number">1.1. </span>概述</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="1. 前言" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../quick_start/index.html" class="btn btn-neutral float-right" title="2. 快速入门" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">1.1. </span>概述<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>本文作为地平线X3M芯片方案的用户手册，目标是满足用户对于环境搭建、方案评测、功能开发等多方面的需求，会从开发板使用、Demo使用、BSP开发、多媒体开发、AI工具链开发等多个方面进行讲解。</p>
+</section>
+<section id="id2">
+<h1><span class="section-number">1.2. </span>交付包总体说明<a class="headerlink" href="#id2" title="永久链接至标题"></a></h1>
+<p>地平线X3M芯片解决方案交付包，主要包括BSP源码、配套文档、硬件参考设计、sample示例、AI算法工具链、配套PC端工具软件等几部分。发布包各模块说明如下：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>组件名</strong></th>
+<th><strong>用途说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>board_support_package/platform_source_code.tar.gz</td>
+<td>系统BSP源码</td>
+</tr>
+<tr>
+<td>board_support_package/firmwares</td>
+<td>预编译的X3SDB开发板刷机镜像</td>
+</tr>
+<tr>
+<td>documentation</td>
+<td>开发手册、接口描述文档</td>
+</tr>
+<tr>
+<td>hardware_reference_design</td>
+<td>硬件参考设计，包含原理图、pcb及bom</td>
+</tr>
+<tr>
+<td>ai_toolchain_package</td>
+<td>AI 工具链开发包</td>
+</tr>
+<tr>
+<td>sample</td>
+<td>图像、算法示例程序</td>
+</tr>
+<tr>
+<td>software_tools</td>
+<td>配套PC端工具软件</td>
+</tr>
+</tbody>
+</table></section>
+<section id="x3m">
+<h1><span class="section-number">1.3. </span>X3M 芯片规格<a class="headerlink" href="#x3m" title="永久链接至标题"></a></h1>
+<p>旭日 3.0M（X3M）是 Horizon Robotics 支持的高度集成的高性能低功耗人工智能片上系统（SoC）。X3M 基于伯努利架构双核 BPU，支持实时像素级视频分割，结构化视频分析和视觉注意力感知。自主自研 BPU 可以对视频进行目标检测、图像分类、目标跟踪、语义分割和实例分割等人工智能推理计算。</p>
+<p>先进的感知功能使 X3M 持续引领人工智能物联网（AIoT）行业水平。通过对环境的精确检测、识别和理解（包括人、物、车辆、行为），实现了人脸检测/识别以及汽车牌照识别等等。除了视频/图像人工智能检测、分割和识别外，X3M BPU 还可以支持智能语音算法，例如关键词检索、语音识别和文字转语音等，以使 AIoT 设备的智能功能更加完善。</p>
+<section id="id3">
+<h2><span class="section-number">1.3.1. </span>关键特性<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p><strong>CPU</strong></p>
+<ul class="simple">
+<li><p>四核Arm® Cortex® A53，32 KB/32 KB L1 I/D和512 KB L2缓存。</p></li>
+<li><p>典型工作频率：1.2GHz &#64;标称VDD_CPU工作电压。</p></li>
+</ul>
+<p><strong>BPU</strong></p>
+<ul class="simple">
+<li><p>由BPU0和BPU1组成的双核伯努利架构BPU，提供高达5 TOPS的等效算力。</p></li>
+<li><p>典型工作频率：1.0GHz &#64;标称VDD_CNN0/1工作电压。</p></li>
+<li><p>支持主流神经网络。</p></li>
+</ul>
+<p><strong>外部存储器</strong></p>
+<ul class="simple">
+<li><p>DDR</p>
+<ul>
+<li><p>支持x32 DDR4/LPDDR4/LPDDR4X片外DRAM。</p></li>
+<li><p>支持最大存储空间4 GB。</p></li>
+</ul>
+</li>
+<li><p>eMMC5.0控制器</p>
+<ul>
+<li><p>最高支持HS200模式</p></li>
+<li><p>最高支持8bit数据位宽</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>ISP</strong></p>
+<ul class="simple">
+<li><p>8M&#64;60fps</p></li>
+<li><p>3DNR/LDC/GDC</p></li>
+<li><p>3A（AE/AWB/AF），支持第三方 3A 算法</p></li>
+</ul>
+<p><strong>视频输入接口</strong></p>
+<ul class="simple">
+<li><p>支持MIPI CSI视频输入：</p>
+<ul>
+<li><p>3 MIPI CSI Rx端口：CSI-Rx1/3（1个时钟通道+4个数据通道），CSI-Rx0（1个时钟通道+ 2个数据通道）和 CSI-Rx2（1个时钟通道+ 2个数据通道）。</p></li>
+<li><p>每个数据通道高达2.0 Gbps，四个数据通道的峰值传输速率为8 Gbps。</p></li>
+<li><p>视频输入高达4096 x 2160p &#64; 30fps。</p></li>
+<li><p>支持RAW 8-/10-/12-/14-/16位格式和8-/10位YUV格式。</p></li>
+</ul>
+</li>
+<li><p>MIPI CSI RX的虚拟通道以支持最多8路sensor视频输入：</p>
+<ul>
+<li><p>CSI-RX1/3：1个时钟通道+ 4个数据通道，支持多达4个虚拟通道。</p></li>
+<li><p>CSI-RX0：1个时钟通道+ 2个数据通道，支持多达2个虚拟通道。</p></li>
+<li><p>CSI-RX2：1个时钟通道+ 2个数据通道，支持多达2个虚拟通道。</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>视频输出接口</strong></p>
+<ul class="simple">
+<li><p>支持BT1120/BT656视频输出</p></li>
+<li><p>支持MIPI CSI TX视频输出</p></li>
+<li><p>支持MIPI DSI TX视频输出</p></li>
+<li><p>支持个用户界面（UI）层alpha混合</p></li>
+</ul>
+<p><strong>视频/图像处理单位</strong></p>
+<ul class="simple">
+<li><p>图像处理单元（IPU）：</p>
+<ul>
+<li><p>支持裁剪和缩放</p></li>
+<li><p>支持多路分解6个虚拟通道</p></li>
+<li><p>支持图像 Mirror、Flip 功能</p></li>
+<li><p>支持编码前处理 OSD 叠加</p></li>
+</ul>
+</li>
+<li><p>金字塔（PYM）：</p>
+<ul>
+<li><p>输入图像尺寸最大为8Mp。</p></li>
+<li><p>生成各种尺寸的多层金字塔图像。</p></li>
+<li><p>可配置图层，感兴趣区域（ROI）和缩放因子。</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>视频编解码器</strong></p>
+<ul class="simple">
+<li><p>支持H.265（HEVC）编码和解码：</p>
+<ul>
+<li><p>Main profile &#64; L5.1。</p></li>
+<li><p>支持I/P/B帧。</p></li>
+</ul>
+</li>
+<li><p>支持H.264编码和解码：</p>
+<ul>
+<li><p>Baseline/Main/High profiles &#64; L5.1。</p></li>
+<li><p>H.264支持SVC-T编码。</p></li>
+</ul>
+</li>
+<li><p>H265/H264编解码性能：</p>
+<ul>
+<li><p>3840 x 2160p &#64; 60fps 编码/解码  + 1280 x 720p &#64; 30fps 编码/解码。</p></li>
+<li><p>4096 x 2160p &#64; 60fps 编码/解码。</p></li>
+<li><p>3840 x 2160p &#64; 30fps 编码/解码  + 1920 x 1080p &#64; 30fps 编码/解码 + 1280 x 720p &#64; 30fps 编码/解码。</p></li>
+<li><p>3840 x 2160p &#64; 30fps 编码/解码 + 3840 x 2160p &#64; 30fps 编码/解码。</p></li>
+</ul>
+</li>
+<li><p>支持JPEG编码和解码：</p>
+<ul>
+<li><p>Baseline profile。</p></li>
+<li><p>支持CBR、VBR、AVBR、FixQp和QpMap比特率控制模式。</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>外围接口</strong></p>
+<ul class="simple">
+<li><p>1个USB 3.0 DRD(Dual-Role Device)</p></li>
+<li><p>1个1G Ethernet MAC</p></li>
+<li><p>3个SDIO/SD3.0</p></li>
+<li><p>3个SPI</p></li>
+<li><p>6个I2C</p></li>
+<li><p>4个UART</p></li>
+<li><p>2个I2S (TDM支持8个通道)</p></li>
+<li><p>9个PWM</p></li>
+<li><p>RTC/Timer</p></li>
+<li><p>Watchdog</p></li>
+</ul>
+<p><strong>芯片物理规格</strong></p>
+<ul class="simple">
+<li><p>台积电16纳米FinFET紧凑型技术（FFC）工艺。</p></li>
+<li><p>FCBGA483封装，管脚间距为0.65 mm，封装尺寸为15 mm x 15 mm。</p></li>
+<li><p>工作温度：-25〜85℃。</p></li>
+</ul>
+</section>
+</section>
+<section id="id4">
+<h1><span class="section-number">1.4. </span>操作系统版本<a class="headerlink" href="#id4" title="永久链接至标题"></a></h1>
+<p>X3M芯片方案SDK提供了 Linux 和 Ubuntu 20.04 两个版本，以满足不同用户群体对操作系统的需求。两个版本的Linux内核和GCC工具链版本保持一致，其中内核版本为4.14，GCC工具链版本为9.3.0。</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="1. 前言" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../quick_start/index.html" class="btn btn-neutral float-right" title="2. 快速入门" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

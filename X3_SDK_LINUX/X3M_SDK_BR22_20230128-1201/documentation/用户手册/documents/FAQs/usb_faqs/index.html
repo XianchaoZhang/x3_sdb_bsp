@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>8.8. 总线类 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="8.8.1. USB常见问题(FAQ)" href="USB_COMMON_FAQs.html" />
+    <link rel="prev" title="8.1. 环境类" href="../FAQs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">8. FAQ</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html">8.1. 环境类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id3">8.2. 系统类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id8">8.3. 视频处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id12">8.4. 编解码类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id14">8.5. 外设类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id15">8.6. 硬件类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FAQs.html#id19">8.7. 工具类</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">8.8. 总线类</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="USB_COMMON_FAQs.html">8.8.1. USB常见问题(FAQ)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="USB_WEBCAM_FAQs.html">8.8.2. USB WEBCAM常见问题(FAQ)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ai_toolchain_faqs/index.html">8.9. 量化工具链类</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html"><span class="section-number">8. </span>FAQ</a> &raquo;</li>
+      <li><span class="section-number">8.8. </span>总线类</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="../FAQs.html" class="btn btn-neutral float-left" title="8.1. 环境类" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="USB_COMMON_FAQs.html" class="btn btn-neutral float-right" title="8.8.1. USB常见问题(FAQ)" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">8.8. </span>总线类<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="USB_COMMON_FAQs.html">8.8.1. USB常见问题(FAQ)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="USB_COMMON_FAQs.html#id1">8.8.1.1. 主机</a></li>
+<li class="toctree-l2"><a class="reference internal" href="USB_COMMON_FAQs.html#id2">8.8.1.2. 从设备</a></li>
+<li class="toctree-l2"><a class="reference internal" href="USB_COMMON_FAQs.html#x3m">8.8.1.3. 热插拔(x3m做设备)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="USB_COMMON_FAQs.html#otg">8.8.1.4. OTG</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="USB_WEBCAM_FAQs.html">8.8.2. USB WEBCAM常见问题(FAQ)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="USB_WEBCAM_FAQs.html#usb-webcam">8.8.2.1. 如何使用usb_webcam单元测试程序?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="USB_WEBCAM_FAQs.html#id1">例子:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="USB_WEBCAM_FAQs.html#id2">8.8.2.2. 程序脚本的详细内容?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="USB_WEBCAM_FAQs.html#isoc-bulkuvc">8.8.2.3. 如何区分isoc, bulk传输两种类型的uvc程序?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="USB_WEBCAM_FAQs.html#usb-webcamsensor">8.8.2.4. usb_webcam程序的sensor配置和选择?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="USB_WEBCAM_FAQs.html#id3">8.8.2.5. usb_webcam 相关复合设备典型形态如何运行?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="USB_WEBCAM_FAQs.html#uac2-windows">8.8.2.6. uac2 windows设备如何配置?(废弃)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="USB_WEBCAM_FAQs.html#uvc">8.8.2.7. 如何修改uvc摄像头支持的格式和分辨率?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="USB_WEBCAM_FAQs.html#uac">8.8.2.8. 如何修改uac设备的音频采样率和频道数?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="USB_WEBCAM_FAQs.html#uac-win10">8.8.2.9. 修改uac设备采样率, 通道等配置后, win10平台无法打开问题?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="USB_WEBCAM_FAQs.html#uvc-isoc">8.8.2.10. uvc isoc传输多带宽配置相关?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="USB_WEBCAM_FAQs.html#id4">8.8.2.11. uvc isoc传输性能方面问题汇总?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../FAQs.html" class="btn btn-neutral float-left" title="8.1. 环境类" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="USB_COMMON_FAQs.html" class="btn btn-neutral float-right" title="8.8.1. USB常见问题(FAQ)" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

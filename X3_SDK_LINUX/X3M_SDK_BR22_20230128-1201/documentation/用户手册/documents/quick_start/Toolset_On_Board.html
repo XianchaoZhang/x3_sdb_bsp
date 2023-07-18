@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2.5. 调试工具说明 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="2.6. X3 SDB v3 开发板接口说明" href="X3SDBv3_Setup.html" />
+    <link rel="prev" title="2.4. 接口使用说明" href="Interface_User_Guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2. 快速入门</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="X3SDB_Setup.html">2.1. X3 SDB开发板说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Login_Method.html">2.2. 开发板登录方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Firmware_Update.html">2.3. 镜像升级方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Interface_User_Guide.html">2.4. 接口使用说明</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.5. 调试工具说明</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bpu">2.5.1. BPU工具</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ddr">2.5.2. DDR工具</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">2.5.3. 网络工具</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">2.5.4. 芯片状态统计工具</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="X3SDBv3_Setup.html">2.6. X3 SDB v3 开发板接口说明</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../samples/index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html"><span class="section-number">2. </span>快速入门</a> &raquo;</li>
+      <li><span class="section-number">2.5. </span>调试工具说明</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="Interface_User_Guide.html" class="btn btn-neutral float-left" title="2.4. 接口使用说明" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="X3SDBv3_Setup.html" class="btn btn-neutral float-right" title="2.6. X3 SDB v3 开发板接口说明" accesskey="n">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><span class="section-number">2.5. </span>调试工具说明<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>X3系统预置了几种常用的板端调试工具，可实现BPU、DDR、网络、Thermal等多个子系统的状态统计和功能配置，下面将逐一介绍。</p>
+<section id="bpu">
+<h2><span class="section-number">2.5.1. </span>BPU工具<a class="headerlink" href="#bpu" title="永久链接至标题"></a></h2>
+<p>hrut_bpuprofile可用来查询、配置BPU模块，例如调节频率、上下电控制、时钟控制、占用统计等。工具说明如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>BPU PROFILE HELP INFORMATION
+
+&gt;&gt;&gt; -b/--bpu <span class="o">[</span>BPU CORE,0--bpu0,1--bpu1,2--ALL BPU<span class="o">]</span> <span class="o">(</span>required<span class="o">)</span>
+
+&gt;&gt;&gt; -p/--power <span class="o">[</span>POWER OFF/ON,0--OFF,1--ON<span class="o">]</span>
+
+&gt;&gt;&gt; -c/--clock <span class="o">[</span>CLOCK OFF/ON,0--OFF,1--ON<span class="o">]</span>
+
+&gt;&gt;&gt; -e/--enabletime <span class="o">[</span>GET FC TIME/ON,0--OFF,1--ON<span class="o">]</span>
+
+&gt;&gt;&gt; -t/--time <span class="o">[</span>GET FC TIME,NO ARGUMENT<span class="o">]</span>
+
+&gt;&gt;&gt; -f/--frq <span class="o">[</span>SET BPU FREQUENCY,ARGUMENT：N<span class="o">]</span>
+
+&gt;&gt;&gt; -r/--ratio <span class="o">[</span>BPU RATIO,N--N TIMES,0--FOREVER<span class="o">]</span>
+</pre></div>
+</div>
+<p><strong>查看bpu使用率</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hrut_bpuprofile -b <span class="m">2</span> -r <span class="m">0</span>
+</pre></div>
+</div>
+<p><strong>设置bpu运行频率</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hrut_bpuprofile -b <span class="m">0</span> -f <span class="m">400000000</span>
+</pre></div>
+</div>
+<p><strong>设置bpu掉电</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hrut_bpuprofile -b <span class="m">1</span> -p <span class="m">0</span>
+</pre></div>
+</div>
+</section>
+<section id="ddr">
+<h2><span class="section-number">2.5.2. </span>DDR工具<a class="headerlink" href="#ddr" title="永久链接至标题"></a></h2>
+<p>hrut_ddr可用统计DDR带宽使用情况，工具既支持单模块的带宽统计，也支持所有模块的总和统计。工具说明如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hrut_ddr -h
+
+DDR MONITOR HELP INFORMATION
+
+&gt;&gt;&gt; -t/--type <span class="o">[</span>SAMPLE TYPE,cpu,bif,bpu0,bpu1,vio0,vpu,vio1, peri,sum,all<span class="o">]</span>
+
+&gt;&gt;&gt; -p/--period <span class="o">[</span>SAMPLE PERIOD, <span class="m">1</span> - 100ms<span class="o">]</span>
+</pre></div>
+</div>
+<p><strong>单模块统计</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@Unknown:/userdata# hrut_ddr -t cpu -p <span class="m">100</span>
+
+<span class="o">[</span><span class="m">100009</span><span class="o">]</span>cpubw R:3607MB/s W:1580MB/s
+
+<span class="o">[</span><span class="m">200005</span><span class="o">]</span>cpubw R:3752MB/s W:1611MB/s
+</pre></div>
+</div>
+<p><strong>总和统计</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3dvbx3-hynix4G-2666:~# hrut_ddr -t all -p <span class="m">100</span>
+
+<span class="o">[</span><span class="m">100011</span><span class="o">]</span>cpu R:1431MB/s W:1139MB/s bif R:0MB/s W:0MB/s bpu0 R:675MB/s W:361MB/s bpu1 R:705MB/s W:419MB/s vio0 R:0MB/s W:0MB/s vpu R:0MB/s W:0MB/s vio1 R:115MB/s W:0MB/s peri R:0MB/s W:0MB/s sum R:2962MB/s W:1920MB/s
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2><span class="section-number">2.5.3. </span>网络工具<a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>hrut_ipfull工具可用于修改系统的网络配置，如IP地址、子网掩码及网关地址等。工具配置后重启生效，断电可保存。工具说明如下：</p>
+<p><strong>配置写入</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hrut_ipfull s IP MASK GATEWAY
+
+e.g. hrut_ipfull s <span class="m">192</span>.168.1.10 <span class="m">255</span>.255.255.0 <span class="m">192</span>.168.1.255
+</pre></div>
+</div>
+<p><strong>配置读取</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hrut_ipfull g
+</pre></div>
+</div>
+<p><strong>配置清除</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hrut_ipfull c
+</pre></div>
+</div>
+<p>配置清除是指恢复系统默认配置：192.168.1.10 255.255.255.0 192.168.1.255</p>
+<p>hrut_mac工具可用于修改网络MAC地址。工具配置后重启生效，断电可保存。工具说明如下：</p>
+<p><strong>MAC写入</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hrut_mac s aa:bb:cc:dd:ee:ff
+</pre></div>
+</div>
+<p><strong>MAC读取</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hrut_mac g
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h2><span class="section-number">2.5.4. </span>芯片状态统计工具<a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p>hrut_somstatus工具可用于系统状态的统计，包括芯片温度、CPU频率、BPU频率、BPU占用率等信息。工具说明如下：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>root@x3sdbx3-samsung2G-3200:/# watch -n <span class="m">1</span> hrut_somstatus
+Every 1s: <span class="nv">hrut_somstatus</span>                                                                                                                                                          
+
+<span class="o">=====================</span><span class="nv">1</span><span class="o">=====================</span>
+temperature--&gt;
+        CPU      : <span class="m">52</span>.4 <span class="o">(</span>C<span class="o">)</span>
+cpu frequency--&gt;
+              min       cur     max
+        cpu0: <span class="m">240000</span>    <span class="m">1200000</span> <span class="m">1200000</span>
+        cpu1: <span class="m">240000</span>    <span class="m">800000</span>  <span class="m">1200000</span>
+        cpu2: <span class="m">240000</span>    <span class="m">800000</span>  <span class="m">1200000</span>
+        cpu3: <span class="m">240000</span>    <span class="m">800000</span>  <span class="m">1200000</span>
+bpu status information----&gt;
+             min        cur             max             ratio
+        bpu0: <span class="m">400000000</span> <span class="m">1000000000</span>      <span class="m">1000000000</span>      <span class="m">0</span>
+        bpu1: <span class="m">400000000</span> <span class="m">1000000000</span>      <span class="m">1000000000</span>      <span class="m">0</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>temperature代表X3芯片结温，单位为摄氏度</p></li>
+<li><p>frequency代表CPU、BPU频率，单位为KHz。min、cur、max分别代表最小、当前、最大频率，例如1200000KHz=1200MHz=1.2GHz</p></li>
+<li><p>cpu0~4代表4核A53，工具分别统计每个核心的最小、当前、最大频率</p></li>
+<li><p>bpu0~1代表2核BPU，工具分别统计每个核心的最小、当前、最大频率</p></li>
+<li><p>ratio代表BPU当前使用率，取值范围0~100，单位为百分比</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Interface_User_Guide.html" class="btn btn-neutral float-left" title="2.4. 接口使用说明" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="X3SDBv3_Setup.html" class="btn btn-neutral float-right" title="2.6. X3 SDB v3 开发板接口说明" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

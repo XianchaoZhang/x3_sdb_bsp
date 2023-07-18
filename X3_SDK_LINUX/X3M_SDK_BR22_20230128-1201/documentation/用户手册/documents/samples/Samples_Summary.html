@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>概述 &mdash; X3 用户手册 1.0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon_theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/horizon.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/hobot.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> X3 用户手册
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../preface/index.html">1. 前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">2. 快速入门</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">3. Demo使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bsp_develop/index.html">4. BSP开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mpp_develop/index.html">5. 多媒体开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai_toolchain_develop/index.html">6. 量化工具链开发指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pc_tools/index.html">7. PC工具使用指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQs/index.html">8. FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../feedback.html">9. 建议反馈</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">X3 用户手册</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>概述</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>概述<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>本章节通过多种类型的功能示例，来展现地平线X3M芯片的图像、多媒体性能、AI工具链的丰富易用。下面将按照典型应用场景、单一模块示例和AI工具链应用示例三个方面进行展开说明。
+注：以下说明使用到的专业术语请查阅<a class="reference internal" href="../mpp_develop/1-Overview_zh_CN.html"><span class="doc">多媒体开发概述-术语约定</span></a>。</p>
+<ul class="simple">
+<li><p><strong>典型应用场景示例：</strong> 本章节基于<code class="docutils literal notranslate"><span class="pre">智能IPC</span></code>、<code class="docutils literal notranslate"><span class="pre">USB摄像头</span></code>、<code class="docutils literal notranslate"><span class="pre">AI算法盒子</span></code>三种典型应用场景，快速的展示芯片图像、多媒体及AI推理能力。详细情况请参考 [典型应用场景]</p>
+<ul>
+<li><p><strong>IPC</strong>： 本示例会介绍<code class="docutils literal notranslate"><span class="pre">单路200W&#64;30fps</span></code>、<code class="docutils literal notranslate"><span class="pre">单路800W&#64;30fps</span></code>、<code class="docutils literal notranslate"><span class="pre">双路</span> <span class="pre">800W&#64;30fps</span> <span class="pre">+</span> <span class="pre">200W&#64;30fps</span></code>等几种不同规格Sensor的接入和AI推理</p></li>
+<li><p><strong>USB Camera</strong>： 本示例会介绍<code class="docutils literal notranslate"><span class="pre">单路200W&#64;30fps</span></code>、<code class="docutils literal notranslate"><span class="pre">单路800W&#64;30fps</span></code>、<code class="docutils literal notranslate"><span class="pre">单路800W&#64;60fps</span></code>等几种不同规格Sensor的接入，并通过UVC协议输出</p></li>
+<li><p><strong>AI Box</strong>： 本示例会介绍<code class="docutils literal notranslate"><span class="pre">单路200W&#64;30fps</span></code>、<code class="docutils literal notranslate"><span class="pre">四路200W&#64;30fps</span></code>的解码、AI推理和编码能力。</p></li>
+</ul>
+</li>
+<li><p><strong>VIO应用示例：</strong>  本章节基于X3M芯片<code class="docutils literal notranslate"><span class="pre">MIPI</span> <span class="pre">CSI、SIF、ISP、VPS、OSD、VENC、VEDC、VOT</span></code>等图像、多媒体模块，以单模块功能示例的方式，快速的展示模块功能及接口使用方法。详细情况请参考 [VIO使用指引]</p>
+<ul>
+<li><p><strong>get_sif_data</strong>： 本示例介绍如何初始化<code class="docutils literal notranslate"><span class="pre">Sensor</span></code>、<code class="docutils literal notranslate"><span class="pre">MIPI</span> <span class="pre">CSI</span></code>、<code class="docutils literal notranslate"><span class="pre">SIF</span></code>模块，并获取<code class="docutils literal notranslate"><span class="pre">Sensor</span></code>输出的原始图像数据</p></li>
+<li><p><strong>get_isp_data</strong>： 本示例介绍如何初始化<code class="docutils literal notranslate"><span class="pre">Sensor</span></code>、<code class="docutils literal notranslate"><span class="pre">MIPI</span> <span class="pre">CSI</span></code>、<code class="docutils literal notranslate"><span class="pre">SIF</span></code>、<code class="docutils literal notranslate"><span class="pre">ISP</span></code>模块，并获取ISP调校后的图像</p></li>
+<li><p><strong>sample_isp</strong>： 本示例介绍如何调用<code class="docutils literal notranslate"><span class="pre">ISP</span></code>模块提供的软件接口动态设置<code class="docutils literal notranslate"><span class="pre">ISP</span></code>的参数</p></li>
+<li><p><strong>sample_vps</strong>： 本示例介绍如何使用VPS模块，实现多通道的视频输出，并且对每个通道进行不同的缩放、旋转等配置</p></li>
+<li><p><strong>sample_vps_zoom</strong>： 本示例介绍如何使用VPS模块实现电子云台的zoom功能，同时介绍如何进行多<code class="docutils literal notranslate"><span class="pre">VPS</span></code>模块级联。</p></li>
+<li><p><strong>sample_osd</strong>：本示例介绍如何初始化<code class="docutils literal notranslate"><span class="pre">OSD</span></code>模块，演示如何在图像上绘制线条、矩形框和添加时间戳类型的文字</p></li>
+<li><p><strong>sample_video_codec</strong>： 本示例下包含4个示例程序，介绍如何使用旭日X3M芯片的视频编解码器，完成对视频数据的编码和解码功能</p></li>
+<li><p><strong>sample_vot</strong>： 本示例介绍如何初始化<code class="docutils literal notranslate"><span class="pre">VOT</span></code>和<code class="docutils literal notranslate"><span class="pre">HDMI</span></code>的显示模块，把图像数据显示到<code class="docutils literal notranslate"><span class="pre">HDMI</span></code>接口的显示器上</p></li>
+<li><p><strong>sample_lcd</strong>：本示例介绍如何初始化<code class="docutils literal notranslate"><span class="pre">VOT</span></code>和<code class="docutils literal notranslate"><span class="pre">LCD</span></code>的显示模块，把图像数据显示到<code class="docutils literal notranslate"><span class="pre">LCD</span></code>屏幕上</p></li>
+</ul>
+</li>
+<li><p><strong>AI应用示例：</strong> 本类别的示例介绍如何使用旭日X3M芯片的AI算法推理加速引擎<code class="docutils literal notranslate"><span class="pre">BPU</span></code>模块。详细情况请参考 [AI使用指引]</p>
+<ul>
+<li><p><strong>开源示例模型量化：</strong> 通过一个算法示例，简述如何把一个浮点算法模型通过地平线的定点量化工具转换成能够在芯片运行的定点算法模型</p></li>
+<li><p><strong>AI模型上板：</strong> 通过一个算法示例，简述如何在X3M开发板上进行算法的运行，并且完成算法的性能和精度评估</p></li>
+</ul>
+</li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2022, Horizon Robotics.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
